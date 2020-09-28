@@ -1,0 +1,10 @@
+application/views/index.php
+application/views/login.php
+application/controllers/Login.php
+application/controllers/Menu_controller.php
+application/models/Model_menu.php
+
+rename folder:
+    application/views/master/ca
+    menjadi
+    application/views/master/memorandum_ca

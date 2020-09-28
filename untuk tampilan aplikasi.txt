@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --chrome-frame --window-size=600,600 --window-position=580,240 --app="http://www.google.com/"

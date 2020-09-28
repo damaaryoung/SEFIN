@@ -1,0 +1,10 @@
+{
+    "require": {
+        "firebase/php-jwt": "^5.0",
+        "knplabs/knp-snappy-bundle": "^1.5",
+        "knplabs/knp-snappy": "^1.0",
+        "h4cc/wkhtmltoimage-amd64": "0.12.x",
+        "h4cc/wkhtmltopdf-amd64": "0.12.x",
+        "wemersonjanuario/wkhtmltopdf-windows": "0.12.2.3"
+    }
+}
