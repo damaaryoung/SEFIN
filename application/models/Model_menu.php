@@ -101,5 +101,9 @@ class Model_menu extends ci_model{
         curl_close($ch);
         return json_decode($output, true);
     }
+
+    function cabang(){
+        return $this->db->get('mk_cabang')->result();
+    }
     
 }

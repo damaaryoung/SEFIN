@@ -35,6 +35,7 @@ class Menu_controller extends CI_Controller
                 $query = "SELECT nama AS nama_sub, `url` AS url_sub FROM `menu_sub` WHERE id IN($im_sub) AND id_menu_master='$res->id' ORDER BY id ASC";
                 $sub = $this->db->query($query)->result();
                 $arrMenu['master_menu'] = strtoupper($res->nama);
+                $arrMenu['icon_menu'] = strtoupper($res->icon);
                 $arrSub = [];
                 foreach ($sub as $ress) :
                     $arrSub[] = array(
@@ -205,7 +206,7 @@ class Menu_controller extends CI_Controller
             foreach ($menu as $res) :
                 $query = "SELECT nama AS nama_sub, `url` AS url_sub FROM `menu_sub` WHERE id IN($im_sub) AND id_menu_master='$res->id' ORDER BY id ASC";
                 $sub = $this->db->query($query)->result();
-                $arrMenu['master_menu'] = strtoupper($res->nama);
+                $arrMenu[] = array('master_menu'=>strtoupper($res->nama),'icon_menu'=>strtoupper($res->icon));
                 $arrSub = [];
                 foreach ($sub as $ress) :
                     $arrSub[] = array(
@@ -226,6 +227,8 @@ class Menu_controller extends CI_Controller
             endif;
         endif;
         $json_encode = json_encode($dataArr);
+        // var_dump($json_encode);
+        // die();
         $data['json_menu'] = $json_encode;
         $this->load->view('master/menu_akses_user', $data);
     }
@@ -340,20 +343,22 @@ class Menu_controller extends CI_Controller
     }
     public function caa()
     {
-        // $url = 'api/master/mcaa';
-        // $result = $this->model_auth->get_data($url);
-        // if ($result['code'] == '404') {
-        //     $data['result'] = 1;
-        // } else {
-        //     $data['result'] = $result;
-        // }
-        // $data['url_table_caa'] = $this->config->item('api_url') . 'api/master/mcaa';
 
         $data['get_user'] = $this->model_menu->getUser();
-        $this->load->view('master/caa/table', $data);
+        $data['cabang'] = $this->model_menu->cabang();
+        $this->load->view('master/caa/table',$data);
     }
     public function ol()
     {
+      //  $url = 'api/master/mcaa';
+        //$result = $this->model_auth->get_data($url);
+        //if ($result['code'] == '404') {
+         //   $data['result'] = 1;
+        //} else {
+         //   $data['result'] = $result;
+       // }
+        //$data['url_table_caa'] = $this->config->item('api_url') . 'api/master/mcaa';
+
         $data['get_user'] = $this->model_menu->getUser();
         $this->load->view('master/ol/table', $data);
     }
@@ -371,13 +376,14 @@ class Menu_controller extends CI_Controller
         // $data['nama_user'] = $this->model_menu->getUser();
         $this->load->view('master/ereporting/data_belum_tersedia');
     }
+    public function marketing()
+    {
+        // $data['nama_user'] = $this->model_menu->getUser();
+        $this->load->view('master/ereporting/marketing/marketing_reporting');
+    }
     public function export()
     {
         $this->load->view('master/export/export_data');
-    }
-    public function lampiran_debitur()
-    {
-        $this->load->view('master/lampiran_nasabah/data_lamp_realisasi');
     }
     public function collection()
     {

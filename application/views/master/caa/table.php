@@ -1,5 +1,6 @@
 <link href="<?php echo base_url('assets/dist/css/datepicker.min.css') ?>" rel="stylesheet" type="text/css">
-<script src="<?php echo base_url('assets/dist/js/datepicker.js') ?>"></script>
+<script src="<?php echo base_url('assets/dist/js/datepicker.min.js') ?>"></script>
+<script src="<?php echo base_url('assets/dist/js/datepicker.en.js') ?>"></script>
 <div id="lihat_data_credit" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
     <section class="content-header">
         <div class="container-fluid">
@@ -22,10 +23,38 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-md">
+                                <?php if ($get_user['data']['divisi_id'] == 'CA' || $get_user['data']['divisi_id'] == 'IT') : ?>
+                                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-id="00" data-target="#modal_caa">Pengajuan CAA</button>
+                                <?php endif ?>
+                            </div>
+                            <div class="col-md-9">
+                                <form class="form-filter">
+                                    <div class="input-group mb-5">
+                                        <input type="text" class="form-control" style="width:200px" placeholder="Date started" id="datepicker1" data-language="en" data-date-format="dd-mm-yyyy" name="start">
+                                        <div class="text-alert"></div>
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" style="width:200px" placeholder="Date ended" id="datepicker2" data-language="en" data-date-format="dd-mm-yyyy" name="end">
+                                        <div class="text-alert"></div>
+                                        <select class="form-control select2 select2-danger" style="width:255px" name="cabang" id="cabang">
+                                            <option value="SEMUA CABANG">SEMUA CABANG</option>
+                                            <?php foreach ($cabang as $key => $value) { ?>
+                                                <option value="<?= $value->id ?>"><?= $value->nama ?></option>
+                                            <?php } ?>
+                                            <option>x</option>
+                                        </select>
+                                        <div class="text-alert"></div>
+                                        <div class="input-group-prepend">
+                                            <button class="input-group-text btn-primary" type="submit"><i class="fa fa-location-arrow"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <div class="box-body table-responsive no-padding">
-                            <?php if ($get_user['data']['divisi_id'] == 'CA' || $get_user['data']['divisi_id'] == 'IT') : ?>
-                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-id="00" data-target="#modal_caa">Pengajuan CAA</button>
-                            <?php endif ?>
                             <table id="table_caa" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
                                 <thead style="font-size: 14px" class="bg-danger">
                                     <tr>
@@ -75,90 +104,7 @@
         <div class="modal-content" id="view_modal_trans_caa"></div>
     </div>
 </div>
-
-<script>
-    function formatRupiah(bilangan) {
-        var number_string = bilangan.toString(),
-            sisa = number_string.length % 3,
-            rupiah = number_string.substr(0, sisa),
-            ribuan = number_string.substr(sisa).match(/\d{3}/g);
-
-        if (ribuan) {
-            separator = sisa ? '.' : '';
-            rupiah += separator + ribuan.join('.');
-        }
-        return rupiah;
-    }
-
-    $(document).ready(function() {
-        tampil_data_caa();
-
-        function tampil_data_caa() {
-            $('#table_caa').DataTable({
-                "processing": true,
-                "serverSide": true,
-                'destroy': true,
-                "order": [],
-                "ajax": {
-                    "url": "<?php echo site_url('Caa_controller/get_data_caa') ?>",
-                    "type": "POST"
-                },
-
-                "columnDefs": [{
-                    "targets": [0],
-                    "orderable": false,
-                }, ],
-
-            })
-        };
-
-        // $('#table_caa').on('dblclick', 'td', function(e) {
-        //     let idx = $(e.relatedTarget).data('id');
-        //     console.log(idx);
-        //     // alert('You clicked on ' + data[0] + '\'s row');
-        // });
-
-
-        $('#modal_caa').on('show.bs.modal', function(e) {
-            let idx = $(e.relatedTarget).data('id');
-            $.ajax({
-                type: 'post',
-                url: 'caa_controller/pengajuan_caa',
-                data: 'kode_cabang=' + idx,
-                beforeSend: function() {
-                    let html = "<div class='modal-body text-center'>" +
-                        "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
-                        "<a href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
-                        "</div>";
-                    $('#view_modal_caa').html(html);
-                },
-                success: function(data) {
-                    $('#view_modal_caa').html(data);
-                }
-            })
-        });
-
-    });
-
-    $('#data_table_caa').on('click', '.edit', function(e) {
-        e.preventDefault();
-        var id = $(this).attr('data');
-        console.log(id);
-        $('#modal_trans_caa').modal('show');
-        $.ajax({
-            type: 'post',
-            url: 'caa_controller/trans_caa_detail',
-            data: 'idx=' + id,
-            beforeSend: function() {
-                let html = "<div class='modal-body text-center'>" +
-                    "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
-                    "<a href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
-                    "</div>";
-                $('#view_modal_trans_caa').html(html);
-            },
-            success: function(data) {
-                $('#view_modal_trans_caa').html(data);
-            }
-        })
-    })
-</script>
+<!-- jquery-validation -->
+<script src="<?= base_url(); ?>assets/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="<?= base_url(); ?>assets/plugins/jquery-validation/additional-methods.min.js"></script>
+<?php $this->view('master/caa/table_js.php'); ?>
