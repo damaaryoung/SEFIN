@@ -5,7 +5,7 @@
 ?>
     <li class="nav-item">
         <a href="" class="nav-link " style="color: #fff">
-            <i class="nav-icon fas fa-th" style="color: #FFDE00"></i>
+            <img src="<?= base_url();?>assets/dist/img/menu-icon/<?= strtolower($menu[$i]->icon_menu); ?>" width="15%">
             <p>
                 <?php echo $menu[$i]->master_menu?>
                 <i class="right fas fa-angle-left"></i>
@@ -58,4 +58,4 @@
         </ul>
     </li>
 <?php endfor ?>
-<!-- AKSES MENU -->
+<!-- AKSES MENU

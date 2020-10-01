@@ -3,8 +3,10 @@ class Model_view_master extends ci_model
 {
     function sumber_penghasilan()
     {
-        $query = "SELECT * from view_sumber_penghasilan";
-        return $this->db->query($query);
+        // $query = "SELECT * from view_sumber_penghasilan";
+        // return $this->db->query($query);
+        $x = array('id_parameter =' => '06', 'nama_parameter =' => 'JUMLAH PENDAPATAN', 'flg_aktif' => '1');
+        return $this->db->select('nama_detail' , 'id_detail_params')->where($x)->get('view_creditscoring');
     }
     function pemasukan_perbulan()
     {
@@ -79,5 +81,18 @@ class Model_view_master extends ci_model
         $this->db->where('id', $id);
         $result = $this->db->update('rekomendasi_pinjaman');
         return $result;
+    }
+
+    function lokasi_agunan()
+    {
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='LOKASI JAMINAN' AND id_parameter='016'";
+        $data=$this->db->query($query)->result();
+        return $data;
+    }
+    function data_collateral()
+    {
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='COLLATERAL' AND id_parameter='011'";
+        $data=$this->db->query($query)->result();
+        return $data;
     }
 }

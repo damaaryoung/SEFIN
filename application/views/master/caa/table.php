@@ -30,28 +30,30 @@
                                 <?php endif ?>
                             </div>
                             <div class="col-md-9">
-                                <form class="form-filter">
-                                    <div class="input-group mb-5">
-                                        <input type="text" class="form-control" style="width:200px" placeholder="Date started" id="datepicker1" data-language="en" data-date-format="dd-mm-yyyy" name="start">
-                                        <div class="text-alert"></div>
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                <?php if ($get_user['data']['kd_cabang'] == '00') : ?>
+                                    <form class="form-filter" id="form_filter">
+                                        <div class="input-group mb-5">
+                                            <input type="text" class="form-control" style="width:200px" placeholder="Date started" id="datepicker1" data-language="en" data-date-format="dd-mm-yyyy" name="start">
+                                            <div class="text-alert"></div>
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                            <input type="text" class="form-control" style="width:200px" placeholder="Date ended" id="datepicker2" data-language="en" data-date-format="dd-mm-yyyy" name="end">
+                                            <div class="text-alert"></div>
+                                            <select class="form-control select2 select2-danger" style="width:255px" name="cabang" id="cabang">
+                                                <option value="SEMUA CABANG">SEMUA CABANG</option>
+                                                <?php foreach ($cabang as $key => $value) { ?>
+                                                    <option value="<?= $value->id ?>"><?= $value->nama ?></option>
+                                                <?php } ?>
+                                                <option>x</option>
+                                            </select>
+                                            <div class="text-alert"></div>
+                                            <div class="input-group-prepend">
+                                                <button class="input-group-text btn-primary" type="submit"><i class="fa fa-location-arrow"></i></button>
+                                            </div>
                                         </div>
-                                        <input type="text" class="form-control" style="width:200px" placeholder="Date ended" id="datepicker2" data-language="en" data-date-format="dd-mm-yyyy" name="end">
-                                        <div class="text-alert"></div>
-                                        <select class="form-control select2 select2-danger" style="width:255px" name="cabang" id="cabang">
-                                            <option value="SEMUA CABANG">SEMUA CABANG</option>
-                                            <?php foreach ($cabang as $key => $value) { ?>
-                                                <option value="<?= $value->id ?>"><?= $value->nama ?></option>
-                                            <?php } ?>
-                                            <option>x</option>
-                                        </select>
-                                        <div class="text-alert"></div>
-                                        <div class="input-group-prepend">
-                                            <button class="input-group-text btn-primary" type="submit"><i class="fa fa-location-arrow"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                <?php endif ?>
                             </div>
                         </div>
                         <div class="box-body table-responsive no-padding">

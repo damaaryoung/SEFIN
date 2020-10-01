@@ -311,7 +311,7 @@
     var divisi = '<?php echo $get_user['data']['divisi_id'] ?>';
     console.log(divisi);
 
-    if (divisi === 'IT' || divisi === 'DIREKSI') {
+    if (divisi === 'IT') {
         $('#content').show()
     } else {
         $('#content').hide();

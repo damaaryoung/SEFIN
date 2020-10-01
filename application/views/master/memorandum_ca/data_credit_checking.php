@@ -3038,7 +3038,7 @@
                                                 <option value="">--Pilih--</option>
                                                 <?php foreach ($data_sumber_penghasilan->result() as $p) { ?>
                                                     echo "
-                                                    <option id="sumber_penghasilan<?php echo $p->kode_sumber_penghasilan ?>" value="<?php echo $p->kode_sumber_penghasilan ?>"><?php echo $p->desk_sumber_penghasilan ?></option>";
+                                                    <option id="sumber_penghasilan<?php echo $p->kode_sumber_penghasilan ?>" value="<?php echo $p->id_detail_params ?>"><?php echo $p->nama_detail ?></option>";
                                                 <?php  } ?>
 
                                             </select>
@@ -3049,7 +3049,6 @@
                                                 <select name="pemasukan_per_bulan_ca" class="form-control" style="width: 100%;">
                                                     <option value="">--Pilih--</option>
                                                     <?php foreach ($data_pemasukan_perbulan->result() as $p) { ?>
-                                                        echo "
                                                         <option id="pemasukan_perbulan<?php echo $p->kode_pemasukan_per_bulan ?>" value="<?php echo $p->kode_pemasukan_per_bulan ?>"><?php echo $p->desk_pemasukan_per_bulan ?></option>";
                                                     <?php  } ?>
                                                 </select>
@@ -5488,7 +5487,6 @@
 
             $("#tambah_informasi_cc").click(function() {
                 $('#modal_tambah_analisa_cc').modal('show');
-                $('#edit_id_info_analisa_cc').val('');
             });
 
             $("#tambah_penjamin").click(function() {

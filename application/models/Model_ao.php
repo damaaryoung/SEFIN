@@ -61,7 +61,7 @@ class Model_ao extends CI_Model
         $this->db->select("a.id,a.id_trans_so, DATE_FORMAT(a.created_at, '%d/%m/%Y %H:%i:%s') AS tanggal , b.nomor_so, b.nama_so, c.nama AS asal_data, b.nama_marketing, d.nama_lengkap AS nama_debitur, e.nama AS cabang", false);
         $this->db->from('trans_ao a');
         $this->db->join('trans_so b', 'b.id=a.id_trans_so', 'left');
-        $this->db->join('view_kode_group4 c', 'c.id=b.id_asal_data', 'left');
+        $this->db->join('master_asal_data c', 'c.id=b.id_asal_data', 'left');
         $this->db->join('calon_debitur d', 'd.id=b.id_calon_debitur', 'left');
         $this->db->join('mk_cabang e', 'e.id=b.id_cabang', 'left');
         $this->db->where_in('b.id_cabang', $cabang);

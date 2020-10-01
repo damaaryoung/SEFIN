@@ -94,7 +94,6 @@ class Menu_controller extends CI_Controller
 
             if (in_array($jabatan, $ARR_so)) :
                 $query_parameter = "SELECT ms.* FROM $tb_parameter_access p LEFT JOIN `menu_sub` ms ON ms.id=p.value WHERE p.id IN ('USER_AKSES_DEFAULT', 'USER_AKSES_SO', 'USER_AKSES_AO')";
-                // $SQL_parameter = $this->db->query($query_parameter);
                 $SQL_parameter = $this->db->query($query_parameter)->result();
                 foreach ($SQL_parameter as $SQL_res) :
                     $value_parameter_master[] = $SQL_res->id_menu_master;
@@ -132,16 +131,6 @@ class Menu_controller extends CI_Controller
                 endforeach;
                 $value_parameter_master = implode(',', $value_parameter_master);
                 $value_parameter_sub = implode(',', $value_parameter_sub);
-
-            // elseif (in_array($jabatan, $ARR_ds_spv)) :
-            //     $query_parameter = "SELECT ms.* FROM $tb_parameter_access p LEFT JOIN `menu_sub` ms ON ms.id=p.value WHERE p.id IN ('USER_AKSES_DEFAULT', 'USER_AKSES_DS_SPV', 'USER_AKSES_SO', 'USER_AKSES_AO', 'USER_AKSES_CA', 'USER_AKSES_DAS', 'USER_AKSES_CAA', 'USER_AKSES_OL')";
-            //     $SQL_parameter = $this->db->query($query_parameter)->result();
-            //     foreach ($SQL_parameter as $SQL_res) :
-            //         $value_parameter_master[] = $SQL_res->id_menu_master;
-            //         $value_parameter_sub[] = $SQL_res->id;
-            //     endforeach;
-            //     $value_parameter_master = implode(',', $value_parameter_master);
-            //     $value_parameter_sub = implode(',', $value_parameter_sub);
 
             elseif (in_array($jabatan, $ARR_ca)) :
                 $query_parameter = "SELECT ms.* FROM $tb_parameter_access p LEFT JOIN `menu_sub` ms ON ms.id=p.value WHERE p.id IN ('USER_AKSES_DEFAULT', 'USER_AKSES_CA', 'USER_AKSES_CAA', 'USER_AKSES_OL')";
@@ -189,7 +178,6 @@ class Menu_controller extends CI_Controller
                 endforeach;
                 $arr_unique = array_unique($arr_master);
                 $im_master = implode(',', $arr_unique) . ',' . $value_parameter_master;
-                // $im_master = $value_parameter_master;
 
                 foreach ($menu as $res) :
                     $arr_sub[] = $res->id_menu_sub;
@@ -206,7 +194,9 @@ class Menu_controller extends CI_Controller
             foreach ($menu as $res) :
                 $query = "SELECT nama AS nama_sub, `url` AS url_sub FROM `menu_sub` WHERE id IN($im_sub) AND id_menu_master='$res->id' ORDER BY id ASC";
                 $sub = $this->db->query($query)->result();
-                $arrMenu[] = array('master_menu'=>strtoupper($res->nama),'icon_menu'=>strtoupper($res->icon));
+                // $arrMenu[] = array('master_menu'=>strtoupper($res->nama),'icon_menu'=>strtoupper($res->icon));
+                $arrMenu['master_menu'] = strtoupper($res->nama);
+                $arrMenu['icon_menu'] = strtoupper($res->icon);
                 $arrSub = [];
                 foreach ($sub as $ress) :
                     $arrSub[] = array(
@@ -321,7 +311,9 @@ class Menu_controller extends CI_Controller
     }
     public function ao()
     {
-        $this->load->view('master/memorandum_ao/data_credit_checking');
+        $data['data_lokasi_agunan'] = $this->Model_view_master->lokasi_agunan();
+        $data['data_collateral'] = $this->Model_view_master->data_collateral();
+        $this->load->view('master/memorandum_ao/data_credit_checking',$data);
     }
     public function ca()
     {
@@ -346,17 +338,17 @@ class Menu_controller extends CI_Controller
 
         $data['get_user'] = $this->model_menu->getUser();
         $data['cabang'] = $this->model_menu->cabang();
-        $this->load->view('master/caa/table',$data);
+        $this->load->view('master/caa/table', $data);
     }
     public function ol()
     {
-      //  $url = 'api/master/mcaa';
+        //  $url = 'api/master/mcaa';
         //$result = $this->model_auth->get_data($url);
         //if ($result['code'] == '404') {
-         //   $data['result'] = 1;
+        //   $data['result'] = 1;
         //} else {
-         //   $data['result'] = $result;
-       // }
+        //   $data['result'] = $result;
+        // }
         //$data['url_table_caa'] = $this->config->item('api_url') . 'api/master/mcaa';
 
         $data['get_user'] = $this->model_menu->getUser();
@@ -385,6 +377,10 @@ class Menu_controller extends CI_Controller
     {
         $this->load->view('master/export/export_data');
     }
+    public function lampiran_debitur()
+    {
+        $this->load->view('master/lampiran_nasabah/data_lamp_realisasi');
+    }
     public function collection()
     {
         // $this->load->view('master/collection/dashboard');
@@ -394,6 +390,10 @@ class Menu_controller extends CI_Controller
     {
         $data['get_user'] = $this->model_menu->getUser();
         $this->load->view('master/restruktur/dashboard_restruktur', $data);
+    }
+    public function credit_scoring()
+    {
+        $this->load->view('master/Credit_Scoring/index');
     }
     public function provinsi()
     {

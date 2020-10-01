@@ -60,7 +60,7 @@ class Model_proses extends CI_Model
         }
         $this->db->select("a.id,a.id_cabang,a.id_pic, a.nomor_so, b.nama AS asal_data,d.nama as cabang,DATE_FORMAT(a.created_at,'%d/%m/%Y %H:%i:%s') as tanggal, a.nama_so, a.nama_marketing, a.status_das, c.nama_lengkap as nama_debitur", false);
         $this->db->from('trans_so a');
-        $this->db->join('view_kode_group4 b', 'b.id=a.id_asal_data', 'left');
+        $this->db->join('master_asal_data b', 'b.id=a.id_asal_data', 'left');
         $this->db->join('calon_debitur c', 'c.id=a.id_calon_debitur', 'left');
         $this->db->join('mk_cabang d', 'd.id=a.id_cabang', 'left');
         $this->db->where_in('a.id_cabang', $cabang);

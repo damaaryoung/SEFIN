@@ -5,6 +5,7 @@ class Master extends CI_Controller
     function __construct(){
         parent::__construct();
         $this->load->model('Model_menu');
+        $this->load->model('Model_memorandum_so');
          
     }
 
@@ -122,7 +123,9 @@ class Master extends CI_Controller
             $this->load->view('master/memorandum_so/data_credit_checking');
         }
         public function add_memorandum_so(){
-            $this->load->view('master/memorandum_so/add_credit');
+            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
+            $data['jml_tanggungan'] = $this->Model_memorandum_so->tampil_data_jml_tanggungan()->result();
+            $this->load->view('master/memorandum_so/add_credit', $data);
         }
         public function das(){
             $this->load->view('master/das/data_credit_checking');

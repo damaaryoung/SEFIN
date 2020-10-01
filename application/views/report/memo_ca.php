@@ -206,7 +206,7 @@
                               <tr>
                                  <td colspan="2">Angsuran lain -lain</td>
                                  <td>:</td>
-                                 <td><?php echo number_format($angsuran_kap) ?></td>
+                                 <td><?php echo number_format($biaya_lain) ?></td>
                                  <td colspan="3">Pembayaran hutang dagang</td>
                                  <td>:</td>
                                  <td><?php echo number_format($biaya_hutang_dagang) ?>
@@ -215,7 +215,7 @@
                               <tr>
                                  <td colspan="2">Lainnya</td>
                                  <td>:</td>
-                                 <td><?php echo number_format($biaya_lain) ?></td>
+                                 <td></td>
                                  <td colspan="3">Pembayaran angsuran usaha</td>
                                  <td>:</td>
                                  <td><?php echo number_format($biaya_angsuran_usaha) ?>
