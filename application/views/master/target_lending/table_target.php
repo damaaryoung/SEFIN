@@ -34,7 +34,7 @@
                                 </thead>
                                 <tbody>
                             <?php
-                            foreach ($data as $t){
+                            foreach ($target as $t){
                                 ?>
                                 <tr>
                                 <td><?php echo $t['area_kerja']; ?></td>
