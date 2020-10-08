@@ -230,6 +230,7 @@ class Caa_controller extends CI_Controller
         $plafon_pengajuan = $this->input->post('plafon');
         $nst = $this->input->post('nst');
         $cabang = $this->input->post('cabang');
+        // $cabang = 'Kantor Cimahi';
 
         $get_teamCAA = $this->model_auth->get_data('/api/master/team_caa');
         $teamCAA = $get_teamCAA['data'];
@@ -460,7 +461,6 @@ class Caa_controller extends CI_Controller
             $arr_nst_crm = array();
             $arr_nst_bis = array('STRUKTUR KREDIT', 'LTV', 'TENOR', 'BD150', 'KTA', 'PASTDUE RO', 'BIAYA PROVISI', 'BIAYA KREDIT', 'BIAYA ADMIN', 'BD50', 'PROFESI BERESIKO', 'JAMINAN DI PERKAMPUNGAN');
             $arr_nst_risk = array('LTV', 'TENOR', 'BD150', 'KTA', 'PASTDUE RO', 'BIAYA PROVISI', 'BIAYA KREDIT', 'BIAYA ADMIN', 'BD50', 'PROFESI BERESIKO', 'JAMINAN DI PERKAMPUNGAN', 'STRUKTUR KREDIT');
-
             if ($nst_struktur) {
                 foreach ($nst_struktur as $nst) {
                     if (in_array($nst, $arr_nst_am)) {

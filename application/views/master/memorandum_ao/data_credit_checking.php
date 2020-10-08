@@ -3459,13 +3459,10 @@
                                 </div>
                             </div>
                         </div>
-
                         <hr>
                         <div style="float: right; margin-right: 7px;">
                             <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success add-lamp-agunan-save">Save</button>
-                            <!--   <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
-                        <button type="submit" id="submit_ao" class="btn btn-primary submit" style="float: right; margin-right: 7px;">Simpan</button> -->
                         </div>
                     </div>
                 </div>

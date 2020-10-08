@@ -629,59 +629,6 @@
     }
 
     $("#modal_pengajuan").click(function() {
-        // load_data_pengajuan = function() {
-        //     get_pengajuan()
-        //         .done(function(response) {
-        //             var data = response.data;
-        //             var html = [];
-        //             var no = 0;
-
-        //             get_provinsi()
-        //                 .done(function(res) {
-        //                     var select = [];
-        //                     var select1 = '<option value="">--Pilih--</option>';
-        //                     $.each(res.data, function(i, e) {
-        //                         var option = [
-        //                             '<option value="' + e.id + '">' + e.nama + '</option>'
-        //                         ].join('\n');
-        //                         select.push(option);
-        //                     });
-        //                     $('#form_modal_agunan_sertifikat select[id=select_provinsi_agunan]').html(select1 + select);
-        //                 })
-        //             $.each(data, function(index, item) {
-        //                 no++;
-        //                 var tr = [
-        //                     '<tr>',
-        //                     '<td>' + no + '</td>',
-        //                     '<td>' + item.tgl_transaksi + '</td>',
-        //                     '<td>' + item.nomor_so + '</td>',
-        //                     '<td>' + item.pic + '</td>',
-        //                     '<td>' + item.asal_data + '</td>',
-        //                     '<td>' + item.nama_marketing + '</td>',
-        //                     '<td>' + item.nama_debitur + '</td>',
-        //                     '<td>' + item.cabang + '</td>',
-        //                     '<td style="width: 70px;">',
-        //                     '<button type="button" class="btn btn-info btn-sm edit" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-plus-circle"></i></button>',
-        //                     '</td>',
-        //                     '</tr>'
-        //                 ].join('\n');
-        //                 html.push(tr);
-        //             });
-        //             $('#data_pengajuan').html(html);
-        //             $('#tbl_pengajuan').DataTable({
-        //                 "paging": true,
-        //                 "retrieve": true,
-        //                 "lengthChange": true,
-        //                 "searching": true,
-        //                 "ordering": true,
-        //                 "info": true,
-        //                 "autoWidth": false,
-        //             });
-        //         })
-        //         .fail(function(response) {
-        //             $('#data_pengajuan').html('<tr><td colspan="4">Tidak ada data</td></tr>');
-        //         });
-        // }
         tampil_data_pengajuan();
         $("#modal_data_pengajuan").modal('show');
     })
@@ -7348,7 +7295,6 @@
     $('#add-lamp-agunan').hide();
     $('#form_modal_agunan_sertifikat ').on('submit', function(e) {
         var id = $('input[name=id_trans_so_aguanan]', this).val();
-
         e.preventDefault();
         var formData = new FormData();
 
@@ -7433,53 +7379,26 @@
         njop = njop.replace(/[^\d]/g, "");
         formData.append('njop', njop);
         formData.append('nop', $('input[name=nop]', this).val());
-        // formData.append('agunan_bag_depan',$('input[name=agunan_bag_depan]',this)[0].files[0]);
-        // formData.append('agunan_bag_jalan',$('input[name=agunan_bag_jalan]',this)[0].files[0]);
-        // formData.append('agunan_bag_ruangtamu',$('input[name=agunan_bag_ruangtamu]',this)[0].files[0]);
-        // formData.append('agunan_bag_kamarmandi',$('input[name=agunan_bag_kamarmandi]',this)[0].files[0]);
-        // formData.append('agunan_bag_dapur',$('input[name=agunan_bag_dapur]',this)[0].files[0]);
-
 
         tambah_agunan_tanah(formData, id)
-            .done(function(res) {
-                let html = "<div width='100%' class='text-center'>" +
-                    "<i class='fa fa-check text-success fa-4x'></i><br><br>" +
-                    "<h5>Jaminan agunan sertifikat berhasil disimpan. Lanjut upload lampiran</h5>" +
-                    "<a id='batal' href='javascript:void(0)' class='btn btn-primary' data-dismiss='modal'>Ok</a>" +
-                    "</div>";
-                $('#load_data').html(html);
-                $('#add-lamp-agunan').show();
-                $('#input-id-lamp-agunan').val(res.data.id);
-                $('.add-lamp-agunan-save').attr('disabled', true);
-            })
-            .fail(function(jqXHR) {
-                var data = jqXHR.responseJSON.message;
-                var error = "Harap isi semua kolom yg tersedia";
-                // if(typeof data == 'string') {
-                //     error = '<p>'+ data +'</p>';
-                // }else{
-                //     $.each(data.agunan_bag_depan, function(index,item){
-                //         error+='<p>'+ item +"</p>";
-                //     });
-                //     $.each(data.agunan_bag_jalan, function(index,item){
-                //         error+='<p>'+ item +"</p>";
-                //     });
-                //     $.each(data.agunan_bag_ruangtamu, function(index,item){
-                //         error+='<p>'+ item +"</p>";
-                //     });
-                //     $.each(data.agunan_bag_kamarmandi, function(index,item){
-                //         error+='<p>'+ item +"</p>";
-                //     });
-                //     $.each(data.agunan_bag_dapur, function(index,item){
-                //         error+='<p>'+ item +"</p>";
-                //     });
-                // }
-                bootbox.alert(error, function() {
-                    $("#batal").click();
-                });
-
+        .done(function(res) {
+            let html = "<div width='100%' class='text-center'>" +
+                "<i class='fa fa-check text-success fa-4x'></i><br><br>" +
+                "<h5>Jaminan agunan sertifikat berhasil disimpan. Lanjut upload lampiran</h5>" +
+                "<a id='batal' href='javascript:void(0)' class='btn btn-primary' data-dismiss='modal'>Ok</a>" +
+                "</div>";
+            $('#load_data').html(html);
+            $('#add-lamp-agunan').show();
+            $('#input-id-lamp-agunan').val(res.data.id);
+            $('.add-lamp-agunan-save').attr('disabled', true);
+        })
+        .fail(function(jqXHR) {
+            var data = jqXHR.responseJSON.message;
+            var error = "Harap isi semua kolom yg tersedia";
+            bootbox.alert(error, function() {
+                $("#batal").click();
             });
-
+        });
     });
 
     $('#form_modal_agunan_sertifikat_detail ').on('submit', function(e) {
@@ -7571,28 +7490,26 @@
 
 
         tambah_agunan_tanah(formData, id)
-            .done(function(res) {
-                let html = "<div width='100%' class='text-center'>" +
-                    "<i class='fa fa-check text-success fa-4x'></i><br><br>" +
-                    "<h5>Jaminan agunan sertifikat berhasil disimpan. Lanjut upload lampiran</h5>" +
-                    "<a id='batal' href='javascript:void(0)' class='btn btn-primary' data-dismiss='modal'>Ok</a>" +
-                    "</div>";
-                $('#load_data').html(html);
-                $('#add-lamp-agunan-detail').show();
-                $('#input-id-lamp-agunan-detail').val(res.data.id);
-                $('.add-lamp-agunan-save').attr('disabled', true);
-                load_agunan();
-            })
-            .fail(function(jqXHR) {
-                var data = jqXHR.responseJSON.message;
-                var error = "Harap isi semua kolom yg tersedia";
+        .done(function(res) {
+            let html = "<div width='100%' class='text-center'>" +
+                "<i class='fa fa-check text-success fa-4x'></i><br><br>" +
+                "<h5>Jaminan agunan sertifikat berhasil disimpan. Lanjut upload lampiran</h5>" +
+                "<a id='batal' href='javascript:void(0)' class='btn btn-primary' data-dismiss='modal'>Ok</a>" +
+                "</div>";
+            $('#load_data').html(html);
+            $('#add-lamp-agunan-detail').show();
+            $('#input-id-lamp-agunan-detail').val(res.data.id);
+            $('.add-lamp-agunan-save').attr('disabled', true);
+            load_agunan();
+        })
+        .fail(function(jqXHR) {
+            var data = jqXHR.responseJSON.message;
+            var error = "Harap isi semua kolom yg tersedia";
 
-                bootbox.alert(error, function() {
-                    $("#batal").click();
-                });
-
+            bootbox.alert(error, function() {
+                $("#batal").click();
             });
-
+        });
     });
 
     get_agunan = function(opts, id) {
@@ -7664,8 +7581,6 @@
                         '<td style="width:200px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
                         '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px"style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
                         '<td style="width:180px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
-
-
                         '</tr>'
                     ].join('\n');
                     htmlpenjamin1.push(tr);
@@ -7712,7 +7627,6 @@
                 ].join('\n');
                 html3.push(d);
                 $('#gambar_pbb').html(html3);
-
 
                 var e = [
                     '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_imb + '" data-lightbox="example-set" data-title="Lampiran IMB Debitur"><img class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_imb + '" /> </a>'
@@ -7786,13 +7700,6 @@
                 ].join('\n');
                 html5.push(f);
                 $('#gambar_lamp_skk').html(html5);
-
-
-                // var p = [
-                // '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>'+data_debitur.lampiran.lamp_skk+'" data-lightbox="example-set" data-title="Lampiran IMB Debitur"><img class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>'+data_debitur.lampiran.lamp_skk+'" /> </a>'
-                // ].join('\n');
-                // html5.push(p);
-                // $('#gambar_lamp_skk').html(html5);
 
                 var p = [
                     '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_slip_gaji + '" data-lightbox="example-set" data-title="Lampiran IMB Debitur"><img class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_slip_gaji + '" /> </a>'
@@ -7916,28 +7823,27 @@
     load_data_anak = function() {
         var id = $('#form_tambah_data_anak input[type=hidden][name=id_debitur_anak]').val();
         get_data_debitur({}, id)
-            .done(function(response) {
-                var data_debitur = response.data;
-                var html = [];
-                var html14 = [];
-                var no = 0;
+        .done(function(response) {
+            var data_debitur = response.data;
+            var html = [];
+            var html14 = [];
+            var no = 0;
 
-                $.each(data_debitur.anak, function(index, item) {
-
-                    var tr = [
-                        '<tr>',
-                        '<td>' + item.nama + '</td>',
-                        '<td>' + item.tgl_lahir_anak + '</td>',
-                        '<td style="width:5px"><button type="button" class="btn btn-default bg-gradient-danger btn-sm delete_anak"  title="Hapus Data Anak"  data="' + item.anak_id + '"><i style="color: #fff;" class="fas fa-window-close"></i></button></td>',
-                        '</tr>'
-                    ].join('\n');
-                    html14.push(tr);
-                    $('#data_anak').html(html14);
-                })
+            $.each(data_debitur.anak, function(index, item) {
+                var tr = [
+                    '<tr>',
+                    '<td>' + item.nama + '</td>',
+                    '<td>' + item.tgl_lahir_anak + '</td>',
+                    '<td style="width:5px"><button type="button" class="btn btn-default bg-gradient-danger btn-sm delete_anak"  title="Hapus Data Anak"  data="' + item.anak_id + '"><i style="color: #fff;" class="fas fa-window-close"></i></button></td>',
+                    '</tr>'
+                ].join('\n');
+                html14.push(tr);
+                $('#data_anak').html(html14);
             })
-            .fail(function(response) {
-                $('#data_anak').html('<tr><td colspan="4">Tidak ada data</td></tr>');
-            });
+        })
+        .fail(function(response) {
+            $('#data_anak').html('<tr><td colspan="4">Tidak ada data</td></tr>');
+        });
     }
 
     //SUBMIT EDIT VERIFIKASI
@@ -7986,27 +7892,27 @@
             catatan: $('textarea[name=catatan_verifikasi_detail]', this).val()
         }
         update_verifikasi(data, id)
-            .done(function(res) {
-                var data = res.data;
-                bootbox.alert('Data berhasil diubah', function() {
-                    $("#batal").click();
-                });
-            })
-            .fail(function(jqXHR) {
-                var data = jqXHR.responseJSON;
-                var error = "";
-
-                if (typeof data == 'string') {
-                    error = '<p>' + data + '</p>';
-                } else {
-                    $.each(data, function(index, item) {
-                        error += '<p>' + item + '</p>' + "\n";
-                    });
-                }
-                bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
-                    $("#batal").click();
-                });
+        .done(function(res) {
+            var data = res.data;
+            bootbox.alert('Data berhasil diubah', function() {
+                $("#batal").click();
             });
+        })
+        .fail(function(jqXHR) {
+            var data = jqXHR.responseJSON;
+            var error = "";
+
+            if (typeof data == 'string') {
+                error = '<p>' + data + '</p>';
+            } else {
+                $.each(data, function(index, item) {
+                    error += '<p>' + item + '</p>' + "\n";
+                });
+            }
+            bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                $("#batal").click();
+            });
+        });
     });
 
     //SUBMIT EDIT VALIDASI
@@ -8050,27 +7956,27 @@
             catatan: $('textarea[name=catatan_val_detail]', this).val()
         }
         update_validasi(data, id)
-            .done(function(res) {
-                var data = res.data;
-                bootbox.alert('Data berhasil diubah', function() {
-                    $("#batal").click();
-                });
-            })
-            .fail(function(jqXHR) {
-                var data = jqXHR.responseJSON;
-                var error = "";
-
-                if (typeof data == 'string') {
-                    error = '<p>' + data + '</p>';
-                } else {
-                    $.each(data, function(index, item) {
-                        error += '<p>' + item + '</p>' + "\n";
-                    });
-                }
-                bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
-                    $("#batal").click();
-                });
+        .done(function(res) {
+            var data = res.data;
+            bootbox.alert('Data berhasil diubah', function() {
+                $("#batal").click();
             });
+        })
+        .fail(function(jqXHR) {
+            var data = jqXHR.responseJSON;
+            var error = "";
+
+            if (typeof data == 'string') {
+                error = '<p>' + data + '</p>';
+            } else {
+                $.each(data, function(index, item) {
+                    error += '<p>' + item + '</p>' + "\n";
+                });
+            }
+            bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                $("#batal").click();
+            });
+        });
     });
 
     update_pemeriksaan_tanah_bangunan = function(opts, id) {
@@ -8133,27 +8039,27 @@
         formData.append('nilai_agunan_independen', nilai_agunan_independen_detail);
 
         update_pemeriksaan_tanah_bangunan(formData, id)
-            .done(function(res) {
-                var data = res.data;
-                bootbox.alert('Data berhasil diubah', function() {
-                    $("#batal").click();
-                });
-            })
-            .fail(function(jqXHR) {
-                var data = jqXHR.responseJSON;
-                var error = "";
-
-                if (typeof data == 'string') {
-                    error = '<p>' + data + '</p>';
-                } else {
-                    $.each(data, function(index, item) {
-                        error += '<p>' + item + '</p>' + "\n";
-                    });
-                }
-                bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
-                    $("#batal").click();
-                });
+        .done(function(res) {
+            var data = res.data;
+            bootbox.alert('Data berhasil diubah', function() {
+                $("#batal").click();
             });
+        })
+        .fail(function(jqXHR) {
+            var data = jqXHR.responseJSON;
+            var error = "";
+
+            if (typeof data == 'string') {
+                error = '<p>' + data + '</p>';
+            } else {
+                $.each(data, function(index, item) {
+                    error += '<p>' + item + '</p>' + "\n";
+                });
+            }
+            bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                $("#batal").click();
+            });
+        });
     });
 
     //UPDATE KAPASITAS BULANAN
@@ -8242,7 +8148,7 @@
                     $("#batal").click();
                 });
             });
-    });
+        });
 
     //UPDATE PENDAPATAN USAHA
     update_usaha_cadeb = function(opts, id) {
@@ -8406,28 +8312,28 @@
         }
 
         update_recom_ao(data, id)
-            .done(function(res) {
-                var data = res.data;
-                bootbox.alert('Data berhasil diubah', function() {
-                    $("#batal").click();
-                    // load_pendapatan_usaha();
-                });
-            })
-            .fail(function(jqXHR) {
-                var data = jqXHR.responseJSON;
-                var error = "";
-
-                if (typeof data == 'string') {
-                    error = '<p>' + data + '</p>';
-                } else {
-                    $.each(data, function(index, item) {
-                        error += '<p>' + item + '</p>' + "\n";
-                    });
-                }
-                bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
-                    $("#batal").click();
-                });
+        .done(function(res) {
+            var data = res.data;
+            bootbox.alert('Data berhasil diubah', function() {
+                $("#batal").click();
+                // load_pendapatan_usaha();
             });
+        })
+        .fail(function(jqXHR) {
+            var data = jqXHR.responseJSON;
+            var error = "";
+
+            if (typeof data == 'string') {
+                error = '<p>' + data + '</p>';
+            } else {
+                $.each(data, function(index, item) {
+                    error += '<p>' + item + '</p>' + "\n";
+                });
+            }
+            bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                $("#batal").click();
+            });
+        });
     });
 
     //SUBMIT TAMBAH PENJAMIN
@@ -8476,22 +8382,6 @@
             bootbox.alert("Hubungan Penjamin Belum Di Pilih !!!");
             return (false);
         }
-        // if (document.getElementById('add_pekerjaan_pen').value == "") {
-        //     bootbox.alert("Pekerjaan Penjamin Belum Di Pilih !!!");
-        //     return (false);
-        // }
-        // if (document.getElementById('add_nama_perusahaan_penjamin').value == "") {
-        //     bootbox.alert("Nama Perusahaan Penjamin Tidak Boleh Kosong !!!");
-        //     return (false);
-        // }
-        // if (document.getElementById('add_posisi_usaha_penjamin').value == "") {
-        //     bootbox.alert("Posisi Pekerjaan Penjamin Tidak Boleh Kosong !!!");
-        //     return (false);
-        // }
-        // if (document.getElementById('add_jenis_usaha_penjamin').value == "") {
-        //     bootbox.alert("Jenis Usaha Perusahaan Penjamin Tidak Boleh Kosong !!!");
-        //     return (false);
-        // }
         //Data Debitur
         formData.append('nama_ktp_pen', $('input[name=add_nama_penjamin]', this).val());
         formData.append('nama_ibu_kandung_pen', $('input[name=add_nama_ibu_kandung_penjamin]', this).val());
@@ -8765,31 +8655,9 @@
                 id: id
             },
             success: function(data) {
-                //   $('[name="id_delete"]').val("");
-                //   $('#Modal_Delete').modal('hide');
                 load_data_anak();
             }
         });
         return false;
-
     });
-
-
-    // load_form_persetujuan_ideb = function() {
-    //     var id = $('#form_debitur input[type=hidden][name=id]').val();
-    //     get_detail({}, id)
-    //         .done(function(response) {
-    //             var data = response.data;
-    //             console.log(data);
-    //             html = [];
-    //             var o = [
-    //                 '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.form_persetujuan_ideb + '" data-lightbox="example-set" data-title="Lampiran Buku Nikah"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.form_persetujuan_ideb + '" /> </a>'
-    //             ].join('\n');
-    //             html.push(o);
-    //             $('#lamp_form_persetujuan_ideb').html(html16);
-    //         })
-    //         .fail(function(response) {
-    //             $('#data_agunan_detail').html('<tr><td colspan="4">Tidak ada data</td></tr>');
-    //         });
-    // }
 </script>

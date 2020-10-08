@@ -39,9 +39,57 @@ class Dashboard_restruktur_controller extends CI_Controller
         echo json_encode($data);
     }
 
+    function get_data_area_cabang_by_amount()
+    {
+        $data = $this->Model_dashboard_restruktur->get_data_area_cabang_by_amount();
+        echo json_encode($data);
+    }
+    
+    function get_data_area_cabang_by_noa()
+    {
+        $data = $this->Model_dashboard_restruktur->get_data_area_cabang_by_noa();
+        echo json_encode($data);
+    }
+
+    function get_noa_restruktur_kredit_by_plafon()
+    {
+        $data = $this->Model_dashboard_restruktur->get_noa_restruktur_kredit_by_plafon();
+        echo json_encode($data);
+    }
+
     function get_model_restruktur_kredit_by_noa()
     {
         $data = $this->Model_dashboard_restruktur->get_model_restruktur_kredit_by_noa();
+        echo json_encode($data);
+    }
+
+    function get_tujuan_pinjaman_restruktur()
+    {
+        $data = $this->Model_dashboard_restruktur->get_tujuan_pinjaman_restruktur();
+        echo json_encode($data);
+    }
+
+    function get_restruktur_segmentasi()
+    {
+        $data = $this->Model_dashboard_restruktur->get_restruktur_segmentasi();
+        echo json_encode($data);
+    }
+
+    function get_collection_rasio()
+    {
+        $data = $this->Model_dashboard_restruktur->get_collection_rasio();
+        echo json_encode($data);
+    }
+
+    function get_current_rasio()
+    {
+        $data = $this->Model_dashboard_restruktur->get_current_rasio();
+        echo json_encode($data);
+    }
+
+    function get_ns_restruktur()
+    {
+        $data = $this->Model_dashboard_restruktur->get_ns_restruktur();
         echo json_encode($data);
     }
 
