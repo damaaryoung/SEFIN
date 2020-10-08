@@ -534,6 +534,6 @@ class Menu_controller extends CI_Controller
         $data = array(
         'target' => $rspJson['data']);
    
-        $this->load->view('master/target_lending/table_target',$rspJson['data']);
+        $this->load->view('master/target_lending/table_target',$data);
 }
 }
