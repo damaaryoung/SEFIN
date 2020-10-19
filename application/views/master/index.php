@@ -12,7 +12,7 @@
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bbootstrap 4 -->
-  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')?>">
+  <link rel="stylesheet" href="<?php echo base_url('assets/plugins/datepicker/css/bootstrap-datepicker.min.css')?>">
   <!-- iCheck -->
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')?>">
   <!-- JQVMap -->
@@ -266,7 +266,7 @@
 <script src="<?php echo base_url('assets/plugins/moment/moment.min.js')?>"></script>
 
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="<?php echo base_url('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')?>"></script>
+<script src="<?php echo base_url('assets/plugins/datepicker/js/bootstrap-datepicker.min.js')?>"></script>
 <!-- Summernote -->
 <script src="<?php echo base_url('assets/plugins/summernote/summernote-bs4.min.js')?>"></script>
 <!-- overlayScrollbars -->

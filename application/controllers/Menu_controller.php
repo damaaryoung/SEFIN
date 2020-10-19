@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') or exmaster('No direct script access allowed');
-use GuzzleHttp\Client;
 
 class Menu_controller extends CI_Controller
 {
@@ -516,24 +515,8 @@ class Menu_controller extends CI_Controller
             $this->load->view('master');
         }
     }
-        public function dashboard_lending()
+    public function cek_sertifikat()
     {
-        $client = new Client();
-        $token = $this->session->userdata('SESSION_TOKEN');
-        $headers = ['headers' => ['Content-Type' => 'application/json',
-        'Authorization' => 'Bearer ' .$token]];
-        $response = $client->getAsync(API_WEBTOOL3 .'/api/master/target', $headers)->then(
-	    function ($response) {
-                return json_decode($response->getBody()->getContents(), true);
-            }, function ($exception) {
-               return $exception->getMessage();
-               
-         });
-        $rspJson= $response->wait();
-
-        $data = array(
-        'target' => $rspJson['data']);
-   
-        $this->load->view('master/target_lending/table_target',$data);
-}
+        $this->load->view('master/cek_sertifikat/index');
+    }
 }
