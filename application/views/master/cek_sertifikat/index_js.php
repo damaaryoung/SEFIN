@@ -101,7 +101,7 @@
           var data=$('#quickForm').serialize();
           // start at ajax updated
           $.ajax({
-            url: "<?= base_url(); ?>CekSertifikat_controller/updated",
+            url: "<!?= base_url(); ?>CekSertifikat_controller/updated",
             data:data,
             type: "POST",
             beforeSend: function() {
@@ -137,6 +137,9 @@
           nomor_surat_ukur: {
             required: true,
           },
+          tgl_sertifikat: {
+            required: true,
+          },
           luas_tanah: {
             required: true,
           },
@@ -146,6 +149,7 @@
           alamat: "Please accept our alamat",
           no_shm: "Please accept our no_shm",
           nomor_surat_ukur: "Please accept our nomor surat ukur",
+          tgl_sertifikat: "Please accept our luas tanah",
           luas_tanah: "Please accept our luas tanah",
         },
         errorElement: 'span',

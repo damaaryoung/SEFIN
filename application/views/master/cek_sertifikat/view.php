@@ -25,7 +25,7 @@
           <div class="row">
             <div class="col-md-9">
               <h5><i class="fas fa-info"></i> Note:</h5>
-              Halaman ini telah disempurnakan untuk pencetakan. Klik tombol cetak di bagian bawah sebelah kiri disamping kanan tombol "Tutup" untuk menguji.
+              Halaman ini telah disempurnakan untuk pencetakan dengan mengeksport file dalam bentuk pdf. Klik tombol PDF di bagian bawah sebelah kanan untuk menguji.
             </div>
             <div class="col-md-3">
               <img src="<?= base_url(); ?>assets/dist/img/detective.svg" width="30%" class="float-right">
@@ -144,30 +144,30 @@
                       <legend class="scheduler-border">Nasabah</legend>
                       <div class="form-group">
                         <label for="exampleInputEmail1">Nama Lengkap</label>
-                        <input type="text" name="nama" class="form-control" id="nama-nasabah" value="<?=$key['nama_lengkap'];?>" readonly>
+                        <input type="text" name="nama" class="form-control" id="nama-nasabah" value="<?=$key['nama_lengkap'];?>">
                       </div>
                       <div class="form-group">
                         <label for="exampleInputPassword1">Alamat</label>
-                        <textarea name="alamat" class="form-control" id="alamat" readonly><?=$key['nama_lengkap'];?></textarea>
+                        <textarea name="alamat" class="form-control" id="alamat"><?=$key['nama_lengkap'];?></textarea>
                       </div>
                     </fieldset>
                     <fieldset class="scheduler-border">
                       <legend class="scheduler-border">Rincian</legend>
                       <div class="form-group">
                         <label for="exampleInputEmail1">No. SHM</label>
-                        <input type="text" name="no_shm" class="form-control" id="no-shm" value="<?=$key['no_shm'];?>" readonly>
+                        <input type="text" name="no_shm" class="form-control" id="no-shm" value="<?=$key['no_shm'];?>">
                       </div>
                       <div class="form-group">
                         <label for="exampleInputPassword1">No. Surat Ukur</label>
-                        <input type="text" name="nomor_surat_ukur" class="form-control" id="no-surat-ukur" value="<?=$key['nomor_surat_ukur'];?>" readonly>
+                        <input type="text" name="nomor_surat_ukur" class="form-control" id="no-surat-ukur" value="<?=$key['nomor_surat_ukur'];?>">
                       </div>
                       <div class="form-group">
                         <label for="exampleInputPassword1">Tgl. Sertifikat</label>
-                        <input type="text" name="tgl_sertifikat" class="form-control" id="tgl-sertifikat" value="<?=$key['tgl_sertifikat'];?>" readonly>
+                        <input type="text" name="tgl_sertifikat" class="form-control" id="tgl-sertifikat" value="<?=$key['tgl_sertifikat'];?>">
                       </div>
                       <div class="form-group">
                         <label for="exampleInputPassword1">Luas Tanah</label>
-                        <input type="text" name="luas_tanah" class="form-control" id="luas-tanah" value="<?=$key['luas_tanah'];?>" readonly>
+                        <input type="text" name="luas_tanah" class="form-control" id="luas-tanah" value="<?=$key['luas_tanah'];?>">
                       </div>
                     </fieldset>
                   </div>
@@ -321,26 +321,25 @@
             <!-- form ended -->
           </div>
 
-
-          <div class="row no-print">
-            <div class="col-12">
-              <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times-circle"></i> Tutup</button>
-              <button type="button" class="btn btn-success float-right updated" onclick="ubah();" style="display:block;margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Lakukan Perubahan Data"><i class="far fa-edit"></i> Ubah
-              </button>
-              <button type="button" class="btn btn-warning float-right back" onclick="back();" style="display:none;margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Kembali Melihat"><i class="fas fa-undo-alt"></i> Kembali
-              </button>
-              <button type="submit" class="btn btn-success float-right save" style="display:none;margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Simpan Perubahan">
-                <i class="fas fa-save"></i> Simpan
-              </button>
-              <button class="btn btn-primary spinner float-right" type="button" disabled style="display:none;margin-right: 5px;">
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Loading...
-              </button>
-              <a href="<?= base_url(); ?>report/Cek_sertifikat_report/index/<?= $id; ?>" class="btn btn-primary float-right" style="margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Generate PDF">
-                <i class="fas fa-download"></i> PDF
-              </a>
+            <div class="row no-print">
+              <div class="col-12">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times-circle"></i> Tutup</button>
+                <button type="button" class="btn btn-success float-right updated" onclick="ubah();" style="display:block;margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Lakukan Perubahan Data"><i class="far fa-edit"></i> Ubah
+                </button>
+                <button type="button" class="btn btn-warning float-right back" onclick="back();" style="display:none;margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Kembali Melihat"><i class="fas fa-undo-alt"></i> Kembali
+                </button>
+                <button type="submit" class="btn btn-success float-right save" style="display:none;margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Simpan Perubahan">
+                  <i class="fas fa-save"></i> Simpan
+                </button>
+                <button class="btn btn-primary spinner float-right" type="button" disabled style="display:none;margin-right: 5px;">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Loading...
+                </button>
+                <a href="<?= base_url(); ?>report/Cek_sertifikat_report/index/<?= $id; ?>" class="btn btn-primary float-right" style="margin-right: 5px;" data-toggle="tooltip" data-placement="top" title="Generate PDF">
+                  <i class="fas fa-download"></i> PDF
+                </a>
+              </div>
             </div>
-          </div>
           </form>
         </div>
       </div>
