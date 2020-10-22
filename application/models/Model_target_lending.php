@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 class Model_target_lending extends CI_Model
 {
 
-  private $_client;
+  // private $_client;
 
   // public function __construct()
   // {
