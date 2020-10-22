@@ -1329,8 +1329,8 @@
 
     // LOAD DATA
     $(function() {
-
         get_credit_checking = function(opts, id) {
+          console.log(opts);
             var url = '<?php echo $this->config->item('api_url'); ?>api/master/mcc';
             return $.ajax({
                 url: url,

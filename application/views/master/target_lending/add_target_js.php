@@ -76,7 +76,7 @@
             //   console.log(res);
                 var data = res;
                     bootbox.alert('Data berhasil ditambah',function(){
-                        $('#form_data_target')[0].reset();
+                        $('#form_data_target').load('target_lending/table_target.php');
                         hide_all();
                         $('#lihat_kantor_cabang').show();
                 });

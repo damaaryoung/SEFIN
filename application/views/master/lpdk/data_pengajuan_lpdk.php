@@ -1509,7 +1509,7 @@
         });
     }
 
-    //TAMBAH PENGAJUAN LPDK  
+    //TAMBAH PENGAJUAN LPDK
     tambah_pengajuan_lpdk = function(opts, id) {
         var url = '<?php echo $this->config->item('api_url'); ?>/api/master/lpdk/' + id;
         var data = opts;
@@ -1721,10 +1721,14 @@
 
     //FUNGSI RUBAH ANGKA
     function rubah(angka) {
+      if (angka === null) {
+        console.log(angka);
+      }else {
         var reverse = angka.toString().split('').reverse().join(''),
             ribuan = reverse.match(/\d{1,3}/g);
         ribuan = ribuan.join('.').split('').reverse().join('');
         return ribuan;
+      }
     }
 
     //FUNGSI DATA APPROVAL
@@ -2240,7 +2244,7 @@
             });
     });
 
-    //KLIK EDIT DATA JAMINAN SERTIFIKAT 
+    //KLIK EDIT DATA JAMINAN SERTIFIKAT
     $('#data_jaminan_sertifikat').on('click', '.edit', function(e) {
         var id = $(this).attr('data');
         $("#modal_input_jaminan").modal('show');
