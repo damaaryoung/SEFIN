@@ -86,4 +86,3 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 define('TB_PARAMETER_ACCESS','parameter_access');
 
-define('API_WEBTOOL3','http://103.31.232.146/API_WEBTOOL3');

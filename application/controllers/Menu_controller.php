@@ -10,6 +10,8 @@ class Menu_controller extends CI_Controller
         $this->load->model('model_menu');
         $this->load->model('model_auth');
         $this->load->model('Model_view_master');
+        $this->load->model('Model_target_lending');
+
     }
 
     public function index()
@@ -516,24 +518,9 @@ class Menu_controller extends CI_Controller
             $this->load->view('master');
         }
     }
-        public function dashboard_lending()
+        public function dashboard_target_lending()
     {
-        $client = new Client();
-        $token = $this->session->userdata('SESSION_TOKEN');
-        $headers = ['headers' => ['Content-Type' => 'application/json',
-        'Authorization' => 'Bearer ' .$token]];
-        $response = $client->getAsync(API_WEBTOOL3 .'/api/master/target', $headers)->then(
-	    function ($response) {
-                return json_decode($response->getBody()->getContents(), true);
-            }, function ($exception) {
-               return $exception->getMessage();
-               
-         });
-        $rspJson= $response->wait();
-
-        $data = array(
-        'target' => $rspJson['data']);
-   
+        $data['target'] = $this->Model_target_lending->tampil_data($page);
         $this->load->view('master/target_lending/table_target',$data);
 }
 }

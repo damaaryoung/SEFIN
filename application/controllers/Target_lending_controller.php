@@ -7,28 +7,70 @@ class Target_lending_controller extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+		$this->load->model('Model_target_lending');
     }
     // menampilkan data kontak
     function index(){
-      
+            // $data =$this->Model_target_lending->tampil_data()
+        // ;
+        // var_dump($data['data']['data']);
 
-        $client = new Client();
-        $headers = ['headers' => ['Content-Type' => 'application/json', 
-        'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJCUFIgS3JlZGl0IE1hbmRpcmkgSW5kb25lc2lhIiwiaWQiOjE1MTEsIm5payI6IjAyMjAxMDE0NyIsInVzZW5hbWUiOiJhcnlvIiwia2RfY2FiYW5nIjpudWxsLCJkaXZpc2lfaWQiOiJJVCIsImphYmF0YW4iOiJJVCBTVEFGRiIsImVtYWlsIjoiaXRAa3JlZGl0bWFuZGlyaS5jby5pZCIsIm5hbWEiOiJIQVJZTyBGQUpBUiBCSEFHQVNLT1JPIiwiaWF0IjoxNjAxOTQ4ODQwLCJleHAiOjE2MDMxNTg0NDB9.EUR-bBVEea1hSk0R-VW5ibvGajX1qkeDdvxtkQ3FKhc']];
-        $response = $client->getAsync('http://103.31.232.146/API_WEBTOOL3/api/master/target', $headers)->then(
-	    function ($response) {
-                return json_decode($response->getBody()->getContents(), true);
-            }, function ($exception) {
-               return $exception->getMessage();
-               
-      });
-    $rspJson= $response->wait();
+        $this->load->view('master/target_lending/template',$data);
+        $this->load->view('master/target_lending/table_target',$data);
+    }
 
-    $data_array = array(
-        'target' => $rspJson['data']);
-    //   var_dump($data_array);
-       
-        $this->load->view('master/target_lending/template',$data_array);
-        $this->load->view('master/target_lending/table_target',$data_array);
+    function tampil_data()
+    {
+      $data=$this->Model_target_lending->tampil_data($page);
+        // var_dump($data['data']);
+        // die();
+
+          // var_dump('d')
+      foreach ($data['data']['data'] as $key) {
+        // code...
+          $datas[]=array(
+          "kode_kantor"=>$key['kode_kantor'],
+          "area_kerja"=>$key['area_kerja'],
+          "area"=>$key['area'],
+          "target"=>$key['target'],
+          "bulan"=>$key['bulan'],
+          "tahun"=>$key['tahun'],
+          "edit"=>'<button class="btn btn-info view" onclick="edit('.$key['id'].');">Edit</button>',
+          "delete"=>'<button class="btn btn-info delete" name="delete" onclick="view('.$key['id'].')";>Delete</button>',
+        
+          
+        );
+      }
+      // var_dump($data);
+      $arrayName = array(
+        "draw"=>$data['data']['current_page'],
+        "recordsTotal"=> $data['data']['total'],
+        "recordsFiltered"=> $data['data']['total'],
+        "data"=>$datas,
+      );
+      echo json_encode($arrayName);
+      // var_dump($arrayName);
     }
+    
+  
+
+     function create(){
+
+      $this->load->view('master/target_lending/add_target');
+      // $this->load->view('master/target_lending/add_target_js.php');
+
     }
+
+    function edit(){
+      $id = $this->input->post('id');
+      $this->load->model('model_auth');
+      $data['get_data'] = $this->model_auth->get_data('api/master/target/'.$id);
+      $this->load->view('master/target_lending/edit_target', $data);
+    }
+    
+    function get_area_kerja() {
+      $area_kerja = $this->model_auth->get_data('api/master/area_kerja');
+      echo json_encode($area_kerja);
+  }
+  
+  }
