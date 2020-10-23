@@ -298,7 +298,7 @@
         <div class="col-md-4">
           <div class="card">
             <div class="card-header d-flex p-0">
-              <h3 class="card-title p-3">FID Ever</h3>
+              <h3 class="card-title p-3">FID Ever By 6 Mounth</h3>
             </div><!-- /.card-header -->
             <div class="card-body">
               <div id="fid-ever" style="height: 300px; width: 100%;"></div>
@@ -308,7 +308,7 @@
         <div class="col-md-4">
           <div class="card">
             <div class="card-header d-flex p-0">
-              <h3 class="card-title p-3">FID Compre</h3>
+              <h3 class="card-title p-3">FID Compre By 6 Mounth</h3>
             </div><!-- /.card-header -->
             <div class="card-body">
               <div id="fid-compre" style="height: 300px; width: 100%;"></div>
