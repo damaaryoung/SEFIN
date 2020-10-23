@@ -9,7 +9,7 @@
                 headers : {
                     'Authorization': 'Bearer '+localStorage.getItem('token')
                 }
-            });
+            }); 
         }
         get_area_cabang = function(opts){
             var url = '<?php echo $this->config->item('api_url');?>api/master/area_cabang';
@@ -76,7 +76,7 @@
             //   console.log(res);
                 var data = res;
                     bootbox.alert('Data berhasil ditambah',function(){
-                        $('#form_data_target').load('target_lending/table_target.php');
+                        $('#form_data_target')[0].reset();
                         hide_all();
                         $('#lihat_kantor_cabang').show();
                 });
@@ -98,6 +98,26 @@
             })
         });
                 
+        $('#area_kerja').change(function(){
+        var id=$(this).val();
+        $.ajax({
+            url : "<?php echo $this->config->item('api_url');?>api/master/target/"+id+"/kode_kantor",
+            method : "GET",
+            data : {id: id},
+            async : false,
+            dataType : 'json',
+            success: function(res){
+            var select = [];
+            $.each(res.data, function(i,e){
+                var option = [
+                    '<option value="'+e.kode_kantor+'">'+e.kode_kantor+'</option>'
+                ].join('\n');
+                select.push(option);
+            });
+            $('#form_data_target select[name=kode_kantor]').html(select);      
+            }
+        });
+      });
  
 });
 

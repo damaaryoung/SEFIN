@@ -518,13 +518,14 @@ class Menu_controller extends CI_Controller
             $this->load->view('master');
         }
     }
+
     public function cek_sertifikat()
     {
         $this->load->view('master/cek_sertifikat/index');
     }
-    public function dashboard_target_lending()
+
+        public function dashboard_target_lending()
     {
-        $data['target'] = $this->Model_target_lending->tampil_data($page);
-        $this->load->view('master/target_lending/table_target',$data);
+        $this->load->view('master/target_lending/table_target');
     }
 }

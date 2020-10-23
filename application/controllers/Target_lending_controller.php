@@ -15,19 +15,19 @@ class Target_lending_controller extends CI_Controller {
         // ;
         // var_dump($data['data']['data']);
 
-        // $this->load->view('master/target_lending/template',$data);
+        $this->load->view('master/target_lending/template',$data);
         $this->load->view('master/target_lending/table_target',$data);
     }
 
     function tampil_data()
     {
+      if ($_GET['draw']) {
+        $page=$_GET['draw'];
+      }else{
+        $page=1;
+      }
       $data=$this->Model_target_lending->tampil_data($page);
-        // var_dump($data['data']);
-        // die();
-
-          // var_dump('d')
       foreach ($data['data']['data'] as $key) {
-        // code...
           $datas[]=array(
           "kode_kantor"=>$key['kode_kantor'],
           "area_kerja"=>$key['area_kerja'],
@@ -49,7 +49,6 @@ class Target_lending_controller extends CI_Controller {
         "data"=>$datas,
       );
       echo json_encode($arrayName);
-      // var_dump($arrayName);
     }
     
   
@@ -73,4 +72,8 @@ class Target_lending_controller extends CI_Controller {
       echo json_encode($area_kerja);
   }
   
+    // function update(){
+    //   $this->load->model('Model_target_lending');
+    // }
+
   }

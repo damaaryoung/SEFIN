@@ -1,6 +1,5 @@
 <script>
-
-        
+   
 get_area_kerja();
     function get_area_kerja() {
             var url = '<?php echo $this->config->item('api_url');?>api/master/area_kerja';
@@ -21,10 +20,29 @@ get_area_kerja();
                         ].join('\n');
                         html.push(opt)
                     }
-                    $('#area_kerjas').append(html);
+                    // $('#area_kerjas').append(html);
                 }
             }
         });
+
+//     $('#form_edit_target').on('submit',function(e){
+//     e.preventDefault();
+//     // NProgress.start();
+
+//     $.ajax({
+//         url : '<?php echo base_url('Target_lending_controller/update') ?>',
+//         dataType: 'html'
+//     })
+//     .done(function(response){
+//         $('#main-content').html(response);
+//         // NProgress.done();
+//     })
+//     .fail(function(jqXHR){
+//         $('#main-content').load('<?php echo base_url('Rusak') ?>');
+//     //    NProgress.done();
+//     });
+//   });
+
 
         update_target = function(opts,id){
         var data = opts;
@@ -56,7 +74,7 @@ get_area_kerja();
         .done(function(res){
             var data = res.data;
             bootbox.alert('Data berhasil diubah',function(){
-
+                
                 load_data();
                 $('#form_edit_target')[0].reset();
                 hide_all();

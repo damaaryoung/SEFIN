@@ -733,6 +733,24 @@
     window.location.replace('<?php echo $this->config->base_url('Master/form_ol');?>');
     NProgress.done();
   });
+  //dashboard target lending
+  $('#dashboard_target_lending').on('click', function(e){
+    e.preventDefault();
+    NProgress.start();
+
+    $.ajax({
+        url : '<?php echo base_url('Target_lending_controller/tampil_data') ?>',
+        dataType: 'html'
+    })
+    .done(function(response){
+        $('#main-content').html(response);
+        NProgress.done();
+    })
+    .fail(function(jqXHR){
+        $('#main-content').load('<?php echo base_url('Rusak') ?>');
+       NProgress.done();
+    });
+  });
 </script>
 </body>
 </html>
