@@ -119,20 +119,7 @@
     }
 
     function edit(id) {
-    //    console.log(id)
-    //    var txt;
-    //     var r = confirm("Press a button!");
-    //         if (r == true) {
-    //         txt = "You pressed OK!";
-    //         edit_target(id)
-    //                 .done(function(res){
-    //                     reload_table();
-    //                     bootbox.alert('Data berhasil dihapus')
-                    
-    //         })
-    //         } else {
-    //         txt = "You pressed Cancel!";
-    //                 }
+ 
         $.ajax({
             method: 'post',
             url: 'Target_lending_controller/edit',
