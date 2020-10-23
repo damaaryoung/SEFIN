@@ -44,11 +44,20 @@ class Model_dashboard_restruktur extends ci_model
 
     function get_data5_cabang_by_amount()
     {
-        $query = "SELECT kode_kantor,nama_area_kerja,total_os, persen 
-        FROM simar.`view_kre_nominatif_restruktur`
-        WHERE kode_kantor <> '' ORDER BY persen DESC LIMIT 5";
-        $hasil = $this->db->query($query);
-        return $hasil->result();
+      $url="http://192.168.1.31/SIMAR/dashboard/internal/restruktur/restruktur_controller/master_data_restruktur_lima_cabang_terbesar";
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+      //     'Authorization: Bearer '.$this->session->userdata('SESSION_TOKEN')
+      // ));
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, ['api'=>'Y']);
+      $output = curl_exec($ch);
+      curl_close($ch);
+      // return json_decode($output, true);
+
+      return $output;
     }
 
     function get_data5_cabang_by_noa()
@@ -58,7 +67,7 @@ class Model_dashboard_restruktur extends ci_model
         COUNT(no_rekening) AS jumlah_noa
  FROM dpm_online.kre_nominatif a LEFT JOIN dpm_online.`app_kode_kantor` b
  ON a.`kode_kantor` = b.`kode_kantor`
- WHERE (kode_produk IN ('53','54') OR no_rekening ='01-39-00001-19' )   
+ WHERE (kode_produk IN ('53','54') OR no_rekening ='01-39-00001-19' )
  AND a.kode_kantor IN (09,04,00,11,01) AND tgl_laporan = CURDATE()
  GROUP BY a.`kode_kantor` ORDER BY jumlah_noa DESC";
         $hasil = $this->db->query($query);
@@ -67,16 +76,16 @@ class Model_dashboard_restruktur extends ci_model
 
     function get_data_area_cabang_by_amount()
     {
-        $query = "SELECT kode_kantor,nama_area_kerja,total_os, persen 
+        $query = "SELECT kode_kantor,nama_area_kerja,total_os, persen
         FROM simar.`view_kre_nominatif_restruktur`
         WHERE kode_kantor <> '' ORDER BY persen DESC LIMIT 5";
         $hasil = $this->db->query($query);
         return $hasil->result();
     }
-    
+
     function get_data_area_cabang_by_noa()
     {
-        $query = "SELECT kode_kantor,nama_area_kerja,total_os, persen 
+        $query = "SELECT kode_kantor,nama_area_kerja,total_os, persen
         FROM simar.`view_kre_nominatif_restruktur`
         WHERE kode_kantor <> '' ORDER BY persen DESC LIMIT 5";
         $hasil = $this->db->query($query);
@@ -85,7 +94,7 @@ class Model_dashboard_restruktur extends ci_model
 
     function get_noa_restruktur_kredit_by_plafon()
     {
-        $query = "SELECT kode_kantor,nama_area_kerja,total_os, persen 
+        $query = "SELECT kode_kantor,nama_area_kerja,total_os, persen
         FROM simar.`view_kre_nominatif_restruktur`
         WHERE kode_kantor <> '' ORDER BY persen DESC LIMIT 5";
         $hasil = $this->db->query($query);
@@ -134,7 +143,7 @@ class Model_dashboard_restruktur extends ci_model
         $hasil = $this->db->query($query);
         return $hasil->result();
     }
-    
+
     function get_collection_rasio()
     {
         $query = "SELECT akk.kode_area AS kode_area, SUM(kn.baki_debet) AS baki_debet,
@@ -154,7 +163,7 @@ class Model_dashboard_restruktur extends ci_model
         $hasil = $this->db->query($query);
         return $hasil->result();
     }
-    
+
     function get_current_rasio()
     {
         $query = "SELECT akk.kode_area AS kode_area, SUM(kn.baki_debet) AS baki_debet,
@@ -174,7 +183,7 @@ class Model_dashboard_restruktur extends ci_model
         $hasil = $this->db->query($query);
         return $hasil->result();
     }
-    
+
     function get_ns_restruktur()
     {
         $query = "SELECT akk.kode_area AS kode_area, SUM(kn.baki_debet) AS baki_debet,
@@ -194,7 +203,7 @@ class Model_dashboard_restruktur extends ci_model
         $hasil = $this->db->query($query);
         return $hasil->result();
     }
-    
+
     function get_tujuan_pinjaman_restruktur()
     {
         $query = "SELECT akk.kode_area AS kode_area, SUM(kn.baki_debet) AS baki_debet,
@@ -214,5 +223,5 @@ class Model_dashboard_restruktur extends ci_model
         $hasil = $this->db->query($query);
         return $hasil->result();
     }
-    
+
 }

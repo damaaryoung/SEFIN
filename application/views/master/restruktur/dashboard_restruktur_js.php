@@ -1,1603 +1,768 @@
-<script>
-    show_data();
-
-    function rubah(angka) {
-        var reverse = angka.toString().split('').reverse().join(''),
-            ribuan = reverse.match(/\d{1,3}/g);
-        ribuan = ribuan.join('.').split('').reverse().join('');
-        return ribuan;
-    }
-
-    var divisi = '<?php echo $get_user['data']['divisi_id'] ?>';
-    console.log(divisi);
-
-    if (divisi === 'IT') {
-        $('#content').show()
-    } else {
-        $('#content').hide();
-    }
-
-    get_5_cabang_ammount = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_data5_cabang_by_amount') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_5_cabang_noa = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_data5_cabang_by_noa') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_area_cabang_ammount = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_data_area_cabang_by_amount') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_area_cabang_noa = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_data_area_cabang_by_noa') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_restruktur_kredit_by_noa = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_model_restruktur_kredit_by_noa') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_noa_restruktur_kredit_by_plafon = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_noa_restruktur_kredit_by_plafon') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-
-    get_komposisi_area = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_data_komp_normal_rest_area') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_komposisi = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_data_komp_normal_rest') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_asal_data = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_data_komp_normal_rest') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_tujuan_pinjaman_restruktur = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_tujuan_pinjaman_restruktur') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_restruktur_segmentasi = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_restruktur_segmentasi') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_collection_rasio = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_collection_rasio') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_collection_rasio = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_collection_rasio') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_current_rasio = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_current_rasio') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    get_ns_restruktur = function(opts) {
-        return $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_ns_restruktur') ?>",
-            async: false,
-            dataType: "JSON",
-        });
-    }
-
-    function modal_area_komposisi_normal_dan_restruktur() {
-        $("#modal_komposisi_per_area").modal('show');
-
-        var normal_res_bandung = Highcharts.chart('container_bandung', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
+<script type="text/javascript">
+var loading='<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>';
+var urlapi="http://103.234.254.186/riskcan";
+// var urlapi='http://192.168.1.31/SIMAR';
+function rubah(angka) {
+    var reverse = angka.toString().split('').reverse().join(''),
+        ribuan = reverse.match(/\d{1,3}/g);
+    ribuan = ribuan.join('.').split('').reverse().join('');
+    return ribuan;
+}
+show_data();
+function show_data() {
+    $.ajax({
+        type: "POST",
+        url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/os_normal_dan_restruktur",
+        async: false,
+        data:{'api':'Y'},
+        dataType: "JSON",
+        beforeSend: function() {
+          $('[id="os_total"]').html(loading);
+          $('[id="os_normal"]').html(loading);
+          $('[id="os_restruktur"]').html(loading);
+        },
+        success: function(data) {
+            var baki_debet = Math.ceil(data.baki_debet);
+            var baki_normal_komulatif = Math.ceil(data.baki_normal_komulatif);
+            var baki_rest_kumulatif = Math.ceil(data.baki_rest_kumulatif);
+            $('[id="os_total"]').text(rubah(baki_debet));
+            $('[id="os_normal"]').text(rubah(baki_normal_komulatif));
+            $('[id="os_restruktur"]').text(rubah(baki_rest_kumulatif));
+        }
+    });
+}
+// KOMPOSISI NORMAL DAN RESTRUKTUR
+komposisi_normal_dan_restruktur();
+function komposisi_normal_dan_restruktur(){
+  var date = $('input[name="date_komposisi_normal_dan_restruktur"]').val();
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/komposisi_normal_dan_restruktur",
+      async: false,
+      data:{'api':'Y','date':date},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="loading-data-normal"]').html(loading);
+      },
+      success: function(data) {
+        // rendernya disini bossskuh
+        var chart = new CanvasJS.Chart("loading-data-normal", {
+            title:{
+              text: "Data Komposisi Normal & Restruktur"
             },
-            title: {
-                text: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            tooltip: {
-                pointFormat: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
+            data: [
+                {
+                 type: "pie",
+                 dataPoints: [
+                    {
+                        y:  data.rasio_normal_kumulatif,
+                        label: "Normal Kumulatif",
+                        bd: parseFloat(data.baki_rest_kumulatif)
                     },
-                }
-            },
-            series: [{
-                type: 'pie',
-                data: []
-            }]
+                    {
+                        y: data.rasio_rest_kumulatif,
+                        label: "Restruktur Kumulatif",
+                        bd: parseFloat(data.baki_rest_kumulatif)
+                    }
+                ]
+               }
+             ]
+           });
+          chart.render();
+        // rendernya disini bossskuh
+      }
+  });
+}
+// KOMPOSISI NORMAL DAN RESTRUKTUR
+
+// Model Restruktur Kredit By NOA start
+modelRestrukturByNoa();
+function modelRestrukturByNoa(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/model_restruktur_kredit_by_noa",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="modelRestrukturByNoa"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("modelRestrukturByNoa", {
+        title:{
+          text: "Model Restruktur Kredit By NOA"
+        },
+        data: [//array of dataSeries
+          { //dataSeries object
+           type: "column",
+           dataPoints: [
+           { label: 'step up', y: parseFloat(result[0].satu[0]) },
+           { label: 'step & pertenor', y: parseFloat(result[0].dua[0]) },
+           { label: 'grace period', y: parseFloat(result[0].tiga[0]) },
+           { label: 'penurunan bunga', y: parseFloat(result[0].empat[0]) }
+           ]
+         }
+         ]
+       });
+
+      chart.render();
+
+      }
+  });
+}
+// Model Restruktur Kredit By NOA end
+
+// restruktur kumulatif by noa start
+restrukturKumulatifByNoa();
+function restrukturKumulatifByNoa(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/line_noa_kumulatif",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="restrukturKumulatifByNoa"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("restrukturKumulatifByNoa", {
+        	animationEnabled: true,
+        	exportEnabled: true,
+        	title:{
+        		text: "Restruktur Kumulatif"
+        	},
+        	toolTip: {
+        		shared: true
+        	},
+        	legend:{
+        		cursor:"pointer",
+        		itemclick: toggleDataSeries
+        	},
+        	data: [{
+        		type: "spline",
+        		name: "Kumulatif",
+        		showInLegend: true,
+        		dataPoints: [
+              { label: result[0].bulan , y: parseFloat(result[0].noa_rest_kumulatif) },
+              { label: result[1].bulan , y: parseFloat(result[1].noa_rest_kumulatif) },
+              { label: result[2].bulan , y: parseFloat(result[2].noa_rest_kumulatif) },
+              { label: result[3].bulan , y: parseFloat(result[3].noa_rest_kumulatif) },
+              { label: result[4].bulan , y: parseFloat(result[4].noa_rest_kumulatif) },
+              { label: result[5].bulan , y: parseFloat(result[5].noa_rest_kumulatif) },
+              { label: result[6].bulan , y: parseFloat(result[6].noa_rest_kumulatif) },
+              { label: result[7].bulan , y: parseFloat(result[7].noa_rest_kumulatif) },
+              { label: result[8].bulan , y: parseFloat(result[8].noa_rest_kumulatif) },
+              { label: result[9].bulan , y: parseFloat(result[9].noa_rest_kumulatif) },
+              { label: result[10].bulan , y: parseFloat(result[10].noa_rest_kumulatif) },
+        			{ label: result[11].bulan , y: parseFloat(result[11].noa_rest_kumulatif) }
+        		]
+        	},
+        	{
+        		type: "spline",
+        		name: "Restruktur",
+        		showInLegend: true,
+        		dataPoints: [
+              { label: result[0].bulan , y: parseFloat(result[0].noa_rest_bulan) },
+              { label: result[1].bulan , y: parseFloat(result[1].noa_rest_bulan) },
+              { label: result[2].bulan , y: parseFloat(result[2].noa_rest_bulan) },
+              { label: result[3].bulan , y: parseFloat(result[3].noa_rest_bulan) },
+              { label: result[4].bulan , y: parseFloat(result[4].noa_rest_bulan) },
+              { label: result[5].bulan , y: parseFloat(result[5].noa_rest_bulan) },
+              { label: result[6].bulan , y: parseFloat(result[6].noa_rest_bulan) },
+              { label: result[7].bulan , y: parseFloat(result[7].noa_rest_bulan) },
+              { label: result[8].bulan , y: parseFloat(result[8].noa_rest_bulan) },
+              { label: result[9].bulan , y: parseFloat(result[9].noa_rest_bulan) },
+              { label: result[10].bulan , y: parseFloat(result[10].noa_rest_bulan) },
+        			{ label: result[11].bulan , y: parseFloat(result[11].noa_rest_bulan) }
+        		]
+        	}]
         });
-
-        var normal_res_bekasi = Highcharts.chart('container_bekasi', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            tooltip: {
-                pointFormat: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                }
-            },
-            series: [{
-                type: 'pie',
-                data: []
-            }]
+        chart.render();
+        function toggleDataSeries(e) {
+        	if(typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        		e.dataSeries.visible = false;
+        	}
+        	else {
+        		e.dataSeries.visible = true;
+        	}
+        	chart.render();
+        }
+      }
+  });
+}
+// restruktur kumulatif by noa extend
+// restruktur kumulatif by baki debet start
+restrukturKumulatifByBakiDebet();
+function restrukturKumulatifByBakiDebet(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/line_noa_kumulatif",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="restrukturKumulatifByBakiDebet"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("restrukturKumulatifByBakiDebet", {
+        	animationEnabled: true,
+        	exportEnabled: true,
+        	title:{
+        		text: "Restruktur Kumulatif"
+        	},
+        	toolTip: {
+        		shared: true
+        	},
+        	legend:{
+        		cursor:"pointer",
+        		itemclick: toggleDataSeries
+        	},
+        	data: [{
+        		type: "spline",
+        		name: "Kumulatif",
+        		showInLegend: true,
+        		dataPoints: [
+              { label: result[0].bulan , y: parseFloat(result[0].baki_rest_kumulatif) },
+              { label: result[1].bulan , y: parseFloat(result[1].baki_rest_kumulatif) },
+              { label: result[2].bulan , y: parseFloat(result[2].baki_rest_kumulatif) },
+              { label: result[3].bulan , y: parseFloat(result[3].baki_rest_kumulatif) },
+              { label: result[4].bulan , y: parseFloat(result[4].baki_rest_kumulatif) },
+              { label: result[5].bulan , y: parseFloat(result[5].baki_rest_kumulatif) },
+              { label: result[6].bulan , y: parseFloat(result[6].baki_rest_kumulatif) },
+              { label: result[7].bulan , y: parseFloat(result[7].baki_rest_kumulatif) },
+              { label: result[8].bulan , y: parseFloat(result[8].baki_rest_kumulatif) },
+              { label: result[9].bulan , y: parseFloat(result[9].baki_rest_kumulatif) },
+              { label: result[10].bulan , y: parseFloat(result[10].baki_rest_kumulatif) },
+        			{ label: result[11].bulan , y: parseFloat(result[11].baki_rest_kumulatif) }
+        		]
+        	},
+        	{
+        		type: "spline",
+        		name: "Restruktur",
+        		showInLegend: true,
+        		dataPoints: [
+              { label: result[0].bulan , y: parseFloat(result[0].baki_rest_bulan) },
+              { label: result[1].bulan , y: parseFloat(result[1].baki_rest_bulan) },
+              { label: result[2].bulan , y: parseFloat(result[2].baki_rest_bulan) },
+              { label: result[3].bulan , y: parseFloat(result[3].baki_rest_bulan) },
+              { label: result[4].bulan , y: parseFloat(result[4].baki_rest_bulan) },
+              { label: result[5].bulan , y: parseFloat(result[5].baki_rest_bulan) },
+              { label: result[6].bulan , y: parseFloat(result[6].baki_rest_bulan) },
+              { label: result[7].bulan , y: parseFloat(result[7].baki_rest_bulan) },
+              { label: result[8].bulan , y: parseFloat(result[8].baki_rest_bulan) },
+              { label: result[9].bulan , y: parseFloat(result[9].baki_rest_bulan) },
+              { label: result[10].bulan , y: parseFloat(result[10].baki_rest_bulan) },
+        			{ label: result[11].bulan , y: parseFloat(result[11].baki_rest_bulan) }
+        		]
+        	}]
         });
+        chart.render();
+        function toggleDataSeries(e) {
+        	if(typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+        		e.dataSeries.visible = false;
+        	}
+        	else {
+        		e.dataSeries.visible = true;
+        	}
+        	chart.render();
+        }
+      }
+  });
+}
+// restruktur kumulatif by baki debet end
 
-        var normal_res_bogor = Highcharts.chart('container_bogor', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            tooltip: {
-                pointFormat: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    // showInLegend: true
-                }
-            },
-            series: [{
-                type: 'pie',
-                data: []
-            }]
+// 5 cabang by amount
+lima_cabang_by_amount();
+function lima_cabang_by_amount(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/master_data_restruktur_lima_cabang_terbesar",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="chart5cabangByAmount"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("chart5cabangByAmount", {
+        title:{
+          text: "5 Cabang Terbesar By Amount"
+        },
+        data: [//array of dataSeries
+          { //dataSeries object
+           type: "column",
+           dataPoints: [
+           { label: result[0].nama_area_kerja[0], y: parseFloat(result[0].total_os[0]) },
+           { label: result[0].nama_area_kerja[1], y: parseFloat(result[0].total_os[1]) },
+           { label: result[0].nama_area_kerja[2], y: parseFloat(result[0].total_os[2]) },
+           { label: result[0].nama_area_kerja[3], y: parseFloat(result[0].total_os[3]) },
+           { label: result[0].nama_area_kerja[4], y: parseFloat(result[0].total_os[4]) }
+           ]
+         }
+         ]
+       });
+
+      chart.render();
+
+      }
+  });
+}
+// 5 cabang by amount
+// 5 cabang by noa
+lima_cabang_by_noa();
+function lima_cabang_by_noa(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/master_data_restruktur_lima_cabang_terbesar",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="chart5cabangByNoa"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("chart5cabangByNoa", {
+        title:{
+          text: "5 Cabang Terbesar By Noa"
+        },
+        data: [//array of dataSeries
+          { //dataSeries object
+           type: "column",
+           dataPoints: [
+           { label: result[0].nama_area_kerja[0], y: parseFloat(result[0].jumlah_noa[0]) },
+           { label: result[0].nama_area_kerja[1], y: parseFloat(result[0].jumlah_noa[1]) },
+           { label: result[0].nama_area_kerja[2], y: parseFloat(result[0].jumlah_noa[2]) },
+           { label: result[0].nama_area_kerja[3], y: parseFloat(result[0].jumlah_noa[3]) },
+           { label: result[0].nama_area_kerja[4], y: parseFloat(result[0].jumlah_noa[4]) }
+           ]
+         }
+         ]
+       });
+
+      chart.render();
+
+      }
+  });
+}
+// 5 cabang by amount
+// area terbesar by amount
+chartAreaTerbesarByAmount();
+function chartAreaTerbesarByAmount(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/area_terbesar",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="chartAreaTerbesarByAmount"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("chartAreaTerbesarByAmount", {
+        title:{
+          text: "Area Terbesar"
+        },
+        data: [//array of dataSeries
+          { //dataSeries object
+           type: "column",
+           dataPoints: [
+           { label: 'area bekasi', y: parseFloat(result.area_bekasi) },
+           { label: 'area bandung', y: parseFloat(result.area_bandung) },
+           { label: 'area tangerang', y: parseFloat(result.area_tangerang) },
+           { label: 'area bogor', y: parseFloat(result.area_bogor) },
+           { label: 'area karawang', y: parseFloat(result.area_karawang) },
+           { label: 'area cirebon', y: parseFloat(result.area_cirebon) }
+           ]
+         }
+         ]
+       });
+
+      chart.render();
+
+      }
+  });
+}
+// area terbesar by amount
+// area terbesar by noa
+chartAreaTerbesarByNoa();
+function chartAreaTerbesarByNoa(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/area_terbesar",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="chartAreaTerbesarByNoa"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("chartAreaTerbesarByNoa", {
+        title:{
+          text: "Area Terbesar"
+        },
+        data: [//array of dataSeries
+          {
+           type: "column",
+           dataPoints: [
+           { label: 'area bekasi', y: parseFloat(result.noa_bekasi) },
+           { label: 'area bandung', y: parseFloat(result.noa_bandung) },
+           { label: 'area tangerang', y: parseFloat(result.noa_tangerang) },
+           { label: 'area bogor', y: parseFloat(result.noa_bogor) },
+           { label: 'area karawang', y: parseFloat(result.noa_karawang) },
+           { label: 'area cirebon', y: parseFloat(result.noa_cirebon) }
+           ]
+         }
+         ]
+       });
+
+      chart.render();
+
+      }
+  });
+}
+// area terbesar by noa
+// Noa Restruktur Kredit By Plafon
+NoaRestrukturKreditByPlafon();
+function NoaRestrukturKreditByPlafon(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/grafik_plafon",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="NoaRestrukturKreditByPlafon"]').html(loading);
+      },
+      success: function(result) {
+        // alert(result[0].kategory);
+        var chart = new CanvasJS.Chart("NoaRestrukturKreditByPlafon", {
+        data: [
+          {
+           type: "column",
+           dataPoints: [
+           { label: result[0].kategory, y: parseFloat(result[0].jml_noa) },
+           { label: result[1].kategory, y: parseFloat(result[1].jml_noa) },
+           { label: result[2].kategory, y: parseFloat(result[2].jml_noa) },
+           { label: result[3].kategory, y: parseFloat(result[3].jml_noa) },
+           { label: result[4].kategory, y: parseFloat(result[4].jml_noa) },
+           { label: result[5].kategory, y: parseFloat(result[5].jml_noa) }
+           ]
+         }
+         ]
+       });
+      chart.render();
+      }
+  });
+}
+// Noa Restruktur Kredit By Plafon
+// Collection Rasio
+CollectionRasio();
+function CollectionRasio(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/line_current_rasio",
+      async: false,
+      data:{'api':'Y'},
+      beforeSend: function() {
+        $('[id="CollectionRasio"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("CollectionRasio", {
+          	animationEnabled: true,
+          	exportEnabled: true,
+          	toolTip: {
+          		shared: true
+          	},
+          	legend:{
+          		cursor:"pointer",
+          		itemclick: toggleDataSeries
+          	},
+          	data: [{
+          		type: "spline",
+          		name: "US",
+          		showInLegend: true,
+          		dataPoints: [
+          			{ label: result[0].bulan , y:parseFloat(result[0].jml_noa)},
+          			{ label: result[1].bulan, y:parseFloat(result[1].jml_noa)},
+          			{ label: result[2].bulan, y:parseFloat(result[2].jml_noa)}
+          		]
+          	}]
+          });
+          chart.render();
+          function toggleDataSeries(e) {
+          	if(typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+          		e.dataSeries.visible = false;
+          	}
+          	else {
+          		e.dataSeries.visible = true;
+          	}
+          	chart.render();
+          }
+      }
+  });
+}
+// Collection Rasio
+// Current Rasio
+CurrentRasio();
+function CurrentRasio(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/pie_current_rasio",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="CurrentRasio"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("CurrentRasio", {
+        	theme: "light2",
+        	animationEnabled: true,
+        	data: [{
+        		type: "pie",
+        		indexLabelFontSize: 18,
+        		radius: 80,
+        		indexLabel: "{label} - {y}",
+        		yValueFormatString: "###0.0\"%\"",
+        		click: explodePie,
+        		dataPoints: [
+        			{ y: parseFloat(result.belum_bayar), label: "Belum_bayar" },
+        			{ y: parseFloat(result.rasio_bucket_0), label: "Bayar"}
+        		]
+        	}]
         });
+        chart.render();
 
-        var normal_res_cirebon = Highcharts.chart('container_cirebon', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            tooltip: {
-                pointFormat: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    // showInLegend: true
-                }
-            },
-            series: [{
-                type: 'pie',
-                data: []
-            }]
+        function explodePie(e) {
+        	for(var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+        		if(i !== e.dataPointIndex)
+        			e.dataSeries.dataPoints[i].exploded = false;
+        	}
+        }
+      }
+  });
+}
+// Current Rasio
+// NSRestruktur
+NSRestruktur();
+function NSRestruktur(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/internal/restruktur/restruktur_controller/pie_ns_restruktur",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="NSRestruktur"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("NSRestruktur", {
+        	theme: "light2",
+        	animationEnabled: true,
+        	data: [{
+        		type: "pie",
+            toolTipContent: "{label}<br/>rasio, <strong>{y}</strong><br/>noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+        		indexLabelFontSize: 18,
+        		radius: 80,
+        		indexLabel: "{label} - {y}",
+        		yValueFormatString: "###0.0\"%\"",
+        		click: explodePie,
+        		dataPoints: [
+        			{ y: parseFloat(result.ns_paid_rasio),yn:parseFloat(result.ns_paid_noa),yb:parseFloat(result.ns_paid_baki_debet), label: "Paid"},
+        			{ y: parseFloat(result.ns_unpaid_rasio),yn:parseFloat(result.ns_unpaid_noa),yb:parseFloat(result.ns_unpaid_baki_debet), label: "Unpaid"}
+        		]
+        	}]
         });
-
-        var normal_res_karawang = Highcharts.chart('container_karawang', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            tooltip: {
-                pointFormat: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    // showInLegend: true
-                }
-            },
-            series: [{
-                type: 'pie',
-                data: []
-            }]
+        chart.render();
+        function explodePie(e) {
+        	for(var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+        		if(i !== e.dataPointIndex)
+        			e.dataSeries.dataPoints[i].exploded = false;
+        	}
+        }
+      }
+  });
+}
+// NSRestruktur
+// NPL
+NPL();
+function NPL(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/kredit/kredit_controller/npl_console",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="NPL"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("NPL", {
+        	theme: "light2",
+        	animationEnabled: true,
+        	data: [{
+        		type: "pie",
+            toolTipContent: "{label}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+        		indexLabelFontSize: 18,
+        		radius: 80,
+        		indexLabel: "{label} - {y}",
+        		yValueFormatString: "###0.0\"%\"",
+        		click: explodePie,
+        		dataPoints: [
+        			{ y: parseFloat(result.rasio_npl),yn:parseFloat(result.noa_npl),yb:parseFloat(result.bd_npl), label: "NPL"},
+        			{ y: parseFloat(result.rasio_nonnpl),yn:parseFloat(result.noa_nonnpl),yb:parseFloat(result.bd_nonnpl), label: "Non NPL"}
+        		]
+        	}]
         });
-
-        var normal_res_tangerang = Highcharts.chart('container_tangerang', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            tooltip: {
-                pointFormat: ''
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    // showInLegend: true
-                }
-            },
-            series: [{
-                type: 'pie',
-                data: []
-            }]
-        });
-
-        get_komposisi_area()
-            .done(function(res) {
-                var data_area_bandung = [];
-                var data_area_bekasi = [];
-                var data_area_bogor = [];
-                var data_area_cirebon = [];
-                var data_area_karawang = [];
-                var data_area_tangerang = [];
-
-                // $('#normal_bandung_span').text('Normal: ' + res[0].rasio_normal_kumulatif + '%');
-                let html =
-                    "<span class='mr-2'><i class='fas fa-circle' style='color:#4d86bd'></i>Normal: " + res[0].rasio_normal_kumulatif + "%</span><span class='mr-2'><i class='fas fa-circle' style='color:#3d3d42'></i>Restruktur: " + res[0].rasio_rest_kumulatif + "%</span>";
-                $('#span_bandung').html(html);
-
-                let html1 =
-                    "<span class='mr-2'><i class='fas fa-circle' style='color:#4d86bd'></i>Normal: " + res[1].rasio_normal_kumulatif + "%</span><span class='mr-2'><i class='fas fa-circle' style='color:#3d3d42'></i>Restruktur: " + res[1].rasio_rest_kumulatif + "%</span>";
-                $('#span_bekasi').html(html1);
-
-                let html2 =
-                    "<span class='mr-2'><i class='fas fa-circle' style='color:#4d86bd'></i>Normal: " + res[2].rasio_normal_kumulatif + "%</span><span class='mr-2'><i class='fas fa-circle' style='color:#3d3d42'></i>Restruktur: " + res[2].rasio_rest_kumulatif + "%</span>";
-                $('#span_bogor').html(html2);
-
-                let html3 =
-                    "<span class='mr-2'><i class='fas fa-circle' style='color:#4d86bd'></i>Normal: " + res[3].rasio_normal_kumulatif + "%</span><span class='mr-2'><i class='fas fa-circle' style='color:#3d3d42'></i>Restruktur: " + res[3].rasio_rest_kumulatif + "%</span>";
-                $('#span_cirebon').html(html3);
-
-                let html4 =
-                    "<span class='mr-2'><i class='fas fa-circle' style='color:#4d86bd'></i>Normal: " + res[4].rasio_normal_kumulatif + "%</span><span class='mr-2'><i class='fas fa-circle' style='color:#3d3d42'></i>Restruktur: " + res[4].rasio_rest_kumulatif + "%</span>";
-                $('#span_karawang').html(html4);
-
-                let html5 =
-                    "<span class='mr-2'><i class='fas fa-circle' style='color:#4d86bd'></i>Normal: " + res[5].rasio_normal_kumulatif + "%</span><span class='mr-2'><i class='fas fa-circle' style='color:#3d3d42'></i>Restruktur: " + res[5].rasio_rest_kumulatif + "%</span>";
-                $('#span_tangerang').html(html5);
-
-                var komposisi_bandung = [{
-                    "nama": 'Normal',
-                    "noa": res[0].noa_normal_kumulatif,
-                    "bd": Math.ceil(res[0].baki_normal_kumulatif),
-                    "rs": res[0].rasio_normal_kumulatif
-                }, {
-                    "nama": 'Restruktur',
-                    "noa": res[0].noa_rest_kumulatif,
-                    "bd": Math.ceil(res[0].baki_rest_kumulatif),
-                    "rs": res[0].rasio_rest_kumulatif
-                }];
-
-                var komposisi_bekasi = [{
-                    "nama": 'Normal',
-                    "noa": res[1].noa_normal_kumulatif,
-                    "bd": Math.ceil(res[1].baki_normal_kumulatif),
-                    "rs": res[1].rasio_normal_kumulatif
-                }, {
-                    "nama": 'Restruktur',
-                    "noa": res[1].noa_rest_kumulatif,
-                    "bd": Math.ceil(res[1].baki_rest_kumulatif),
-                    "rs": res[1].rasio_rest_kumulatif
-                }];
-
-                var komposisi_bogor = [{
-                    "nama": 'Normal',
-                    "noa": res[2].noa_normal_kumulatif,
-                    "bd": Math.ceil(res[2].baki_normal_kumulatif),
-                    "rs": res[2].rasio_normal_kumulatif
-                }, {
-                    "nama": 'Restruktur',
-                    "noa": res[2].noa_rest_kumulatif,
-                    "bd": Math.ceil(res[2].baki_rest_kumulatif),
-                    "rs": res[2].rasio_rest_kumulatif
-                }];
-
-                var komposisi_cirebon = [{
-                    "nama": 'Normal',
-                    "noa": res[3].noa_normal_kumulatif,
-                    "bd": Math.ceil(res[3].baki_normal_kumulatif),
-                    "rs": res[3].rasio_normal_kumulatif
-                }, {
-                    "nama": 'Restruktur',
-                    "noa": res[3].noa_rest_kumulatif,
-                    "bd": Math.ceil(res[3].baki_rest_kumulatif),
-                    "rs": res[3].rasio_rest_kumulatif
-                }];
-
-                var komposisi_karawang = [{
-                    "nama": 'Normal',
-                    "noa": res[4].noa_normal_kumulatif,
-                    "bd": Math.ceil(res[4].baki_normal_kumulatif),
-                    "rs": res[4].rasio_normal_kumulatif
-                }, {
-                    "nama": 'Restruktur',
-                    "noa": res[4].noa_rest_kumulatif,
-                    "bd": Math.ceil(res[4].baki_rest_kumulatif),
-                    "rs": res[4].rasio_rest_kumulatif
-                }];
-
-                var komposisi_tangerang = [{
-                    "nama": 'Normal',
-                    "noa": res[5].noa_normal_kumulatif,
-                    "bd": Math.ceil(res[5].baki_normal_kumulatif),
-                    "rs": res[5].rasio_normal_kumulatif
-                }, {
-                    "nama": 'Restruktur',
-                    "noa": res[5].noa_rest_kumulatif,
-                    "bd": Math.ceil(res[5].baki_rest_kumulatif),
-                    "rs": res[5].rasio_rest_kumulatif
-                }];
-
-                $.each(komposisi_bandung, function(i, e) {
-                    var jumlah_noa = (rubah(e.noa));
-                    data_area_bandung.push({
-                        name: 'NOA:' + jumlah_noa + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                        y: parseFloat(e.rs)
-                    });
-                });
-                $.each(komposisi_bekasi, function(i, e) {
-                    var jumlah = (rubah(e.noa));
-                    data_area_bekasi.push({
-                        name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                        y: parseFloat(e.rs)
-                    });
-                });
-                $.each(komposisi_bogor, function(i, e) {
-                    var jumlah = (rubah(e.noa));
-                    data_area_bogor.push({
-                        name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                        y: parseFloat(e.rs)
-                    });
-                });
-                $.each(komposisi_cirebon, function(i, e) {
-                    var jumlah = (rubah(e.noa));
-                    data_area_cirebon.push({
-                        name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                        y: parseFloat(e.rs)
-                    });
-                });
-                $.each(komposisi_karawang, function(i, e) {
-                    var jumlah = (rubah(e.noa));
-                    data_area_karawang.push({
-                        name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                        y: parseFloat(e.rs)
-                    });
-                });
-                $.each(komposisi_tangerang, function(i, e) {
-                    var jumlah = (rubah(e.noa));
-                    data_area_tangerang.push({
-                        name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                        y: parseFloat(e.rs)
-                    });
-                });
-
-                normal_res_bandung.series[0].setData(data_area_bandung);
-                normal_res_bekasi.series[0].setData(data_area_bekasi);
-                normal_res_bogor.series[0].setData(data_area_bogor);
-                normal_res_cirebon.series[0].setData(data_area_cirebon);
-                normal_res_karawang.series[0].setData(data_area_karawang);
-                normal_res_tangerang.series[0].setData(data_area_tangerang);
-
-            })
-            .fail(function(xhr) {
-                console.log(xhr);
-            })
-
-
-    }
-
-    function show_data() {
-        $.ajax({
-            type: "POST",
-            url: "<?php echo site_url('Dashboard_restruktur_controller/get_data_dashboard') ?>",
-            async: false,
-            dataType: "JSON",
-            success: function(data) {
-                var baki_debet = Math.ceil(data[0].baki_debet);
-                var baki_normal_komulatif = Math.ceil(data[0].baki_normal_komulatif);
-                var baki_rest_kumulatif = Math.ceil(data[0].baki_rest_kumulatif);
-                $('[id="os_total"]').text(rubah(baki_debet));
-                $('[id="os_normal"]').text(rubah(baki_normal_komulatif));
-                $('[id="os_restruktur"]').text(rubah(baki_rest_kumulatif));
-            }
-        });
-    }
-
-    //KOMPOSISI NORMAL & RESTRUKTUR
-    var normal_res = Highcharts.chart('container', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        tooltip: {
-            pointFormat: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                // showInLegend: true
-            }
-        },
-        series: [{
-            type: 'pie',
-            // color: '#2c94ff',
-            data: []
-        }]
-    });
-
-    get_komposisi()
-        .done(function(res) {
-
-            var data_normal = [];
-
-            var komposisi = [{
-                "nama": 'Normal',
-                "noa": res[0].noa_normal_kumulatif,
-                "bd": Math.ceil(res[0].baki_normal_kumulatif),
-                "rs": res[0].rasio_normal_kumulatif
-            }, {
-                "nama": 'Restruktur',
-                "noa": res[0].noa_rest_kumulatif,
-                "bd": Math.ceil(res[0].baki_rest_kumulatif),
-                "rs": res[0].rasio_rest_kumulatif
-            }];
-
-            $.each(komposisi, function(i, e) {
-                var jumlah = (rubah(e.noa));
-                data_normal.push({
-                    name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                    y: parseFloat(e.rs)
-                });
-            });
-
-            normal_res.series[0].setData(data_normal);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //===============================================================================
-
-    //MODEL RESTRUKTUR KREDIT By NOA
-    var get_model_restruktur_kredit_by_noa = Highcharts.chart('container1', {
-
-        chart: {
-            type: 'column',
-
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            announceNewData: {
-                enabled: true
-            }
-        },
-        xAxis: {
-            type: 'category'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            },
-
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: false,
-                    // format: '{point.y:.3f}'
-                }
-            }
-        },
-
-        tooltip: {
-            headerFormat: '<b style="font-size:11px">{point.name}</b><br>',
-            pointFormat: '<b>NOA: {point.y}</b><br/>'
-        },
-        credits: {
-            enabled: false
-        },
-        subtitle: {
-            enabled: false
-        },
-
-        series: [{
-            // name: "Browsers",
-            color: '#f46300',
-            type: 'column',
-            data: []
-        }],
-
-    });
-
-    get_restruktur_kredit_by_noa()
-        .done(function(res) {
-            console.log(res[0]);
-            var data_area_bandung = [];
-
-
-            var data_model_restruktur_kred_by_noa = [];
-
-            var data = [{
-                "nama": 'Step Up',
-                "noa": res[0].satu
-            }, {
-                "nama": 'Step Up & Perpanjang tenor',
-                "noa": res[0].dua
-            }, {
-                "nama": 'Grace Period',
-                "noa": res[0].tiga
-            }, {
-                "nama": 'Penurunan Bunga',
-                "noa": res[0].empat
-            }];
-
-
-            $.each(data, function(i, e) {
-                // var jumlah_noa = (rubah(e.noa));
-                data_model_restruktur_kred_by_noa.push({
-                    name: e.nama,
-                    y: parseFloat(e.noa)
-                });
-            });
-            get_model_restruktur_kredit_by_noa.series[0].setData(data_model_restruktur_kred_by_noa);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //=============================================================================
-
-    // 5 CABANG TERBESAR BY AMOUNT 
-    var get_cabang_by_ammount = Highcharts.chart('container2', {
-
-        chart: {
-            type: 'column',
-
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            announceNewData: {
-                enabled: true
-            }
-        },
-        xAxis: {
-            type: 'category'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            },
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: false,
-                    // format: '{point.y:.3f}'
-                }
-            }
-        },
-
-        tooltip: {
-            headerFormat: '<b style="font-size:11px">{point.name}</b><br>',
-            pointFormat: '<b>RP. {point.y}</b><br/>'
-        },
-        credits: {
-            enabled: false
-        },
-        subtitle: {
-            enabled: false
-        },
-
-        series: [{
-            // name: "Browsers",
-            color: '#2c94ff',
-            type: 'column',
-            data: []
-        }],
-
-    });
-
-    get_5_cabang_ammount()
-        .done(function(res) {
-            // console.log(nama_area_kerja);
-            var data_5_cabang_ammount = [];
-
-            $.each(res, function(i, e) {
-                var jumlah = parseFloat(e.total_os);
-
-                data_5_cabang_ammount.push({
-                    name: e.nama_area_kerja,
-                    y: jumlah
-                });
-            });
-
-            get_cabang_by_ammount.series[0].setData(data_5_cabang_ammount);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //=====================================================================================
-
-    // 5 CABANG TERBESAR BY NOA
-    var get_cabang_by_noa = Highcharts.chart('container3', {
-
-        chart: {
-            type: 'column',
-
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            announceNewData: {
-                enabled: true
-            }
-        },
-        xAxis: {
-            type: 'category'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            },
-
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: false,
-                    // format: '{point.y:.3f}'
-                }
-            }
-        },
-
-        tooltip: {
-            headerFormat: '<b style="font-size:11px">{point.name}</b><br>',
-            pointFormat: '<b>NOA: {point.y}</b><br/>'
-        },
-        credits: {
-            enabled: false
-        },
-        subtitle: {
-            enabled: false
-        },
-
-        series: [{
-            // name: "Browsers",
-            color: '#2c94ff',
-            type: 'column',
-            data: []
-        }],
-
-    });
-
-    get_5_cabang_noa()
-        .done(function(res) {
-            // console.log(nama_area_kerja);
-            var data_5_cabang_noa = [];
-
-            $.each(res, function(i, e) {
-                var jumlah = parseFloat(e.jumlah_noa);
-
-                data_5_cabang_noa.push({
-                    name: e.nama_area_kerja,
-                    y: jumlah
-                });
-            });
-
-            get_cabang_by_noa.series[0].setData(data_5_cabang_noa);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //================================================================================
-    // AREA TERBESAR BY AMOUNT 
-    var get_area_by_ammount = Highcharts.chart('container4', {
-
-        chart: {
-            type: 'column',
-
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            announceNewData: {
-                enabled: true
-            }
-        },
-        xAxis: {
-            type: 'category'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            },
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: false,
-                    // format: '{point.y:.3f}'
-                }
-            }
-        },
-
-        tooltip: {
-            headerFormat: '<b style="font-size:11px">{point.name}</b><br>',
-            pointFormat: '<b>RP. {point.y}</b><br/>'
-        },
-        credits: {
-            enabled: false
-        },
-        subtitle: {
-            enabled: false
-        },
-
-        series: [{
-            // name: "Browsers",
-            color: '#2c94ff',
-            type: 'column',
-            data: []
-        }],
-
-    });
-
-    get_area_cabang_ammount()
-        .done(function(res) {
-            // console.log(nama_area_kerja);
-            var get_area_cabang_ammount = [];
-
-            $.each(res, function(i, e) {
-                var jumlah = parseFloat(e.total_os);
-
-                get_area_cabang_ammount.push({
-                    name: e.nama_area_kerja,
-                    y: jumlah
-                });
-            });
-
-            get_area_by_ammount.series[0].setData(get_area_cabang_ammount);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-        // ======================================================================
-        // AREA TERBESAR BY NOA 
-    var get_area_by_noa = Highcharts.chart('container5', {
-
-        chart: {
-            type: 'column',
-
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            announceNewData: {
-                enabled: true
-            }
-        },
-        xAxis: {
-            type: 'category'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            },
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: false,
-                    // format: '{point.y:.3f}'
-                }
-            }
-        },
-
-        tooltip: {
-            headerFormat: '<b style="font-size:11px">{point.name}</b><br>',
-            pointFormat: '<b>RP. {point.y}</b><br/>'
-        },
-        credits: {
-            enabled: false
-        },
-        subtitle: {
-            enabled: false
-        },
-
-        series: [{
-            // name: "Browsers",
-            color: '#2c94ff',
-            type: 'column',
-            data: []
-        }],
-
-    });
-
-    get_area_cabang_noa()
-    .done(function(res) {
-        // console.log(nama_area_kerja);
-        var get_area_cabang_noa = [];
-
-        $.each(res, function(i, e) {
-            var jumlah = parseFloat(e.total_os);
-
-            get_area_cabang_noa.push({
-                name: e.nama_area_kerja,
-                y: jumlah
-            });
-        });
-
-        get_area_by_noa.series[0].setData(get_area_cabang_noa);
-
-    })
-    .fail(function(xhr) {
-        console.log(xhr);
-    })
-        // ======================================================================
-        //ASAL DATA
-    var asal_data = Highcharts.chart('container6', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        tooltip: {
-            pointFormat: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                // showInLegend: true
-            }
-        },
-        series: [{
-            type: 'pie',
-            // color: '#2c94ff',
-            data: []
-        }]
-    });
-
-    get_asal_data()
-        .done(function(res) {
-
-            var data_normal = [];
-
-            var komposisi = [{
-                "nama": 'Normal',
-                "noa": res[0].noa_normal_kumulatif,
-                "bd": Math.ceil(res[0].baki_normal_kumulatif),
-                "rs": res[0].rasio_normal_kumulatif
-            }, {
-                "nama": 'Restruktur',
-                "noa": res[0].noa_rest_kumulatif,
-                "bd": Math.ceil(res[0].baki_rest_kumulatif),
-                "rs": res[0].rasio_rest_kumulatif
-            }];
-
-            $.each(komposisi, function(i, e) {
-                var jumlah = (rubah(e.noa));
-                data_normal.push({
-                    name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                    y: parseFloat(e.rs)
-                });
-            });
-
-            asal_data.series[0].setData(data_normal);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //===============================================================================
-    // NOA RESTRUKTUR KREDIT BY PLAFON 
-    var noa_restruktur_kredit_by_plafon = Highcharts.chart('container7', {
-
-        chart: {
-            type: 'column',
-
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            announceNewData: {
-                enabled: true
-            }
-        },
-        xAxis: {
-            type: 'category'
-        },
-        yAxis: {
-            title: {
-                text: ''
-            },
-        },
-        legend: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: false,
-                    // format: '{point.y:.3f}'
-                }
-            }
-        },
-
-        tooltip: {
-            headerFormat: '<b style="font-size:11px">{point.name}</b><br>',
-            pointFormat: '<b>RP. {point.y}</b><br/>'
-        },
-        credits: {
-            enabled: false
-        },
-        subtitle: {
-            enabled: false
-        },
-
-        series: [{
-            // name: "Browsers",
-            color: '#2c94ff',
-            type: 'column',
-            data: []
-        }],
-
-    });
-
-    get_noa_restruktur_kredit_by_plafon()
-    .done(function(res) {
-        // console.log(nama_area_kerja);
-        var get_noa_restruktur_kredit_by_plafon = [];
-
-        $.each(res, function(i, e) {
-            var jumlah = parseFloat(e.total_os);
-
-            get_noa_restruktur_kredit_by_plafon.push({
-                name: e.nama_area_kerja,
-                y: jumlah
-            });
-        });
-
-        noa_restruktur_kredit_by_plafon.series[0].setData(get_noa_restruktur_kredit_by_plafon);
-
-    })
-    .fail(function(xhr) {
-        console.log(xhr);
-    })
-    // ======================================================================
-        //TUJUAN PINJAMAN RESTRUKTUR
-    var tujuan_pinjaman_restruktur = Highcharts.chart('container8', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        tooltip: {
-            pointFormat: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                // showInLegend: true
-            }
-        },
-        series: [{
-            type: 'pie',
-            // color: '#2c94ff',
-            data: []
-        }]
-    });
-
-    get_tujuan_pinjaman_restruktur()
-        .done(function(res) {
-
-            var data_normal = [];
-
-            var komposisi = [{
-                "nama": 'Normal',
-                "noa": res[0].noa_normal_kumulatif,
-                "bd": Math.ceil(res[0].baki_normal_kumulatif),
-                "rs": res[0].rasio_normal_kumulatif
-            }, {
-                "nama": 'Restruktur',
-                "noa": res[0].noa_rest_kumulatif,
-                "bd": Math.ceil(res[0].baki_rest_kumulatif),
-                "rs": res[0].rasio_rest_kumulatif
-            }];
-
-            $.each(komposisi, function(i, e) {
-                var jumlah = (rubah(e.noa));
-                data_normal.push({
-                    name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                    y: parseFloat(e.rs)
-                });
-            });
-
-            tujuan_pinjaman_restruktur.series[0].setData(data_normal);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //===============================================================================
-     //RESTRUKTUR & SEGMENTASI
-    var restruktur_segmentasi = Highcharts.chart('container9', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        tooltip: {
-            pointFormat: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                // showInLegend: true
-            }
-        },
-        series: [{
-            type: 'pie',
-            // color: '#2c94ff',
-            data: []
-        }]
-    });
-
-    get_restruktur_segmentasi()
-        .done(function(res) {
-
-            var data_normal = [];
-
-            var komposisi = [{
-                "nama": 'Normal',
-                "noa": res[0].noa_normal_kumulatif,
-                "bd": Math.ceil(res[0].baki_normal_kumulatif),
-                "rs": res[0].rasio_normal_kumulatif
-            }, {
-                "nama": 'Restruktur',
-                "noa": res[0].noa_rest_kumulatif,
-                "bd": Math.ceil(res[0].baki_rest_kumulatif),
-                "rs": res[0].rasio_rest_kumulatif
-            }];
-
-            $.each(komposisi, function(i, e) {
-                var jumlah = (rubah(e.noa));
-                data_normal.push({
-                    name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                    y: parseFloat(e.rs)
-                });
-            });
-
-            restruktur_segmentasi.series[0].setData(data_normal);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //===============================================================================
-    //COLLECTION RASIO
-    var collection_rasio = Highcharts.chart('container10', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        tooltip: {
-            pointFormat: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                // showInLegend: true
-            }
-        },
-        series: [{
-            type: 'pie',
-            // color: '#2c94ff',
-            data: []
-        }]
-    });
-
-    get_collection_rasio()
-        .done(function(res) {
-
-            var data_normal = [];
-
-            var komposisi = [{
-                "nama": 'Normal',
-                "noa": res[0].noa_normal_kumulatif,
-                "bd": Math.ceil(res[0].baki_normal_kumulatif),
-                "rs": res[0].rasio_normal_kumulatif
-            }, {
-                "nama": 'Restruktur',
-                "noa": res[0].noa_rest_kumulatif,
-                "bd": Math.ceil(res[0].baki_rest_kumulatif),
-                "rs": res[0].rasio_rest_kumulatif
-            }];
-
-            $.each(komposisi, function(i, e) {
-                var jumlah = (rubah(e.noa));
-                data_normal.push({
-                    name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                    y: parseFloat(e.rs)
-                });
-            });
-
-            collection_rasio.series[0].setData(data_normal);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //===============================================================================//CURRENT RASIO
-    var current_rasio = Highcharts.chart('container11', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        tooltip: {
-            pointFormat: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                // showInLegend: true
-            }
-        },
-        series: [{
-            type: 'pie',
-            // color: '#2c94ff',
-            data: []
-        }]
-    });
-
-    get_current_rasio()
-        .done(function(res) {
-
-            var data_normal = [];
-
-            var komposisi = [{
-                "nama": 'Normal',
-                "noa": res[0].noa_normal_kumulatif,
-                "bd": Math.ceil(res[0].baki_normal_kumulatif),
-                "rs": res[0].rasio_normal_kumulatif
-            }, {
-                "nama": 'Restruktur',
-                "noa": res[0].noa_rest_kumulatif,
-                "bd": Math.ceil(res[0].baki_rest_kumulatif),
-                "rs": res[0].rasio_rest_kumulatif
-            }];
-
-            $.each(komposisi, function(i, e) {
-                var jumlah = (rubah(e.noa));
-                data_normal.push({
-                    name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                    y: parseFloat(e.rs)
-                });
-            });
-
-            current_rasio.series[0].setData(data_normal);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //===============================================================================//NS RESTRUKTUR
-    var ns_restruktur = Highcharts.chart('container12', {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        tooltip: {
-            pointFormat: ''
-        },
-        accessibility: {
-            point: {
-                valueSuffix: '%'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                // showInLegend: true
-            }
-        },
-        series: [{
-            type: 'pie',
-            // color: '#2c94ff',
-            data: []
-        }]
-    });
-
-    get_ns_restruktur()
-        .done(function(res) {
-
-            var data_normal = [];
-
-            var komposisi = [{
-                "nama": 'Normal',
-                "noa": res[0].noa_normal_kumulatif,
-                "bd": Math.ceil(res[0].baki_normal_kumulatif),
-                "rs": res[0].rasio_normal_kumulatif
-            }, {
-                "nama": 'Restruktur',
-                "noa": res[0].noa_rest_kumulatif,
-                "bd": Math.ceil(res[0].baki_rest_kumulatif),
-                "rs": res[0].rasio_rest_kumulatif
-            }];
-
-            $.each(komposisi, function(i, e) {
-                var jumlah = (rubah(e.noa));
-                data_normal.push({
-                    name: 'NOA:' + jumlah + '|BD:' + (rubah(e.bd)) + '|Rasio(%):' + e.rs,
-                    y: parseFloat(e.rs)
-                });
-            });
-
-            ns_restruktur.series[0].setData(data_normal);
-
-        })
-        .fail(function(xhr) {
-            console.log(xhr);
-        })
-    //===============================================================================
+        chart.render();
+        function explodePie(e) {
+        	for(var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+        		if(i !== e.dataPointIndex)
+        			e.dataSeries.dataPoints[i].exploded = false;
+        	}
+        }
+      }
+  });
+}
+// NPL
+// Bucket Zero
+Bucket_0();
+function Bucket_0(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/kredit/kredit_controller/bucket_nol_console",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="Bucket_0"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("Bucket_0",
+      	{
+      		theme: "light2",
+      		data: [
+      		{
+      			type: "pie",
+            toolTipContent: "{indexLabel}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+      			showInLegend: true,
+      			legendText: "{indexLabel}",
+      			dataPoints: [
+      				{  y: parseFloat(result.rasio_bucket_0),yn: parseFloat(result.noa_bucket_0),yb: parseFloat(result.bd_bucket_0), indexLabel: "Bucket 0" },
+      				{  y: parseFloat(result.rasio_bucket_1),yn: parseFloat(result.noa_bucket_1),yb: parseFloat(result.bd_bucket_1), indexLabel: "Bucket 1" },
+      				{  y: parseFloat(result.rasio_bucket_2),yn: parseFloat(result.noa_bucket_2),yb: parseFloat(result.bd_bucket_2), indexLabel: "Bucket 2" },
+      				{  y: parseFloat(result.rasio_npl),yn: parseFloat(result.noa_npl),yb: parseFloat(result.bd_npl), indexLabel: "NPL"}
+      			]
+      		}
+      		]
+      	});
+      	chart.render();
+      }
+  });
+}
+// Bucket Zero
+// 0NS
+ZeroNS();
+function ZeroNS(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/kredit/kreditrisk_controller/ns_console",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="ZeroNS"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("ZeroNS",
+      	{
+      		theme: "light2",
+      		data: [
+      		{
+      			type: "pie",
+            toolTipContent: "{indexLabel}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+      			showInLegend: true,
+      			legendText: "{indexLabel}",
+      			dataPoints: [
+      				{  y: parseFloat(result.rasio_paid),yn: parseFloat(result.noa_paid),yb: parseFloat(result.bd_paid), indexLabel: "Paid" },
+      				{  y: parseFloat(result.rasio_unpaid),yn: parseFloat(result.noa_unpaid),yb: parseFloat(result.bd_unpaid), indexLabel: "Unpaid" }
+      			]
+      		}
+      		]
+      	});
+      	chart.render();
+      }
+  });
+}
+// 0NS
+
+// fidever
+fidever();
+function fidever(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/kredit/kreditrisk_controller/fid_ever_06_console",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="fid-ever"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("fid-ever",
+      	{
+      		theme: "light2",
+      		data: [
+      		{
+      			type: "pie",
+            toolTipContent: "{indexLabel}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+      			showInLegend: true,
+      			legendText: "{indexLabel}",
+      			dataPoints: [
+      				{  y: parseFloat(result.rasio_fid),yn: parseFloat(result.noa_fid),yb: parseFloat(result.bd_fid), indexLabel: "FID" },
+      				{  y: parseFloat(result.rasio_nonfid),yn: parseFloat(result.noa_nonfid),yb: parseFloat(result.bd_nonfid), indexLabel: "UnFID" }
+      			]
+      		}
+      		]
+      	});
+      	chart.render();
+      }
+  });
+}
+// fidever
+
+// fidcompre
+fidcompre();
+function fidcompre(){
+  $.ajax({
+      type: "POST",
+      url: urlapi+"/dashboard/kredit/kreditrisk_controller/fid_compre_console",
+      async: false,
+      data:{'api':'Y'},
+      dataType: "JSON",
+      beforeSend: function() {
+        $('[id="fid-compre"]').html(loading);
+      },
+      success: function(result) {
+        var chart = new CanvasJS.Chart("fid-compre",
+      	{
+      		theme: "light2",
+      		data: [
+      		{
+      			type: "pie",
+            toolTipContent: "{indexLabel}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+      			showInLegend: true,
+      			legendText: "{indexLabel}",
+      			dataPoints: [
+      				{  y: parseFloat(result.rasio_fid),yn: parseFloat(result.noa_fid),yb: parseFloat(result.bd_fid), indexLabel: "FID" },
+      				{  y: parseFloat(result.rasio_nonfid),yn: parseFloat(result.noa_nonfid),yb: parseFloat(result.bd_nonfid), indexLabel: "UnFID" }
+      			]
+      		}
+      		]
+      	});
+      	chart.render();
+      }
+  });
+}
+// fidcompre
 </script>
