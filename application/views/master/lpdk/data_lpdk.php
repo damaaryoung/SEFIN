@@ -1117,14 +1117,14 @@
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             beforeSend: function() {
-                // let html = 
+                // let html =
                 //             "<div width='100%' class='text-center'>"+
                 //                 "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>"+
                 //                 "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>"+
 
-                //             "</div>";                
+                //             "</div>";
                 // $('#data_pengajuan').html(html);
-                // $('#modal_load_data').modal('show');   
+                // $('#modal_load_data').modal('show');
             },
         });
     }
@@ -2528,7 +2528,7 @@
 
     });
 
-    //TAMBAH PENGAJUAN LPDK     
+    //TAMBAH PENGAJUAN LPDK
 
     $('#form_pengajuan').on('submit', function(e) {
         e.preventDefault();

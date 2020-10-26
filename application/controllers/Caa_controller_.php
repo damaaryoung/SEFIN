@@ -351,7 +351,8 @@ class Caa_controller extends CI_Controller
                     }
                 }
             }
-
+            var_dump($ya_dsh);
+            die();
             if ($ya_dsh == 1) {
                 for ($i = 0; $i < count($teamCAA); $i++) {
                     if ($teamCAA[$i]['jabatan'] == 'DSH') {
@@ -382,14 +383,6 @@ class Caa_controller extends CI_Controller
                 }
             }
 
-            // if($teamCAA[$i]['cabang'] == $cabang) {
-            //     echo "
-            //         <div class='col-md-4'>
-            //             <input type='checkbox' value='".$teamCAA[$i]['id']."' name='team_caa[]' checked disabled>
-            //             <small>".$teamCAA[$i]['jabatan']."</small>
-            //         </div>
-            //     ";
-            // }
             if ($ya_am == 1) {
                 for ($i = 0; $i < count($teamCAA); $i++) {
                     if ($teamCAA[$i]['jabatan'] == 'AM') {

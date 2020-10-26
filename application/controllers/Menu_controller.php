@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exmaster('No direct script access allowed');
+use GuzzleHttp\Client;
 
 class Menu_controller extends CI_Controller
 {
@@ -9,6 +10,8 @@ class Menu_controller extends CI_Controller
         $this->load->model('model_menu');
         $this->load->model('model_auth');
         $this->load->model('Model_view_master');
+        $this->load->model('Model_target_lending');
+
     }
 
     public function index()
@@ -527,5 +530,15 @@ class Menu_controller extends CI_Controller
         } else {
             $this->load->view('master');
         }
+    }
+
+    public function cek_sertifikat()
+    {
+        $this->load->view('master/cek_sertifikat/index');
+    }
+
+        public function dashboard_target_lending()
+    {
+        $this->load->view('master/target_lending/table_target');
     }
 }
