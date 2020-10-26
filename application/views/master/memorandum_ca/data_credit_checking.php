@@ -287,20 +287,19 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-md-5">
                                                 <label>Tempat Lahir</label>
                                                 <input type="text" class="form-control" name="tempat_lahir" onkeyup="this.value = this.value.toUpperCase()">
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label>Tanggal Lahir<span class="required_notification">*</span></label>
+                                            <div class="form-group col-md-5">
+                                                <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="far fa-calendar-alt"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input type="text" name="tgl_lahir_deb" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
+                                                    <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control"/>
                                                 </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label>Umur<span class="required_notification">*</span></label>
+                                                <input type="text" id="umur" name="umur" class="form-control" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -537,20 +536,19 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label>Tanggal Mulai Bekerja<span class="required_notification">*</span></label>
+                                            <div class="form-group col-md-4">
+                                                <label>Mulai Bekerja<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="far fa-calendar-alt"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input type="text" name="masa_kerja_usaha" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
+                                                    <input type="date" id="masa_kerja_usaha" onchange="changeWorkDate()" name="masa_kerja_usaha" class="form-control" data-date-format="d-m-Y"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label>No Telpon Kantor/Usaha<span class="required_notification">*</span></label>
-                                                <input type="text" class="form-control" name="no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
+                                            <div class="form-group col-md-4">
+                                                <label>Lama Bekerja (bln)<span class="required_notification">*</span></label>
+                                                <input type="text" id="masa_lama_kerja_usaha" name="masa_lama_kerja_usaha" class="form-control" readonly="">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>No Telp Kantor/Usaha<span class="required_notification">*</span></label>
+                                                <input type="text" class="form-control" id="no_telp_kantor_usaha" name="no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
                                     </div>
@@ -4575,8 +4573,9 @@
                                             <label for="exampleInput1">Lokasi Agunan<span class="required_notification">*</span></label>
                                             <select name="tipe_lokasi_agunan" class="form-control ">
                                                 <option value="">-- Pilih --</option>
-                                                <option id="lok_perum" value="PERUM">PERUMAHAN</option>
-                                                <option id="lok_biasa" value="BIASA">NON PERUMAHAN</option>
+                                                <?php foreach ($lokasi_jaminan as $key => $value) {
+                                                    echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
+                                                } ?>
                                             </select>
                                         </div>
                                         <div class="form-row">
@@ -4868,8 +4867,9 @@
                                             <label for="exampleInput1">Lokasi Agunan<span class="required_notification">*</span></label>
                                             <select id="tipe_lokasi_agunan_tbh" name="tipe_lokasi_agunan" class="form-control ">
                                                 <option value="">-- Pilih --</option>
-                                                <option value="PERUM">PERUMAHAN</option>
-                                                <option value="BIASA">NON PERUMAHAN</option>
+                                                <?php foreach ($lokasi_jaminan as $key => $value) {
+                                                    echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
+                                                } ?>
                                             </select>
                                         </div>
                                         <div class="form-row">
@@ -5383,7 +5383,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Jenis Kredit<span class="required_notification">*</span></label>
-                                        <input type="text" name="add_jenis_kredit" id="add_jenis_kredit" onkeyup="this.value = this.value.toUpperCase()" class="form-control">
+                                        <select id="add_jenis_kredit" name="add_jenis_kredit" class="form-control ">
+                                            <option disabled value="" selected="selected">-- Pilih --</option>
+                                            <option value="No Din">No Din</option>
+                                            <option value="KTA">KTA</option>
+                                            <option value="CC">CC (Credit Card)</option>
+                                            <option value="Sertifikat">Sertifikat</option>
+                                            <option value="BPKB">BPKB</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -7269,6 +7276,7 @@
                                     $('#form_detail input[name=no_npwp]').val(data_debitur.no_npwp);
                                     $('#form_detail input[name=tempat_lahir]').val(data_debitur.tempat_lahir);
                                     $('#form_detail input[name=tgl_lahir_deb]').val(data_debitur.tgl_lahir);
+                                    $('#form_detail input[name=umur]').val(data_debitur.umur);
 
                                     var select_agama = [];
                                     var option_agama = [
@@ -7423,6 +7431,7 @@
                                     $('#form_detail input[name=nama_perusahaan]').val(data_debitur.pekerjaan.nama_tempat_kerja);
                                     $('#form_detail input[name=jenis_usaha]').val(data_debitur.pekerjaan.jenis_pekerjaan);
                                     $('#form_detail input[name=masa_kerja_usaha]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
+                                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data_debitur.pekerjaan.masa_lama_kerja_usaha);
                                     $('#form_detail input[name=no_telp_kantor_usaha]').val(data_debitur.pekerjaan.no_telp_tempat_kerja);
                                     $('#form_detail input[name=alamat_usaha_kantor]').val(data_debitur.pekerjaan.alamat.alamat_singkat);
                                     $('#form_detail input[name=rt_usaha_kantor]').val(data_debitur.pekerjaan.alamat.rt);
@@ -8331,6 +8340,7 @@
                                     $('#form_detail input[name=no_npwp]').val(data_debitur.no_npwp);
                                     $('#form_detail input[name=tempat_lahir]').val(data_debitur.tempat_lahir);
                                     $('#form_detail input[name=tgl_lahir_deb]').val(data_debitur.tgl_lahir);
+                                    $('#form_detail input[name=umur]').val(data_debitur.umur);
                                     $('#form_detail input[name=email]').val(data_debitur.email);
 
                                     var select_agama = [];
@@ -8485,6 +8495,7 @@
                                     $('#form_detail input[name=nama_perusahaan]').val(data_debitur.pekerjaan.nama_tempat_kerja);
                                     $('#form_detail input[name=jenis_usaha]').val(data_debitur.pekerjaan.jenis_pekerjaan);
                                     $('#form_detail input[name=masa_kerja_usaha]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
+                                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data_debitur.pekerjaan.masa_lama_kerja_usaha);
                                     $('#form_detail input[name=no_telp_kantor_usaha]').val(data_debitur.pekerjaan.no_telp_tempat_kerja);
                                     $('#form_detail input[name=alamat_usaha_kantor]').val(data_debitur.pekerjaan.alamat.alamat_singkat);
                                     $('#form_detail input[name=rt_usaha_kantor]').val(data_debitur.pekerjaan.alamat.rt);
@@ -9873,6 +9884,7 @@
                 formData.append('no_npwp', $('input[name=no_npwp]', this).val());
                 formData.append('tempat_lahir', $('input[name=tempat_lahir]', this).val());
                 formData.append('tgl_lahir', $('input[name=tgl_lahir_deb]', this).val());
+                formData.append('umur', $('input[name=umur]', this).val());
                 formData.append('agama', $('select[name=agama]', this).val());
                 formData.append('alamat_ktp', $('input[name=alamat_ktp]', this).val());
                 formData.append('rt_ktp', $('input[name=rt_ktp]', this).val());
@@ -9914,6 +9926,7 @@
                 formData.append('id_kec_tempat_kerja', $('select[name=kecamatan_kantor]', this).val());
                 formData.append('id_kel_tempat_kerja', $('select[name=kelurahan_kantor]', this).val());
                 formData.append('tgl_mulai_kerja', $('input[name=masa_kerja_usaha]', this).val());
+                formData.append('masa_lama_kerja_usaha', $('input[name=masa_lama_kerja_usaha]', this).val());
                 formData.append('no_telp_tempat_kerja', $('input[name=no_telp_kantor_usaha]', this).val());
                 formData.append('email', $('input[name=email]', this).val());
 
@@ -10360,6 +10373,35 @@
                         });
                     });
             });
+
+            function changeBirthDate() {
+                var date = $("#tgl_lahir_deb").val();
+                var today = new Date();
+                var birthDate = new Date(date);
+                var umur = today.getFullYear() - birthDate.getFullYear();
+                var m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    umur--;
+                }
+
+                $("#umur").val(umur);
+                
+            }
+
+            function changeWorkDate() {
+                var date = $("#masa_kerja_usaha").val();
+                var today = new Date();
+                var workDate = new Date(date);
+                var masa_lama_kerja_usaha = (today.getFullYear() - workDate.getFullYear()) * 12;
+                masa_lama_kerja_usaha -= workDate.getMonth();
+                masa_lama_kerja_usaha += today.getMonth();
+                if (today.getDate() < workDate.getDate()) {
+                    masa_lama_kerja_usaha -= 1;
+                }
+
+                $("#masa_lama_kerja_usaha").val(masa_lama_kerja_usaha < 0 ? 0 : masa_lama_kerja_usaha);
+                
+            }
             //========================================================================================
 
             //FUNGSI PROVINSI, KAB.KEC, KEL BERDASARKAN KTP DEBITUR

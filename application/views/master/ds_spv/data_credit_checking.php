@@ -197,13 +197,17 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-md-5">
                                                 <label>Tempat Lahir</label>
                                                 <input type="text" name="tempat_lahir" class="form-control" disabled>
                                             </div>
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-md-5">
                                                 <label for="exampleInputEmail1">Tanggal Lahir</label>
                                                 <input type="text" name="tgl_lahir_deb" class="form-control" disabled>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label>Umur</label>
+                                                <input type="text" id="umur" name="umur" class="form-control" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -843,6 +847,7 @@
                 $('#form_detail_credit input[name=no_npwp]').val(data.data_debitur.no_npwp);
                 $('#form_detail_credit input[name=tempat_lahir]').val(data.data_debitur.tempat_lahir);
                 $('#form_detail_credit input[name=tgl_lahir_deb]').val(data.data_debitur.tgl_lahir);
+                $('#form_detail_credit input[name=umur]').val(data.data_debitur.umur);
                 $('#form_detail_credit input[name=agama]').val(data.data_debitur.agama);
 
                 $('#form_detail_credit input[name=alamat_ktp]').val(data.data_debitur.alamat_ktp.alamat_singkat);

@@ -239,20 +239,19 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-md-5">
                                                 <label>Tempat Lahir<span class="required_notification">*</span></label>
                                                 <input type="text" id="tempat_lahir" name="tempat_lahir" onkeyup="this.value = this.value.toUpperCase()" class="form-control">
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label>Tanggal Lahir<span class="required_notification">*</span></label>
+                                            <div class="form-group col-md-5">
+                                                <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="far fa-calendar-alt"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input type="text" id="tgl_lahir_deb" name="tgl_lahir_deb" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy">
+                                                    <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control" data-date-format="d-m-Y"/>
                                                 </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label>Umur<span class="required_notification">*</span></label>
+                                                <input type="text" id="umur" name="umur" class="form-control" readonly="">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -286,7 +285,7 @@
                                             <label>Jumlah Tanggungan<span class="required_notification">*</span></label>
                                             <select id="jumlah_tanggungan" name="jumlah_tanggungan" class="form-control">
                                                 <?php foreach ($jml_tanggungan as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?> Tanggungan</option>
+                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -941,3 +940,19 @@
     <!-- <script src="<?php echo base_url('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') ?>"></script> -->
     <?php $this->view('master/memorandum_so/add_credit_js.php'); ?>
     
+    <script>
+        function changeBirthDate() {
+        var date = $("#tgl_lahir_deb").val();
+        var today = new Date();
+        var birthDate = new Date(date);
+        var umur = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            umur--;
+        }
+
+        $("#umur").val(umur);
+        
+        }
+
+    </script>

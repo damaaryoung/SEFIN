@@ -284,20 +284,19 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-6">
+                                            <div class="form-group col-md-5">
                                                 <label>Tempat Lahir</label>
                                                 <input type="text" class="form-control" name="tempat_lahir" onkeyup="this.value = this.value.toUpperCase()">
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label>Tanggal Lahir<span class="required_notification">*</span></label>
+                                            <div class="form-group col-md-5">
+                                                <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="far fa-calendar-alt"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input type="text" name="tgl_lahir_deb" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
+                                                    <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control"/>
                                                 </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label>Umur<span class="required_notification">*</span></label>
+                                                <input type="text" id="umur" name="umur" class="form-control" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -537,25 +536,18 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-7">
-                                                <label>Tanggal Mulai Bekerja</label>
+                                            <div class="form-group col-md-4">
+                                                <label>Mulai Bekerja<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="far fa-calendar-alt"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input type="text" name="masa_kerja_usaha" class="datepicker-here form-control masa_kerja_usaha" data-language='en' data-date-format="yyyy-mm-dd" />
-                                                    <input type="number" readonly disabled name="masa_lama_kerja_usaha" class="form-control" id="masa_lama_kerja_usaha" />
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            Th
-                                                        </span>
-                                                    </div>
+                                                    <input type="date" id="masa_kerja_usaha" onchange="changeWorkDate()" name="masa_kerja_usaha" class="form-control" data-date-format="d-m-Y"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-5">
-                                                <label>No Telpon Kantor/Usaha<span class="required_notification">*</span></label>
+                                            <div class="form-group col-md-4">
+                                                <label>Lama Bekerja (bln)<span class="required_notification">*</span></label>
+                                                <input type="text" id="masa_lama_kerja_usaha" name="masa_lama_kerja_usaha" class="form-control" readonly="">
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label>No Telp Kantor/Usaha<span class="required_notification">*</span></label>
                                                 <input type="text" class="form-control" id="no_telp_kantor_usaha" name="no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
@@ -1187,13 +1179,12 @@
                                             <input type="text" class="form-control" id="nama_penghuni_agunan" name="nama_penghuni_agunan[]" onkeyup="this.value = this.value.toUpperCase()">
                                         </div>
                                         <div class="form-group">
-                                            <label>Status Penghuni<span class="required_notification">*</span></label>
+                                            <label>Pemilik Jaminan<span class="required_notification">*</span></label>
                                             <select id="status_penghuni_agunan" name="status_penghuni_agunan[]" class="form-control ">
-                                                <option value="">--Pilih Status Penghuni--</option>
-                                                <option value="PEMILIK">PEMILIK</option>
-                                                <option value="PENYEWA">PENYEWA</option>
-                                                <option value="TIDAK DIHUNI">TIDAK DIHUNI</option>
-                                                <option value="KELUARGA">KELUARGA</option>
+                                                <option value="">--Pilih Pemilik Jaminan--</option>
+                                                <?php foreach ($pemilik_jaminan as $key => $value) {
+                                                    echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
+                                                } ?>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -1753,7 +1744,7 @@
                                                     No
                                                 </th>
                                                 <th>
-                                                    Lokasi Agunan
+                                                    Lokasi Jaminan
                                                 </th>
                                                 <th>
                                                     Collateral
@@ -2155,13 +2146,12 @@
                                         <input type="text" class="form-control" name="nama_penghuni_agunan_detail" id="nama_penghuni_agunan_detail" onkeyup="this.value = this.value.toUpperCase()">
                                     </div>
                                     <div class="form-group">
-                                        <label>Status Penghuni<span class="required_notification">*</span></label>
+                                        <label>Pemilik Jaminan<span class="required_notification">*</span></label>
                                         <select name="status_tanah_bangunan_detail" id="status_tanah_bangunan" class="form-control ">
-                                            <option value="">--Pilih Status Penghuni--</option>
-                                            <option id="pemilik_agunan_tanah" value="PEMILIK">PEMILIK</option>
-                                            <option id="penyewa_agunan_tanah" value="PENYEWA">PENYEWA</option>
-                                            <option id="tidak_dihuni_agunan_tanah" value="TIDAK DIHUNI">TIDAK DIHUNI</option>
-                                            <option id="keluarga_agunan_tanah" value="KELUARGA">KELUARGA</option>
+                                            <option value="">--Pilih Pemilik Jaminan--</option>
+                                            <?php foreach ($pemilik_jaminan as $key => $value) {
+                                                echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
+                                            } ?>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -2549,7 +2539,7 @@
                                             No
                                         </th>
                                         <th>
-                                            Lokasi Agunan
+                                            Lokasi Jaminan
                                         </th>
                                         <th>
                                             Alamat
@@ -3278,10 +3268,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="exampleInput1">Lokasi Agunan<span class="required_notification">*</span></label>
+                                    <label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label>
                                     <select id="tipe_lokasi_agunan_detail" name="tipe_lokasi_agunan_detail" class="form-control ">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($data_lokasi_agunan as $key => $value) {
+                                        <?php foreach ($lokasi_jaminan as $key => $value) {
                                             echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
                                         } ?>
                                     </select>
@@ -3362,8 +3352,9 @@
                                     <label for="exampleInput1">Jenis Sertifikat</label>
                                     <select id="jenis_sertifikat" id="jenis_sertifikat" name="jenis_sertifikat" class="form-control " onchange="showshgb()">
                                         <option value="">-- Pilih --</option>
-                                        <option value="SHM">SHM</option>
-                                        <option value="SHGB">SHGB</option>
+                                        <?php foreach ($jenis_sertifikat as $key => $value) {
+                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
+                                        } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -3491,10 +3482,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="exampleInput1">Lokasi Agunan<span class="required_notification">*</span></label>
+                                    <label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label>
                                     <select id="tipe_lokasi_agunan_detail" name="tipe_lokasi_agunan_detail" class="form-control ">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($data_lokasi_agunan as $key => $value) {
+                                        <?php foreach ($lokasi_jaminan as $key => $value) {
                                             echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
                                         } ?>
                                     </select>
@@ -3575,8 +3566,9 @@
                                     <label for="exampleInput1">Jenis Sertifikat</label>
                                     <select id="jenis_sertifikat_detail" name="jenis_sertifikat_detail" class="form-control " onchange="showshgb()">
                                         <option value="">-- Pilih --</option>
-                                        <option value="SHM">SHM</option>
-                                        <option value="SHGB">SHGB</option>
+                                        <?php foreach ($jenis_sertifikat as $key => $value) {
+                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
+                                        } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -4214,10 +4206,10 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="exampleInput1">Lokasi Agunan<span class="required_notification">*</span></label>
+                                    <label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label>
                                     <select id="tipe_lokasi_agunan_detail" name="tipe_lokasi_agunan_detail" class="form-control ">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($data_lokasi_agunan as $key => $value) {
+                                        <?php foreach ($lokasi_jaminan as $key => $value) {
                                             echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
                                         } ?>
                                     </select>
@@ -4295,8 +4287,9 @@
                                     <label for="exampleInput1">Jenis Sertifikat</label>
                                     <select id="jenis_sertifikat" name="jenis_sertifikat" class="form-control " onchange="showshgb()">
                                         <option value="">-- Pilih --</option>
-                                        <option id="jenis_shm" value="SHM">SHM</option>
-                                        <option id="jenis_shgb" value="SHGB">SHGB</option>
+                                        <?php foreach ($jenis_sertifikat as $key => $value) {
+                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
+                                        } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -4757,3 +4750,34 @@
 <script src="<?php echo base_url('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') ?>"></script>
 
 <?php $this->view('master/memorandum_ao/data_credit_checking_js.php'); ?>
+
+<script>
+    function changeBirthDate() {
+        var date = $("#tgl_lahir_deb").val();
+        var today = new Date();
+        var birthDate = new Date(date);
+        var umur = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            umur--;
+        }
+
+        $("#umur").val(umur);
+        
+    }
+
+    function changeWorkDate() {
+        var date = $("#masa_kerja_usaha").val();
+        var today = new Date();
+        var workDate = new Date(date);
+        var masa_lama_kerja_usaha = (today.getFullYear() - workDate.getFullYear()) * 12;
+        masa_lama_kerja_usaha -= workDate.getMonth();
+        masa_lama_kerja_usaha += today.getMonth();
+        if (today.getDate() < workDate.getDate()) {
+            masa_lama_kerja_usaha -= 1;
+        }
+
+        $("#masa_lama_kerja_usaha").val(masa_lama_kerja_usaha < 0 ? 0 : masa_lama_kerja_usaha);
+        
+    }
+</script>

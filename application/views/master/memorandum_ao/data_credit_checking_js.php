@@ -13,34 +13,7 @@
         bsCustomFileInput.init();
     });
     // =============================================================
-    $('.masa_kerja_usaha').datepicker({
-        onSelect: function(dateText) {
-            getAge(dateText);
-        }
-    });
-    function getAge($date) {
-    var date = $date;
- 
-    if(date === ""){
-        alert("Please complete the required field!");
-    }else{
-        var today = new Date();
-        var birthday = new Date(date);
-        var year = 0;
-        if (today.getMonth() < birthday.getMonth()) {
-            year = 1;
-        } else if ((today.getMonth() == birthday.getMonth()) && today.getDate() < birthday.getDate()) {
-            year = 1;
-        }
-        var age = today.getFullYear() - birthday.getFullYear() - year;
- 
-        if(age < 0){
-            age = 0;
-        }
-        document.getElementById('masa_lama_kerja_usaha').value = age;
-        // console.log(age);
-    }
-}
+    
     $(function() {
         $("#tambah_data_anak").click(function() {
             // var id_data_anak = $('#form_tambah_data_anak input[type=hidden][name=id_debitur_anak]').val();
@@ -2960,6 +2933,7 @@
                     $('#form_detail input[name=no_npwp]').val(data.data_debitur.no_npwp);
                     $('#form_detail input[name=tempat_lahir]').val(data.data_debitur.tempat_lahir);
                     $('#form_detail input[name=tgl_lahir_deb]').val(data.data_debitur.tgl_lahir);
+                    $('#form_detail input[name=umur]').val(data.data_debitur.umur);
 
                     if (data.data_debitur.agama == "ISLAM") {
                         document.getElementById("agama_deb1").selected = "true";
@@ -3110,6 +3084,7 @@
                     $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
                     $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
                     $('#form_detail input[name=masa_kerja_usaha]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
+                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data.data_debitur.pekerjaan.masa_lama_kerja_usaha);
                     $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
 
 
@@ -3626,6 +3601,7 @@
                     $('#form_detail input[name=no_npwp]').val(data.data_debitur.no_npwp);
                     $('#form_detail input[name=tempat_lahir]').val(data.data_debitur.tempat_lahir);
                     $('#form_detail input[name=tgl_lahir_deb]').val(data.data_debitur.tgl_lahir);
+                    $('#form_detail input[name=umur]').val(data.data_debitur.umur);
                     $('#form_detail input[name=tinggi_badan]').val(data.data_debitur.tinggi_badan);
                     $('#form_detail input[name=berat_badan]').val(data.data_debitur.berat_badan);
 
@@ -3768,6 +3744,7 @@
                     $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
                     $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
                     $('#form_detail input[name=masa_kerja_usaha]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
+                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data.data_debitur.pekerjaan.masa_lama_kerja_usaha);
                     $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
 
                     get_provinsi()
@@ -5308,6 +5285,7 @@
             formData.append('no_npwp', $('input[name=no_npwp]', this).val());
             formData.append('tempat_lahir', $('input[name=tempat_lahir]', this).val());
             formData.append('tgl_lahir', $('input[name=tgl_lahir_deb]', this).val());
+            formData.append('umur', $('input[name=umur]', this).val());
             formData.append('agama', $('select[name=agama]', this).val());
             formData.append('alamat_ktp', $('input[name=alamat_ktp]', this).val());
             formData.append('rt_ktp', $('input[name=rt_ktp]', this).val());
@@ -5341,6 +5319,7 @@
             formData.append('id_kec_tempat_kerja', $('select[id=kecamatan_kantor]', this).val());
             formData.append('id_kel_tempat_kerja', $('select[id=kelurahan_kantor]', this).val());
             formData.append('tgl_mulai_kerja', $('input[name=masa_kerja_usaha]', this).val());
+            formData.append('masa_lama_kerja_usaha', $('input[name=masa_lama_kerja_usaha]', this).val());
             formData.append('no_telp_tempat_kerja', $('input[name=no_telp_kantor_usaha]', this).val());
 
             update_debitur(formData, id)

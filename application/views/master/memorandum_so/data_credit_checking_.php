@@ -218,20 +218,19 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-row">
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-5">
                                                     <label>Tempat Lahir<span class="required_notification">*</span></label>
                                                     <input type="text" name="tempat_lahir" onkeyup="this.value = this.value.toUpperCase()" class="form-control">
                                                 </div>
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-5">
                                                     <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">
-                                                                <i class="far fa-calendar-alt"></i>
-                                                            </span>
-                                                        </div>
-                                                        <input type="text" name="tgl_lahir_deb" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
+                                                        <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control"/>
                                                     </div>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label>Umur<span class="required_notification">*</span></label>
+                                                    <input type="text" id="umur" name="umur" class="form-control" disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -2200,6 +2199,19 @@
     })
     //==============================================================================================
 
+    function changeBirthDate() {
+        var date = $("#tgl_lahir_deb").val();
+        var today = new Date();
+        var birthDate = new Date(date);
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+
+        $("#umur").val(age);
+        
+    }
 
 
     //UPDATE FASILITAS

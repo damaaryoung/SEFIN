@@ -221,20 +221,19 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-row">
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-5">
                                                     <label>Tempat Lahir<span class="required_notification">*</span></label>
                                                     <input type="text" name="tempat_lahir" onkeyup="this.value = this.value.toUpperCase()" class="form-control">
                                                 </div>
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-5">
                                                     <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
                                                     <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">
-                                                                <i class="far fa-calendar-alt"></i>
-                                                            </span>
-                                                        </div>
-                                                        <input type="text" name="tgl_lahir_deb" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
+                                                        <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control"/>
                                                     </div>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label>Umur<span class="required_notification">*</span></label>
+                                                    <input type="text" id="umur" name="umur" class="form-control" disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -1933,6 +1932,7 @@
                                 $('#form_detail input[name=no_npwp]').val(data_debitur.no_npwp);
                                 $('#form_detail input[name=tempat_lahir]').val(data_debitur.tempat_lahir);
                                 $('#form_detail input[name=tgl_lahir_deb]').val(data_debitur.tgl_lahir);
+                                $('#form_detail input[name=umur]').val(data_debitur.umur);
 
                                 var select_agama = [];
                                 var option_agama = [
@@ -2357,6 +2357,7 @@
             formData.append('no_npwp', $('input[name=no_npwp]', this).val());
             formData.append('tempat_lahir', $('input[name=tempat_lahir]', this).val());
             formData.append('tgl_lahir', $('input[name=tgl_lahir_deb]', this).val());
+            formData.append('umur', $('input[name=umur]', this).val());
             formData.append('agama', $('select[name=agama_deb]', this).val());
             formData.append('alamat_ktp', $('input[name=alamat_ktp]', this).val());
             formData.append('rt_ktp', $('input[name=rt_ktp]', this).val());
@@ -2748,6 +2749,20 @@
         });
     });
 
+    function changeBirthDate() {
+        var date = $("#tgl_lahir_deb").val();
+        var today = new Date();
+        var birthDate = new Date(date);
+        var umur = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            umur--;
+        }
+
+        $("#umur").val(umur);
+        
+    } 
+
     //update_penjamin
     $(function() {
 
@@ -3108,6 +3123,8 @@
                 });
         });
 
+        
+        
         //CHANGE KTP PENJAMIN
         $('.add_lamp_ktp_penjamin').on('change', function(e) {
             e.preventDefault();
@@ -3517,9 +3534,10 @@
                 })
         }
     });
-
+    
     function click_detail() {
         $('#form_detail .form-control').prop('disabled', true);
         $('.submit').hide();
     }
+
 </script>

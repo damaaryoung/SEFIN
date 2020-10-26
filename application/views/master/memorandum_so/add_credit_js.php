@@ -856,6 +856,7 @@
                 formData.append('no_npwp', $('input[name=no_npwp]', this).val());
                 formData.append('tempat_lahir', $('input[name=tempat_lahir]', this).val());
                 formData.append('tgl_lahir', $('input[name=tgl_lahir_deb]', this).val());
+                formData.append('umur', $('input[name=umur]', this).val());
                 formData.append('agama', $('select[name=agama]', this).val());
                 formData.append('alamat_ktp', $('input[name=alamat_ktp]', this).val());
                 formData.append('rt_ktp', $('input[name=rt_ktp]', this).val());
@@ -975,6 +976,7 @@
                 formData.append('no_npwp', $('input[name=no_npwp]', this).val());
                 formData.append('tempat_lahir', $('input[name=tempat_lahir]', this).val());
                 formData.append('tgl_lahir', $('input[name=tgl_lahir_deb]', this).val());
+                formData.append('umur', $('input[name=umur]', this).val());
                 formData.append('agama', $('select[name=agama]', this).val());
                 formData.append('alamat_ktp', $('input[name=alamat_ktp]', this).val());
                 formData.append('rt_ktp', $('input[name=rt_ktp]', this).val());
@@ -1108,6 +1110,9 @@
                             error += '<p>' + item + "</p>";
                         });
                         $.each(data.tgl_lahir, function(index, item) {
+                            error += '<p>' + item + "</p>";
+                        });
+                        $.each(data.age, function(index, item) {
                             error += '<p>' + item + "</p>";
                         });
                         $.each(data.jenis_kelamin, function(index, item) {
@@ -1486,6 +1491,7 @@
                 $('[name="alamat_ktp"]').val(data.Alamat.value);
                 $('[name="tempat_lahir"]').val(data['Tempat Lahir'].value);
                 $('[name="tgl_lahir_deb"]').val(data['Tgl Lahir'].value);
+                $('[name="umur"]').val(data['Umur'].value);
                 $('[name="rt_ktp"]').val(data['RT/RW'].value.substr(0, 3));
                 $('[name="rw_ktp"]').val(data['RT/RW'].value.substr(4));
 
@@ -1628,6 +1634,7 @@
                 $('[name="alamat_ktp"]').val(data.Alamat.value);
                 $('[name="tempat_lahir"]').val(data['Tempat Lahir'].value);
                 $('[name="tgl_lahir_deb"]').val(data['Tgl Lahir'].value);
+                $('[name="umur"]').val(data['Umur'].value);
                 $('[name="rt_ktp"]').val(data['RT/RW'].value.substr(0, 3));
                 $('[name="rw_ktp"]').val(data['RT/RW'].value.substr(4));
 
@@ -1771,6 +1778,7 @@
                 $('[name="alamat_ktp"]').val(data.Alamat.value);
                 $('[name="tempat_lahir"]').val(data['Tempat Lahir'].value);
                 $('[name="tgl_lahir_deb"]').val(data['Tgl Lahir'].value);
+                $('[name="umur"]').val(data['Umur'].value);
                 $('[name="rt_ktp"]').val(data['RT/RW'].value.substr(0, 3));
                 $('[name="rw_ktp"]').val(data['RT/RW'].value.substr(4));
 

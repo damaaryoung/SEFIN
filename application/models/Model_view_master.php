@@ -83,15 +83,37 @@ class Model_view_master extends ci_model
         return $result;
     }
 
-    function lokasi_agunan()
+    // function jenis_kredit()
+    // {
+    //     $query = "SELECT * from view_creditscoring WHERE nama_parameter='KREDIT CHECKING' AND id_parameter='01'";
+    //     $data=$this->db->query($query)->result();
+    //     return $data;
+    // }
+
+    function tampil_lokasi_jaminan()
     {
         $query = "SELECT * from view_creditscoring WHERE nama_parameter='LOKASI JAMINAN' AND id_parameter='016'";
         $data=$this->db->query($query)->result();
         return $data;
     }
+    
     function data_collateral()
     {
         $query = "SELECT * from view_creditscoring WHERE nama_parameter='COLLATERAL' AND id_parameter='011'";
+        $data=$this->db->query($query)->result();
+        return $data;
+    }
+
+    function jenis_sertifikat()
+    {
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='JENIS SERTIFIKAT' AND id_parameter='017'";
+        $data=$this->db->query($query)->result();
+        return $data;
+    }
+
+    function pemilik_jaminan()
+    {
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='PEMILIK JAMINAN' AND id_parameter='013'";
         $data=$this->db->query($query)->result();
         return $data;
     }

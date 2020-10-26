@@ -134,7 +134,7 @@ class Master extends CI_Controller
             $this->load->view('master/ds_spv/data_credit_checking');
         }
         public function memorandum_ao(){
-            $this->load->view('master/memorandum_ao/data_credit_checking');
+            $this->load->view('master/memorandum_ao/data_credit_checking', $data);
         }
         public function add_memorandum_ao(){
             $this->load->view('master/memorandum_ao/add_ao');
