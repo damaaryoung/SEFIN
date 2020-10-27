@@ -101,7 +101,7 @@
           var data=$('#quickForm').serialize();
           // start at ajax updated
           $.ajax({
-            url: "<!?= base_url(); ?>CekSertifikat_controller/updated",
+            url: "<?= base_url(); ?>CekSertifikat_controller/updated",
             data:data,
             type: "POST",
             beforeSend: function() {
