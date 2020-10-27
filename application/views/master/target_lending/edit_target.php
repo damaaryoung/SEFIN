@@ -1,70 +1,71 @@
-<!-- <div id="lihat_detail" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Edit Target Lending</h1>
+<form id="edit-master">
+    <div class="modal-header">
+        <h4 class="modal-title">Edit Data Master</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleInputCode">Kode kantor</label>
+                    <input type="hidden" name="id" value="<?= $data_edit['data'][0]['id']; ?>">
+                    <input type="text" name="kode_kantor" class="form-control" id="exampleInputCode" placeholder="Enter code" value="<?= $data_edit['data'][0]['kode_kantor']; ?>">
+                </div>
             </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Edit Target Lending</li>
-                </ol>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleInputAreaKerja">Area kerja</label>
+                    <select class="form-control" name="area_kerja" id="exampleInputAreaKerja">
+                        <?php foreach ($data_area as $key): ?>
+                            <option value="<?= $key->nama_area_kerja; ?>" <?= ($data_edit['data'][0]['area_kerja']==$key->nama_area_kerja) ? 'selected' : '' ; ?> ><?= $key->nama_area_kerja; ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
             </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleInputArea">Area</label>
+                    <select class="form-control" name="area" id="exampleInputArea">
+
+                        <?php foreach ($data_area as $key): ?>
+                            <option value="<?= $key->kode_area; ?>" <?= ($data_edit['data'][0]['area']==$key->kode_area) ? 'selected' : '' ; ?>><?= $key->kode_area; ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleInputTarget">Target</label>
+                    <input type="text" name="target" class="form-control" id="exampleInputTarget" placeholder="Enter Target" value="<?= $data_edit['data'][0]['target']; ?>">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleInputBulan">Bulan</label>
+                    <select class="form-control" name="bulan" id="exampleInputBulan">
+                        <?php for ($i=1; $i <= 12; $i++) { ?>
+                            <option value="<?=$i;?>" <?= ($data_edit['data'][0]['bulan']==$i) ? 'selected' : '' ; ?>><?=$i;?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="exampleInputTahun">Tahun</label>
+                    <select class="form-control" name="tahun" id="exampleInputTahun">
+                        <?php $now=date('Y'); for ($a=2010;$a<=$now;$a++){?>
+                        <option value='<?= $a; ?>' <?= ($data_edit['data'][0]['tahun']==$a) ? "selected" : "" ;?>><?= $a; ?></option>";
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            
         </div>
     </div>
-</section>
-    <div class='container'> -->
-    <div class='edit_target'>
-    <!-- <?php print_r($get_data['data']['data'][0]['bulan']) ?> -->
-        <form method="post" id="form_edit_target">
-            
-            <div class="form-group">
-                <label>Area</label>
-                <select name="area" id="area" class="area form-control">
-                <option value="<?php echo $get_data['data']['data'][0]['area'] ?>">
-                    <?php echo $get_data['data']['data'][0]['area'] ?></option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Area Kerja</label>
-                <select name="area_kerja" id="area_kerjas" class="area_kerja form-control">
-                    <option value="<?php echo $get_data['data']['data'][0]['area_kerja'] ?>">
-                    <?php echo $get_data['data']['data'][0]['area_kerja'] ?></option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="name">Kode Kantor</label>
-                <input type="text" name="kode_kantor" class="form-control" id="kd_kantor" value='<?php echo $get_data['data']['data'][0]['kode_kantor'] ?>'>
-            </div>
-            
-            <div class="form-group">
-                <label>Target</label>
-                <input type="text" name="target" class="form-control" id="target" value='<?php echo $get_data['data']['data'][0]['target'] ?>']>
-            </div>
-
-            <div class="form-group">
-                <label>Bulan</label>
-                <input type="text" name="bulan" class="form-control" 
-                placeholder="Masukkan Bulan" id="bulan" value='<?php echo $get_data['data']['data'][0]['bulan'] ?>'>
-            </div>
-
-            <div class="form-group">
-                <label>Tahun</label>
-                <input type="text" name="tahun" class="form-control" id="tahun" value='<?php echo $get_data['data']['data'][0]['tahun'] ?>'>
-            </div>
-            
-            <button type="submit" id="save" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
     </div>
-<!-- </div> -->
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-
-<?php $this->view('master/target_lending/edit_target_js.php'); ?>
+</form>

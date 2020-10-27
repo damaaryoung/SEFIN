@@ -540,6 +540,6 @@ class Menu_controller extends CI_Controller
 
         public function dashboard_target_lending()
     {
-        $this->load->view('master/target_lending/table_target');
+        $this->load->view('master/target_lending/target_lending_template');
     }
 }

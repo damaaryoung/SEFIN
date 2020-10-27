@@ -1,79 +1,71 @@
-<?php 
+<?php
 defined('BASEPATH') or exit('No direct script access allowed');
-use GuzzleHttp\Client;
 
-class Target_lending_controller extends CI_Controller {
-    // var $API ="";
-
-    function __construct() {
+class Target_lending_controller extends CI_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
-		$this->load->model('Model_target_lending');
+        $this->load->model('Model_target_lending');
     }
-    // menampilkan data kontak
-    function index(){
-            // $data =$this->Model_target_lending->tampil_data()
-        // ;
-        // var_dump($data['data']['data']);
 
+<<<<<<< HEAD
         $this->load->view('master/target_lending/template');
         $this->load->view('master/target_lending/table_target');
-    }
-
-    function tampil_data()
+=======
+    // view function::STARTED
+    public function tampil_data()
     {
-      if ($_GET['draw']) {
-        $page=$_GET['draw'];
-      }else{
-        $page=1;
-      }
-      $data=$this->Model_target_lending->tampil_data($page);
-      foreach ($data['data']['data'] as $key) {
-          $datas[]=array(
-          "kode_kantor"=>$key['kode_kantor'],
-          "area_kerja"=>$key['area_kerja'],
-          "area"=>$key['area'],
-          "target"=>$key['target'],
-          "bulan"=>$key['bulan'],
-          "tahun"=>$key['tahun'],
-          "edit"=>'<button class="btn btn-info view" onclick="edit('.$key['id'].');">Edit</button>',
-          "delete"=>'<button class="btn btn-info delete" name="delete" onclick="view('.$key['id'].')";>Delete</button>',
-        
-          
-        );
-      }
-      // var_dump($data);
-      $arrayName = array(
-        "draw"=>$data['data']['current_page'],
-        "recordsTotal"=> $data['data']['total'],
-        "recordsFiltered"=> $data['data']['total'],
-        "data"=>$datas,
-      );
-      echo json_encode($arrayName);
-    }
-    
-  
-
-     function create(){
-
-      $this->load->view('master/target_lending/add_target');
-      // $this->load->view('master/target_lending/add_target_js.php');
-
+        if (isset($_POST['page'])) {
+            $page=$_POST['page'];
+        } else {
+            $page="1";
+        }
+        $data=$this->Model_target_lending->tampil_data($page);
+        $data['pagination']=$data['data']['last_page'];
+        $data['page']=$data['data']['current_page'];
+        $data['data']=$data['data']['data'];
+        $this->load->view('master/target_lending/table_data', $data);
+>>>>>>> refs/remotes/origin/master
     }
 
-    function edit(){
-      $id = $this->input->post('id');
-      $this->load->model('model_auth');
-      $data['get_data'] = $this->model_auth->get_data('api/master/target/'.$id);
-      $this->load->view('master/target_lending/edit_target', $data);
+    public function create()
+    {
+        $data['data_edit']=$this->Model_target_lending->view($id);
+        $data['data_area']=$this->Model_target_lending->get_area();
+        $this->load->view('master/target_lending/add_target', $data);
     }
-    
-    function get_area_kerja() {
-      $area_kerja = $this->model_auth->get_data('api/master/area_kerja');
-      echo json_encode($area_kerja);
-  }
-  
-    // function update(){
-    //   $this->load->model('Model_target_lending');
-    // }
 
-  }
+    public function edit()
+    {
+        $id = $this->input->post('id');
+        $data['data_edit']=$this->Model_target_lending->view($id);
+        $data['data_area']=$this->Model_target_lending->get_area();
+        $this->load->view('master/target_lending/edit_target', $data);
+    }
+
+    public function get_area_kerja()
+    {
+        $area_kerja = $this->model_auth->get_data('api/master/area_kerja');
+        echo json_encode($area_kerja);
+    }
+    // view function::ENDED
+
+    // action function::STARTED
+    public function store()
+    {
+        echo $this->Model_target_lending->store();
+    }
+
+    public function update()
+    {
+        echo $this->Model_target_lending->update();
+    }
+
+    public function destroy()
+    {
+        $id = $this->input->post('id');
+        echo $this->Model_target_lending->destroy($id);
+    }
+    // action function::ENDED
+}
