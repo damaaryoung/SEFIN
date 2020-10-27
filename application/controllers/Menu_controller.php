@@ -314,12 +314,16 @@ class Menu_controller extends CI_Controller
     }
     public function ao()
     {
-        $data['data_lokasi_agunan'] = $this->Model_view_master->lokasi_agunan();
+        $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['data_collateral'] = $this->Model_view_master->data_collateral();
+        $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
+        $data['pemilik_jaminan'] = $this->Model_view_master->pemilik_jaminan();
         $this->load->view('master/memorandum_ao/data_credit_checking',$data);
     }
     public function ca()
-    {
+    {   
+        // $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
+        $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['data_sumber_penghasilan'] =  $this->Model_view_master->sumber_penghasilan();
         $data['data_pemasukan_perbulan'] =  $this->Model_view_master->pemasukan_perbulan();
         $data['data_frek_trans_pemasukan'] =  $this->Model_view_master->frek_trans_pemasukan();
@@ -328,6 +332,7 @@ class Menu_controller extends CI_Controller
         $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
         $this->load->view('master/memorandum_ca/data_credit_checking', $data);
     }
+
     public function das()
     {
         $this->load->view('master/das/data_credit_checking');
@@ -393,6 +398,14 @@ class Menu_controller extends CI_Controller
     {
         $data['get_user'] = $this->model_menu->getUser();
         $this->load->view('master/restruktur/dashboard_restruktur', $data);
+    }
+    public function dashboard_lending()
+    {
+        $this->load->view('master/lending/dashboard_lending');
+    }
+    public function dashboard_funnel_lending()
+    {
+        $this->load->view('master/funnel_lending/dashboard_funnel_lending');
     }
     public function credit_scoring()
     {
