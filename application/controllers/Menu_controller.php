@@ -324,6 +324,7 @@ class Menu_controller extends CI_Controller
     {   
         // $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
         $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
+        $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
         $data['data_sumber_penghasilan'] =  $this->Model_view_master->sumber_penghasilan();
         $data['data_pemasukan_perbulan'] =  $this->Model_view_master->pemasukan_perbulan();
         $data['data_frek_trans_pemasukan'] =  $this->Model_view_master->frek_trans_pemasukan();

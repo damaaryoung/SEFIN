@@ -125,7 +125,6 @@
                 </div>
             </div>
             <div class="row justify-content-center" id="chartLending">
-
             </div>
         </div>
     </section>

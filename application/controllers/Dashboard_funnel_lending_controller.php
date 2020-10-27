@@ -18,6 +18,8 @@ class Dashboard_funnel_lending_controller extends CI_Controller
         if (!empty($kode_area)) {
             $kondisi_kode_area = "AND id_area = $kode_area";
             $chart_title = $this->db->where('id', $kode_area)->get('mk_area')->row()->nama;
+            $all_cabang_by_area = $this->db->where('id_area', $kode_area)->get('mk_cabang')->result();
+            $data['all_cabang_by_area'] = $all_cabang_by_area;
         } else {
             $kondisi_kode_area = "";
             $chart_title = "KONSOLIDASI";
@@ -98,6 +100,92 @@ class Dashboard_funnel_lending_controller extends CI_Controller
 
         $Q = "SELECT COUNT(trans_so) FROM lpdk WHERE status_kredit='ON-PROGRESS' AND MONTH(created_at) = $m AND YEAR(created_at) = $y $kondisi_kode_area";
         $data['lendingWaiting'] = $this->db->query($Q)->row();
+
+        echo json_encode($data);
+    }
+
+    function get_data_funnel_lending_for_single_chart(){
+        $m = $this->input->post("m");
+        $y = $this->input->post("y");
+        $kode_kantor = $this->input->post("kode_kantor");
+
+        $chart_title = $this->db->where('id', $kode_kantor)->get('mk_cabang')->row()->nama;
+        $data['chart_title_kantor'] = $chart_title;
+
+        $Q = "SELECT COUNT(id) FROM trans_so WHERE MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor";
+        $data['leadsDataCabang'] = $this->db->query($Q)->row();
+
+        //=============================================================================================================
+
+        $Q = "SELECT COUNT(id) FROM trans_so WHERE status_hm='1' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor";
+        $data['prospekApproveCabang'] = $this->db->query($Q)->row();
+
+        $Q = "SELECT COUNT(id) FROM trans_so WHERE status_hm='0' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor";
+        $data['prospekWaitingCabang'] = $this->db->query($Q)->row();
+
+        $Q = "SELECT COUNT(id) FROM trans_so WHERE status_hm='2' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor";
+        $data['prospekRejectCabang'] = $this->db->query($Q)->row();
+
+        //=============================================================================================================
+
+        $Q = "SELECT COUNT(a.id) FROM trans_ao AS a LEFT JOIN recom_ao AS b ON (a.id_recom_ao=b.id) WHERE b.plafon_kredit > '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor";
+        $data['aoApproveCabang'] = $this->db->query($Q)->row();
+
+        $Q = "SELECT COUNT(a.id) FROM trans_ao AS a LEFT JOIN recom_ao AS b ON (a.id_recom_ao=b.id) WHERE b.plafon_kredit='0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor";
+        $data['aoRejectCabang'] = $this->db->query($Q)->row();
+
+        $prospekApprove = $this->db->query("SELECT COUNT(id) as prospekApprove FROM trans_so WHERE status_hm='1' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor")->row();
+        $aoApprove = $this->db->query("SELECT COUNT(a.id) as aoApprove FROM trans_ao AS a LEFT JOIN recom_ao AS b ON (a.id_recom_ao=b.id) WHERE b.plafon_kredit > '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor")->row();
+        $aoReject = $this->db->query("SELECT COUNT(a.id) as aoReject FROM trans_ao AS a LEFT JOIN recom_ao AS b ON (a.id_recom_ao=b.id) WHERE b.plafon_kredit = '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor")->row();
+        
+        $data['status_aoCabang'] = $prospekApprove->prospekApprove - ( $aoApprove->aoApprove + $aoReject->aoReject );
+
+        //=============================================================================================================
+
+        $Q = "SELECT COUNT(a.id_trans_so) FROM trans_ca AS a LEFT JOIN recom_ca AS b ON (a.id_recom_ca=b.id) WHERE b.plafon_kredit > '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor";
+        $data['caApproveCabang'] = $this->db->query($Q)->row();
+
+        $Q = "SELECT COUNT(a.id_trans_so) FROM trans_ca AS a LEFT JOIN recom_ca AS b ON (a.id_recom_ca=b.id) WHERE b.plafon_kredit = '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor";
+        $data['caRejectCabang'] = $this->db->query($Q)->row();
+
+        $aoApprove = $this->db->query("SELECT COUNT(a.id) as aoApprove FROM trans_ao AS a LEFT JOIN recom_ao AS b ON (a.id_recom_ao=b.id) WHERE b.plafon_kredit > '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor")->row();
+        $caApprove = $this->db->query("SELECT COUNT(a.id_trans_so) as caApprove FROM trans_ca AS a LEFT JOIN recom_ca AS b ON (a.id_recom_ca=b.id) WHERE b.plafon_kredit > '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor")->row();
+        $caReject = $this->db->query("SELECT COUNT(a.id_trans_so) as caReject FROM trans_ca AS a LEFT JOIN recom_ca AS b ON (a.id_recom_ca=b.id) WHERE b.plafon_kredit = '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor")->row();
+
+        $data['verif_caCabang'] = $aoApprove->aoApprove - ( $caApprove->caApprove + $caReject->caReject );
+
+        //=============================================================================================================
+
+        $Q = "SELECT COUNT(id_trans_so) FROM tb_approval WHERE status = 'accept' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor";
+        $data['caaApproveCabang'] = $this->db->query($Q)->row();
+
+        $Q = "SELECT COUNT(id_trans_so) FROM tb_approval WHERE status = 'reject' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor";
+        $data['caaRejectCabang'] = $this->db->query($Q)->row();
+
+        $caApprove = $this->db->query("SELECT COUNT(a.id_trans_so) as caApprove FROM trans_ca AS a LEFT JOIN recom_ca AS b ON (a.id_recom_ca=b.id) WHERE b.plafon_kredit > '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor")->row();
+        $caReject = $this->db->query("SELECT COUNT(a.id_trans_so) as caReject FROM trans_ca AS a LEFT JOIN recom_ca AS b ON (a.id_recom_ca=b.id) WHERE b.plafon_kredit = '0' AND MONTH(a.created_at) = $m AND YEAR(a.created_at) = $y AND a.id_cabang = $kode_kantor")->row();
+        $caaApprove = $this->db->query("SELECT COUNT(id_trans_so) as caaApprove FROM tb_approval WHERE status = 'accept' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor")->row();
+        $caaReject = $this->db->query("SELECT COUNT(id_trans_so) as caaReject FROM tb_approval WHERE status = 'reject' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor")->row();
+
+        $data['caaWaitingCabang'] = (($caApprove->caApprove + $caReject->caReject) - ( $caaApprove->caaApprove + $caaReject->caaReject ));
+
+        // =============================================================================================================
+
+        $Q = "SELECT COUNT(a.id) FROM agunan_tanah AS a LEFT JOIN trans_so AS b ON (a.id_trans_so=b.id) WHERE a.STATUS='MASUK' AND MONTH(b.created_at)= $m AND YEAR(b.created_at) = $y AND b.id_cabang = $kode_kantor";
+        $data['ceksertipikatApproveCabang'] = $this->db->query($Q)->row();
+
+        $caaApprove = $this->db->query("SELECT COUNT(id_trans_so) as caaApprove FROM tb_approval WHERE status = 'accept' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor")->row();
+        $ceksertipikatApprove = $this->db->query("SELECT COUNT(a.id) as ceksertipikatApprove FROM agunan_tanah AS a LEFT JOIN trans_so AS b ON (a.id_trans_so=b.id) WHERE a.STATUS='MASUK' AND MONTH(b.created_at)= $m AND YEAR(b.created_at) = $y AND b.id_cabang = $kode_kantor")->row();
+
+        $data['ceksertipikatWaitingCabang'] = ($caaApprove->caaApprove - $ceksertipikatApprove->ceksertipikatApprove);
+
+        // =============================================================================================================
+
+        $Q = "SELECT COUNT(trans_so) FROM lpdk WHERE status_kredit='REALISASI' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor";
+        $data['lendingApproveCabang'] = $this->db->query($Q)->row();
+
+        $Q = "SELECT COUNT(trans_so) FROM lpdk WHERE status_kredit='ON-PROGRESS' AND MONTH(created_at) = $m AND YEAR(created_at) = $y AND id_cabang = $kode_kantor";
+        $data['lendingWaitingCabang'] = $this->db->query($Q)->row();
 
         echo json_encode($data);
     }

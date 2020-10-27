@@ -15,8 +15,8 @@ class Target_lending_controller extends CI_Controller {
         // ;
         // var_dump($data['data']['data']);
 
-        $this->load->view('master/target_lending/template',$data);
-        $this->load->view('master/target_lending/table_target',$data);
+        $this->load->view('master/target_lending/template');
+        $this->load->view('master/target_lending/table_target');
     }
 
     function tampil_data()

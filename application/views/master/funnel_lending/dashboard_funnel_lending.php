@@ -123,6 +123,9 @@
 
 <script>
     function filter_data_funnel_lending() {
+
+        $("#funnellendingChart").empty();
+
         var requestBody = {
             kode_area   : $("#kode_area option:selected").val(),
             m           : $("#m option:selected").val(),
@@ -153,82 +156,227 @@
                 var lendingApproveResponse = JSON.parse(res).lendingApprove["COUNT(trans_so)"];
                 var lendingWaitingResponse = JSON.parse(res).lendingWaiting["COUNT(trans_so)"];
                 var chart_titleResponse = JSON.parse(res).chart_title;
+                var allcabangResponse = JSON.parse(res).all_cabang_by_area;
 
                 //===============================================================================================
 
-                Highcharts.chart('funnellendingChart', {
-                    chart: {
-                        type: 'bar',
-                        height: '45%'
-                    },
-                    title: {
-                        text: chart_titleResponse
-                    },
-                    xAxis: {
-                        categories: ['Leads', 'Prospek', 'Rekomendasi AO', 'Rekomendasi CA', 'Commite CAA', 'Cek Sertipikat', 'Lending']
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Total NoA'
-                        }
-                    },
-                    plotOptions: {
-                        series: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true
+                if (allcabangResponse !== undefined) {
+                        allcabangResponse.forEach(cabang => {
+                            var requestBodyForLoop = {
+                                kode_kantor  : cabang.id,
+                                m            : $("#m option:selected").val(),
+                                y            : $("#y option:selected").val(),
                             }
-                        }
-                    },
-                    series: [{
-                        name: 'Approved',
-                        id: 'Approved',
-                        color: "#007bff",
-                        data: [Number(leadsResponse), 3, 4, 7, 2]
-                    }, {
-                        name: 'Waiting Cek CC',
-                        id: 'Waiting Cek CC',
-                        color: "#fff199",
-                    }, {
-                        name: 'Reject CC',
-                        id: 'Reject CC',
-                        color: "#f33a3a",
-                    }, {
-                        name: 'Reject AO',
-                        id: 'Reject AO',
-                        color: "#ff6666",
-                    }, 
-                    {
-                        name: 'No Status AO',
-                        id: 'No Status AO',
-                        color: "#f0e68c",
-                    }, {
-                        name: 'Proses Verif CA',
-                        id: 'Proses Verif CA',
-                        color: "#ffe4b5",
-                    }, {
-                        name: 'Reject CA',
-                        id: 'Reject CA',
-                        color: "#cd4c4c",
-                    },
-                    {
-                        name: 'Waiting Approve CAA',
-                        id: 'Waiting Approve CAA',
-                        color: "#eedc82",
-                    }, {
-                        name: 'Reject CAA',
-                        id: 'Reject CAA',
-                        color: "#e47272",
-                    }, {
-                        name: 'Waiting SHM in',
-                        id: 'Waiting SHM in',
-                        color: "#fff3a7",
-                    }, {
-                        name: 'Waiting Hasil Cek',
-                        id: 'Waiting Hasil Cek',
-                        color: "#f9ea8c",
-                    }]
-                });
+
+                            $.ajax({ 
+                                type : 'post',
+                                url : 'Dashboard_funnel_lending_controller/get_data_funnel_lending_for_single_chart',
+                                data :  requestBodyForLoop,
+                                cache: false,
+                                success : function(res) {
+                                    var leadsCabangResponse = JSON.parse(res).leadsDataCabang["COUNT(id)"];
+                                    var prospekApproveCabangResponse = JSON.parse(res).prospekApproveCabang["COUNT(id)"];
+                                    var prospekWaitingCabangResponse = JSON.parse(res).prospekWaitingCabang["COUNT(id)"];
+                                    var prospekRejectCabangResponse = JSON.parse(res).prospekRejectCabang["COUNT(id)"];
+                                    var aoApproveCabangResponse = JSON.parse(res).aoApproveCabang["COUNT(a.id)"];
+                                    var aoRejectCabangResponse = JSON.parse(res).aoRejectCabang["COUNT(a.id)"];
+                                    var status_aoCabangResponse = JSON.parse(res).status_aoCabang;
+                                    var caApproveCabangResponse = JSON.parse(res).caApproveCabang["COUNT(a.id_trans_so)"];
+                                    var verif_caCabangResponse = JSON.parse(res).verif_caCabang;
+                                    var caRejectCabangResponse = JSON.parse(res).caRejectCabang["COUNT(a.id_trans_so)"];
+                                    var caaApproveCabangResponse = JSON.parse(res).caaApproveCabang["COUNT(id_trans_so)"];
+                                    var caaWaitingCabangResponse = JSON.parse(res).caaWaitingCabang;
+                                    var caaRejectCabangResponse = JSON.parse(res).caaRejectCabang["COUNT(id_trans_so)"];
+                                    var ceksertipikatApproveCabangResponse = JSON.parse(res).ceksertipikatApproveCabang["COUNT(a.id)"];
+                                    var ceksertipikatWaitingCabangResponse = JSON.parse(res).ceksertipikatWaitingCabang;
+                                    var lendingApproveCabangResponse = JSON.parse(res).lendingApproveCabang["COUNT(trans_so)"];
+                                    var lendingWaitingCabangResponse = JSON.parse(res).lendingWaitingCabang["COUNT(trans_so)"];
+                                    var chart_titleResponse = JSON.parse(res).chart_title_kantor;
+
+                                    $("#funnellendingChart").append(`
+                                        <div class="col-md-12">                
+                                            <div id="kantor${cabang.id}"></div><br>
+                                        </div>
+                                    `);
+
+                                    Highcharts.chart(`kantor${cabang.id}`, {
+                                        chart: {
+                                            type: 'bar',
+                                            height: '35%'
+                                        },
+                                        title: {
+                                            text: chart_titleResponse
+                                        },
+                                        xAxis: {
+                                            categories: ['Leads', 'Prospek', 'Rekomendasi AO', 'Rekomendasi CA', 'Commite CAA', 'Cek Sertipikat', 'Lending']
+                                        },
+                                        yAxis: {
+                                            title: {
+                                                text: 'Total NoA'
+                                            }
+                                        },
+                                        plotOptions: {
+                                            series: {
+                                                stacking: 'normal',
+                                                dataLabels: {
+                                                    enabled: true
+                                                }
+                                            }
+                                        },
+                                        series: [{
+                                            name: 'Waiting Hasil Cek',
+                                            id: 'Waiting Hasil Cek',
+                                            color: "#f9ea8c",
+                                            data: ['', '', '', '', '', '', Number(lendingWaitingCabangResponse)]
+                                        }, {
+                                            name: 'Waiting SHM in',
+                                            id: 'Waiting SHM in',
+                                            color: "#fff3a7",
+                                            data: ['', '', '', '', '', Number(ceksertipikatWaitingCabangResponse)]
+                                        }, {
+                                            name: 'Reject CAA',
+                                            id: 'Reject CAA',
+                                            color: "#e47272",
+                                            data: ['', '', '', '', Number(caaRejectCabangResponse)]
+                                        }, {
+                                            name: 'Waiting Approve CAA',
+                                            id: 'Waiting Approve CAA',
+                                            color: "#eedc82",
+                                            data: ['', '', '', '', Number(caaWaitingCabangResponse)]
+                                        }, 
+                                        {
+                                            name: 'Proses Verif CA',
+                                            id: 'Proses Verif CA',
+                                            color: "#ffe4b5",
+                                            data: ['', '', '', Number(verif_caCabangResponse)]
+                                        }, {
+                                            name: 'Reject CA',
+                                            id: 'Reject CA',
+                                            color: "#cd4c4c",
+                                            data: ['', '', '', Number(caRejectCabangResponse)]
+                                        }, {
+                                            name: 'No Status AO',
+                                            id: 'No Status AO',
+                                            color: "#f0e68c",
+                                            data: ['', '', Number(status_aoCabangResponse)]
+                                        },
+                                        {   
+                                            name: 'Reject AO',
+                                            id: 'Reject AO',
+                                            color: "#ff6666",
+                                            data: ['', '', Number(aoRejectCabangResponse)] 
+                                        }, {
+                                            name: 'Reject CC',
+                                            id: 'Reject CC',
+                                            color: "#f33a3a",
+                                            data: ['', Number(prospekRejectCabangResponse)]
+                                        }, {
+                                            name: 'Waiting Cek CC',
+                                            id: 'Waiting Cek CC',
+                                            color: "#fff199",
+                                            data: ['', Number(prospekWaitingCabangResponse)]
+                                        }, {
+                                            name: 'Approved',
+                                            id: 'Approved',
+                                            color: "#007bff",
+                                            data: [Number(leadsCabangResponse), Number(prospekApproveCabangResponse), Number(aoApproveCabangResponse), Number(caApproveCabangResponse), Number(caaApproveCabangResponse), Number(ceksertipikatApproveCabangResponse), Number(lendingApproveCabangResponse)]  
+                                        }]
+                                    });
+                                }
+                            })
+                        });
+                } else {
+                    $("#funnellendingChart").append(`
+                    <div class="col-12">                
+                        <div id="funnellendingChart"></div>
+                    </div>
+                    `);
+
+                    Highcharts.chart('funnellendingChart', {
+                        chart: {
+                            type: 'bar',
+                            height: '45%'
+                        },
+                        title: {
+                            text: chart_titleResponse
+                        },
+                        xAxis: {
+                            categories: ['Leads', 'Prospek', 'Rekomendasi AO', 'Rekomendasi CA', 'Commite CAA', 'Cek Sertipikat', 'Lending']
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Total NoA'
+                            }
+                        },
+                        plotOptions: {
+                            series: {
+                                stacking: 'normal',
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Waiting Hasil Cek',
+                            id: 'Waiting Hasil Cek',
+                            color: "#f9ea8c",
+                            data: ['', '', '', '', '', '', Number(lendingWaitingResponse)]
+                        }, {
+                            name: 'Waiting SHM in',
+                            id: 'Waiting SHM in',
+                            color: "#fff3a7",
+                            data: ['', '', '', '', '', Number(ceksertipikatWaitingResponse)]
+                        }, {
+                            name: 'Reject CAA',
+                            id: 'Reject CAA',
+                            color: "#e47272",
+                            data: ['', '', '', '', Number(caaRejectResponse)]
+                        }, {
+                            name: 'Waiting Approve CAA',
+                            id: 'Waiting Approve CAA',
+                            color: "#eedc82",
+                            data: ['', '', '', '', Number(caaWaitingResponse)]
+                        }, 
+                        {
+                            name: 'Proses Verif CA',
+                            id: 'Proses Verif CA',
+                            color: "#ffe4b5",
+                            data: ['', '', '', Number(verif_caResponse)]
+                        }, {
+                            name: 'Reject CA',
+                            id: 'Reject CA',
+                            color: "#cd4c4c",
+                            data: ['', '', '', Number(caRejectResponse)]
+                        }, {
+                            name: 'No Status AO',
+                            id: 'No Status AO',
+                            color: "#f0e68c",
+                            data: ['', '', Number(status_aoResponse)]
+                        },
+                        {   
+                            name: 'Reject AO',
+                            id: 'Reject AO',
+                            color: "#ff6666",
+                            data: ['', '', Number(aoRejectResponse)] 
+                        }, {
+                            name: 'Reject CC',
+                            id: 'Reject CC',
+                            color: "#f33a3a",
+                            data: ['', Number(prospekRejectResponse)]
+                        }, {
+                            name: 'Waiting Cek CC',
+                            id: 'Waiting Cek CC',
+                            color: "#fff199",
+                            data: ['', Number(prospekWaitingResponse)]
+                        }, {
+                            name: 'Approved',
+                            id: 'Approved',
+                            color: "#007bff",
+                            data: [Number(leadsResponse), Number(prospekApproveResponse), Number(aoApproveResponse), Number(caApproveResponse), Number(caaApproveResponse), Number(ceksertipikatApproveResponse), Number(lendingApproveResponse)]  
+                        }]
+                    });
+
+                }
             }
         }); 
     };

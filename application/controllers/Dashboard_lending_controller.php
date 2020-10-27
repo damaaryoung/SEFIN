@@ -25,7 +25,6 @@ class Dashboard_lending_controller extends CI_Controller
 			if ($kode_area == '*') {
 				$chart_title = "KONSOLIDASI";
 			} else {
-                // $chart_title = $this->db->where('kode_area', $kode_area)->get('view_kode_kantor')->row()->kode_area;
                 $all_cabang_by_area = $this->db->where('kode_area', $kode_area)->get('view_kode_kantor')->result();
                 $data['all_cabang_by_area'] = $all_cabang_by_area;
 			}

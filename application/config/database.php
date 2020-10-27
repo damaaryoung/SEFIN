@@ -138,7 +138,3 @@ $db['db2'] = array(
 // 	'failover' => array(),
 // 	'save_queries' => TRUE
 // );
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/master
