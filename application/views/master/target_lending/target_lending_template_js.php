@@ -30,6 +30,18 @@
 		    	$('.modal-content').html(response);
 		    	var dataUrl="<?= base_url(); ?>Target_lending_controller/store";
 		    	validation(dataUrl);
+				$('#exampleInputAreaKerja').change(function(){
+					$.ajax({
+						url: "<?= base_url(); ?>Target_lending_controller/get_area",
+						data:{name_area:$(this).val()},
+						type: "POST",
+						success: function(response) {
+							var data=JSON.parse(response);
+							$('#exampleInputCode').val(data['kode_kantor']);
+							$('#exampleInputArea').val(data['kode_area']);
+						}
+					});
+				});
 			}
 		});
 	}
@@ -42,6 +54,18 @@
 		    	$('.modal-content').html(response);
 		    	var dataUrl="<?= base_url(); ?>Target_lending_controller/update";
 		    	validation(dataUrl);
+				$('#exampleInputAreaKerja').change(function(){
+					$.ajax({
+						url: "<?= base_url(); ?>Target_lending_controller/get_area",
+						data:{name_area:$(this).val()},
+						type: "POST",
+						success: function(response) {
+							var data=JSON.parse(response);
+							$('#exampleInputCode').val(data['kode_kantor']);
+							$('#exampleInputArea').val(data['kode_area']);
+						}
+					});
+				});
 			}
 		});
 	}

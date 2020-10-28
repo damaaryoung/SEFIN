@@ -95,8 +95,24 @@ class Model_target_lending extends ci_model
         return json_encode($output, true);
     }
 
+    public function get_area_kerja()
+    {
+        $this->db->select('nama_area_kerja');
+        $this->db->group_by('nama_area_kerja'); 
+        $this->db->get('view_kode_kantor');
+        $data=$this->db->get('view_kode_kantor')->result();
+        return $data;
+    }
+
     public function get_area()
     {
-        return $this->db->get('view_kode_kantor')->result();
+        $query=$this->db->query('SELECT DISTINCT kode_area FROM view_kode_kantor')->result_array();
+        return $query;
+    }
+
+    public function getAreaData(){
+        $name_area=$this->input->post('name_area');
+        $query=$this->db->query("SELECT * FROM view_kode_kantor WHERE nama_area_kerja='$name_area'")->row();
+        return $query;
     }
 }

@@ -18,7 +18,7 @@
                     <label for="exampleInputAreaKerja">Area kerja</label>
                     <select class="form-control" name="area_kerja" id="exampleInputAreaKerja">
                         <option value="">selected</option>
-                        <?php foreach ($data_area as $key): ?>
+                        <?php foreach ($data_area_kerja as $key): ?>
                             <option value="<?= $key->nama_area_kerja; ?>" ><?= $key->nama_area_kerja; ?></option>
                         <?php endforeach ?>
                     </select>
@@ -30,7 +30,7 @@
                     <select class="form-control" name="area" id="exampleInputArea">
                         <option value="">selected</option>
                         <?php foreach ($data_area as $key): ?>
-                            <option value="<?= $key->kode_area; ?>"><?= $key->kode_area; ?></option>
+                            <option value="<?= $key['kode_area']; ?>"><?= $key['kode_area']; ?></option>
                         <?php endforeach ?>
                     </select>
                 </div>

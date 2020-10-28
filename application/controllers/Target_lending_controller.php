@@ -26,7 +26,7 @@ class Target_lending_controller extends CI_Controller
 
     public function create()
     {
-        $data['data_edit']=$this->Model_target_lending->view($id);
+        $data['data_area_kerja']=$this->Model_target_lending->get_area_kerja();
         $data['data_area']=$this->Model_target_lending->get_area();
         $this->load->view('master/target_lending/add_target', $data);
     }
@@ -35,14 +35,9 @@ class Target_lending_controller extends CI_Controller
     {
         $id = $this->input->post('id');
         $data['data_edit']=$this->Model_target_lending->view($id);
+        $data['data_area_kerja']=$this->Model_target_lending->get_area_kerja();
         $data['data_area']=$this->Model_target_lending->get_area();
         $this->load->view('master/target_lending/edit_target', $data);
-    }
-
-    public function get_area_kerja()
-    {
-        $area_kerja = $this->model_auth->get_data('api/master/area_kerja');
-        echo json_encode($area_kerja);
     }
     // view function::ENDED
 
@@ -63,4 +58,15 @@ class Target_lending_controller extends CI_Controller
         echo $this->Model_target_lending->destroy($id);
     }
     // action function::ENDED
+
+    // utility function::STARTED
+    public function get_area()
+    {
+        $row= $this->Model_target_lending->getAreaData();
+        $kode_kantor=$row->kode_kantor;
+        $kode_area= $row->kode_area;
+        $arrayData = array('kode_kantor' => $kode_kantor, 'kode_area'=>$kode_area );
+        echo json_encode($arrayData);
+    }
+    // utility function::ENDED
 }
