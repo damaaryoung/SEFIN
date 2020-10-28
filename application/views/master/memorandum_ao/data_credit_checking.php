@@ -295,8 +295,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-2">
-                                                <label>Umur<span class="required_notification">*</span></label>
-                                                <input type="text" id="umur" name="umur" class="form-control" disabled>
+                                                <label>Umur</label>
+                                                <input type="text" id="umur" name="umur" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -441,7 +441,7 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label>Pendidikan Terakhir<span class="required_notification">*</span></label>
-                                                <select name="select_pendidikan_terakhir" id="pendidikan_terakhir" class="form-control select2 select2-danger" style="width: 100%;">
+                                                <select name="pendidikan_terakhir" id="pendidikan_terakhir" class="form-control select2 select2-danger" style="width: 100%;">
                                                     <option value="">--Pilih--</option>
                                                     <?php foreach ($pendidikan as $key) {?>
                                                         <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
@@ -543,12 +543,12 @@
                                             <div class="form-group col-md-4">
                                                 <label>Mulai Bekerja<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="date" id="masa_kerja_usaha" onchange="changeWorkDate()" name="masa_kerja_usaha" class="form-control" data-date-format="d-m-Y"/>
+                                                    <input type="date" id="tgl_mulai_kerja" onchange="changeWorkDate()" name="tgl_mulai_kerja" class="form-control"/>
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label>Lama Bekerja (bln)<span class="required_notification">*</span></label>
-                                                <input type="text" id="masa_lama_kerja_usaha" name="masa_lama_kerja_usaha" class="form-control" readonly="">
+                                                <input type="text" id="lama_kerja" name="lama_kerja" class="form-control" readonly>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label>No Telp Kantor/Usaha<span class="required_notification">*</span></label>
@@ -4771,17 +4771,17 @@
     }
 
     function changeWorkDate() {
-        var date = $("#masa_kerja_usaha").val();
+        var date = $("#tgl_mulai_kerja").val();
         var today = new Date();
         var workDate = new Date(date);
-        var masa_lama_kerja_usaha = (today.getFullYear() - workDate.getFullYear()) * 12;
-        masa_lama_kerja_usaha -= workDate.getMonth();
-        masa_lama_kerja_usaha += today.getMonth();
+        var lama_kerja = (today.getFullYear() - workDate.getFullYear()) * 12;
+        lama_kerja -= workDate.getMonth();
+        lama_kerja += today.getMonth();
         if (today.getDate() < workDate.getDate()) {
-            masa_lama_kerja_usaha -= 1;
+            lama_kerja -= 1;
         }
 
-        $("#masa_lama_kerja_usaha").val(masa_lama_kerja_usaha < 0 ? 0 : masa_lama_kerja_usaha);
+        $("#lama_kerja").val(lama_kerja < 0 ? 0 : lama_kerja);
         
     }
 </script>

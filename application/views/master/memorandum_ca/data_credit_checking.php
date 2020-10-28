@@ -299,7 +299,7 @@
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label>Umur<span class="required_notification">*</span></label>
-                                                <input type="text" id="umur" name="umur" class="form-control" disabled>
+                                                <input type="text" id="umur" name="umur" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -543,12 +543,12 @@
                                             <div class="form-group col-md-4">
                                                 <label>Mulai Bekerja<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="date" id="masa_kerja_usaha" onchange="changeWorkDate()" name="masa_kerja_usaha" class="form-control" data-date-format="d-m-Y"/>
+                                                    <input type="date" id="tgl_mulai_kerja" onchange="changeWorkDate()" name="tgl_mulai_kerja" class="form-control" data-date-format="d-m-Y"/>
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label>Lama Bekerja (bln)<span class="required_notification">*</span></label>
-                                                <input type="text" id="masa_lama_kerja_usaha" name="masa_lama_kerja_usaha" class="form-control" readonly="">
+                                                <input type="text" id="lama_kerja" name="lama_kerja" class="form-control" readonly="">
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <label>No Telp Kantor/Usaha<span class="required_notification">*</span></label>
@@ -7388,16 +7388,11 @@
                                     var select_pendidikan_terakhir = [];
                                     var option_pendidikan_terakhir = [
                                         '<option value="' + data_debitur.pendidikan_terakhir + '">' + data_debitur.pendidikan_terakhir + '</option>',
-                                        '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
-                                        '<option value="SD">SD</option>',
-                                        '<option value="SMP">SMP</option>',
-                                        '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
-                                        '<option value="D1">D1</option>',
-                                        '<option value="D2">D2</option>',
-                                        '<option value="D3">D3</option>',
-                                        '<option value="S1">S1</option>',
-                                        '<option value="S2">S2</option>',
-                                        '<option value="S3">S3</option>'
+                                        '<option value="0021">Tidak Sekolah/SD</option>',
+                                        '<option value="0022">SMP</option>',
+                                        '<option value="0023">SMA</option>',
+                                        '<option value="0024">D3/S1</option>',
+                                        '<option value="0025">S2/S3</option>'
                                     ].join('\n');
                                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -7436,8 +7431,8 @@
                                     $('#form_detail input[name=posisi]').val(data_debitur.pekerjaan.posisi_pekerjaan);
                                     $('#form_detail input[name=nama_perusahaan]').val(data_debitur.pekerjaan.nama_tempat_kerja);
                                     $('#form_detail input[name=jenis_usaha]').val(data_debitur.pekerjaan.jenis_pekerjaan);
-                                    $('#form_detail input[name=masa_kerja_usaha]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
-                                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data_debitur.pekerjaan.masa_lama_kerja_usaha);
+                                    $('#form_detail input[name=tgl_mulai_kerja]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
+                                    $('#form_detail input[name=lama_kerja]').val(data_debitur.pekerjaan.lama_kerja);
                                     $('#form_detail input[name=no_telp_kantor_usaha]').val(data_debitur.pekerjaan.no_telp_tempat_kerja);
                                     $('#form_detail input[name=alamat_usaha_kantor]').val(data_debitur.pekerjaan.alamat.alamat_singkat);
                                     $('#form_detail input[name=rt_usaha_kantor]').val(data_debitur.pekerjaan.alamat.rt);
@@ -8453,16 +8448,11 @@
                                     var select_pendidikan_terakhir = [];
                                     var option_pendidikan_terakhir = [
                                         '<option value="' + data_debitur.pendidikan_terakhir + '">' + data_debitur.pendidikan_terakhir + '</option>',
-                                        '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
-                                        '<option value="SD">SD</option>',
-                                        '<option value="SMP">SMP</option>',
-                                        '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
-                                        '<option value="D1">D1</option>',
-                                        '<option value="D2">D2</option>',
-                                        '<option value="D3">D3</option>',
-                                        '<option value="S1">S1</option>',
-                                        '<option value="S2">S2</option>',
-                                        '<option value="S3">S3</option>'
+                                        '<option value="0021">Tidak Sekolah/SD</option>',
+                                        '<option value="0022">SMP</option>',
+                                        '<option value="0023">SMA</option>',
+                                        '<option value="0024">D3/S1</option>',
+                                        '<option value="0025">S2/S3</option>'
                                     ].join('\n');
                                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -8500,8 +8490,8 @@
                                     $('#form_detail input[name=posisi]').val(data_debitur.pekerjaan.posisi_pekerjaan);
                                     $('#form_detail input[name=nama_perusahaan]').val(data_debitur.pekerjaan.nama_tempat_kerja);
                                     $('#form_detail input[name=jenis_usaha]').val(data_debitur.pekerjaan.jenis_pekerjaan);
-                                    $('#form_detail input[name=masa_kerja_usaha]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
-                                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data_debitur.pekerjaan.masa_lama_kerja_usaha);
+                                    $('#form_detail input[name=tgl_mulai_kerja]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
+                                    $('#form_detail input[name=lama_kerja]').val(data_debitur.pekerjaan.lama_kerja);
                                     $('#form_detail input[name=no_telp_kantor_usaha]').val(data_debitur.pekerjaan.no_telp_tempat_kerja);
                                     $('#form_detail input[name=alamat_usaha_kantor]').val(data_debitur.pekerjaan.alamat.alamat_singkat);
                                     $('#form_detail input[name=rt_usaha_kantor]').val(data_debitur.pekerjaan.alamat.rt);
@@ -9931,8 +9921,8 @@
                 formData.append('id_kab_tempat_kerja', $('select[name=kabupaten_kantor]', this).val());
                 formData.append('id_kec_tempat_kerja', $('select[name=kecamatan_kantor]', this).val());
                 formData.append('id_kel_tempat_kerja', $('select[name=kelurahan_kantor]', this).val());
-                formData.append('tgl_mulai_kerja', $('input[name=masa_kerja_usaha]', this).val());
-                formData.append('masa_lama_kerja_usaha', $('input[name=masa_lama_kerja_usaha]', this).val());
+                formData.append('tgl_mulai_kerja', $('input[name=tgl_mulai_kerja]', this).val());
+                formData.append('lama_kerja', $('input[name=lama_kerja]', this).val());
                 formData.append('no_telp_tempat_kerja', $('input[name=no_telp_kantor_usaha]', this).val());
                 formData.append('email', $('input[name=email]', this).val());
 
@@ -10395,17 +10385,17 @@
             }
 
             function changeWorkDate() {
-                var date = $("#masa_kerja_usaha").val();
+                var date = $("#tgl_mulai_kerja").val();
                 var today = new Date();
                 var workDate = new Date(date);
-                var masa_lama_kerja_usaha = (today.getFullYear() - workDate.getFullYear()) * 12;
-                masa_lama_kerja_usaha -= workDate.getMonth();
-                masa_lama_kerja_usaha += today.getMonth();
+                var lama_kerja = (today.getFullYear() - workDate.getFullYear()) * 12;
+                lama_kerja -= workDate.getMonth();
+                lama_kerja += today.getMonth();
                 if (today.getDate() < workDate.getDate()) {
-                    masa_lama_kerja_usaha -= 1;
+                    lama_kerja -= 1;
                 }
 
-                $("#masa_lama_kerja_usaha").val(masa_lama_kerja_usaha < 0 ? 0 : masa_lama_kerja_usaha);
+                $("#lama_kerja").val(lama_kerja < 0 ? 0 : lama_kerja);
                 
             }
             //========================================================================================

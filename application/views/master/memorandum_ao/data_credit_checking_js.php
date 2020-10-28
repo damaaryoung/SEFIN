@@ -3027,16 +3027,11 @@
                     var select_pendidikan_terakhir = [];
                     var option_pendidikan_terakhir = [
                         '<option value="' + data.data_debitur.pendidikan_terakhir + '">' + data.data_debitur.pendidikan_terakhir + '</option>',
-                        '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
-                        '<option value="SD">SD</option>',
-                        '<option value="SMP">SMP</option>',
-                        '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
-                        '<option value="D1">D1</option>',
-                        '<option value="D2">D2</option>',
-                        '<option value="D3">D3</option>',
-                        '<option value="S1">S1</option>',
-                        '<option value="S2">S2</option>',
-                        '<option value="S3">S3</option>'
+                        '<option value="0021">Tidak Sekolah/SD</option>',
+                        '<option value="0022">SMP</option>',
+                        '<option value="0023">SMA</option>',
+                        '<option value="0024">D3/S1</option>',
+                        '<option value="0025">S2/S3</option>'
                     ].join('\n');
                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -3076,16 +3071,16 @@
                             }
                         })
 
-                    $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
-                    $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
-                    $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
-                    $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
-                    $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
-                    $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
-                    $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
-                    $('#form_detail input[name=masa_kerja_usaha]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
-                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data.data_debitur.pekerjaan.masa_lama_kerja_usaha);
-                    $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
+                        $('#form_detail input[name=posisi]').val(data_debitur.pekerjaan.posisi_pekerjaan);
+                        $('#form_detail input[name=nama_perusahaan]').val(data_debitur.pekerjaan.nama_tempat_kerja);
+                        $('#form_detail input[name=jenis_usaha]').val(data_debitur.pekerjaan.jenis_pekerjaan);
+                        $('#form_detail input[name=tgl_mulai_kerja]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
+                        $('#form_detail input[name=lama_kerja]').val(data_debitur.pekerjaan.lama_kerja);
+                        $('#form_detail input[name=no_telp_kantor_usaha]').val(data_debitur.pekerjaan.no_telp_tempat_kerja);
+                        $('#form_detail input[name=alamat_usaha_kantor]').val(data_debitur.pekerjaan.alamat.alamat_singkat);
+                        $('#form_detail input[name=rt_usaha_kantor]').val(data_debitur.pekerjaan.alamat.rt);
+                        $('#form_detail input[name=rw_usaha_kantor]').val(data_debitur.pekerjaan.alamat.rw);
+                        $('#form_detail input[name=kode_pos_kantor]').val(data_debitur.pekerjaan.alamat.kode_pos);
 
 
                     get_provinsi()
@@ -3694,16 +3689,11 @@
                     var select_pendidikan_terakhir = [];
                     var option_pendidikan_terakhir = [
                         '<option value="' + data.data_debitur.pendidikan_terakhir + '">' + data.data_debitur.pendidikan_terakhir + '</option>',
-                        '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
-                        '<option value="SD">SD</option>',
-                        '<option value="SMP">SMP</option>',
-                        '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
-                        '<option value="D1">D1</option>',
-                        '<option value="D2">D2</option>',
-                        '<option value="D3">D3</option>',
-                        '<option value="S1">S1</option>',
-                        '<option value="S2">S2</option>',
-                        '<option value="S3">S3</option>'
+                        '<option value="0021">Tidak Sekolah/SD</option>',
+                        '<option value="0022">SMP</option>',
+                        '<option value="0023">SMA</option>',
+                        '<option value="0024">D3/S1</option>',
+                        '<option value="0025">S2/S3</option>'
                     ].join('\n');
                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -3736,17 +3726,17 @@
                         })
 
 
-                    $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
-                    $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
-                    $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
-                    $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
-                    $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
-                    $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
-                    $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
-                    $('#form_detail input[name=masa_kerja_usaha]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
-                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data.data_debitur.pekerjaan.masa_lama_kerja_usaha);
-                    $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
-
+                        $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
+                        $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
+                        $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
+                        $('#form_detail input[name=tgl_mulai_kerja]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
+                        $('#form_detail input[name=lama_kerja]').val(data.data_debitur.pekerjaan.lama_kerja);
+                        $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
+                        $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
+                        $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
+                        $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
+                        $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
+                                    
                     get_provinsi()
                         .done(function(res) {
                             var select = [];
@@ -5318,8 +5308,8 @@
             formData.append('id_kab_tempat_kerja', $('select[id=kabupaten_kantor]', this).val());
             formData.append('id_kec_tempat_kerja', $('select[id=kecamatan_kantor]', this).val());
             formData.append('id_kel_tempat_kerja', $('select[id=kelurahan_kantor]', this).val());
-            formData.append('tgl_mulai_kerja', $('input[name=masa_kerja_usaha]', this).val());
-            formData.append('masa_lama_kerja_usaha', $('input[name=masa_lama_kerja_usaha]', this).val());
+            formData.append('tgl_mulai_kerja', $('input=[name=tgl_mulai_kerja]', this).val());
+            formData.append('lama_kerja', $('input[name=lama_kerja]', this).val());
             formData.append('no_telp_tempat_kerja', $('input[name=no_telp_kantor_usaha]', this).val());
 
             update_debitur(formData, id)
@@ -7003,7 +6993,7 @@
                 $('#form_edit_penjamin input[name=rt_usaha_kantor_pen]').val(data.pekerjaan.alamat.rt);
                 $('#form_edit_penjamin input[name=rw_usaha_kantor_pen]').val(data.pekerjaan.alamat.rw);
                 $('#form_edit_penjamin input[name=kode_pos_kantor_pen]').val(data.pekerjaan.alamat.kode_pos);
-                $('#form_edit_penjamin input[name=masa_kerja_usaha]').val(data.pekerjaan.tgl_mulai_kerja);
+                $('#form_edit_penjamin input[name=tgl_mulai_kerja]').val(data.pekerjaan.tgl_mulai_kerja);
                 $('#form_edit_penjamin input[name=no_telp_kantor_usaha]').val(data.pekerjaan.no_telp_tempat_kerja);
 
                 get_provinsi()
