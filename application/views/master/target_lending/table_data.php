@@ -30,29 +30,29 @@
         <td>Rp. <?= number_format($key['target']); ?></td>
         <td>
           <?php
-          if ($key['bulan']==1) {
+          if ($key['bulan']=='1') {
             echo "januari";
-          }elseif ($key['bulan']==2) {
+          }elseif ($key['bulan']=='2') {
             echo "februari";
-          }elseif ($key['bulan']==3) {
+          }elseif ($key['bulan']=='3') {
             echo "maret";
-          }elseif ($key['bulan']==4) {
+          }elseif ($key['bulan']=='4') {
             echo "april";
-          }elseif ($key['bulan']==5) {
+          }elseif ($key['bulan']=='5') {
             echo "mei";
-          }elseif ($key['bulan']==6) {
+          }elseif ($key['bulan']=='6') {
             echo "juni";
-          }elseif ($key['bulan']==7) {
+          }elseif ($key['bulan']=='7') {
             echo "juli";
-          }elseif ($key['bulan']==8) {
+          }elseif ($key['bulan']=='8') {
             echo "agustus";
-          }elseif ($key['bulan']==9) {
+          }elseif ($key['bulan']=='9') {
             echo "september";
-          }elseif ($key['bulan']==10) {
+          }elseif ($key['bulan']=='10') {
             echo "oktober";
-          }elseif ($key['bulan']==11) {
+          }elseif ($key['bulan']=='11') {
             echo "november";
-          }elseif ($key['bulan']==12) {
+          }elseif ($key['bulan']=='12') {
             echo "desember";
           }
           ?>
