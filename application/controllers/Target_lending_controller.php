@@ -9,10 +9,6 @@ class Target_lending_controller extends CI_Controller
         $this->load->model('Model_target_lending');
     }
 
-<<<<<<< HEAD
-        $this->load->view('master/target_lending/template');
-        $this->load->view('master/target_lending/table_target');
-=======
     // view function::STARTED
     public function tampil_data()
     {
@@ -26,7 +22,6 @@ class Target_lending_controller extends CI_Controller
         $data['page']=$data['data']['current_page'];
         $data['data']=$data['data']['data'];
         $this->load->view('master/target_lending/table_data', $data);
->>>>>>> refs/remotes/origin/master
     }
 
     public function create()
