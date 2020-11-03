@@ -1186,9 +1186,9 @@
                                             <label>Pemilik Jaminan<span class="required_notification">*</span></label>
                                             <select id="status_penghuni_agunan" name="status_penghuni_agunan[]" class="form-control ">
                                                 <option value="">--Pilih Pemilik Jaminan--</option>
-                                                <?php foreach ($pemilik_jaminan as $key => $value) {
-                                                    echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                                } ?>
+                                                <?php foreach ($pemilik_jaminan as $key) {?>
+                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -2151,11 +2151,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Pemilik Jaminan<span class="required_notification">*</span></label>
-                                        <select name="status_tanah_bangunan_detail" id="status_tanah_bangunan" class="form-control ">
+                                        <select name="status_penghuni_agunan_detail" id="status_penghuni_agunan_detail" class="form-control ">
                                             <option value="">--Pilih Pemilik Jaminan--</option>
-                                            <?php foreach ($pemilik_jaminan as $key => $value) {
-                                                echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                            } ?>
+                                            <?php foreach ($pemilik_jaminan as $key) {?>
+                                                <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                            <?php } ?>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -2544,6 +2544,9 @@
                                         </th>
                                         <th>
                                             Lokasi Jaminan
+                                        </th>
+                                        <th>
+                                            Collateral
                                         </th>
                                         <th>
                                             Alamat
@@ -3273,20 +3276,20 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label>
-                                    <select id="tipe_lokasi_agunan_detail" name="tipe_lokasi_agunan_detail" class="form-control ">
-                                        <option value="">-- Pilih --</option>
-                                        <?php foreach ($lokasi_jaminan as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                    <select id="tipe_lokasi_agunan" name="tipe_lokasi_agunan" class="form-control ">
+                                        <option value="">--Pilih--</option>
+                                        <?php foreach ($lokasi_jaminan as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInput1">Collateral<span class="required_notification">*</span></label>
-                                    <select id="tipe_lokasi_agunan_detail_collateral" name="tipe_lokasi_agunan_detail_collateral" class="form-control ">
+                                    <select id="tipe_lokasi_agunan_collateral" name="tipe_lokasi_agunan_collateral" class="form-control ">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($data_collateral as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                        <?php foreach ($data_collateral as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-row">
@@ -3356,9 +3359,9 @@
                                     <label for="exampleInput1">Jenis Sertifikat</label>
                                     <select id="jenis_sertifikat" name="jenis_sertifikat" class="form-control " onchange="showshgb()">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($jenis_sertifikat as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                        <?php foreach ($jenis_sertifikat as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -3371,7 +3374,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label>Tanggal Berlaku SHGB<span id="wajib_shgb" class="required_notification">*</span></label>
+                                        <label>Tgl Berlaku SHGB<span id="wajib_shgb" class="required_notification">*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
@@ -3489,18 +3492,18 @@
                                     <label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label>
                                     <select id="tipe_lokasi_agunan_detail" name="tipe_lokasi_agunan_detail" class="form-control ">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($lokasi_jaminan as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                        <?php foreach ($lokasi_jaminan as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInput1">Collateral<span class="required_notification">*</span></label>
-                                    <select id="tipe_lokasi_agunan_detail_collateral" name="tipe_lokasi_agunan_detail_collateral" class="form-control ">
+                                    <select id="tipe_lokasi_agunan_collateral_detail" name="tipe_lokasi_agunan_collateral_detail" class="form-control ">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($data_collateral as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                        <?php foreach ($data_collateral as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-row">
@@ -3570,9 +3573,9 @@
                                     <label for="exampleInput1">Jenis Sertifikat</label>
                                     <select id="jenis_sertifikat_detail" name="jenis_sertifikat_detail" class="form-control " onchange="showshgb()">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($jenis_sertifikat as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                        <?php foreach ($jenis_sertifikat as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -3585,7 +3588,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label>Tanggal Berlaku SHGB<span id="wajib_shgb_detail" class="required_notification">*</span></label>
+                                        <label>Tgl Berlaku SHGB<span id="wajib_shgb_detail" class="required_notification">*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
@@ -4211,20 +4214,20 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label>
-                                    <select id="tipe_lokasi_agunan_detail" name="tipe_lokasi_agunan_detail" class="form-control ">
+                                    <select id="tipe_lokasi_agunan" name="tipe_lokasi_agunan" class="form-control ">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($lokasi_jaminan as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                        <?php foreach ($lokasi_jaminan as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInput1">Collateral<span class="required_notification">*</span></label>
-                                    <select id="tipe_lokasi_agunan_detail_collateral" name="tipe_lokasi_agunan_detail_collateral" class="form-control ">
+                                    <select id="tipe_lokasi_agunan_collateral" name="tipe_lokasi_agunan_collateral" class="form-control ">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($data_collateral as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                        <?php foreach ($data_collateral as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-row">
@@ -4291,9 +4294,9 @@
                                     <label for="exampleInput1">Jenis Sertifikat</label>
                                     <select id="jenis_sertifikat" name="jenis_sertifikat" class="form-control " onchange="showshgb()">
                                         <option value="">-- Pilih --</option>
-                                        <?php foreach ($jenis_sertifikat as $key => $value) {
-                                            echo "<option value='".$value->id_parameter."'>".$value->nama_detail."</option>";
-                                        } ?>
+                                        <?php foreach ($jenis_sertifikat as $key) {?>
+                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -4306,7 +4309,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label>Tanggal Berlaku SHGB<span id="wajib_shgb" class="required_notification">*</span></label>
+                                        <label>Tgl Berlaku SHGB<span id="wajib_shgb" class="required_notification">*</span></label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">

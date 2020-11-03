@@ -2062,11 +2062,11 @@
                                 var select_pendidikan_terakhir = [];
                                 var option_pendidikan_terakhir = [
                                     '<option value="' + data_debitur.pendidikan_terakhir + '">' + data_debitur.pendidikan_terakhir + '</option>',
-                                    '<option value="0021">Tidak Sekolah/SD</option>',
-                                    '<option value="0022">SMP</option>',
-                                    '<option value="0023">SMA</option>',
-                                    '<option value="0024">D3/S1</option>',
-                                    '<option value="0025">S2/S3</option>'
+                                    '<option value="Tidak Sekolah/SD">Tidak Sekolah/SD</option>',
+                                    '<option value="SMP">SMP</option>',
+                                    '<option value="SMA">SMA</option>',
+                                    '<option value="D3/S1">D3/S1</option>',
+                                    '<option value="S2/S3">S2/S3</option>'
                                 ].join('\n');
                                 select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                                 $('#form_detail select[id=pendidikan_terakhir]').html(select_pendidikan_terakhir);
