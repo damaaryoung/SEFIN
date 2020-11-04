@@ -450,7 +450,7 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label>Jumlah Tanggungan</label>
-                                                <input type="text" class="form-control" name="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
+                                                <input type="text" class="form-control" name="jumlah_tanggungan"  id="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
 
@@ -551,7 +551,7 @@
                                                 <input type="text" id="lama_kerja" name="lama_kerja" class="form-control" readonly>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label>No Telp Kantor/Usaha<span class="required_notification">*</span></label>
+                                                <label>No Telp Kantor<span class="required_notification">*</span></label>
                                                 <input type="text" class="form-control" id="no_telp_kantor_usaha" name="no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
@@ -3868,7 +3868,7 @@
                             </div>
                         </div>
                         <div class="form-group col-md-6">
-                            <label>No Telpon Kantor/Usaha</label>
+                            <label>No Telpon Kantor</label>
                             <input type="text" class="form-control" name="no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
                         </div>
                     </div>
@@ -4685,7 +4685,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
-                                <label>No Telpon Kantor/Usaha</label>
+                                <label>No Telpon Kantor</label>
                                 <input type="text" class="form-control" id="add_no_telp_kantor_usaha" name="add_no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
                             </div>
                         </div>

@@ -454,7 +454,7 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label>Jumlah Tanggungan</label>
-                                                <input type="text" class="form-control" name="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
+                                                <input type="text" class="form-control" name="jumlah_tanggungan"  id="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
                                         <div class="row">
