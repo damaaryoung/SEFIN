@@ -15,13 +15,13 @@
      ?>
     <?php foreach ($data as $key): ?>
       <tr>
-        <td><?= $key['nama_cabang']; ?></td>
-        <td><?= $key['nama_lengkap']; ?></td>
-        <td>Rp. <?= number_format($key['plafon']); ?></td>
+        <td><?= $key['nama_aktivitas']; ?></td>
+        <td><?= $key['target_aktivitas']; ?></td>
+        <td><?= $key['durasi_aktivitas']; ?></td>
         <td>
           <div class="btn-group">
-              <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_cabang']; ?>"><i class="fas fa-wrench"></i></button>
-              <button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_cabang']; ?>"><i class="fas fa-trash"></i></button>
+              <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_jenis']; ?>"><i class="fas fa-wrench"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_jenis']; ?>"><i class="fas fa-trash"></i></button>
             </div>
         </td>
       </tr>

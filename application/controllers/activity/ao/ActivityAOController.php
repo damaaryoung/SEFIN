@@ -22,7 +22,7 @@ class ActivityAOController extends CI_Controller
       $data['pagination']=$data['data']['last_page'];
       $data['page']=$data['data']['current_page'];
       $data['data']=$data['data']['data'];
-      $this->load->view('master/activity/sales-officer/tabel_data',$data);
+      $this->load->view('master/activity/account-officer/tabel_data',$data);
     }
     function survey(){
       $this->load->view('master/activity/account-officer/formSurvey');

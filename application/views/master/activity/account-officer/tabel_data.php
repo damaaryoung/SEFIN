@@ -17,7 +17,7 @@
       <tr>
         <td><?= $key['nama_cabang']; ?></td>
         <td><?= $key['nama_lengkap']; ?></td>
-        <td>Rp. <?= number_format($key['plafon']); ?></td>
+        <td><?= $key['plafon']; ?></td>
         <td>
           <div class="btn-group">
               <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_cabang']; ?>"><i class="fas fa-wrench"></i></button>
