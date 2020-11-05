@@ -120,6 +120,7 @@ class Master extends CI_Controller
             $this->load->view('master/master/kantor_cabang/add_kantor_cabang');
         }
         public function memorandum_so(){
+            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
             $this->load->view('master/memorandum_so/data_credit_checking');
         }
         public function add_memorandum_so(){
@@ -127,19 +128,19 @@ class Master extends CI_Controller
             $this->load->view('master/memorandum_so/add_credit', $data);
         }
         public function das(){
-            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan();
+            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
             $this->load->view('master/das/data_credit_checking', $data);
         }
         public function ds_spv(){
-            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan();
+            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
             $this->load->view('master/ds_spv/data_credit_checking', $data);
         }
         public function memorandum_ao(){
-            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan();
+            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
             $this->load->view('master/memorandum_ao/data_credit_checking', $data);
         }
         public function add_memorandum_ao(){
-            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan();
+            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
             $this->load->view('master/memorandum_ao/add_ao', $data);
         }
         public function menu(){
