@@ -542,4 +542,56 @@ class Menu_controller extends CI_Controller
     {
         $this->load->view('master/target_lending/target_lending_template');
     }
+
+    public function dashboard_collection()
+    {
+        //CURL NPL AREA
+        $url_npl_area = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/npl_console_area";
+        $post_npl_area = array('api'=>'Y');
+        $ch_npl_area = curl_init();
+        curl_setopt($ch_npl_area, CURLOPT_URL, $url_npl_area);
+        curl_setopt($ch_npl_area, CURLOPT_HEADER, 0);
+        curl_setopt($ch_npl_area, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch_npl_area, CURLOPT_POST, count($post_npl_area));
+        curl_setopt($ch_npl_area, CURLOPT_POSTFIELDS, $post_npl_area);
+        $output_npl_area = curl_exec($ch_npl_area);
+        curl_close($ch_npl_area);
+        $data['output_npl_area'] = json_decode($output_npl_area);
+
+        //CURL NPL CABANG
+        // $url_cabang = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/npl_console_cabang";
+
+        // for($i=0;$i<count($data['output_npl_area']);$i++){
+        //     $post_cabang[$i] = array(
+        //         'api'=>'Y',
+        //         'kode_area'=>$data['output_npl_area'][$i]->kode_area
+        //     );
+        //     $ch_cabang = curl_init();
+        //     curl_setopt($ch_cabang, CURLOPT_URL, $url_cabang);
+        //     curl_setopt($ch_cabang, CURLOPT_HEADER, 0);
+        //     curl_setopt($ch_cabang, CURLOPT_RETURNTRANSFER, 1);
+        //     curl_setopt($ch_cabang, CURLOPT_POST, count($post_cabang[$i]));
+        //     curl_setopt($ch_cabang, CURLOPT_POSTFIELDS, $post_cabang[$i]);
+        //     $output_npl_cabang = curl_exec($ch_cabang);
+        //     curl_close($ch_cabang);
+        //     $data['output_npl_cabang'] = json_decode($output_npl_cabang);
+        //     // echo count( $data['output_cabang']);
+        // }
+
+        //CURL BUCKET0 AREA
+        $url_bucket_nol_area = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/bucket_nol_console_area";
+        $post_bucket_nol_area = array('api'=>'Y');
+        $ch_bucket_nol_area = curl_init();
+        curl_setopt($ch_bucket_nol_area, CURLOPT_URL, $url_bucket_nol_area);
+        curl_setopt($ch_bucket_nol_area, CURLOPT_HEADER, 0);
+        curl_setopt($ch_bucket_nol_area, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch_bucket_nol_area, CURLOPT_POST, count($post_bucket_nol_area));
+        curl_setopt($ch_bucket_nol_area, CURLOPT_POSTFIELDS, $post_bucket_nol_area);
+        $output_bucket_nol_area = curl_exec($ch_bucket_nol_area);
+        curl_close($ch_bucket_nol_area);
+        $data['output_bucket_nol_area'] = json_decode($output_bucket_nol_area);
+
+        // $data['get_user'] = $this->model_menu->getUser();
+        $this->load->view('master/collection/dashboard_collection',$data);
+    }
 }
