@@ -321,7 +321,7 @@ class Menu_controller extends CI_Controller
         $this->load->view('master/memorandum_ao/data_credit_checking',$data);
     }
     public function ca()
-    {   
+    {
         // $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
         $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
@@ -538,8 +538,30 @@ class Menu_controller extends CI_Controller
         $this->load->view('master/cek_sertifikat/index');
     }
 
-        public function dashboard_target_lending()
+    public function dashboard_target_lending()
     {
         $this->load->view('master/target_lending/target_lending_template');
     }
+
+    public function activity_sales_officer()
+    {
+        $this->load->view('master/activity/sales-officer/index');
+    }
+    public function activity_account_officer()
+    {
+        $this->load->view('master/activity/account-officer/index');
+    }
+    public function activity_master()
+    {
+        $this->load->view('master/activity/master-data/index');
+    }
+    public function master_target_lending_periodik()
+    {
+        $this->load->view('master/target-lending-periodik/master-data/index');
+    }
+    public function dashboard_activity_so_dan_ao()
+    {
+        $this->load->view('master/dashboard-activity-so-dan-ao/index');
+    }
+    
 }
