@@ -117,4 +117,11 @@ class Model_view_master extends ci_model
         $data=$this->db->query($query)->result();
         return $data;
     }
+
+    function tampil_data_pendidikan()
+    {
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='PENDIDIKAN' AND id_parameter='02'";
+        $data=$this->db->query($query)->result();
+        return $data;
+    }
 }

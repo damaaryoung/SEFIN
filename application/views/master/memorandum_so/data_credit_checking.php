@@ -258,7 +258,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Jumlah Tanggungan<span class="required_notification">*</span></label>
-                                                <input type="text" class="form-control" name="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
+                                                <input type="text" class="form-control" name="jumlah_tanggungan"  id="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
@@ -2062,16 +2062,11 @@
                                 var select_pendidikan_terakhir = [];
                                 var option_pendidikan_terakhir = [
                                     '<option value="' + data_debitur.pendidikan_terakhir + '">' + data_debitur.pendidikan_terakhir + '</option>',
-                                    '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
-                                    '<option value="SD">SD</option>',
-                                    '<option value="SMP SEDERAJAT">SMP SEDERAJAT</option>',
-                                    '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
-                                    '<option value="D1">D1</option>',
-                                    '<option value="D2">D2</option>',
-                                    '<option value="D3">D3</option>',
-                                    '<option value="S1 SEDERAJAT">S1 SEDERAJAT</option>',
-                                    '<option value="S2">S2</option>',
-                                    '<option value="S3">S3</option>'
+                                    '<option value="Tidak Sekolah/SD">Tidak Sekolah/SD</option>',
+                                    '<option value="SMP">SMP</option>',
+                                    '<option value="SMA">SMA</option>',
+                                    '<option value="D3/S1">D3/S1</option>',
+                                    '<option value="S2/S3">S2/S3</option>'
                                 ].join('\n');
                                 select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                                 $('#form_detail select[id=pendidikan_terakhir]').html(select_pendidikan_terakhir);

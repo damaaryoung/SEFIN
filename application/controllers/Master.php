@@ -120,28 +120,28 @@ class Master extends CI_Controller
             $this->load->view('master/master/kantor_cabang/add_kantor_cabang');
         }
         public function memorandum_so(){
+            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
             $this->load->view('master/memorandum_so/data_credit_checking');
         }
         public function add_memorandum_so(){
             $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
-            // $data['jml_tanggungan'] = $this->Model_memorandum_so->tampil_data_jml_tanggungan()->result();
             $this->load->view('master/memorandum_so/add_credit', $data);
         }
         public function das(){
             $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
-            $this->load->view('master/das/data_credit_checking');
+            $this->load->view('master/das/data_credit_checking', $data);
         }
         public function ds_spv(){
             $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
-            $this->load->view('master/ds_spv/data_credit_checking');
+            $this->load->view('master/ds_spv/data_credit_checking', $data);
         }
         public function memorandum_ao(){
             $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
-            $this->load->view('master/memorandum_ao/data_credit_checking');
+            $this->load->view('master/memorandum_ao/data_credit_checking', $data);
         }
         public function add_memorandum_ao(){
             $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
-            $this->load->view('master/memorandum_ao/add_ao');
+            $this->load->view('master/memorandum_ao/add_ao', $data);
         }
         public function menu(){
             $this->load->view('master/menu/data_menu');
@@ -157,7 +157,7 @@ class Master extends CI_Controller
         } 
         public function memorandum_ca(){
             $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
-            $this->load->view('master/ca/data_credit_checking');
+            $this->load->view('master/ca/data_credit_checking', $data);
         }      
         public function add_menu()
         {

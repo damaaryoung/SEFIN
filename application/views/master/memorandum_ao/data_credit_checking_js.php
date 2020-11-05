@@ -1790,7 +1790,7 @@
         var idkell = 'select_kelurahan_agunan' + nl++;
         var idkodepos = 'select_kelurahan_agunan' + ns++;
 
-        var markup = '<tr><td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><div class="row"><div class="col-md-6"><div class="form-group"><label for="exampleInput1">Lokasi Agunan<span class="required_notification">*</span></label><select name="tipe_lokasi_agunan[]" class="form-control "><option value="">-- Pilih --</option><option value="PERUM">PERUMAHAN</option><option value="BIASA">NON PERUMAHAN</option></select></div><div class="form-row"><div class="form-group col-md-8"><label >Alamat Sesuai KTP<span class="required_notification">*</span></label><input type="text" name="alamat_agunan[]" class="form-control"  ></div><div class="form-group col-md-2"><label >RT<span class="required_notification">*</span></label><input type="text" class="form-control" name="rt_agunan[]" maxlength="3" onkeypress="return hanyaAngka(event)"></div><div class="form-group col-md-2"><label >RW<span class="required_notification">*</span></label><input type="text" class="form-control" name="rw_agunan[]" maxlength="3" onkeypress="return hanyaAngka(event)"></div></div><div class="form-group"><label>Provinsi<span class="required_notification">*</span></label><select name="id_prov_agunan[]" id="' + iddd + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-row"><div class="form-group col-md-6"><label>Kabupaten/Kota<span class="required_notification">*</span></label><select id="' + idkabb + '" name="id_kab_agunan[]" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-group col-md-6"><label>Kecamatan<span class="required_notification">*</span></label><select name="id_kec_agunan[]" id="' + idkecc + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div></div><div class="form-row"><div class="form-group col-md-6"><label>Kelurahan<span class="required_notification">*</span></label><select name="id_kel_agunan[]" id="' + idkell + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-group col-md-6"><label>Kode POS<span class="required_notification">*</span></label><input type="text" name="kode_pos_agunan[]" id="' + idkodepos + '" class="form-control" maxlength="5" onkeypress="return hanyaAngka(event)"></div></div><div class="form-row"><div class="form-group col-md-6"><label >Luas Tanah<span class="required_notification">*</span></label><input type="text" class="form-control" name="luas_tanah[]" ></div><div class="form-group col-md-6"><label >Luas Bangunan<span class="required_notification">*</span></label><input type="text" class="form-control"  name="luas_bangunan[]" ></div></div></div><div class="col-md-6"><div class="form-group"><label for="exampleInput1" >Nama Pemilik Sertifikat<span class="required_notification">*</span></label><input type="text" name="nama_pemilik_sertifikat[]" class="form-control "></div><div class="form-group"><label for="exampleInput1" >Jenis Sertifikat</label><select name="jenis_sertifikat[]" class="form-control "><option value="">-- Pilih --</option><option value="SHM">SHM</option><option value="SHGB">SHGB</option></select></div><div class="form-group"><label for="exampleInputEmail1" >Nomor Sertifikat<span class="required_notification">*</span></label><input type="text" class="form-control" name="no_sertifikat[]" aria-describedby=""></div><div class="form-group"> <label for="exampleInputEmail1" >Tanggal & Nomor Ukur sertifikat</label><input type="text" class="form-control" name="no_ukur_sertifikat[]"></div><div class="form-row"><div class="form-group col-md-6"><label>Tanggal Berlaku SHGB<span class="required_notification">*</span></label><div class="input-group"><div class="input-group-prepend"><span class="input-group-text"><i class="far fa-calendar-alt"></i></span></div><input type="text" name="tgl_berlaku_shgb[]" class="datepicker-here form-control" data-language="en"  data-date-format="dd-mm-yyyy"/></div></div><div class="form-group col-md-6"><label for="exampleInputEmail1" >Nomor IMB<small><i>(Jika Ada)</i></small></label><input type="text" class="form-control" name="no_imb[]"></div></div><div class="form-row"><div class="form-group col-md-6"><label for="exampleInputEmail1" >NJOP<span class="required_notification">*</span></label><input type="text" class="form-control uang" name="njop[]"></div><div class="form-group col-md-6"><label for="exampleInputEmail1" >NOP<span class="required_notification">*</span></label><input type="text" class="form-control" name="nop[]"></div></div></div></div><div class="form-group"><label>LAMPIRAN<span class="required_notification">*</span></label></div><div class="row"><div class="col-md-6"><div class="form-group"><label >Foto Agunan Tampak Depan<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_depan[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div><div class="form-group"><label >Foto Agunan Tampak Jalan<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_jalan[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div><div class="form-group"><label >Foto Agunan Tampak Ruang Tamu<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_ruangtamu[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div></div><div class="col-md-6"><div class="form-group"><label >Foto Agunan Tampak Dapur<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_dapur[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div> <div class="form-group"><label >Foto Agunan Tampak Kamar Mandi<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_kamarmandi[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div> </div></div> </td></tr>';
+        var markup = '<tr><td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><div class="row"><div class="col-md-6"><div class="form-group"><label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label><select name="tipe_lokasi_agunan[]" class="form-control "><option value="">-- Pilih --</option><option value="PERUMAHAN/CLUSTER">PERUMAHAN/CLUSTER</option><option value="JAMINAN PINGGIR JALAN RAYA">JAMINAN PINGGIR JALAN RAYA</option><option value="KAVLING">KAVLING</option><option value="PERKAMPUNGAN AKSES JALAN MOBIL">PERKAMPUNGAN AKSES JALAN MOBIL</option><option value="LAINNYA">LAINNYA</option></select></div><div class="form-group"><label for="exampleInput1">Collateral<span class="required_notification">*</span></label><select name="tipe_lokasi_agunan_collateral[]" class="form-control "><option value="">-- Pilih --</option><option value="RUMAH">RUMAH</option><option value="RUKO">RUKO</option><option value="RUMAH KONTRAKAN">RUMAH KONTRAKAN</option><option value="GEDUNG">GEDUNG</option><option value="TANAH KOSONG">TANAH KOSONG</option></select></div><div class="form-row"><div class="form-group col-md-8"><label >Alamat Sesuai KTP<span class="required_notification">*</span></label><input type="text" name="alamat_agunan[]" class="form-control"  ></div><div class="form-group col-md-2"><label >RT<span class="required_notification">*</span></label><input type="text" class="form-control" name="rt_agunan[]" maxlength="3" onkeypress="return hanyaAngka(event)"></div><div class="form-group col-md-2"><label >RW<span class="required_notification">*</span></label><input type="text" class="form-control" name="rw_agunan[]" maxlength="3" onkeypress="return hanyaAngka(event)"></div></div><div class="form-group"><label>Provinsi<span class="required_notification">*</span></label><select name="id_prov_agunan[]" id="' + iddd + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-row"><div class="form-group col-md-6"><label>Kabupaten/Kota<span class="required_notification">*</span></label><select id="' + idkabb + '" name="id_kab_agunan[]" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-group col-md-6"><label>Kecamatan<span class="required_notification">*</span></label><select name="id_kec_agunan[]" id="' + idkecc + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div></div><div class="form-row"><div class="form-group col-md-6"><label>Kelurahan<span class="required_notification">*</span></label><select name="id_kel_agunan[]" id="' + idkell + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-group col-md-6"><label>Kode POS<span class="required_notification">*</span></label><input type="text" name="kode_pos_agunan[]" id="' + idkodepos + '" class="form-control" maxlength="5" onkeypress="return hanyaAngka(event)"></div></div><div class="form-row"><div class="form-group col-md-6"><label >Luas Tanah<span class="required_notification">*</span></label><input type="text" class="form-control" name="luas_tanah[]" ></div><div class="form-group col-md-6"><label >Luas Bangunan<span class="required_notification">*</span></label><input type="text" class="form-control"  name="luas_bangunan[]" ></div></div></div><div class="col-md-6"><div class="form-group"><label for="exampleInput1" >Nama Pemilik Sertifikat<span class="required_notification">*</span></label><input type="text" name="nama_pemilik_sertifikat[]" class="form-control "></div><div class="form-group"><label for="exampleInput1" >Jenis Sertifikat</label><select name="jenis_sertifikat[]" class="form-control "><option value="">-- Pilih --</option><option value="SHM">SHM</option><option value="SHGB">SHGB</option></select></div><div class="form-group"><label for="exampleInputEmail1" >Nomor Sertifikat<span class="required_notification">*</span></label><input type="text" class="form-control" name="no_sertifikat[]" aria-describedby=""></div><div class="form-group"> <label for="exampleInputEmail1" >Tanggal & Nomor Ukur sertifikat</label><input type="text" class="form-control" name="no_ukur_sertifikat[]"></div><div class="form-row"><div class="form-group col-md-6"><label>Tanggal Berlaku SHGB<span class="required_notification">*</span></label><div class="input-group"><div class="input-group-prepend"><span class="input-group-text"><i class="far fa-calendar-alt"></i></span></div><input type="text" name="tgl_berlaku_shgb[]" class="datepicker-here form-control" data-language="en"  data-date-format="dd-mm-yyyy"/></div></div><div class="form-group col-md-6"><label for="exampleInputEmail1" >Nomor IMB<small><i>(Jika Ada)</i></small></label><input type="text" class="form-control" name="no_imb[]"></div></div><div class="form-row"><div class="form-group col-md-6"><label for="exampleInputEmail1" >NJOP<span class="required_notification">*</span></label><input type="text" class="form-control uang" name="njop[]"></div><div class="form-group col-md-6"><label for="exampleInputEmail1" >NOP<span class="required_notification">*</span></label><input type="text" class="form-control" name="nop[]"></div></div></div></div><div class="form-group"><label>LAMPIRAN<span class="required_notification">*</span></label></div><div class="row"><div class="col-md-6"><div class="form-group"><label >Foto Agunan Tampak Depan<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_depan[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div><div class="form-group"><label >Foto Agunan Tampak Jalan<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_jalan[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div><div class="form-group"><label >Foto Agunan Tampak Ruang Tamu<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_ruangtamu[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div></div><div class="col-md-6"><div class="form-group"><label >Foto Agunan Tampak Dapur<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_dapur[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div> <div class="form-group"><label >Foto Agunan Tampak Kamar Mandi<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_kamarmandi[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div> </div></div> </td></tr>';
         $("#table tbody").append(markup);
 
         $(function() {
@@ -3027,16 +3027,11 @@
                     var select_pendidikan_terakhir = [];
                     var option_pendidikan_terakhir = [
                         '<option value="' + data.data_debitur.pendidikan_terakhir + '">' + data.data_debitur.pendidikan_terakhir + '</option>',
-                        '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
-                        '<option value="SD">SD</option>',
-                        '<option value="SMP">SMP</option>',
-                        '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
-                        '<option value="D1">D1</option>',
-                        '<option value="D2">D2</option>',
-                        '<option value="D3">D3</option>',
-                        '<option value="S1">S1</option>',
-                        '<option value="S2">S2</option>',
-                        '<option value="S3">S3</option>'
+                        '<option value="0021">Tidak Sekolah/SD</option>',
+                        '<option value="0022">SMP</option>',
+                        '<option value="0023">SMA</option>',
+                        '<option value="0024">D3/S1</option>',
+                        '<option value="0025">S2/S3</option>'
                     ].join('\n');
                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -3076,16 +3071,16 @@
                             }
                         })
 
-                    $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
-                    $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
-                    $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
-                    $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
-                    $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
-                    $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
-                    $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
-                    $('#form_detail input[name=masa_kerja_usaha]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
-                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data.data_debitur.pekerjaan.masa_lama_kerja_usaha);
-                    $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
+                        $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
+                        $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
+                        $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
+                        $('#form_detail input[name=tgl_mulai_kerja]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
+                        $('#form_detail input[name=lama_kerja]').val(data.data_debitur.pekerjaan.lama_kerja);
+                        $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
+                        $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
+                        $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
+                        $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
+                        $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
 
 
                     get_provinsi()
@@ -3694,16 +3689,11 @@
                     var select_pendidikan_terakhir = [];
                     var option_pendidikan_terakhir = [
                         '<option value="' + data.data_debitur.pendidikan_terakhir + '">' + data.data_debitur.pendidikan_terakhir + '</option>',
-                        '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
-                        '<option value="SD">SD</option>',
-                        '<option value="SMP">SMP</option>',
-                        '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
-                        '<option value="D1">D1</option>',
-                        '<option value="D2">D2</option>',
-                        '<option value="D3">D3</option>',
-                        '<option value="S1">S1</option>',
-                        '<option value="S2">S2</option>',
-                        '<option value="S3">S3</option>'
+                        '<option value="0021">Tidak Sekolah/SD</option>',
+                        '<option value="0022">SMP</option>',
+                        '<option value="0023">SMA</option>',
+                        '<option value="0024">D3/S1</option>',
+                        '<option value="0025">S2/S3</option>'
                     ].join('\n');
                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -3736,17 +3726,17 @@
                         })
 
 
-                    $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
-                    $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
-                    $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
-                    $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
-                    $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
-                    $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
-                    $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
-                    $('#form_detail input[name=masa_kerja_usaha]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
-                    $('#form_detail input[name=masa_lama_kerja_usaha]').val(data.data_debitur.pekerjaan.masa_lama_kerja_usaha);
-                    $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
-
+                        $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
+                        $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
+                        $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
+                        $('#form_detail input[name=tgl_mulai_kerja]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
+                        $('#form_detail input[name=lama_kerja]').val(data.data_debitur.pekerjaan.lama_kerja);
+                        $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
+                        $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
+                        $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
+                        $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
+                        $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
+                                    
                     get_provinsi()
                         .done(function(res) {
                             var select = [];
@@ -4406,18 +4396,17 @@
                     //PEMERIKSAAN TANAH DAN BANGUNAN
                     $('#detail_ao input[id=nama_penghuni_agunan_detail]').val(data.pemeriksaan.agunan_tanah[0].nama_penghuni);
 
-                    if (data.pemeriksaan.agunan_tanah[0].status_penghuni == "PEMILIK") {
-                        document.getElementById("pemilik_agunan_tanah").selected = "true";
-                    } else
-                    if (data.pemeriksaan.agunan_tanah[0].status_penghuni == "PENYEWA") {
-                        document.getElementById("penyewa_agunan_tanah").selected = "true";
-                    } else
-                    if (data.pemeriksaan.agunan_tanah[0].status_penghuni = "TIDAK DIHUNI") {
-                        document.getElementById("tidak_dihuni_agunan_tanah").selected = "true";
-                    } else
-                    if (data.pemeriksaan.agunan_tanah[0].status_penghuni = "KELUARGA") {
-                        document.getElementById("keluarga_agunan_tanah").selected = "true";
-                    }
+                    var select_status_penghuni = [];
+                    var option_status_penghuni = [
+                        '<option value="' + data.pemeriksaan.agunan_tanah[0].status_penghuni + '">' + data.pemeriksaan.agunan_tanah[0].status_penghuni + '</option>',
+                        '<option value="SUAMI/ISTRI">SUAMI/ISTRI</option>',
+                        '<option value="MILIK KELUARGA">MILIK KELUARGA</option>',
+                        '<option value="MILIK ORANG LAIN (BELUM BALIK NAMA)">MILIK ORANG LAIN (BELUM BALIK NAMA)</option>',
+                        '<option value="TAKE OVER A.N SENDIRI">TAKE OVER A.N SENDIRI</option>',
+                        '<option value="TAKE OVER MASIH A.N ORANG LAIN">TAKE OVER MASIH A.N ORANG LAIN</option>'
+                    ].join('\n');
+                    select_status_penghuni.push(option_status_penghuni);
+                    $('#detail_ao select[id=status_penghuni_agunan_detail]').html(select_status_penghuni);
 
                     $('#detail_ao input[id=bentuk_bangunan_agunan_detail]').val(data.pemeriksaan.agunan_tanah[0].bentuk_bangunan);
 
@@ -4708,13 +4697,6 @@
                     $('#form_edit_agunan_tampak_ruang_tamu input[type=hidden][name=id_agunan_ruang_tamu]').val(data.id);
                     $('#form_edit_agunan_tampak_dapur input[type=hidden][name=id_agunan_dapur]').val(data.id);
                     $('#form_edit_agunan_tampak_kamar_mandi input[type=hidden][name=id_agunan_kamar_mandi]').val(data.id);
-
-                    if (data.tipe_lokasi == "PERUM") {
-                        document.getElementById("lok_perum").selected = "true";
-                    } else if (data.tipe_lokasi == "BIASA") {
-                        document.getElementById("lok_biasa").selected = "true";
-                    }
-
                     $('#form_edit_agunan input[name=alamat_agunan]').val(data.alamat.alamat_singkat);
                     $('#form_edit_agunan input[name=rt_agunan]').val(data.alamat.rt);
                     $('#form_edit_agunan input[name=rw_agunan]').val(data.alamat.rw);
@@ -4762,11 +4744,41 @@
                     $('#form_edit_agunan input[name=luas_bangunan]').val(data.luas_bangunan);
                     $('#form_edit_agunan input[name=nama_pemilik_sertifikat]').val(data.nama_pemilik_sertifikat);
 
-                    // if (data.jenis_sertifikat == "SHM") {
-                    //     document.getElementById("jenis_shm").selected = "true";
-                    // } else if (data.jenis_sertifikat == "SHGB") {
-                    //     document.getElementById("jenis_shgb").selected = "true";
-                    // }
+                    var select_jenis_sertifikat = [];
+                    var option_jenis_sertifikat = [
+                        '<option value="' + data.jenis_sertifikat + '">' + data.jenis_sertifikat + '</option>',
+                        '<option value="SHM">SHM</option>',
+                        '<option value="SHGB AKTIF">SHGB AKTIF</option>',
+                        '<option value="SHGB Akan Expired < 5 Tahun">SHGB Akan Expired < 5 Tahun</option>',
+                        '<option value="SHM PTSL">SHM PTSL</option>',
+                        '<option value="LAINNYA">LAINNYA</option>'
+                    ].join('\n');
+                    select_jenis_sertifikat.push(option_jenis_sertifikat);
+                    $('#form_edit_agunan select[name=jenis_sertifikat]').html(select_jenis_sertifikat);
+
+                    var select_tipe_lokasi_agunan = [];
+                    var option_tipe_lokasi_agunan = [
+                        '<option value="' + data.tipe_lokasi + '">' + data.tipe_lokasi + '</option>',
+                        '<option value="PERUMAHAN/CLUSTER">PERUMAHAN/CLUSTER</option>',
+                        '<option value="JAMINAN PINGGIR JALAN RAYA">JAMINAN PINGGIR JALAN RAYA</option>',
+                        '<option value="KAVLING">KAVLING</option>',
+                        '<option value="PERKAMPUNGAN AKSES JALAN MOBIL">PERKAMPUNGAN AKSES JALAN MOBIL</option>',
+                        '<option value="LAINNYA">LAINNYA</option>'
+                    ].join('\n');
+                    select_tipe_lokasi_agunan.push(option_tipe_lokasi_agunan);
+                    $('#form_edit_agunan select[name=tipe_lokasi_agunan]').html(select_tipe_lokasi_agunan);
+
+                    var select_tipe_lokasi_agunan_collateral = [];
+                    var option_tipe_lokasi_agunan_collateral = [
+                        '<option value="' + data.collateral + '">' + data.collateral + '</option>',
+                        '<option value="RUMAH">RUMAH</option>',
+                        '<option value="RUKO">RUKO</option>',
+                        '<option value="RUMAH KONTRAKAN">RUMAH KONTRAKAN</option>',
+                        '<option value="GEDUNG">GEDUNG</option>',
+                        '<option value="TANAH KOSONG">TANAH KOSONG</option>'
+                    ].join('\n');
+                    select_tipe_lokasi_agunan_collateral.push(option_tipe_lokasi_agunan_collateral);
+                    $('#form_edit_agunan select[name=tipe_lokasi_agunan_collateral]').html(select_tipe_lokasi_agunan_collateral);
 
                     $('#form_edit_agunan input[name=no_sertifikat]').val(data.no_sertifikat);
                     $('#form_edit_agunan input[name=no_ukur_sertifikat]').val(data.tgl_ukur_sertifikat);
@@ -4905,6 +4917,7 @@
 
             var formData = new FormData();
             formData.append('tipe_lokasi_agunan', $('select[name=tipe_lokasi_agunan]', this).val());
+            formData.append('tipe_lokasi_agunan_collateral', $('select[name=tipe_lokasi_agunan_collateral]', this).val());
             formData.append('alamat_agunan', $('input[name=alamat_agunan]', this).val());
             formData.append('id_prov_agunan', $('select[name=id_prov_agunan]', this).val());
             formData.append('id_kab_agunan', $('select[name=id_kab_agunan]', this).val());
@@ -5147,6 +5160,7 @@
                             '<td><button type="button" class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_agunan"data="' + item.id + '"><i class="fas fa-pencil-alt"></i></button></td>',
                             '<td>' + no + '</td>',
                             '<td>' + item.tipe_lokasi + '</td>',
+                            '<td>' + item.collateral + '</td>',
                             '<td>' + item.alamat + '</td>',
                             '<td>' + item.luas_tanah + '</td>',
                             '<td>' + item.luas_bangunan + '</td>',
@@ -5318,8 +5332,8 @@
             formData.append('id_kab_tempat_kerja', $('select[id=kabupaten_kantor]', this).val());
             formData.append('id_kec_tempat_kerja', $('select[id=kecamatan_kantor]', this).val());
             formData.append('id_kel_tempat_kerja', $('select[id=kelurahan_kantor]', this).val());
-            formData.append('tgl_mulai_kerja', $('input[name=masa_kerja_usaha]', this).val());
-            formData.append('masa_lama_kerja_usaha', $('input[name=masa_lama_kerja_usaha]', this).val());
+            formData.append('tgl_mulai_kerja', $('input=[name=tgl_mulai_kerja]', this).val());
+            formData.append('lama_kerja', $('input[name=lama_kerja]', this).val());
             formData.append('no_telp_tempat_kerja', $('input[name=no_telp_kantor_usaha]', this).val());
 
             update_debitur(formData, id)
@@ -6570,7 +6584,7 @@
                     return (false);
                 }
                 if (document.getElementById('status_penghuni_agunan').value == "") {
-                    bootbox.alert("Status Penghuni Agunan Belum Di Pilih !!!");
+                    bootbox.alert("Pemilik Jaminan Belum Di Pilih !!!");
                     return (false);
                 }
                 if (document.getElementById('bentuk_bangunan_agunan').value == "") {
@@ -7003,7 +7017,7 @@
                 $('#form_edit_penjamin input[name=rt_usaha_kantor_pen]').val(data.pekerjaan.alamat.rt);
                 $('#form_edit_penjamin input[name=rw_usaha_kantor_pen]').val(data.pekerjaan.alamat.rw);
                 $('#form_edit_penjamin input[name=kode_pos_kantor_pen]').val(data.pekerjaan.alamat.kode_pos);
-                $('#form_edit_penjamin input[name=masa_kerja_usaha]').val(data.pekerjaan.tgl_mulai_kerja);
+                $('#form_edit_penjamin input[name=tgl_mulai_kerja]').val(data.pekerjaan.tgl_mulai_kerja);
                 $('#form_edit_penjamin input[name=no_telp_kantor_usaha]').val(data.pekerjaan.no_telp_tempat_kerja);
 
                 get_provinsi()
@@ -7332,7 +7346,11 @@
         var formData = new FormData();
 
         if (document.getElementById('tipe_lokasi_agunan').value == "") {
-            bootbox.alert("Tipe Lokasi Agunan Belum Di Pilih !!!");
+            bootbox.alert("Tipe Lokasi Jaminan Belum Di Pilih !!!");
+            return (false);
+        }
+        if (document.getElementById('tipe_lokasi_agunan_collateral').value == "") {
+            bootbox.alert("Tipe Collateral Belum Di Pilih !!!");
             return (false);
         }
         if (document.getElementById('alamat_agunan').value == "") {
@@ -7393,6 +7411,7 @@
         }
 
         formData.append('tipe_lokasi_agunan', $('select[name=tipe_lokasi_agunan]', this).val());
+        formData.append('tipe_lokasi_agunan_collateral', $('select[name=tipe_lokasi_agunan_collateral]', this).val());
         formData.append('alamat_agunan', $('input[name=alamat_agunan]', this).val());
         formData.append('rt_agunan', $('input[name=rt_agunan]', this).val());
         formData.append('rw_agunan', $('input[name=rw_agunan]', this).val());
@@ -7467,7 +7486,11 @@
         e.preventDefault();
         var formData = new FormData();
         if (document.getElementById('tipe_lokasi_agunan_detail').value == "") {
-            bootbox.alert("Tipe Lokasi Agunan Belum Di Pilih !!!");
+            bootbox.alert("Tipe Lokasi Jaminan Belum Di Pilih !!!");
+            return (false);
+        }
+        if (document.getElementById('tipe_lokasi_agunan_collateral_detail').value == "") {
+            bootbox.alert("Tipe Collateral Belum Di Pilih !!!");
             return (false);
         }
         if (document.getElementById('alamat_agunan_detail').value == "") {
@@ -7528,6 +7551,7 @@
         }
 
         formData.append('tipe_lokasi_agunan', $('select[name=tipe_lokasi_agunan_detail]', this).val());
+        formData.append('tipe_lokasi_agunan_collateral', $('select[name=tipe_lokasi_agunan_collateral_detail]', this).val());
         formData.append('alamat_agunan', $('input[name=alamat_agunan_detail]', this).val());
         formData.append('rt_agunan', $('input[name=rt_agunan_detail]', this).val());
         formData.append('rw_agunan', $('input[name=rw_agunan_detail]', this).val());
@@ -7865,6 +7889,8 @@
                         '<tr>',
                         '<td>' + no + '</td>',
                         '<td>' + item.tipe_lokasi + '</td>',
+                        '<td>' + item.collateral + '</td>',
+                        '<td>' + item.alamat + '</td>',
                         '<td>' + item.alamat + '</td>',
                         '<td>' + item.luas_tanah + '</td>',
                         '<td>' + item.luas_bangunan + '</td>',
@@ -8085,7 +8111,7 @@
         e.preventDefault();
         var formData = new FormData();
         formData.append('nama_penghuni_agunan', $('input[name=nama_penghuni_agunan_detail]', this).val());
-        formData.append('status_penghuni_agunan', $('select[name=status_tanah_bangunan_detail]', this).val());
+        formData.append('status_penghuni_agunan', $('select[name=status_penghuni_agunan_detail]', this).val());
         formData.append('bentuk_bangunan_agunan', $('input[name=bentuk_bangunan_agunan_detail]', this).val());
         formData.append('kondisi_bangunan_agunan', $('select[name=kondisi_bangunan_agunan_detail]', this).val());
         formData.append('fasilitas_agunan', $('input[name=fasilitas_agunan_detail]', this).val());

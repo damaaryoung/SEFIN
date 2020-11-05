@@ -59,6 +59,7 @@
                             }
                             $('#form_tambah_so input[name=tempat_lahir]').val(data.data.TEMPATLAHIR);
                             $('#form_tambah_so input[id=tgl_lahir_deb]').val(data.data.TGLLAHIR);
+                            $('#form_tambah_so input[id=umur]').val(data.data.UMUR);
                             $('#form_tambah_so input[name=ibu_kandung]').val(data.data.NAMA_IBU_KANDUNG);
                             $('#form_tambah_so input[name=no_telp]').val(data.data.HP);
                         }
@@ -1112,9 +1113,6 @@
                         $.each(data.tgl_lahir, function(index, item) {
                             error += '<p>' + item + "</p>";
                         });
-                        $.each(data.age, function(index, item) {
-                            error += '<p>' + item + "</p>";
-                        });
                         $.each(data.jenis_kelamin, function(index, item) {
                             error += '<p>' + item + "</p>";
                         });
@@ -1633,8 +1631,8 @@
                 $('[id="nama_lengkap"]').val(data.Nama.value);
                 $('[name="alamat_ktp"]').val(data.Alamat.value);
                 $('[name="tempat_lahir"]').val(data['Tempat Lahir'].value);
-                $('[name="tgl_lahir_deb"]').val(data['Tgl Lahir'].value);
                 $('[name="umur"]').val(data['Umur'].value);
+                $('[name="tgl_lahir_deb"]').val(data['Tgl Lahir'].value);
                 $('[name="rt_ktp"]').val(data['RT/RW'].value.substr(0, 3));
                 $('[name="rw_ktp"]').val(data['RT/RW'].value.substr(4));
 

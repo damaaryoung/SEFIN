@@ -239,7 +239,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-row">
-                                            <div class="form-group col-md-5">
+                                        <div class="form-group col-md-5">
                                                 <label>Tempat Lahir<span class="required_notification">*</span></label>
                                                 <input type="text" id="tempat_lahir" name="tempat_lahir" onkeyup="this.value = this.value.toUpperCase()" class="form-control">
                                             </div>
@@ -282,8 +282,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label>Jumlah Tanggungan<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" name="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
+                                        <label>Jumlah Tanggungan<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" name="jumlah_tanggungan" id="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-6">
