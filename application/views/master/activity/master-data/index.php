@@ -28,6 +28,11 @@
 </style>
 <link href="<?php echo base_url('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>" rel="stylesheet" type="text/css">
 <script src="<?php echo base_url('assets/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
+<!-- Menyisipkan library Google Maps -->
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsCPjK2y06rTKA0E8Z-21yngKKUc4U3y0&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
 <div id="lihat_data_credit" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
   <section class="content-header">
     <div class="container-fluid">

@@ -49,7 +49,7 @@
         <div class="row">
           <div class="col-md-3">
             <div class="input-group mb-3">
-              <select class="form-control form">
+              <select class="form-control form cari-berdasarkan" onchange="filter();">
                 <option value="survey">Survey</option>
                 <option value="visit">Visit CGC</option>
                 <option value="promosi">Promosi</option>
@@ -70,16 +70,91 @@
 </div>
 
 <!-- modal started -->
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow: scroll !important;">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-body">
           <section id="html-rendered-form-data"></section>
       </div>
+    </div>
   </div>
 </div>
-</div>
 <!-- modal ended -->
+
+<!-- modal daftar form survey -->
+<div class="modal fade" id="modal-default-survey" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Data selected</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control cari-berdasarkan-nama-debitur-survey" placeholder="find.." onkeyup="filterFormSurvey();">
+          <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+          </div>
+        </div>
+        <div class="data-selected"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal daftar form survey -->
+
+<!-- modal daftar form visit -->
+<div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Data selected</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control cari-berdasarkan-nama-debitur-visit" placeholder="find.." onkeyup="filterFormVisit();">
+          <div class="input-group-append">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+          </div>
+        </div>
+        <div class="data-selected"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal daftar form visit -->
+
+<!-- modal camera::started -->
+<div class="modal fade bd-example-modal-sm" id="modal-camera-swafoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Swafoto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="my_camera" class="justify-content-center"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="take-shoots">Take shoot</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal camera::ended -->
 <script src="<?= base_url() ?>assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/plugins/jquery-validation/additional-methods.min.js"></script>
 <?php $this->view('master/activity/account-officer/index_js.php'); ?>

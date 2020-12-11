@@ -1,45 +1,48 @@
-<table class="table table-sm table-hover table-bordered">
+<table class="table table-sm table-hover table-bordered" width="100%">
   <thead>
-      <tr>
-          <th>Nama Activity</th>
-          <th>Target Activity</th>
-          <th>Durasi Per Activity</th>
-          <th width="10">ACT</th>
-      </tr>
+    <tr>
+      <th>Tanggal</th>
+      <th>No. Kontrak</th>
+      <th>Nama Debitur</th>
+      <th>PIC</th>
+      <th width="10">ACT</th>
+    </tr>
   </thead>
   <tbody style="font-size: 13px !important;">
     <?php
     $limit = 10;
     $limit_start = ($page - 1) * $limit;
     $no = $limit_start + 1;
-     ?>
+    ?>
     <?php foreach ($data as $key): ?>
       <tr>
-        <td><?= $key['nama_aktivitas']; ?></td>
-        <td><?= $key['target_aktivitas']; ?></td>
-        <td><?= $key['durasi_aktivitas']; ?></td>
+        <td><i class="fas fa-calendar-alt"></i> <?= date('d F Y', strtotime(substr($key['tgl_assign'], 0,9))); ?> | <i class="fas fa-clock"></i> <?= substr($key['tgl_assign'],11);?></td>
+        <td><span class="btn btn-outline-secondary btn-sm"><i class="fas fa-key"> <?= $key['no_kontrak']; ?></span></td>
+        <td><i class="fas fa-user"></i> <?= $key['nama_debitur']; ?></td>
+        <td><i class="fas fa-user-secret"></i> <?= $key['nama_pic']; ?></td>
         <td>
           <div class="btn-group">
-              <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_jenis']; ?>"><i class="fas fa-wrench"></i></button>
-              <button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_jenis']; ?>"><i class="fas fa-trash"></i></button>
-            </div>
+            <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>','SURVEY');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_mb']; ?>"><i class="fas fa-wrench"></i></button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>','ao');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_mb']; ?>"><i class="fas fa-trash"></i></button>
+          </div>
         </td>
       </tr>
-    <?php $no++; endforeach; ?>
-  </tbody>
-  <tfoot>
-    <tr>
-      <th>Nama Activity</th>
-      <th>Target Activity</th>
-      <th>Durasi Per Activity</th>
-      <th width="10">ACT</th>
-    </tr>
-  </tfoot>
-</table>
-<div class="text-center">
-  <ul class="pagination">
-    <?php
-    $jumlah_page = $pagination;
+      <?php $no++; endforeach; ?>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Tanggal</th>
+        <th>No. Kontrak</th>
+        <th>Nama Debitur</th>
+        <th>PIC</th>
+        <th width="10">ACT</th>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="text-center">
+    <ul class="pagination">
+      <?php
+      $jumlah_page = $pagination;
 
     $jumlah_number = 3 ; //jumlah halaman ke kanan dan kiri dari halaman yang aktif
     $start_number = ($page > $jumlah_number)? $page - $jumlah_number : 1;

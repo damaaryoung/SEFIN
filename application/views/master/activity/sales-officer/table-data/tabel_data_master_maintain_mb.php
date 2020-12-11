@@ -1,9 +1,10 @@
 <table class="table table-sm table-hover table-bordered">
   <thead>
       <tr>
-          <th>Nama Activity</th>
-          <th>Target Activity</th>
-          <th>Durasi Per Activity</th>
+          <th width="100">Tanggal</th>
+          <th width="100">Nama MB</th>
+          <th width="100">Hasil Maintain MB</th>
+          <th width="100">Swafoto</th>
           <th width="10">ACT</th>
       </tr>
   </thead>
@@ -15,13 +16,20 @@
      ?>
     <?php foreach ($data as $key): ?>
       <tr>
-        <td><?= $key['nama_cabang']; ?></td>
-        <td><?= $key['nama_lengkap']; ?></td>
-        <td><?= $key['plafon']; ?></td>
+        <td><?= $key['tanggal']; ?></td>
+        <td><?= $key['nama_mb']; ?></td>
+        <td><?= $key['hasil_maintain']; ?></td>
+        <td>
+          <?php if ($key['swafoto']=='') {?>
+            Gambar tidak tersedia !
+          <?php } else {?>
+            <img src="<?= $this->config->item('api_url').$key['swafoto']; ?>" class="rounded mx-auto d-block" alt="..." width="50%">
+          <?php } ?>
+        </td>
         <td>
           <div class="btn-group">
-              <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_cabang']; ?>"><i class="fas fa-wrench"></i></button>
-              <button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_cabang']; ?>"><i class="fas fa-trash"></i></button>
+              <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>','maintain');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_mb']; ?>"><i class="fas fa-wrench"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_mb']; ?>"><i class="fas fa-trash"></i></button>
             </div>
         </td>
       </tr>
@@ -29,9 +37,10 @@
   </tbody>
   <tfoot>
     <tr>
-      <th>Nama Activity</th>
-      <th>Target Activity</th>
-      <th>Durasi Per Activity</th>
+      <th width="100">Tanggal</th>
+      <th width="100">Nama MB</th>
+      <th width="100">Hasil Maintain MB</th>
+      <th width="100">Swafoto</th>
       <th width="10">ACT</th>
     </tr>
   </tfoot>

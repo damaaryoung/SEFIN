@@ -564,5 +564,13 @@ class Menu_controller extends CI_Controller
     {
         $this->load->view('master/dashboard-activity-so-dan-ao/index');
     }
+    public function activity_head_marketing()
+    {
+        $this->load->view('master/activity/head-marketing/index');
+    }
+    public function activity_head_bussiness()
+    {
+        $this->load->view('master/activity/head-bussines/index');
+    }
     
 }

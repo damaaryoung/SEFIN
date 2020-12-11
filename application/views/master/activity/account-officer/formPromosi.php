@@ -10,28 +10,23 @@
           <th>Tanggal Promosi</th>
           <td>
             <div class="form-group">
-              <input type="text" name="tanggal_promosi" class="form-control" value="<?= date('Y-m-d'); ?>" disabled readonly>
+              <input type="text" name="tanggal_promosi" class="form-control" value="<?= date('Y-m-d'); ?>" disabled readonly id="tanggal_promosi">
             </div>
           </td>
         </tr>
         <tr>
-          <th>Lokasi Promosi</th>
+          <th>Lokasi Promosi Latitude</th>
           <td>
             <div class="form-group">
-              <input type="text" name="lokasi_promosi" class="form-control" value="latitude & longitude cordinates" disabled readonly>
+              <input type="text" name="lokasi_promosi" class="form-control" placeholder="latitude & longitude cordinates" disabled readonly id="latitude">
             </div>
           </td>
         </tr>
         <tr>
-          <th>Swafoto</th>
+          <th>Lokasi Promosi Longitude</th>
           <td>
             <div class="form-group">
-              <div class="input-group">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="exampleInputFile" name="swafoto">
-                  <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                </div>
-              </div>
+              <input type="text" name="lokasi_promosi" class="form-control" placeholder="latitude & longitude cordinates" disabled readonly id="longitude">
             </div>
           </td>
         </tr>
