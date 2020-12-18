@@ -597,6 +597,7 @@ function NPL(){
         $('[id="NPL"]').html(loading);
       },
       success: function(result) {
+        alert(urlapi+"/dashboard/kredit/kredit_controller/npl_console");
         var chart = new CanvasJS.Chart("NPL", {
         	theme: "light2",
         	animationEnabled: true,

@@ -27,7 +27,7 @@
             bootbox.alert("Silahkan masukkan No KTP Debitur  !!!");
             return (false);
         }
-        if (document.getElementById('no_ktp_cadeb_cek').value.length < 16) {
+        if (document.getElementById('no_ktp_cadeb_cek').value.length < 15) {
             bootbox.alert("No KTP Debitur harus 16 Digit !!!");
             return (false);
         }
@@ -592,7 +592,7 @@
                     bootbox.alert("No KTP Debitur Tidak Boleh Kosong !!!");
                     return (false);
                 }
-                if (document.getElementById('no_ktp').value.length < 16) {
+                if (document.getElementById('no_ktp').value.length < 15) {
                     bootbox.alert("No KTP Debitur 16 Digit !!!");
                     return (false);
                 }
@@ -600,7 +600,7 @@
                     bootbox.alert("No KTP Di KK Debitur Tidak Boleh Kosong !!!");
                     return (false);
                 }
-                if (document.getElementById('no_ktp_kk').value.length < 16) {
+                if (document.getElementById('no_ktp_kk').value.length < 15) {
                     bootbox.alert("No KTP Di KK Debitur 16 Digit !!!");
                     return (false);
                 }
@@ -608,7 +608,7 @@
                     bootbox.alert("No KK Debitur Tidak Boleh Kosong !!!");
                     return (false);
                 }
-                if (document.getElementById('no_kk').value.length < 16) {
+                if (document.getElementById('no_kk').value.length < 15) {
                     bootbox.alert("No KTP Debitur 16 Digit !!!");
                     return (false);
                 }
@@ -741,7 +741,7 @@
                     bootbox.alert("No KTP Debitur Tidak Boleh Kosong !!!");
                     return (false);
                 }
-                if (document.getElementById('no_ktp').value.length < 16) {
+                if (document.getElementById('no_ktp').value.length < 15) {
                     bootbox.alert("No KTP Debitur 16 Digit !!!");
                     return (false);
                 }
@@ -749,7 +749,7 @@
                     bootbox.alert("No KTP Di KK Debitur Tidak Boleh Kosong !!!");
                     return (false);
                 }
-                if (document.getElementById('no_ktp_kk').value.length < 16) {
+                if (document.getElementById('no_ktp_kk').value.length < 15) {
                     bootbox.alert("No KTP Di KK Debitur 16 Digit !!!");
                     return (false);
                 }
@@ -757,7 +757,7 @@
                     bootbox.alert("No KK Debitur Tidak Boleh Kosong !!!");
                     return (false);
                 }
-                if (document.getElementById('no_kk').value.length < 16) {
+                if (document.getElementById('no_kk').value.length < 15) {
                     bootbox.alert("No KTP Debitur 16 Digit !!!");
                     return (false);
                 }
