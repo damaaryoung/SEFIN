@@ -332,6 +332,8 @@ class Menu_controller extends CI_Controller
         $data['data_sumber_data_untuk_setoran'] =  $this->Model_view_master->sumber_data_untuk_setoran();
         $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
         $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
+        $data['pendidikan'] = $this->Model_view_master->tampil_data_pendidikan();
+        
         $this->load->view('master/memorandum_ca/data_credit_checking', $data);
     }
 
@@ -542,5 +544,35 @@ class Menu_controller extends CI_Controller
         public function dashboard_target_lending()
     {
         $this->load->view('master/target_lending/target_lending_template');
+    }
+
+    public function target_lending_periodik()
+    {
+        $this->load->view('master/master/target_lending_periodik/target_lending_periodik');
+    }
+
+    public function target_approval_periodik()
+    {
+        $this->load->view('master/master/target_approval_periodik/target_approval_periodik');
+    }
+
+    public function activity_tele_collection()
+    {
+        $this->load->view('master/activity/activity_tele_collection');
+    }
+
+    public function activity_tele_sales()
+    {
+        $this->load->view('master/activity/activity_tele_sales');
+    }
+
+    public function dashboard_tele()
+    {
+        $this->load->view('master/tele_center/dashboard_tele');
+    }
+
+    public function pipeline_lending()
+    {
+        $this->load->view('master/cek_sertifikat/pipeline_lending');
     }
 }

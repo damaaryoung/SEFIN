@@ -1841,11 +1841,9 @@
                                             <label>Sumber Penghasilan<span class="required_notification">*</span></label>
                                             <select name="sumber_penghasilan" class="form-control" style="width: 100%;">
                                                 <option value="">--Pilih--</option>
-                                                <?php foreach ($data_sumber_penghasilan->result() as $p) { ?>
-                                                    echo "
-                                                    <option value="<?php echo $p->kode_sumber_penghasilan ?>"><?php echo $p->desk_sumber_penghasilan ?></option>";
-                                                <?php  } ?>
-
+                                                <?php foreach ($data_sumber_penghasilan->result() as $p) {?>
+                                                    <option value="<?= $p->nama_detail; ?>"><?= $p->nama_detail; ?></option>
+                                                <?php } ?>
                                             </select>
                                         </div>
                                         <div class="row">
@@ -1974,7 +1972,13 @@
                                                         <input type="text" class="form-control" name="collectabilitas_acc[]" value="0" onkeypress="return hanyaAngka(event)">
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-control" name="jenis_kredit_acc[]" value="-" onkeyup="this.value = this.value.toUpperCase()">
+                                                        <select id="jenis_kredit_acc[]" name="jenis_kredit_acc[]" class="form-control ">
+                                                            <option value="No Din">No Din</option>
+                                                            <option value="KTA">KTA</option>
+                                                            <option value="CC">CC (Credit Card)</option>
+                                                            <option value="Sertifikat">Sertifikat</option>
+                                                            <option value="BPKB">BPKB</option>
+                                                        </select>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -3133,7 +3137,7 @@
                         <div class="card-body collapse" id="collapse_16">
                             <div class="col-md-12" id="">
                                 <div class="box-body table-responsive no-padding">
-                                    <button type="button" class="btn btn-primary" id="tambah_informasi_cc" style="margin-bottom: 9px;"><i class="fa fa-user-plus">Tambah</i></button>
+                                    <button type="button" class="btn btn-primary add" id="tambah_informasi_cc" style="margin-bottom: 9px;"><i class="fa fa-user-plus">Tambah</i></button>
                                     <table id="example4" class="table table-bordered table-hover table-sm">
                                         <thead style="font-size: 11px" class="bg-success">
                                             <tr>
@@ -5363,7 +5367,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Input Informasi Analisa Credit Checking</h5>
+                            <h5 class="modal-title">Tambah Informasi Analisa Credit Checking</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -5371,7 +5375,7 @@
                         <div class="modal-body">
                             <div class="row">
                                 <input type="hidden" id="add_id_so_analisa_cc" name="add_id_so_analisa_cc">
-                                <input type="hidden" id="edit_id_info_analisa_cc" name="edit_id_info_analisa_cc">
+                                <!-- <input type="hidden" id="edit_id_info_analisa_cc" name="edit_id_info_analisa_cc"> -->
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Nama Bank <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label>
@@ -5410,6 +5414,77 @@
                                     <div class="form-group">
                                         <label>Jenis Kredit<span class="required_notification">*</span></label>
                                         <select id="add_jenis_kredit" name="add_jenis_kredit" class="form-control ">
+                                            <option disabled value="" selected="selected">-- Pilih --</option>
+                                            <option value="No Din">No Din</option>
+                                            <option value="KTA">KTA</option>
+                                            <option value="CC">CC (Credit Card)</option>
+                                            <option value="Sertifikat">Sertifikat</option>
+                                            <option value="BPKB">BPKB</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary submit">Simpan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form id="form_modal_edit_analisa_cc">
+            <div class="modal fade in" id="modal_edit_analisa_cc" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Ubah Informasi Analisa Credit Checking</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <!-- <input type="hidden" id="add_id_so_analisa_cc" name="add_id_so_analisa_cc"> -->
+                                <input type="hidden" id="edit_id_info_analisa_cc" name="edit_id_info_analisa_cc">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Nama Bank <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label>
+                                        <input type="text" name="edit_nama_bank" id="edit_nama_bank" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Plafon<span class="required_notification">*</span></label>
+                                        <input type="text" name="edit_plafon" id="edit_plafon" class="form-control uang">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Baki Debet<span class="required_notification">*</span></label>
+                                        <input type="text" name="edit_baki_debet" id="edit_baki_debet" class="form-control uang">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Angsuran<span class="required_notification">*</span></label>
+                                        <input type="text" name="edit_angsuran" id="edit_angsuran" class="form-control uang">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Collectabilitas<span class="required_notification">*</span></label>
+                                        <input type="text" name="edit_collectabilitas" id="edit_collectabilitas" onkeypress="return hanyaAngka(event)" class="form-control ">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Jenis Kredit<span class="required_notification">*</span></label>
+                                        <select id="edit_jenis_kredit" name="edit_jenis_kredit" class="form-control ">
                                             <option disabled value="" selected="selected">-- Pilih --</option>
                                             <option value="No Din">No Din</option>
                                             <option value="KTA">KTA</option>
@@ -5489,6 +5564,7 @@
                     }
                 });
             }
+
             edit_analisa_cc = function(opts, id) {
                 var data = opts;
                 var url = '<?php echo $this->config->item('api_url'); ?>api/info_cc/' + id;
@@ -6634,7 +6710,7 @@
 
             $(".add-row").click(function() {
 
-                var markup = '<tr><td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><input type="text" class="form-control" name="nama_bank_acc[]" onkeyup="this.value = this.value.toUpperCase()"></td><td><input type="text" class="form-control uang" id="plafon_acc[]" name="plafon_acc[]" value="0"></td><td><input type="text" class="form-control uang" name="baki_debet_acc[]" value="0"></td><td><input type="text" class="form-control uang" name="angsuran_acc[]" aria-describedby="emailHelp" placeholder="" value="0"></td><td><input type="text" class="form-control" name="collectabilitas_acc[]" onkeypress="return hanyaAngka(event)"></td><td><input type="text" class="form-control" name="jenis_kredit_acc[]" onkeyup="this.value = this.value.toUpperCase()"></td></tr>';
+                var markup = '<tr><td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><input type="text" class="form-control" name="nama_bank_acc[]" onkeyup="this.value = this.value.toUpperCase()"></td><td><input type="text" class="form-control uang" id="plafon_acc[]" name="plafon_acc[]" value="0"></td><td><input type="text" class="form-control uang" name="baki_debet_acc[]" value="0"></td><td><input type="text" class="form-control uang" name="angsuran_acc[]" aria-describedby="emailHelp" placeholder="" value="0"></td><td><input type="text" class="form-control" name="collectabilitas_acc[]" onkeypress="return hanyaAngka(event)"></td><td><select class="form-control" name="jenis_kredit_acc[]" id ="jenis_kredit_acc[]"><option value="No Din">No Din</option><option value="KTA">KTA</option><option value="CC">CC (Credit Card)</option><option value="Sertifikat">Sertifikat</option><option value="BPKB">BPKB</option></select></td></tr>';
                 $("#table tbody").append(markup);
 
                 //RIBUAN
@@ -8024,6 +8100,7 @@
                         $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id_trans_so);
                         $('#form_penjamin input[type=hidden][name=id_trans_so_pen]').val(data.id_trans_so);
                         $('#form_modal_tambah_analisa_cc input[type=hidden][name=add_id_so_analisa_cc]').val(data.id_trans_so);
+                        $('#form_modal_edit_analisa_cc input[type=hidden][name=edit_id_so_analisa_cc]').val(data.id_trans_so);
                         $('#form_modal_agunan_sertifikat input[type=hidden][name=id_trans_so_aguanan]').val(data.id_trans_so);
                         $('#form_edit_form_persetujuan_ideb input[type=hidden][name=id_debitur_form_persetujuan_ideb]').val(data.id_trans_so);
                         // $('#form_detail input[type=hidden][name=id]').val(data.id);
@@ -11461,7 +11538,7 @@
                     formData.append('collectabilitas_acc[]', e.value);
                 });
 
-                $.each($('input[name="jenis_kredit_acc[]"]'), function(i, e) {
+                $.each($('select[name="jenis_kredit_acc[]"]'), function(i, e) {
                     formData.append('jenis_kredit_acc[]', e.value);
                 });
                 //===============================================================================================
@@ -14908,7 +14985,7 @@
                 })
             });
 
-            //SUBMIT TAMBAH PENJAMIN
+            //SUBMIT TAMBAH ANALISA CC
             $('#form_modal_tambah_analisa_cc ').on('submit', function(e) {
 
                 if (document.getElementById('add_nama_bank').value == "") {
@@ -14935,96 +15012,123 @@
                     bootbox.alert("Jenis Kredit Tidak Boleh Kosong !!!");
                     return (false);
                 }
-                if (document.getElementById('edit_id_info_analisa_cc').value == "") {
-                    var id = $('input[name=add_id_so_analisa_cc]', this).val();
-                    e.preventDefault();
-                    var formData = new FormData();
-                    formData.append('nama_bank_acc', $('input[name=add_nama_bank]', this).val());
-                    var plafon = $('input[name=add_plafon]', this).val();
-                    plafon = plafon.replace(/[^\d]/g, "");
-                    formData.append('plafon_acc', plafon);
+                var id = $('input[name=add_id_so_analisa_cc]', this).val();
+                e.preventDefault();
+                var formData = new FormData();
+                formData.append('nama_bank_acc', $('input[name=add_nama_bank]', this).val());
+                var plafon = $('input[name=add_plafon]', this).val();
+                plafon = plafon.replace(/[^\d]/g, "");
+                formData.append('plafon_acc', plafon);
 
-                    var baki_debet_acc = $('input[name=add_baki_debet]', this).val();
-                    baki_debet_acc = baki_debet_acc.replace(/[^\d]/g, "");
-                    formData.append('baki_debet_acc', baki_debet_acc);
+                var baki_debet_acc = $('input[name=add_baki_debet]', this).val();
+                baki_debet_acc = baki_debet_acc.replace(/[^\d]/g, "");
+                formData.append('baki_debet_acc', baki_debet_acc);
 
-                    var angsuran_acc = $('input[name=add_angsuran]', this).val();
-                    angsuran_acc = angsuran_acc.replace(/[^\d]/g, "");
-                    formData.append('angsuran_acc', angsuran_acc);
+                var angsuran_acc = $('input[name=add_angsuran]', this).val();
+                angsuran_acc = angsuran_acc.replace(/[^\d]/g, "");
+                formData.append('angsuran_acc', angsuran_acc);
 
-                    formData.append('collectabilitas_acc', $('input[name=add_collectabilitas]', this).val());
-                    formData.append('jenis_kredit_acc', $('input[name=add_jenis_kredit]', this).val());
+                formData.append('collectabilitas_acc', $('input[name=add_collectabilitas]', this).val());
+                formData.append('jenis_kredit_acc', $('select[name=add_jenis_kredit]', this).val());
 
-                    tambah_analisa_cc(formData, id)
-                        .done(function(res) {
-                            var data = res.data;
-                            console.log(data);
-                            bootbox.alert('Data berhasil disimpan', function() {
-                                $("#batal").click();
-                                $('#form_modal_tambah_analisa_cc')[0].reset();
-                                load_informasi_cc();
-                            });
-                        })
-                        .fail(function(jqXHR) {
-                            var data = jqXHR.responseJSON;
-                            var error = "";
-
-                            if (typeof data == 'string') {
-                                error = '<p>' + data + '</p>';
-                            } else {
-                                $.each(data, function(index, item) {
-                                    error += '<p>' + item + '</p>' + "\n";
-                                });
-                            }
-                            bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
-                                $("#batal").click();
-                            });
+                tambah_analisa_cc(formData, id)
+                    .done(function(res) {
+                        var data = res.data;
+                        console.log(data);
+                        bootbox.alert('Data berhasil disimpan', function() {
+                            $("#batal").click();
+                            $('#form_modal_tambah_analisa_cc')[0].reset();
+                            load_informasi_cc();
                         });
-                } else {
-                    var id = $('input[name=edit_id_info_analisa_cc]', this).val();
-                    e.preventDefault();
-                    var formData = new FormData();
-                    var add_plafon = $('input[name=add_plafon]', this).val();
-                    add_plafon = add_plafon.replace(/[^\d]/g, "");
-                    var add_baki_debet = $('input[name=add_baki_debet]', this).val();
-                    add_baki_debet = add_baki_debet.replace(/[^\d]/g, "");
-                    var add_angsuran = $('input[name=add_angsuran]', this).val();
-                    add_angsuran = add_angsuran.replace(/[^\d]/g, "");
-                    var data = {
-                        nama_bank_acc: $('input[name=add_nama_bank]', this).val(),
-                        plafon_acc: add_plafon,
-                        baki_debet_acc: add_baki_debet,
-                        angsuran_acc: add_angsuran,
-                        collectabilitas_acc: $('input[name=add_collectabilitas]', this).val(),
-                        jenis_kredit_acc: $('input[name=add_jenis_kredit]', this).val(),
+                    })
+                    .fail(function(jqXHR) {
+                        var data = jqXHR.responseJSON;
+                        var error = "";
 
-                    }
-                    edit_analisa_cc(data, id)
-                        .done(function(res) {
-                            var data = res.data;
-                            console.log(data);
-                            bootbox.alert('Data berhasil diubah', function() {
-                                $("#batal").click();
-                                $('#form_modal_tambah_analisa_cc')[0].reset();
-                                load_informasi_cc();
+                        if (typeof data == 'string') {
+                            error = '<p>' + data + '</p>';
+                        } else {
+                            $.each(data, function(index, item) {
+                                error += '<p>' + item + '</p>' + "\n";
                             });
-                        })
-                        .fail(function(jqXHR) {
-                            var data = jqXHR.responseJSON;
-                            var error = "";
-
-                            if (typeof data == 'string') {
-                                error = '<p>' + data + '</p>';
-                            } else {
-                                $.each(data, function(index, item) {
-                                    error += '<p>' + item + '</p>' + "\n";
-                                });
-                            }
-                            bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
-                                $("#batal").click();
-                            });
+                        }
+                        bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                            $("#batal").click();
                         });
+                    });
+            });
+
+            $('#form_modal_edit_analisa_cc ').on('submit', function(e) {
+
+                if (document.getElementById('edit_nama_bank').value == "") {
+                    bootbox.alert("Nama Bank Tidak Boleh Kosong !!!");
+                    return (false);
                 }
+                if (document.getElementById('edit_plafon').value == "") {
+                    bootbox.alert("Plafon Tidak Boleh Kosong !!!");
+                    return (false);
+                }
+                if (document.getElementById('edit_baki_debet').value == "") {
+                    bootbox.alert("Baki Debet Tidak Boleh Kosong !!!");
+                    return (false);
+                }
+                if (document.getElementById('edit_angsuran').value == "") {
+                    bootbox.alert("Angsuran Tidak Boleh Kosong !!!");
+                    return (false);
+                }
+                if (document.getElementById('edit_collectabilitas').value == "") {
+                    bootbox.alert("Collectabilitas Tidak Boleh Kosong !!!");
+                    return (false);
+                }
+                if (document.getElementById('edit_jenis_kredit').value == "") {
+                    bootbox.alert("Jenis Kredit Tidak Boleh Kosong !!!");
+                    return (false);
+                }
+            
+                var id = $('input[name=edit_id_info_analisa_cc]', this).val();
+                e.preventDefault();
+                var formData = new FormData();
+                var add_plafon = $('input[name=edit_plafon]', this).val();
+                add_plafon = add_plafon.replace(/[^\d]/g, "");
+                var add_baki_debet = $('input[name=edit_baki_debet]', this).val();
+                add_baki_debet = add_baki_debet.replace(/[^\d]/g, "");
+                var add_angsuran = $('input[name=edit_angsuran]', this).val();
+                add_angsuran = add_angsuran.replace(/[^\d]/g, "");
+                var data = {
+                    nama_bank_acc: $('input[name=edit_nama_bank]', this).val(),
+                    plafon_acc: add_plafon,
+                    baki_debet_acc: add_baki_debet,
+                    angsuran_acc: add_angsuran,
+                    collectabilitas_acc: $('input[name=edit_collectabilitas]', this).val(),
+                    jenis_kredit_acc: $('select[name=edit_jenis_kredit]', this).val(),
+
+                }
+                edit_analisa_cc(data, id)
+                    .done(function(res) {
+                        var data = res.data;
+                        console.log(data);
+                        bootbox.alert('Data berhasil diubah', function() {
+                            $("#batal").click();
+                            $('#form_modal_edit_analisa_cc')[0].reset();
+                            load_informasi_cc();
+                        });
+                    })
+                    .fail(function(jqXHR) {
+                        var data = jqXHR.responseJSON;
+                        var error = "";
+
+                        if (typeof data == 'string') {
+                            error = '<p>' + data + '</p>';
+                        } else {
+                            $.each(data, function(index, item) {
+                                error += '<p>' + item + '</p>' + "\n";
+                            });
+                        }
+                        bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                            $("#batal").click();
+                        });
+                    });
+                
             });
 
             load_informasi_cc = function() {
@@ -15073,8 +15177,8 @@
 
             $('#data_informasi_analisa_credit').on('click', '.edit', function(e) {
                 e.preventDefault();
-                $('#form_modal_tambah_analisa_cc')[0].reset();
-                $('#modal_tambah_analisa_cc').modal('show');
-                $('#form_modal_tambah_analisa_cc input[name=edit_id_info_analisa_cc]').val($(this).attr('data'));
+                $('#form_modal_edit_analisa_cc')[0].reset();
+                $('#modal_edit_analisa_cc').modal('show');
+                $('#form_modal_edit_analisa_cc input[name=edit_id_info_analisa_cc]').val($(this).attr('data'));
             });
         </script>

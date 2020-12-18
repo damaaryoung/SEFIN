@@ -1,12 +1,12 @@
 <table class="table table-sm table-hover table-bordered">
   <thead>
       <tr>
-          <th>no</th>
-          <th>nomor so</th>
-          <th>nama cabang</th>
-          <th>nama lengkap</th>
-          <th>plafon</th>
-          <th>status</th>
+          <th>No</th>
+          <th>Nomor so</th>
+          <th>Nama Cabang</th>
+          <th>Nama Lengkap</th>
+          <th>Plafon</th>
+          <th>Status</th>
           <th width="10">ACT</th>
       </tr>
   </thead>
@@ -41,17 +41,6 @@
       </tr>
     <?php $no++; endforeach; ?>
   </tbody>
-  <tfoot>
-    <tr>
-      <th>no</th>
-      <th>nomor so</th>
-      <th>nama cabang</th>
-      <th>nama lengkap</th>
-      <th>plafon</th>
-      <th>status</th>
-      <th width="10">ACT</th>
-    </tr>
-  </tfoot>
 </table>
 <div class="text-center">
   <ul class="pagination">
