@@ -605,4 +605,45 @@ class Menu_controller extends CI_Controller
         $this->load->view('master/activity/head-bussines/index');
     }
     
+    public function dashboard_collection()
+    {
+        $this->load->library('Curl');
+        //CURL NPL AREA
+        $url_npl_area = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/npl_console_area";
+        $post_npl_area = array('api'=>'Y');
+        $this->load->library('Curl');
+        $Curl = new Curl();
+        $data['output_npl_area'] = $Curl->get_rest_api($url_npl_area,$post_npl_area);
+
+        //CURL BUCKET0 AREA
+        $url_bucket_nol_area = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/bucket_nol_console_area";
+        $post_bucket_nol_area = array('api'=>'Y');
+        $data['output_bucket_nol_area'] = $Curl->get_rest_api($url_bucket_nol_area, $post_bucket_nol_area);
+
+        //CURL CURRENT RATIO AREA
+        $url_current_ratio_area = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/current_rasio_console_area";
+        $post_current_ratio_area = array('api'=>'Y');
+        $data['output_current_ratio_area'] = $Curl->get_rest_api($url_current_ratio_area,$post_current_ratio_area);
+
+        //CURL DELIQUENCY AREA
+        $url_deliquency_area = "http://103.234.254.186/riskcan/dashboard/kredit/kreditrisk_controller/delinquensy_console_area";
+        $post_deliquency_area = array('api'=>'Y');
+        $data['output_deliquency_area'] = $Curl->get_rest_api($url_deliquency_area,$post_deliquency_area);
+
+        //CURL BUCKET FLOW AREA
+        $url_roll_bucket_area = "http://103.234.254.186/riskcan/dashboard/kredit/kreditrisk_controller/roll_console_area";
+        $post_roll_bucket_area = array('api'=>'Y');
+        $ch_roll_bucket_area = curl_init();
+        curl_setopt($ch_roll_bucket_area, CURLOPT_URL, $url_roll_bucket_area);
+        curl_setopt($ch_roll_bucket_area, CURLOPT_HEADER, 0);
+        curl_setopt($ch_roll_bucket_area, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch_roll_bucket_area, CURLOPT_POST, count($post_roll_bucket_area));
+        curl_setopt($ch_roll_bucket_area, CURLOPT_POSTFIELDS, $post_roll_bucket_area);
+        $output_roll_bucket_area = curl_exec($ch_roll_bucket_area);
+        curl_close($ch_roll_bucket_area);
+        $data['output_bucket_roll_area'] = json_decode($output_roll_bucket_area);
+
+        // $data['get_user'] = $this->model_menu->getUser();
+        $this->load->view('master/collection/dashboard_collection',$data);
+    }
 }

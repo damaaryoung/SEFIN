@@ -392,6 +392,19 @@ class Curl {
 		$this->session = NULL;
 	}
 
+	public function get_rest_api($url, $post){
+		$ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, count($post));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $data = json_decode($output);
+        return $data;
+	}
+
 }
 
 /* End of file Curl.php */
