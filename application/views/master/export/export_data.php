@@ -58,7 +58,6 @@
                                     <option value="CA">CA</option>
                                     <option value="CAA">CAA</option>
                                     <option value="LPDK">LPDK</option>
-                                    <option value="Pipeline Lending">Pipeline Lending</option>
                                 </select>
                             </div>
                             <div class="form-group col-md">
@@ -102,21 +101,6 @@
         $("#status_hm_selected").css({display: "none"});
       }
     });
-
-    var keperluanSelect = document.getElementById("select_keperluan");
-    keperluanSelect.addEventListener("change", function(e) {
-        var selectedKeperluan = $("#select_keperluan option:selected").val();
-
-        if (selectedKeperluan == "Pipeline Lending") {
-            $('#select_area').prop('disabled', 'disabled');
-            $('#select_cabang').prop('disabled', 'disabled');
-        } else {
-            $('#select_area').prop('disabled', false);
-            $('#select_cabang').prop('disabled', false);
-        }
-        
-    });
-    
     $('#form_report').on('submit', function(e) {
         if (document.getElementById('dari_tgl').value == "") {
             bootbox.alert("Dari Tanggal Belum Di Isi !!!");
@@ -131,17 +115,12 @@
             return (false);
         }
         if (document.getElementById('select_area').value == "") {
-            if (document.getElementById('select_keperluan').value !== "Pipeline Lending"){
-                bootbox.alert("Area Belum Di Pilih !!!");
-                return (false);
-            }
-            
+            bootbox.alert("Area Belum Di Pilih !!!");
+            return (false);
         }
         if (document.getElementById('select_cabang').value == "") {
-            if (document.getElementById('select_keperluan').value !== "Pipeline Lending"){
-                bootbox.alert("Cabang Belum Di Pilih !!!");
-                return (false);
-            }
+            bootbox.alert("Cabang Belum Di Pilih !!!");
+            return (false);
         }
     })
 

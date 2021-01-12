@@ -7,7 +7,7 @@
     $('#check_pembukuan_usaha').hide();
     $('#check_sku').hide();
     $('#form_lampiran').hide();
-    $('#form_agunan_sertifikat').hide();
+    $('#form_agunan_sertifikat').show();
     //INPUT FILE
     $(document).ready(function() {
         bsCustomFileInput.init();
@@ -5332,7 +5332,7 @@
             formData.append('id_kab_tempat_kerja', $('select[id=kabupaten_kantor]', this).val());
             formData.append('id_kec_tempat_kerja', $('select[id=kecamatan_kantor]', this).val());
             formData.append('id_kel_tempat_kerja', $('select[id=kelurahan_kantor]', this).val());
-            formData.append('tgl_mulai_kerja', $('input[name=tgl_mulai_kerja]', this).val());
+            formData.append('tgl_mulai_kerja', $('input=[name=tgl_mulai_kerja]', this).val());
             formData.append('lama_kerja', $('input[name=lama_kerja]', this).val());
             formData.append('no_telp_tempat_kerja', $('input[name=no_telp_kantor_usaha]', this).val());
 

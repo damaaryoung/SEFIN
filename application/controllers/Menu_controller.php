@@ -332,8 +332,6 @@ class Menu_controller extends CI_Controller
         $data['data_sumber_data_untuk_setoran'] =  $this->Model_view_master->sumber_data_untuk_setoran();
         $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
         $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
-        $data['pendidikan'] = $this->Model_view_master->tampil_data_pendidikan();
-        
         $this->load->view('master/memorandum_ca/data_credit_checking', $data);
     }
 
@@ -546,36 +544,6 @@ class Menu_controller extends CI_Controller
         $this->load->view('master/target_lending/target_lending_template');
     }
 
-    public function target_lending_periodik()
-    {
-        $this->load->view('master/master/target_lending_periodik/target_lending_periodik');
-    }
-
-    public function target_approval_periodik()
-    {
-        $this->load->view('master/master/target_approval_periodik/target_approval_periodik');
-    }
-
-    public function activity_tele_collection()
-    {
-        $this->load->view('master/activity/activity_tele_collection');
-    }
-
-    public function activity_tele_sales()
-    {
-        $this->load->view('master/activity/activity_tele_sales');
-    }
-
-    public function dashboard_tele()
-    {
-        $this->load->view('master/tele_center/dashboard_tele');
-    }
-
-    public function pipeline_lending()
-    {
-        $this->load->view('master/cek_sertifikat/pipeline_lending');
-    }
-
     public function activity_sales_officer()
     {
         $this->load->view('master/activity/sales-officer/index');
@@ -606,45 +574,4 @@ class Menu_controller extends CI_Controller
         $this->load->view('master/activity/head-bussines/index');
     }
     
-    public function dashboard_collection()
-    {
-        $this->load->library('Curl');
-        //CURL NPL AREA
-        $url_npl_area = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/npl_console_area";
-        $post_npl_area = array('api'=>'Y');
-        $this->load->library('Curl');
-        $Curl = new Curl();
-        $data['output_npl_area'] = $Curl->get_rest_api($url_npl_area,$post_npl_area);
-
-        //CURL BUCKET0 AREA
-        $url_bucket_nol_area = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/bucket_nol_console_area";
-        $post_bucket_nol_area = array('api'=>'Y');
-        $data['output_bucket_nol_area'] = $Curl->get_rest_api($url_bucket_nol_area, $post_bucket_nol_area);
-
-        //CURL CURRENT RATIO AREA
-        $url_current_ratio_area = "http://103.234.254.186/riskcan/dashboard/kredit/kredit_controller/current_rasio_console_area";
-        $post_current_ratio_area = array('api'=>'Y');
-        $data['output_current_ratio_area'] = $Curl->get_rest_api($url_current_ratio_area,$post_current_ratio_area);
-
-        //CURL DELIQUENCY AREA
-        $url_deliquency_area = "http://103.234.254.186/riskcan/dashboard/kredit/kreditrisk_controller/delinquensy_console_area";
-        $post_deliquency_area = array('api'=>'Y');
-        $data['output_deliquency_area'] = $Curl->get_rest_api($url_deliquency_area,$post_deliquency_area);
-
-        //CURL BUCKET FLOW AREA
-        $url_roll_bucket_area = "http://103.234.254.186/riskcan/dashboard/kredit/kreditrisk_controller/roll_console_area";
-        $post_roll_bucket_area = array('api'=>'Y');
-        $ch_roll_bucket_area = curl_init();
-        curl_setopt($ch_roll_bucket_area, CURLOPT_URL, $url_roll_bucket_area);
-        curl_setopt($ch_roll_bucket_area, CURLOPT_HEADER, 0);
-        curl_setopt($ch_roll_bucket_area, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch_roll_bucket_area, CURLOPT_POST, count($post_roll_bucket_area));
-        curl_setopt($ch_roll_bucket_area, CURLOPT_POSTFIELDS, $post_roll_bucket_area);
-        $output_roll_bucket_area = curl_exec($ch_roll_bucket_area);
-        curl_close($ch_roll_bucket_area);
-        $data['output_bucket_roll_area'] = json_decode($output_roll_bucket_area);
-
-        // $data['get_user'] = $this->model_menu->getUser();
-        $this->load->view('master/collection/dashboard_collection',$data);
-    }
 }
