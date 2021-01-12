@@ -70,10 +70,10 @@ WHERE
       activity_ao
       WHERE 
       activity = 'SURVEY'
-      AND id_area=6
-      AND id_cabang=5
-      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=12 ORDER BY(DATE(tgl)))
-      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=2020) 
+      AND id_area=".$area."
+      AND id_cabang=".$cabang."
+      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=".$bulan." ORDER BY(DATE(tgl)))
+      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=".$tahun.") 
       GROUP BY (DAY(tanggal))");
     return $data;
   }
@@ -85,10 +85,10 @@ WHERE
       activity_ao
       WHERE 
       activity = 'VISIT CGC'
-      AND id_area=6
-      AND id_cabang=5
-      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=12 ORDER BY(DATE(tgl)))
-      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=2020) 
+      AND id_area=".$area."
+      AND id_cabang=".$cabang."
+      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=".$bulan." ORDER BY(DATE(tgl)))
+      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=".$tahun.") 
       GROUP BY (DAY(tanggal))");
     return $data;
   }
@@ -100,10 +100,10 @@ WHERE
       activity_ao
       WHERE 
       activity = 'PROMOSI'
-      AND id_area=6
-      AND id_cabang=5
-      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=12 ORDER BY(DATE(tgl)))
-      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=2020) 
+      AND id_area=".$area."
+      AND id_cabang=".$cabang."
+      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=".$bulan." ORDER BY(DATE(tgl)))
+      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=".$tahun.") 
       GROUP BY (DAY(tanggal))");
     return $data;
   }
