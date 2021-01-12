@@ -1,69 +1,113 @@
 <?php
 class Model_Dashboard_SO_AO extends CI_Model{
-
-  function tampil_data($filter,$page){
-    $url     = $this->config->item('api_url') . "api/master/sertifikat/filter/cari?nomor_so=".$filter."&page=".$page."";
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Authorization: Bearer '.$this->session->userdata('SESSION_TOKEN')
-    ));
-    $output = curl_exec($ch);
-    curl_close($ch);
-    return json_decode($output, true);
+  function prospek($bulan,$tahun,$area,$cabang){
+    $data=$this->db->query("SELECT 
+      COUNT(trans_so.`id`) AS prospek,
+      (SELECT hk FROM master_periodik WHERE DATE(tgl) IN (DATE(created_at)) GROUP BY(DATE(created_at))) AS hk
+      FROM
+      trans_so
+      WHERE 
+      status_hm = 1
+      AND id_area=".$area." AND id_cabang=".$cabang." 
+      AND  DATE(created_at) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=".$bulan." ORDER BY(tgl))
+      AND YEAR(created_at) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=".$tahun.")
+      GROUP BY (DAY(created_at))");
+    return $data;
   }
-
-  // function view(){
-  //   $url     = $this->config->item('api_url') . "/api/master/sertifikat/".$this->input->post('id', TRUE)."" ;
-  //   $ch = curl_init();
-  //   curl_setopt($ch, CURLOPT_URL, $url);
-  //   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  //   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-  //       'Authorization: Bearer '.$this->session->userdata('SESSION_TOKEN')
-  //   ));
-  //   $output = curl_exec($ch);
-  //   curl_close($ch);
-  //   return json_decode($output, true);
-  // }
-
-  // function print($id){
-  //   $url     = $this->config->item('api_url') . "/api/master/sertifikat/".$this->input->post('id', TRUE)."" ;
-  //   $ch = curl_init();
-  //   curl_setopt($ch, CURLOPT_URL, $url);
-  //   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  //   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-  //       'Authorization: Bearer '.$this->session->userdata('SESSION_TOKEN')
-  //   ));
-  //   $output = curl_exec($ch);
-  //   curl_close($ch);
-  //   return json_decode($output, true);
-  // }
-
-  // function updated(){
-  //   $arrayData = array(
-  //     'id_data' =>$this->input->post('id_data',TRUE),
-  //     'nama' =>$this->input->post('nama',TRUE),
-  //     'alamat' =>$this->input->post('alamat',TRUE),
-  //     'no_shm' =>$this->input->post('no_shm',TRUE),
-  //     'nomor_surat_ukur' =>$this->input->post('nomor_surat_ukur',TRUE),
-  //     'tgl_sertifikat' =>$this->input->post('tgl_sertifikat',TRUE),
-  //     'luas_tanah' =>$this->input->post('luas_tanah',TRUE),
-  //     'ajb_flag' =>$this->input->post('ajb_flag',TRUE),
-  //   );
-  //   $url="/api/master/sertifikat/update/".$this->input->post('id_data', TRUE)."";
-  //   $curl     = $this->config->item('api_url') . $url ;
-  //   $ch = curl_init();
-  //   curl_setopt($ch, CURLOPT_URL, $curl);
-  //   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  //   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-  //       'Authorization: Bearer '.$this->session->userdata('SESSION_TOKEN')
-  //   ));
-  //   curl_setopt($ch, CURLOPT_POST, 1);
-  //   curl_setopt($ch, CURLOPT_POSTFIELDS, $arrayData);
-  //   $output = curl_exec($ch);
-  //   curl_close($ch);
-  //   return json_encode($output, true);
-  // }
-
+  function visitro($bulan,$tahun,$area,$cabang){
+    $data=$this->db->query("SELECT 
+COUNT(activity_so.`id` ) AS visit,
+(SELECT hk FROM master_periodik WHERE DATE(tgl) IN (DATE(tanggal)) GROUP BY((tanggal))) AS hk
+FROM
+  activity_so
+WHERE 
+     activity = 'VISIT RO'
+     AND id_area=".$area."
+   AND id_cabang=".$cabang."
+ AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=".$bulan." ORDER BY(DATE(tgl)))
+ AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=".$tahun.") 
+ GROUP BY (DAY(tanggal))");
+    return $data;
+  }
+  function maintainmb($bulan,$tahun,$area,$cabang){
+    $data=$this->db->query("SELECT 
+      COUNT(activity_so.`id` ) AS maintain_mb,
+      (SELECT hk FROM master_periodik WHERE DATE(tgl) IN (DATE(tanggal)) GROUP BY((tanggal))) AS hk
+      FROM
+      activity_so
+      WHERE 
+      activity = 'MAINTAIN MB' AND id_area=".$area." AND id_cabang=".$cabang."
+      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=".$bulan." ORDER BY(DATE(tgl)))
+      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=".$tahun.") 
+      GROUP BY (DAY(tanggal))");
+    return $data;
+  }
+  function leads($bulan,$tahun,$area,$cabang){
+    $data=$this->db->query("SELECT 
+      COUNT(trans_so.`id` ) AS leads,(SELECT hk FROM master_periodik WHERE DATE(tgl) IN (DATE(created_at)) GROUP BY((created_at))) AS hk
+      FROM
+      trans_so
+      WHERE 
+      id_area=".$area."
+      AND id_cabang=".$cabang."
+      AND  DATE(created_at) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=".$bulan." ORDER BY(DATE(tgl)))
+      AND YEAR(created_at) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=".$tahun.") 
+      GROUP BY (DAY(created_at))");
+    return $data;
+  }
+  function promosi($bulan,$tahun,$area,$cabang){
+    $data=$this->db->query("SELECT COUNT(activity_so.`id` ) AS promosi, (SELECT hk FROM master_periodik WHERE DATE(tgl) IN (DATE(tanggal)) GROUP BY((tanggal))) AS hk FROM activity_so WHERE activity = 'PROMOSI' AND id_area=".$area." AND id_cabang=".$cabang."
+     AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=".$bulan." ORDER BY(DATE(tgl)))
+     AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=".$tahun.") 
+     GROUP BY (DAY(tanggal))");
+    return $data;
+  }
+  function survey($bulan,$tahun,$area,$cabang){
+    $data=$this->db->query("SELECT 
+      COUNT(activity_ao.`id` ) AS survey,
+      (SELECT hk FROM master_periodik WHERE DATE(tgl) IN (DATE(tanggal)) GROUP BY((tanggal))) AS hk
+      FROM
+      activity_ao
+      WHERE 
+      activity = 'SURVEY'
+      AND id_area=6
+      AND id_cabang=5
+      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=12 ORDER BY(DATE(tgl)))
+      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=2020) 
+      GROUP BY (DAY(tanggal))");
+    return $data;
+  }
+  function visitcgc($bulan,$tahun,$area,$cabang){
+    $data=$this->db->query("SELECT 
+      COUNT(activity_ao.`id` ) AS visit_cgc,
+      (SELECT hk FROM master_periodik WHERE DATE(tgl) IN (DATE(tanggal)) GROUP BY((tanggal))) AS hk
+      FROM
+      activity_ao
+      WHERE 
+      activity = 'VISIT CGC'
+      AND id_area=6
+      AND id_cabang=5
+      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=12 ORDER BY(DATE(tgl)))
+      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=2020) 
+      GROUP BY (DAY(tanggal))");
+    return $data;
+  }
+  function promosiao($bulan,$tahun,$area,$cabang){
+    $data=$this->db->query("SELECT 
+      COUNT(activity_ao.`id` ) AS promosi,
+      (SELECT hk FROM master_periodik WHERE DATE(tgl) IN (DATE(tanggal)) GROUP BY((tanggal))) AS hk
+      FROM
+      activity_ao
+      WHERE 
+      activity = 'PROMOSI'
+      AND id_area=6
+      AND id_cabang=5
+      AND  DATE(tanggal) IN (SELECT DATE(tgl) FROM master_periodik WHERE bulan=12 ORDER BY(DATE(tgl)))
+      AND YEAR(tanggal) IN  (SELECT YEAR(tgl) FROM master_periodik WHERE YEAR(tgl)=2020) 
+      GROUP BY (DAY(tanggal))");
+    return $data;
+  }
+  function get_cabang($id){
+    return $this->db->query("SELECT mc.id,mc.nama FROM mk_cabang mc WHERE id_area =".$id);
+  }
 }

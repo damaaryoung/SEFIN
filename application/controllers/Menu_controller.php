@@ -562,7 +562,8 @@ class Menu_controller extends CI_Controller
     }
     public function dashboard_activity_so_dan_ao()
     {
-        $this->load->view('master/dashboard-activity-so-dan-ao/index');
+        $data['get_area'] = $this->model_menu->getArea()->result();
+        $this->load->view('master/dashboard-activity-so-dan-ao/index',$data);
     }
     public function activity_head_marketing()
     {
