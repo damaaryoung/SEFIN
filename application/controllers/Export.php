@@ -492,6 +492,62 @@ class Export extends CI_Controller
       header('Cache-Control: max-age=0');
 
       $writer->save('php://output');
+    }  else if ($keperluan == 'Pipeline Lending') {
+      
+      $query = "SELECT
+        `a`.`id`           AS `id`,
+        `a`.`nomor_so`     AS `nomor_so`,
+        `b`.`nama_lengkap` AS `nama_debitur`,
+        `d`.`created_at`   AS `tgl_transaksi`,
+        (SELECT
+        IF(ISNULL(`d`.`plan_akad`),'Plan Akad Kosong',
+          (SELECT CONCAT('Hari Kerja ke ',
+            (SELECT `master_periodik`.`hk` 
+            FROM `master_periodik` 
+            WHERE (`master_periodik`.`tgl` = `d`.`plan_akad`)),' tanggal',' ',
+              (SELECT `master_periodik`.`tgl` 
+              FROM `master_periodik` 
+              WHERE (`master_periodik`.`tgl` = `d`.`plan_akad`)))))) AS `plan_akad`
+      FROM (((`trans_so` `a`
+      JOIN `calon_debitur` `b`
+        ON ((`a`.`id_calon_debitur` = `b`.`id`)))
+      JOIN `trans_ao` `c`
+        ON ((`a`.`id` = `c`.`id_trans_so`)))
+      JOIN `agunan_tanah` `d`
+        ON ((`c`.`id_agunan_tanah` = `d`.`id`)))
+      WHERE (DAY(d.created_at) BETWEEN DAY('$dari_tgl') AND DAY('$sampai_tgl')) 
+        AND (MONTH(d.created_at) BETWEEN MONTH('$dari_tgl') AND MONTH('$sampai_tgl')) 
+        AND (YEAR(d.created_at) BETWEEN YEAR('$dari_tgl') AND YEAR('$sampai_tgl'))";
+      $data = $this->db->query($query)->result();
+
+      $spreadsheet = new Spreadsheet();
+      $spreadsheet->setActiveSheetIndex(0)
+      ->setCellValue('A1', 'No')
+      ->setCellValue('B1', 'Nama Debitur')
+      ->setCellValue('C1', 'Plan Akad');
+
+      $kolom = 2;
+      $nomor = 1;
+      foreach ($data as $hasil) {
+
+        $sheet = $spreadsheet->getActiveSheet()
+        ->setCellValue('A' . $kolom, $nomor)
+        ->setCellValue('B' . $kolom, $hasil->nama_debitur)
+        ->setCellValue('C' . $kolom, $hasil->plan_akad);
+
+        $kolom++;
+        $nomor++;
+      }
+
+      $writer = new Xlsx($spreadsheet);
+
+      $filename = 'Export Data Pipeline Lending';
+
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+      header('Cache-Control: max-age=0');
+
+      $writer->save('php://output');
     }
   }
 

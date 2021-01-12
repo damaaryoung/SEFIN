@@ -275,7 +275,7 @@ $(function(){
 });
 }
 $('#data_jenis_pic').show();
-load_data();
+    load_data();
         // server response
 
         // Click ubah
