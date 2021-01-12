@@ -156,8 +156,8 @@ class Master extends CI_Controller
             $this->load->view('master/master/form_caa/data_caa');
         } 
         public function memorandum_ca(){
-            $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
-            $this->load->view('master/ca/data_credit_checking', $data);
+            // $data['pendidikan'] = $this->Model_memorandum_so->tampil_data_pendidikan()->result();
+            $this->load->view('master/ca/data_credit_checking');
         }      
         public function add_menu()
         {
@@ -186,6 +186,16 @@ class Master extends CI_Controller
             $html = $this->load->view('master/master/form_ol/form_ol',[],true);
             $mpdf->WriteHTML($html);
             $mpdf->Output();
+        }
+
+        public function target_lending_periodik()
+        {
+            $this->load->view('master/master/target_lending_periodik/target_lending_periodik');
+        }
+
+        public function target_approval_periodik()
+        {
+            $this->load->view('master/master/target_approval_periodik/target_approval_periodik');
         }
 
     }
