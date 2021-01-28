@@ -24,10 +24,10 @@
                                           </button>
                                           <div class="dropdown-menu dropdown-menu-right" role="menu">
                                             <div class="dropdown-item">
-                                              <input type="date" class="form-control" name="date-current-ratio-cabang_<?php echo $res->nama_area_kerja;?>" value="">
+                                              <input type="date" class="form-control" name="date-current-ratio-cabang_<?php echo str_replace(" ","",$res->nama_area_kerja);?>" value="">
                                             </div>
                                             <div class="dropdown-item">
-                                              <button class="btn btn-success btn-block btn-sm" id="preview_list_current_ratio_console_cabang_<?php echo $res->nama_area_kerja ?>" href="javascript:void(0)" >Lihat Data</button>
+                                              <button class="btn btn-success btn-block btn-sm" id="preview_list_current_ratio_console_cabang_<?php echo str_replace(" ","",$res->nama_area_kerja); ?>" href="javascript:void(0)" >Lihat Data</button>
                                             </div>
                                           </div>
                                         </div>
@@ -37,7 +37,7 @@
                                       </div>
 				              	</div>
 				              	<div class="card-body">
-                    				<div id="CURRENT_RATIO_CONSOLE_CABANG_<?php echo $res->nama_area_kerja;?>" style="width:400px;height:400px"></div>
+                    				<div id="CURRENT_RATIO_CONSOLE_CABANG_<?php echo str_replace(" ","",$res->nama_area_kerja);?>" style="width:400px;height:400px"></div>
                     			</div>
                     		</div>
                     	</div>
@@ -53,7 +53,7 @@
 <?php $i=0; foreach($output_current_ratio_cabang as $row):?>
 var loading = '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>';
 var kode_area = "<?php echo $row->kode_area; ?>";
-var nama_area_kerja = "<?php echo $row->nama_area_kerja;?>";
+var nama_area_kerja = "<?php echo str_replace(" ","",$row->nama_area_kerja);?>";
 var rasio_paid = "<?php echo $row->rasio_paid;?>";
 var bd_paid = "<?php echo $row->bd_paid;?>";
 var noa_paid = "<?php echo $row->noa_paid;?>";
@@ -107,8 +107,8 @@ function explodePie(e) {
     }
 }
 
-$('input[name="date-current-ratio-cabang_<?php echo $row->nama_area_kerja ?>"]').change(function(){
-  var date = $('input[name="date-current-ratio-cabang_<?php echo $row->nama_area_kerja ?>"]').val();
+$('input[name="date-current-ratio-cabang_<?php echo str_replace(" ","",$row->nama_area_kerja) ?>"]').change(function(){
+  var date = $('input[name="date-current-ratio-cabang_<?php echo str_replace(" ","",$row->nama_area_kerja) ?>"]').val();
   var data = {
     'api' : 'Y',
     'tgl' : date,
@@ -121,7 +121,7 @@ $('input[name="date-current-ratio-cabang_<?php echo $row->nama_area_kerja ?>"]')
     data     : data,
     dataType : "JSON",
     success  : function(result){
-      var chart = new CanvasJS.Chart("CURRENT_RATIO_CONSOLE_CABANG_<?php echo $row->nama_area_kerja;?>", {
+      var chart = new CanvasJS.Chart("CURRENT_RATIO_CONSOLE_CABANG_<?php echo str_replace(" ","",$row->nama_area_kerja);?>", {
         title: {
             text: "<?php echo $row->nama_area_kerja;?>",
             fontSize: 12
@@ -169,8 +169,8 @@ $('input[name="date-current-ratio-cabang_<?php echo $row->nama_area_kerja ?>"]')
   });
 });
 
-$('#preview_list_current_ratio_console_cabang_<?php echo $row->nama_area_kerja ?>').click(function(){
-  var date = $('input[name="date-current-ratio-cabang_<?php echo $row->nama_area_kerja ?>"]').val();
+$('#preview_list_current_ratio_console_cabang_<?php echo str_replace(" ","",$row->nama_area_kerja) ?>').click(function(){
+  var date = $('input[name="date-current-ratio-cabang_<?php echo str_replace(" ","",$row->nama_area_kerja) ?>"]').val();
   var url = "<?php echo base_url();?>modal_bootstrap_controller/modal_list_current_ratio_console_cabang";
   var data = {
     'api' : 'Y',
@@ -182,11 +182,11 @@ $('#preview_list_current_ratio_console_cabang_<?php echo $row->nama_area_kerja ?
     type     : "POST",
     data     : data,
     beforeSend: function(){
-      $('#modal-1-list').modal('show');
-      $('.modal-1-list').html('<center><p><i class="fa fa-spinner fa-spin fa-3x"></i></p>Loading..</center>');
+      $('#modal-2-list').modal('show');
+      $('.modal-2-list').html('<center><p><i class="fa fa-spinner fa-spin fa-3x"></i></p>Loading..</center>');
     },
     success: function(response){
-      $('.modal-1-list').html(response);
+      $('.modal-2-list').html(response);
       $('#date_current_ratio_console_cabang').val(date);
       $('#kode_cabang').val("<?php echo $row->nama_area_kerja;?>");
     },

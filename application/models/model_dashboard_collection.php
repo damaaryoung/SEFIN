@@ -34,7 +34,7 @@ class Model_dashboard_collection extends CI_Model{
             	LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
             	WHERE kn.baki_debet > 0 ";
         if(!empty($search)){
-        	$sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%')";
+        	$sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%' OR kn.nama_nasabah LIKE '%".$search."%' OR kn.no_rekening LIKE '%".$search."%' OR kn.tgl_realisasi LIKE '%".$search."%' OR kn.kolek_bi LIKE '%".$search."%' OR kn.ft_hari LIKE '%".$search."%' OR kn.ft_angsuran LIKE '%".$search."%' OR kn.jml_pinjaman LIKE '%".$search."%' OR kn.jml_angsuran LIKE '%".$search."%' OR kn.baki_debet LIKE '%".$search."%' OR kn.jumlah_angsuran LIKE '%".$search."%' OR kn.jumlah_angsuran LIKE '%".$search."%' OR kkg4.deskripsi_group4 LIKE '%".$search."%' OR kjp.DESKRIPSI_JENIS_PENGGUNAAN LIKE '%".$search."%' OR kp.DESKRIPSI_PRODUK LIKE '%".$search."%' OR kkg7.deskripsi_group7 LIKE '%".$search."%')";
         }
         $sql .="  AND kn.tgl_laporan = '$tgl'
             	GROUP BY kn.no_rekening ORDER BY akk.nama_area_kerja DESC LIMIT ?,?";
@@ -72,7 +72,7 @@ class Model_dashboard_collection extends CI_Model{
             	LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
             	WHERE kn.baki_debet > 0 ";
         if(!empty($search)){
-        	$sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%')";
+        	$sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%' OR kn.nama_nasabah LIKE '%".$search."%' OR kn.no_rekening LIKE '%".$search."%' OR kn.tgl_realisasi LIKE '%".$search."%' OR kn.kolek_bi LIKE '%".$search."%' OR kn.ft_hari LIKE '%".$search."%' OR kn.ft_angsuran LIKE '%".$search."%' OR kn.jml_pinjaman LIKE '%".$search."%' OR kn.jml_angsuran LIKE '%".$search."%' OR kn.baki_debet LIKE '%".$search."%' OR kn.jumlah_angsuran LIKE '%".$search."%' OR kn.jumlah_angsuran LIKE '%".$search."%' OR kkg4.deskripsi_group4 LIKE '%".$search."%' OR kjp.DESKRIPSI_JENIS_PENGGUNAAN LIKE '%".$search."%' OR kp.DESKRIPSI_PRODUK LIKE '%".$search."%' OR kkg7.deskripsi_group7 LIKE '%".$search."%')";
         }
         $sql .="  AND kn.tgl_laporan = '$tgl'
             	GROUP BY kn.no_rekening";
@@ -841,7 +841,7 @@ public function get_dt_0ns_console_cabang_list($start,$limit,$search,$tgl,$kode_
 public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
     $tgl == null ? $tgl = date("Y-m-d") : $tgl;
         $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -878,7 +878,10 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_produk kp ON kp.kode_produk=kn.kode_produk
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
-                WHERE kn.baki_debet > 0 ";
+                WHERE kn.baki_debet > 0 
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE()))) ";
         if(!empty($search)){
             $sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%')";
         }
@@ -890,7 +893,7 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
     public function get_dt_total_0_all_console_list($search,$tgl){
         $tgl == null ? $tgl = date("Y-m-d") : $tgl;
         $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -927,7 +930,10 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_produk kp ON kp.kode_produk=kn.kode_produk
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
-                WHERE kn.baki_debet > 0 ";
+                WHERE kn.baki_debet > 0 
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE()))) ";
         if(!empty($search)){
             $sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%')";
         }
@@ -940,7 +946,7 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
     public function get_0_all_console_list($tgl){
         $tgl == null ? $tgl = date("Y-m-d") : $tgl;
             $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -977,7 +983,11 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_produk kp ON kp.kode_produk=kn.kode_produk
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
-                WHERE kn.baki_debet > 0 AND kn.tgl_laporan = $tgl
+                WHERE kn.baki_debet > 0 
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE())))
+                AND kn.tgl_laporan = $tgl
                 GROUP BY kn.no_rekening";
         $query = $this->db->query($sql);
         return $query;
@@ -986,7 +996,7 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
     public function get_dt_0_all_console_area_list($start,$limit,$search,$tgl,$kode_area){
         $tgl == null ? $tgl = date("Y-m-d") : $tgl;
         $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -1023,7 +1033,9 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_produk kp ON kp.kode_produk=kn.kode_produk
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
-                WHERE kn.baki_debet > 0 AND akk.kode_area = '$kode_area'";
+                WHERE kn.baki_debet > 0 AND akk.kode_area = '$kode_area' AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE()))) ";
         if(!empty($search)){
             $sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%')";
         }
@@ -1035,7 +1047,7 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
     public function get_dt_total_0_all_console_area_list($search,$tgl,$kode_area){
         $tgl == null ? $tgl = date("Y-m-d") : $tgl;
         $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -1072,7 +1084,9 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_produk kp ON kp.kode_produk=kn.kode_produk
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
-                WHERE kn.baki_debet > 0 AND  akk.kode_area = '$kode_area' ";
+                WHERE kn.baki_debet > 0 AND  akk.kode_area = '$kode_area' AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE()))) ";
         if(!empty($search)){
             $sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%')";
         }
@@ -1085,7 +1099,7 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
     public function get_0_all_console_area_list($tgl,$kode_area){
         $tgl == null ? $tgl = date("Y-m-d") : $tgl;
             $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -1123,6 +1137,9 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
                 WHERE kn.baki_debet > 0 AND kn.tgl_laporan = $tgl AND akk.kode_area = '$kode_area'
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE())))
                 GROUP BY kn.no_rekening";
         $query = $this->db->query($sql);
         return $query;
@@ -1131,7 +1148,7 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
     public function get_dt_0_all_console_cabang_list($start,$limit,$search,$tgl,$kode_cabang){
         $tgl == null ? $tgl = date("Y-m-d") : $tgl;
         $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -1168,19 +1185,24 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_produk kp ON kp.kode_produk=kn.kode_produk
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
-                WHERE kn.baki_debet > 0 AND akk.nama_area_kerja = '$kode_cabang'";
+                WHERE kn.baki_debet > 0 
+                AND akk.nama_area_kerja = '$kode_cabang' 
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE()))) ";
         if(!empty($search)){
             $sql .= "AND (akk.nama_area_kerja LIKE '%".$search."%')";
         }
         $sql .="  AND kn.tgl_laporan = '$tgl'
                 GROUP BY kn.no_rekening ORDER BY akk.nama_area_kerja DESC LIMIT ?,?";
+        // die($sql);
         return $this->db->query($sql, array($start, $limit));
     }
 
     public function get_dt_total_0_all_console_cabang_list($search,$tgl,$kode_cabang){
         $tgl == null ? $tgl = date("Y-m-d") : $tgl;
         $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -1217,7 +1239,10 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_produk kp ON kp.kode_produk=kn.kode_produk
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
-                WHERE kn.baki_debet > 0 AND  akk.nama_area_kerja = '$kode_cabang' ";
+                WHERE kn.baki_debet > 0 AND  akk.nama_area_kerja = '$kode_cabang' 
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE())))";
         if(!empty($search)){
             $sql .= "AND (akk.nama_cabang_kerja LIKE '%".$search."%')";
         }
@@ -1230,7 +1255,7 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
     public function get_0_all_console_cabang_list($tgl,$kode_cabang){
         $tgl == null ? $tgl = date("Y-m-d") : $tgl;
             $sql = "SELECT
-                akk.nama_area_kerja,
+                dpm_online.get_area_kerja(kn.no_rekening) as nama_area_kerja,
                 kn.nama_nasabah,
                 kn.no_rekening,
                 kn.tgl_realisasi,
@@ -1268,6 +1293,9 @@ public function get_dt_0_all_console_list($start,$limit,$search,$tgl){
                 LEFT JOIN dpm_online.kre_kode_group7 kkg7 ON kkg7.kode_group7=kn.kode_group7
                 LEFT JOIN dpm_online.kre_kode_group5 kkg5 ON kkg5.kode_group5=kn.kode_group5
                 WHERE kn.baki_debet > 0 AND kn.tgl_laporan = $tgl AND akk.nama_area_kerja = '$kode_cabang'
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE())))
                 GROUP BY kn.no_rekening";
         $query = $this->db->query($sql);
         return $query;
@@ -2280,7 +2308,6 @@ public function get_dt_current_ratio_console_area_list($start,$limit,$search,$tg
     }
 
 public function get_dt_current_ratio_console_cabang_list($start,$limit,$search,$tgl,$kode_cabang){
-        $tgl = $this->input->post('tgl');
             if(empty($tgl)){
                 $tgl = "CURDATE()";
             }else {
@@ -2323,7 +2350,6 @@ public function get_dt_current_ratio_console_cabang_list($start,$limit,$search,$
     }
 
     public function get_dt_total_current_ratio_console_cabang_list($search,$tgl,$kode_cabang){
-        $tgl = $this->input->post('tgl');
             if(empty($tgl)){
                 $tgl = "CURDATE()";
             }else {
@@ -3424,8 +3450,7 @@ public function get_dt_bucket_roll_console_area_list($start,$limit,$search,$tgl,
             WHERE
                 IF(YEAR(CURDATE())=YEAR($tgl),
                     (k3.bulan IN (MONTH($tgl - INTERVAL 1 MONTH), MONTH($tgl))) AND (k3.tahun = YEAR($tgl)),
-                    (k3.bulan = MONTH($tgl - INTERVAL 1 MONTH) AND k3.tahun = YEAR($tgl)-1) OR (k3.bulan = MONTH($tgl) AND k3.tahun = YEAR($tgl)) AND akk.kode_area = '".$kode_area."'
-                )
+                    (k3.bulan = MONTH($tgl - INTERVAL 1 MONTH) AND k3.tahun = YEAR($tgl)-1) OR (k3.bulan = MONTH($tgl) AND k3.tahun = YEAR($tgl)))  AND akk.kode_area = '".$kode_area."'
             GROUP BY no_rekening";
             // die($sql);
         return $this->db->query($sql);
@@ -3542,7 +3567,7 @@ public function get_dt_bucket_roll_console_area_list($start,$limit,$search,$tgl,
             WHERE
                 IF(YEAR(CURDATE())=YEAR($tgl),
                     (k3.bulan IN (MONTH($tgl - INTERVAL 1 MONTH), MONTH($tgl))) AND (k3.tahun = YEAR($tgl)),
-                    (k3.bulan = MONTH($tgl - INTERVAL 1 MONTH) AND k3.tahun = YEAR($tgl)-1) OR (k3.bulan = MONTH($tgl) AND k3.tahun = YEAR($tgl)) AND akk.nama_area_kerja = '".$nama_area_kerj."'
+                    (k3.bulan = MONTH($tgl - INTERVAL 1 MONTH) AND k3.tahun = YEAR($tgl)-1) OR (k3.bulan = MONTH($tgl) AND k3.tahun = YEAR($tgl)) AND akk.nama_area_kerja = '".$kode_cabang."'
                 )
             GROUP BY no_rekening";
             // die($sql);
@@ -3550,97 +3575,250 @@ public function get_dt_bucket_roll_console_area_list($start,$limit,$search,$tgl,
     }
 
     function bucket_nol_console($tgl) {
-        $sql = "SELECT 
-                akk.`kode_area`,
-                akk.`kode_kantor`,
-                akk.`nama_area_kerja`,
-                SUM(IF(kn.jumlah_tunggakan = 0, 1, 0)) AS noa_bucket_0,
-                SUM(IF(kn.jumlah_tunggakan = 0, kn.`baki_debet`, 0)) AS bd_bucket_0,
-                ROUND((SUM(IF(kn.jumlah_tunggakan = 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_0,
-                SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_1,
-                SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_1,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_1,
-                SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_2,
-                SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_2,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_2,
-                SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_3,
-                SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_3,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_3,
-                SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_npl,
-                SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_npl,
-                ROUND((SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_npl
+        $sql = "SELECT
+                SUM(baki_debet) AS bd_all,
+                SUM(IF(bucket_col = 0, baki_debet, 0)) AS bd_bucket_0,
+                SUM(IF(bucket_col = 0, 1, 0)) AS noa_bucket_0,
+                ROUND((SUM(IF(bucket_col = 0, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_0,
+                SUM(IF(bucket_col = 1, baki_debet, 0)) AS bd_bucket_1,
+                SUM(IF(bucket_col = 1, 1, 0)) AS noa_bucket_1,
+                ROUND((SUM(IF(bucket_col = 1, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_1,
+                SUM(IF(bucket_col = 2, baki_debet, 0)) AS bd_bucket_2,
+                SUM(IF(bucket_col = 2, 1, 0)) AS noa_bucket_2,
+                ROUND((SUM(IF(bucket_col = 2, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_2,
+                SUM(IF(bucket_col = 3, baki_debet, 0)) AS bd_bucket_3,
+                SUM(IF(bucket_col = 3, 1, 0)) AS noa_bucket_3,
+                ROUND((SUM(IF(bucket_col = 3, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_3,
+                SUM(IF(bucket_col > 3, baki_debet, 0)) AS bd_npl,
+                SUM(IF(bucket_col > 3, 1, 0)) AS noa_npl,
+                ROUND((SUM(IF(bucket_col > 3, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_npl
+            FROM (
+            SELECT
+                IF(kn.kolek_internal_eom = 1 AND kn.ft_hari_eom = 0, 0,
+                IF(kn.kolek_internal_eom = 1 AND kn.ft_hari_eom BETWEEN 1 AND 30, 1,
+                    IF(kn.kolek_internal_eom = 2 AND kn.ft_hari_eom BETWEEN 31 AND 60, 2,
+                    IF(kn.kolek_internal_eom = 2 AND kn.ft_hari_eom BETWEEN 61 AND 90, 3,
+                        IF(kn.kolek_internal_eom > 2, 4,
+                        IF((kn.kolek_internal_eom = 2 AND (DATEDIFF(kn.tgl_jatuh_tempo,CURDATE()))) BETWEEN 0 AND 15, 2,
+                            IF(((kn.`kolek_internal_eom`>2) AND (DATEDIFF(kn.tgl_jatuh_tempo,CURDATE()))) > 15, 4,
+                              5
+                            )
+                        )
+                        )
+                    )
+                    )
+                )
+                ) AS bucket_col,
+                kn.*
             FROM
-                dpm_online.`kre_nominatif` kn 
-                    LEFT JOIN dpm_online.`app_kode_kantor` akk 
-                    ON akk.`kode_kantor` = kn.`kode_kantor`
-            WHERE kn.baki_debet > 0 
-                AND kn.tgl_laporan = $tgl";
-
+                dpm_online.`kre_nominatif` kn
+            WHERE kn.baki_debet > 0
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE ((tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE())))
+                AND kn.tgl_laporan = $tgl
+            ) xx";
+        // die($tgl);
         $query = $this->db->query($sql);
         return $query;
     }
 
     function bucket_nol_console_area($tgl) {
-        $sql = "SELECT 
-                akk.`kode_area`,
-                akk.`kode_kantor`,
-                akk.`nama_area_kerja`,
-                SUM(IF(kn.jumlah_tunggakan = 0, 1, 0)) AS noa_bucket_0,
-                SUM(IF(kn.jumlah_tunggakan = 0, kn.`baki_debet`, 0)) AS bd_bucket_0,
-                ROUND((SUM(IF(kn.jumlah_tunggakan = 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_0,
-                SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_1,
-                SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_1,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_1,
-                SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_2,
-                SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_2,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_2,
-                SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_3,
-                SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_3,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_3,
-                SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_npl,
-                SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_npl,
-                ROUND((SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_npl
+        $sql = "SELECT
+                kode_area,
+                SUM(baki_debet) AS bd_all,
+                SUM(IF(bucket_col = 0, baki_debet, 0)) AS bd_bucket_0,
+                SUM(IF(bucket_col = 0, 1, 0)) AS noa_bucket_0,
+                ROUND((SUM(IF(bucket_col = 0, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_0,
+                SUM(IF(bucket_col = 1, baki_debet, 0)) AS bd_bucket_1,
+                SUM(IF(bucket_col = 1, 1, 0)) AS noa_bucket_1,
+                ROUND((SUM(IF(bucket_col = 1, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_1,
+                SUM(IF(bucket_col = 2, baki_debet, 0)) AS bd_bucket_2,
+                SUM(IF(bucket_col = 2, 1, 0)) AS noa_bucket_2,
+                ROUND((SUM(IF(bucket_col = 2, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_2,
+                SUM(IF(bucket_col = 3, baki_debet, 0)) AS bd_bucket_3,
+                SUM(IF(bucket_col = 3, 1, 0)) AS noa_bucket_3,
+                ROUND((SUM(IF(bucket_col = 3, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_3,
+                SUM(IF(bucket_col > 3, baki_debet, 0)) AS bd_npl,
+                SUM(IF(bucket_col > 3, 1, 0)) AS noa_npl,
+                ROUND((SUM(IF(bucket_col > 3, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_npl
+            FROM (
+            SELECT
+                IF(kn.kolek_internal_eom = 1 AND kn.ft_hari_eom = 0, 0,
+                IF(kn.kolek_internal_eom = 1 AND kn.ft_hari_eom BETWEEN 1 AND 30, 1,
+                    IF(kn.kolek_internal_eom = 2 AND kn.ft_hari_eom BETWEEN 31 AND 60, 2,
+                    IF(kn.kolek_internal_eom = 2 AND kn.ft_hari_eom BETWEEN 61 AND 90, 3,
+                        IF(kn.kolek_internal_eom > 2, 4,
+                        IF((kn.kolek_internal_eom = 2 AND (DATEDIFF(kn.tgl_jatuh_tempo,CURDATE()))) BETWEEN 0 AND 15, 2,
+                            IF(((kn.`kolek_internal_eom`>2) AND (DATEDIFF(kn.tgl_jatuh_tempo,CURDATE()))) > 15, 4,
+                              5
+                            )
+                        )
+                        )
+                    )
+                    )
+                )
+                ) AS bucket_col,
+                kn.*
             FROM
-                dpm_online.`kre_nominatif` kn 
-                    LEFT JOIN dpm_online.`app_kode_kantor` akk 
-                    ON akk.`kode_kantor` = kn.`kode_kantor`
-            WHERE kn.baki_debet > 0 
+                dpm_online.`kre_nominatif` kn
+            WHERE kn.baki_debet > 0
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (
+                    SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE (
+                        (tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE())
+                    )
+                )
                 AND kn.tgl_laporan = $tgl
-                GROUP BY akk.`kode_area`";
+            ) xx
+            LEFT JOIN dpm_online.app_kode_kantor akk ON xx.kode_kantor = akk.kode_kantor
+            GROUP BY akk.kode_area
+            ";
         $query = $this->db->query($sql);
         return $query;
     }
 
     function bucket_nol_console_cabang($tgl) {
-        $sql = "SELECT 
-                akk.`kode_area`,
-                akk.`kode_kantor`,
-                akk.`nama_area_kerja`,
-                SUM(IF(kn.jumlah_tunggakan = 0, 1, 0)) AS noa_bucket_0,
-                SUM(IF(kn.jumlah_tunggakan = 0, kn.`baki_debet`, 0)) AS bd_bucket_0,
-                ROUND((SUM(IF(kn.jumlah_tunggakan = 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_0,
-                SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_1,
-                SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_1,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 0 AND 30 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_1,
-                SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_2,
-                SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_2,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 31 AND 60 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_2,
-                SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_bucket_3,
-                SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_bucket_3,
-                ROUND((SUM(IF(kn.`ft_hari` BETWEEN 61 AND 90 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_bucket_3,
-                SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, 1, 0)) AS noa_npl,
-                SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, kn.`baki_debet`, 0)) AS bd_npl,
-                ROUND((SUM(IF(kn.`ft_hari` >90 AND kn.jumlah_tunggakan > 0, kn.baki_debet, 0)) / SUM(kn.baki_debet)) * 100, 2) AS rasio_npl
+        $sql = "SELECT
+                kode_area,
+                get_area_kerja(no_rekening) AS nama_area_kerja,
+                SUM(baki_debet) AS bd_all,
+                SUM(IF(bucket_col = 0, baki_debet, 0)) AS bd_bucket_0,
+                SUM(IF(bucket_col = 0, 1, 0)) AS noa_bucket_0,
+                ROUND((SUM(IF(bucket_col = 0, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_0,
+                SUM(IF(bucket_col = 1, baki_debet, 0)) AS bd_bucket_1,
+                SUM(IF(bucket_col = 1, 1, 0)) AS noa_bucket_1,
+                ROUND((SUM(IF(bucket_col = 1, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_1,
+                SUM(IF(bucket_col = 2, baki_debet, 0)) AS bd_bucket_2,
+                SUM(IF(bucket_col = 2, 1, 0)) AS noa_bucket_2,
+                ROUND((SUM(IF(bucket_col = 2, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_2,
+                SUM(IF(bucket_col = 3, baki_debet, 0)) AS bd_bucket_3,
+                SUM(IF(bucket_col = 3, 1, 0)) AS noa_bucket_3,
+                ROUND((SUM(IF(bucket_col = 3, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_bucket_3,
+                SUM(IF(bucket_col > 3, baki_debet, 0)) AS bd_npl,
+                SUM(IF(bucket_col > 3, 1, 0)) AS noa_npl,
+                ROUND((SUM(IF(bucket_col > 3, baki_debet, 0)) / SUM(baki_debet)) * 100, 2) AS rasio_npl
+            FROM (
+            SELECT
+                IF(kn.kolek_internal_eom = 1 AND kn.ft_hari_eom = 0, 0,
+                IF(kn.kolek_internal_eom = 1 AND kn.ft_hari_eom BETWEEN 1 AND 30, 1,
+                    IF(kn.kolek_internal_eom = 2 AND kn.ft_hari_eom BETWEEN 31 AND 60, 2,
+                    IF(kn.kolek_internal_eom = 2 AND kn.ft_hari_eom BETWEEN 61 AND 90, 3,
+                        IF(kn.kolek_internal_eom > 2, 4,
+                        IF((kn.kolek_internal_eom = 2 AND (DATEDIFF(kn.tgl_jatuh_tempo,CURDATE()))) BETWEEN 0 AND 15, 2,
+                            IF(((kn.`kolek_internal_eom`>2) AND (DATEDIFF(kn.tgl_jatuh_tempo,CURDATE()))) > 15, 4,
+                              5
+                            )
+                        )
+                        )
+                    )
+                    )
+                )
+                ) AS bucket_col,
+                kn.*
             FROM
-                dpm_online.`kre_nominatif` kn 
-                    LEFT JOIN dpm_online.`app_kode_kantor` akk 
-                    ON akk.`kode_kantor` = kn.`kode_kantor`
-            WHERE kn.baki_debet > 0 
+                dpm_online.`kre_nominatif` kn
+            WHERE kn.baki_debet > 0
+                AND kn.ayda=0
+                AND kn.debius=0
+                AND kn.`kode_kantor` IN (
+                    SELECT kode_kantor FROM dpm_online.app_kode_kantor WHERE (
+                        (tgl_mulai IS NULL) OR (tgl_mulai <= CURDATE())
+                    )
+                )
                 AND kn.tgl_laporan = $tgl
-                GROUP BY akk.nama_area_kerja";
+            ) xx
+            LEFT JOIN dpm_online.app_kode_kantor akk ON akk.kode_kantor = xx.kode_kantor
+            GROUP BY dpm_online.get_area_kerja(xx.no_rekening)
+            ";
 
         $query = $this->db->query($sql);
         return $query;
+    }
+
+    function get_summary_deliquency_console($tgl){
+        $this->db->query("SET @pv_tgl = $tgl");
+        $sql = "SELECT * FROM dpm_online.`vmicro_delinquensi_kantor` WHERE kode_kantor='*'";
+        return $this->db->query($sql);
+    }
+
+    function get_summary_deliquency_area($tgl){
+        $this->db->query("SET @pv_tgl = $tgl");
+        $sql = "SELECT
+                kk.kode_area AS kode_area,
+                SUM(IF((kn.ft_hari = 0),1,0)) AS noa_current,
+                SUM(IF((kn.ft_hari = 0),kn.baki_debet,0)) AS bd_current,
+                ROUND(((SUM(IF((kn.ft_hari = 0),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_current,
+                SUM(IF((kn.ft_hari > 0),1,0)) AS noa_0_plus,
+                SUM(IF((kn.ft_hari > 0),kn.baki_debet,0)) AS bd_0_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 0),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_0_plus,
+                SUM(IF((kn.ft_hari > 30),1,0)) AS noa_30_plus,
+                SUM(IF((kn.ft_hari > 30),kn.baki_debet,0)) AS bd_30_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 30),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_30_plus,
+                SUM(IF((kn.ft_hari > 60),1,0)) AS noa_60_plus,
+                SUM(IF((kn.ft_hari > 60),kn.baki_debet,0)) AS bd_60_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 60),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_60_plus,
+                SUM(IF((kn.ft_hari > 90),1,0)) AS noa_90_plus,
+                SUM(IF((kn.ft_hari > 90),kn.baki_debet,0)) AS bd_90_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 90),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_90_plus,
+                SUM(IF((kn.ft_hari > 180),1,0)) AS noa_180_plus,
+                SUM(IF((kn.ft_hari > 180),kn.baki_debet,0)) AS bd_180_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 180),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_180_plus,
+                SUM(IF((kn.ft_hari > 360),1,0)) AS noa_360_plus,
+                SUM(IF((kn.ft_hari > 360),kn.baki_debet,0)) AS bd_360_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 360),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_360_plus,
+                SUM(1) AS noa_total,
+                SUM(kn.baki_debet) AS bd_all
+            FROM (dpm_online.kre_nominatif kn
+                LEFT JOIN dpm_online.app_kode_kantor kk
+                ON ((kk.kode_kantor = kn.kode_kantor)))
+            WHERE ((kn.tgl_laporan = $tgl)
+                    AND (kn.ayda = 0)
+                    AND (kn.debius = 0)
+                    AND (kn.baki_debet > 0))
+            GROUP BY kk.kode_area";
+            //echo $sql; die();
+        return $this->db->query($sql);
+    }
+
+    function get_summary_deliquency_cabang($tgl,$kode_area){
+        $sql = "SELECT
+                kk.kode_area AS kode_area,
+                kk.nama_area_kerja AS nama_area_kerja,
+                SUM(IF((kn.ft_hari = 0),1,0)) AS noa_current,
+                SUM(IF((kn.ft_hari = 0),kn.baki_debet,0)) AS bd_current,
+                ROUND(((SUM(IF((kn.ft_hari = 0),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_current,
+                SUM(IF((kn.ft_hari > 0),1,0)) AS noa_0_plus,
+                SUM(IF((kn.ft_hari > 0),kn.baki_debet,0)) AS bd_0_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 0),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_0_plus,
+                SUM(IF((kn.ft_hari > 30),1,0)) AS noa_30_plus,
+                SUM(IF((kn.ft_hari > 30),kn.baki_debet,0)) AS bd_30_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 30),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_30_plus,
+                SUM(IF((kn.ft_hari > 60),1,0)) AS noa_60_plus,
+                SUM(IF((kn.ft_hari > 60),kn.baki_debet,0)) AS bd_60_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 60),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_60_plus,
+                SUM(IF((kn.ft_hari > 90),1,0)) AS noa_90_plus,
+                SUM(IF((kn.ft_hari > 90),kn.baki_debet,0)) AS bd_90_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 90),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_90_plus,
+                SUM(IF((kn.ft_hari > 180),1,0)) AS noa_180_plus,
+                SUM(IF((kn.ft_hari > 180),kn.baki_debet,0)) AS bd_180_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 180),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_180_plus,
+                SUM(IF((kn.ft_hari > 360),1,0)) AS noa_360_plus,
+                SUM(IF((kn.ft_hari > 360),kn.baki_debet,0)) AS bd_360_plus,
+                ROUND(((SUM(IF((kn.ft_hari > 360),kn.baki_debet,0)) / SUM(kn.baki_debet)) * 100),2) AS rasio_360_plus,
+                SUM(1) AS noa_total,
+                SUM(kn.baki_debet) AS bd_all
+            FROM (dpm_online.kre_nominatif kn
+                LEFT JOIN dpm_online.app_kode_kantor kk
+                ON ((kk.kode_kantor = kn.kode_kantor)))
+            WHERE ((kn.tgl_laporan = $tgl) 
+                    AND (kk.kode_area = '$kode_area') 
+                    AND (kn.ayda = 0)
+                    AND (kn.debius = 0)
+                    AND (kn.baki_debet > 0))
+            GROUP BY kk.nama_area_kerja";
+            return $this->db->query($sql);
     }
 
 }

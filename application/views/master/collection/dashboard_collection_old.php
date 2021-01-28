@@ -96,13 +96,13 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="ZeroNS" style="height: 300px; width: 100%;"></div>
-                                <button type="button" class="btn btn-md btn-danger col-4" id="btn_0ns_area" data-toggle="modal">Tampilkan Area</button>
-                                <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_0ns" data-toggle="modal">Compare Per 3 Bulan</button>
+                                <button type="button" class="btn btn-md btn-danger col-12" id="btn_0ns_area" data-toggle="modal">Tampilkan Area</button>
+                                <!-- <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_0ns" data-toggle="modal">Compare 3 bulanan</button> -->
                                 <div id="ZeroNS_area"></div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
+                    <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <h3 class="card-title">Bucket NS 3 Month</h3>
@@ -111,12 +111,15 @@
                                       <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="BucketNS_3month" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
@@ -145,13 +148,13 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="Bucket_0" style="height: 300px; width: 100%;"></div>
-                                <button type="button" class="btn btn-md btn-danger col-4" id="btn_Bucket_0_Area" data-toggle="modal">Tampilkan Area</button>
-                                <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_0_all" data-toggle="modal">Compare Per 3 Bulan</button>
+                                <button type="button" class="btn btn-md btn-danger col-12" id="btn_Bucket_0_Area" data-toggle="modal">Tampilkan Area</button>
+                                <!-- <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_0_all" data-toggle="modal">Compare 3 bulanan</button> -->
                                 <div id="Bucket_0_area"></div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
+                    <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <h3 class="card-title">Bucket 0 ALL 3 Month</h3>
@@ -160,12 +163,12 @@
                                       <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="Bucket0_3month" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 
                 <div class="row">
@@ -197,13 +200,13 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="fid-compre" style="height: 300px; width: 100%;"></div>
-                                <button type="button" class="btn btn-md btn-danger col-4" id="btn_fid-compre_area" data-toggle="modal">Tampilkan Area</button>
-                                <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_fid_compre" data-toggle="modal">Compare Per 3 Bulan</button>
+                                <button type="button" class="btn btn-md btn-danger col-12" id="btn_fid-compre_area" data-toggle="modal">Tampilkan Area</button>
+                                <!-- <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_fid_compre" data-toggle="modal">Compare 3 bulanan</button> -->
                                 <div id="fid-compre_area"></div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
+                    <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <h3 class="card-title">FID Compre 3 Month</h3>
@@ -212,12 +215,15 @@
                                       <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="FID_Compre_3month" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
@@ -246,13 +252,13 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="fid-ever" style="height: 300px; width: 100%;"></div>
-                                <button type="button" class="btn btn-md btn-danger col-4" id="btn_fid-ever_area" data-toggle="modal">Tampilkan Area</button>
-                                <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_fid_ever" data-toggle="modal">Compare Per 3 Bulan</button>
+                                <button type="button" class="btn btn-md btn-danger col-12" id="btn_fid-ever_area" data-toggle="modal">Tampilkan Area</button>
+                                <!-- <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_fid_ever" data-toggle="modal">Compare 3 bulanan</button> -->
                                 <div id="div_fid-ever_area"></div>
                             </div>
                         </div>
                     </div> 
-                    <!-- <div class="col-xl-6 col-lg-5">
+                    <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <h3 class="card-title">FID Ever 3 Month</h3>
@@ -261,12 +267,12 @@
                                       <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="FID_Ever_3month" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
 
                 <div class="row">
@@ -298,13 +304,13 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="NPL" style="height: 300px; width: 100%;"></div>
-                                <button type="button" class="btn btn-md btn-danger col-4" id="NPL_AREA" data-toggle="modal">Tampilkan Area</button>
-                                <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_npl" data-toggle="modal">Compare Per 3 Bulan</button>
+                                <button type="button" class="btn btn-md btn-danger col-12" id="NPL_AREA" data-toggle="modal">Tampilkan Area</button>
+                                <!-- <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_npl" data-toggle="modal">Compare 3 bulanan</button> -->
                                 <div id="div_npl_area"></div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
+                    <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <h3 class="card-title">NPL 3 Month</h3>
@@ -313,12 +319,15 @@
                                       <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="NPL_3month" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
@@ -347,13 +356,13 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="current_rasio" style="height: 300px; width: 100%;"></div>
-                                <button type="button" class="btn btn-md btn-danger col-4" id="btn_current_rasio_area" data-toggle="modal">Tampilkan Area</button>
-                                <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_current_ratio" data-toggle="modal">Compare Per 3 Bulan</button>
+                                <button type="button" class="btn btn-md btn-danger col-12" id="btn_current_rasio_area" data-toggle="modal">Tampilkan Area</button>
+                                <!-- <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_current_ratio" data-toggle="modal">Compare 3 bulanan</button> -->
                                 <div id="div_current_ratio_area"></div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
+                    <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <h3 class="card-title">Current Ratio 3 Month</h3>
@@ -362,12 +371,12 @@
                                       <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="Current_Ratio_3month" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-xl-6 col-lg-5">
@@ -398,13 +407,13 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="deliquency" style="height: 300px; width: 100%;"></div>
-                                <button type="button" class="btn btn-md btn-danger col-4" id="btn_deliquency_area" data-toggle="modal">Tampilkan Area</button>
-                                 <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_deliquency" data-toggle="modal">Compare Per 3 Bulan</button>
+                                <button type="button" class="btn btn-md btn-danger col-12" id="btn_deliquency_area" data-toggle="modal">Tampilkan Area</button>
+                                 <!-- <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_deliquency" data-toggle="modal">Compare 3 bulanan</button> -->
                                 <div id="div_deliquency_area"></div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
+                    <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <h3 class="card-title">Deliquency 3 Month</h3>
@@ -413,12 +422,14 @@
                                       <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="deliquency_3month" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
@@ -448,13 +459,13 @@
                             </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="bucket_roll" style="height: 300px; width: 100%;"></div>
-                                <button type="button" class="btn btn-md btn-danger col-4" id="btn_bucket_roll_area" data-toggle="modal">Tampilkan Area</button>
-                                <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_roll" data-toggle="modal">Compare Per 3 Bulan</button>
+                                <button type="button" class="btn btn-md btn-danger col-12" id="btn_bucket_roll_area" data-toggle="modal">Tampilkan Area</button>
+                                <!-- <button type="button" class="btn btn-md btn-danger col-6" id="btn_compare_roll" data-toggle="modal">Compare 3 bulanan</button> -->
                                 <div id="div_bucket_roll_area"></div>
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
+                    <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
                                 <h3 class="card-title">Bucket Roll 3 Month</h3>
@@ -463,12 +474,12 @@
                                       <i class="fas fa-minus"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div><!-- /.card-header -->
                             <div class="card-body">
                                 <div id="Roll_Bucket_3month" style="height: 300px; width: 100%;"></div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,10 +3,10 @@
     <center><font size="4"><b>Bucket FID EVER Cabang</b></font></center>
 </div>
 <div class="modal-body" style="overflow-x:auto">
-    <input type="text" name="date_fid-ever_console_cabang" id="date_fid-ever_console_cabang"/>
+    <input type="hidden" name="date_fid-ever_console_cabang" id="date_fid-ever_console_cabang"/>
     <input type="hidden" name="kode_cabang" id="kode_cabang"/>
     <div class="table-responsive">
-        <table id="listData" class="table table-striped table-bordered table-hover dataTable">
+        <table id="listData2" class="table table-striped table-bordered table-hover dataTable">
             <thead>
                 <tr>
                     <th>NO</th>

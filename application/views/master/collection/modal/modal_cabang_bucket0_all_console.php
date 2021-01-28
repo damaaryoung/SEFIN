@@ -73,7 +73,9 @@ var rasio_bucket_3 = "<?php echo $row->rasio_bucket_3;?>";
 var rasio_npl = "<?php echo $row->rasio_npl;?>";
 
 var urlapi = "http://103.234.254.186/riskcan";
-url = urlapi + "/dashboard/kredit/kredit_controller/bucket_nol_console_cabang";
+//url = urlapi + "/dashboard/kredit/kredit_controller/bucket_nol_console_cabang";
+url = urlapi + "/dashboard/kredit/kredit_controller/bucket_nol_col_console_cabang";
+
 
 var chart = new CanvasJS.Chart("BUCKET0_ALL_CONSOLE_CABANG_<?php echo str_replace(" ","",$row->nama_area_kerja);?>", {
     title: {
@@ -230,7 +232,7 @@ $('#preview_list_0_all_console_cabang_<?php echo str_replace(" ","",$row->nama_a
     var data = {
         'api' : 'Y',
         'tgl' : date,
-        'kode_cabang' : "<?php echo str_replace(" ","",$row->nama_area_kerja);?>"
+        'kode_cabang' : "<?php echo $row->nama_area_kerja;?>"
     };
     $.ajax({
         url      : url,

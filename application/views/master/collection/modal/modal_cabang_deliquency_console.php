@@ -8,7 +8,7 @@
              <div class="modal-body">
                 <div class="row">
                     <input type="hidden" name="kode_area_to_cabang" id="kode_area_to_cabang"/>
-                 	<?php foreach($output_deliquency_cabang as $res):?>
+                 	<?php foreach($output_deliquency_cabang->result() as $res):?>
                     	<div class="col-md-6">
 				            <div class="card">
 				              	<div class="card-header d-flex p-0">
@@ -23,10 +23,10 @@
                                           </button>
                                           <div class="dropdown-menu dropdown-menu-right" role="menu">
                                             <div class="dropdown-item">
-                                              <input type="date" class="form-control" name="date_deliquency_console_cabang_<?php echo $res->nama_area_kerja;?>" value="">
+                                              <input type="date" class="form-control" name="date_deliquency_console_cabang_<?php echo str_replace(" ","",$res->nama_area_kerja);?>" value="">
                                             </div>
                                             <div class="dropdown-item">
-                                              <button class="btn btn-success btn-block btn-sm" id="preview_list_deliquency_console_cabang_<?php echo $res->nama_area_kerja;?>" href="javascript:void(0)" >Lihat Data</button>
+                                              <button class="btn btn-success btn-block btn-sm" id="preview_list_deliquency_console_cabang_<?php echo str_replace(" ","",$res->nama_area_kerja);?>" href="javascript:void(0)" >Lihat Data</button>
                                             </div>
                                           </div>
                                         </div>
@@ -36,7 +36,7 @@
                                       </div>
 				              	</div>
 				              	<div class="card-body">
-                    				<div id="DELIQUENCY_CONSOLE_CABANG_<?php echo $res->nama_area_kerja;?>" style="width:400px;height:400px"></div>
+                    				<div id="DELIQUENCY_CONSOLE_CABANG_<?php echo str_replace(" ","",$res->nama_area_kerja);?>" style="width:500px;height:500px"></div>
                     			</div>
                     		</div>
                     	</div>
@@ -50,10 +50,10 @@
     $('#modal-2').modal('hide');
   });
 	//CABANG
-<?php $i=0; foreach($output_deliquency_cabang as $row):?>
+<?php $i=0; foreach($output_deliquency_cabang->result() as $row):?>
 var loading = '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>';
 var kode_area = "<?php echo $row->kode_area; ?>";
-var nama_area_kerja = "<?php echo $row->nama_area_kerja;?>";
+var nama_area_kerja = "<?php echo str_replace(" ","",$row->nama_area_kerja);?>";
 var rasio_current = "<?php echo $row->rasio_current;?>";
 var bd_current = "<?php echo $row->bd_current;?>";
 var noa_current = "<?php echo $row->noa_current;?>";
@@ -82,8 +82,10 @@ var rasio_360_plus = "<?php echo $row->rasio_360_plus;?>";
 var bd_360_plus = "<?php echo $row->bd_360_plus;?>";
 var noa_360_plus = "<?php echo $row->noa_360_plus;?>";
 
+// alert(rasio_360_plus);
 var urlapi = "http://103.234.254.186/riskcan";
-url = urlapi + "/dashboard/kredit/kreditrisk_controller/delinquensy_console_cabang";
+// url = urlapi + "/dashboard/kredit/kreditrisk_controller/delinquensy_console_cabang";
+url = "<?php echo base_url();?>/modal_bootstrap_controller/json_deliquency_cabang";
 var chart = new CanvasJS.Chart("DELIQUENCY_CONSOLE_CABANG_" + nama_area_kerja, {
     title: {
         text: nama_area_kerja,
@@ -96,7 +98,7 @@ var chart = new CanvasJS.Chart("DELIQUENCY_CONSOLE_CABANG_" + nama_area_kerja, {
     data: [{
         type: "funnel",
         toolTipContent: "Percentage : <strong>{y}</strong><br/>NOA : <strong>{yn}</strong><br/>BD : <strong>{yb}</strong>",
-        indexLabelFontSize: 18,
+        indexLabelFontSize: 12,
         indexLabel: "{label} - {y}",
         yValueFormatString: "###0.0\"%\"",
         click: explodePie,
@@ -155,8 +157,8 @@ function explodePie(e) {
     }
 }
 
-$('input[name="date_deliquency_console_cabang_<?php echo $row->nama_area_kerja ?>"]').change(function(){
-  var date = $('input[name="date_deliquency_console_cabang_<?php echo $row->nama_area_kerja ?>"]').val();
+$('input[name="date_deliquency_console_cabang_<?php echo str_replace(" ","",$row->nama_area_kerja) ?>"]').change(function(){
+  var date = $('input[name="date_deliquency_console_cabang_<?php echo str_replace(" ","",$row->nama_area_kerja) ?>"]').val();
   var data = {
     'api' : 'Y',
     'tgl' : date,
@@ -169,7 +171,7 @@ $('input[name="date_deliquency_console_cabang_<?php echo $row->nama_area_kerja ?
     data     : data,
     dataType : "JSON",
     success  : function(result){
-      var chart = new CanvasJS.Chart("DELIQUENCY_CONSOLE_CABANG_<?php echo $row->nama_area_kerja;?>", {
+      var chart = new CanvasJS.Chart("DELIQUENCY_CONSOLE_CABANG_<?php echo str_replace(" ","",$row->nama_area_kerja);?>", {
         title: {
             text: "<?php echo $row->nama_area_kerja;?>",
             fontSize: 12
@@ -181,7 +183,7 @@ $('input[name="date_deliquency_console_cabang_<?php echo $row->nama_area_kerja ?
         data: [{
             type: "funnel",
             toolTipContent: "Percentage : <strong>{y}</strong><br/>NOA : <strong>{yn}</strong><br/>BD : <strong>{yb}</strong>",
-            indexLabelFontSize: 18,
+            indexLabelFontSize: 12,
             indexLabel: "{label} - {y}",
             yValueFormatString: "###0.0\"%\"",
             click: explodePie,
@@ -247,8 +249,8 @@ $('input[name="date_deliquency_console_cabang_<?php echo $row->nama_area_kerja ?
   });
 });
 
-$('#preview_list_deliquency_console_cabang_<?php echo $row->nama_area_kerja ?>').click(function(){
-  var date = $('input[name="date_deliquency_console_cabang_<?php echo $row->nama_area_kerja ?>"]').val();
+$('#preview_list_deliquency_console_cabang_<?php echo str_replace(" ","",$row->nama_area_kerja) ?>').click(function(){
+  var date = $('input[name="date_deliquency_console_cabang_<?php echo str_replace(" ","",$row->nama_area_kerja) ?>"]').val();
   var url = "<?php echo base_url();?>modal_bootstrap_controller/modal_list_deliquency_console_cabang";
   var data = {
     'api' : 'Y',

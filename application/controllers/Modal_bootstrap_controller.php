@@ -8,6 +8,15 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Font;
 
+//CHART
+use PhpOffice\PhpSpreadsheet\Chart\Chart;
+use PhpOffice\PhpSpreadsheet\Chart\DataSeries;
+use PhpOffice\PhpSpreadsheet\Chart\DataSeriesValues;
+use PhpOffice\PhpSpreadsheet\Chart\Layout;
+use PhpOffice\PhpSpreadsheet\Chart\Legend;
+use PhpOffice\PhpSpreadsheet\Chart\PlotArea;
+use PhpOffice\PhpSpreadsheet\Chart\Title;
+
 // require APPPATH .'/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Spreadsheet.php';
 
 class Modal_bootstrap_controller extends MY_Controller
@@ -166,28 +175,84 @@ class Modal_bootstrap_controller extends MY_Controller
         echo $response;
     }
 
+    function json_deliquency_console(){
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $data = $this->model_dashboard_collection->get_summary_deliquency_console($tgl)->row();
+        header('Content-Type: application/json');
+        echo json_encode($data);
+    }
+
+    function json_deliquency_area()
+    {
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $data = $this->model_dashboard_collection->get_summary_deliquency_area($tgl)->result();
+        header('Content-Type: application/json');
+        echo json_encode($data);
+    }
+
     function modal_area_deliquency_console()
-    {   $url_deliquency_area = self::$url_string."dashboard/kredit/kreditrisk_controller/delinquensy_console_area";
-        $post_deliquency_area = array(
-            'api'=>'Y',
-            'tgl'=>$this->input->post('tgl'));
-        $Curl = new Curl();
-        $data['output_deliquency_area'] = $Curl->get_rest_api($url_deliquency_area,$post_deliquency_area);
+    {   
+        // $url_deliquency_area = self::$url_string."dashboard/kredit/kreditrisk_controller/delinquensy_console_area";
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        // $post_deliquency_area = array(
+        //     'api'=>'Y',
+        //     'tgl'=>$this->input->post('tgl'));
+        // $Curl = new Curl();
+        // $data['output_deliquency_area'] = $Curl->get_rest_api($url_deliquency_area,$post_deliquency_area);
+        $data['output_deliquency_area'] = $this->model_dashboard_collection->get_summary_deliquency_area($tgl);
         $response = $this->load->view('master/collection/modal/modal_area_deliquency_console',$data,TRUE);
         echo $response;
     }
 
     function modal_cabang_deliquency_console()
-    {   $url_deliquency_cabang = self::$url_string."dashboard/kredit/kreditrisk_controller/delinquensy_console_cabang";
-        $post_deliquency_cabang = array(
-            'api'=>'Y',
-            'kode_area'=>$this->input->post('kode_area'),
-            'tgl'=>$this->input->post('tgl')
-            );
-        $Curl = new Curl();
-        $data['output_deliquency_cabang'] = $Curl->get_rest_api($url_deliquency_cabang,$post_deliquency_cabang);
+    {
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $kode_area = $this->input->post('kode_area');
+    // {   $url_deliquency_cabang = self::$url_string."dashboard/kredit/kreditrisk_controller/delinquensy_console_cabang";
+    //     $post_deliquency_cabang = array(
+    //         'api'=>'Y',
+    //         'kode_area'=>$this->input->post('kode_area'),
+    //         'tgl'=>$this->input->post('tgl')
+    //         );
+    //     $Curl = new Curl();
+        //$data['output_deliquency_cabang'] = $Curl->get_rest_api($url_deliquency_cabang,$post_deliquency_cabang);
+        $data['output_deliquency_cabang'] = $this->model_dashboard_collection->get_summary_deliquency_cabang($tgl,$kode_area);
         $response = $this->load->view('master/collection/modal/modal_cabang_deliquency_console',$data,TRUE);
         echo $response;
+    }
+
+    function json_deliquency_cabang()
+    {
+        $tgl = $this->input->post('tgl');
+        $kode_area = $this->input->post('kode_area');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $data = $this->model_dashboard_collection->get_summary_deliquency_cabang($tgl,$kode_area)->result();
+        header('Content-Type: application/json');
+        echo json_encode($data);
     }
 
     function modal_area_bucket_roll_console()
@@ -252,7 +317,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -263,7 +328,6 @@ class Modal_bootstrap_controller extends MY_Controller
         ');
         $data['params'] = $this->params;
         $this->load->view('master/collection/modal/modal_list_npl_console',$data);
-        
     }
 
     function ajax_list_npl_console(){
@@ -366,7 +430,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -452,7 +516,7 @@ class Modal_bootstrap_controller extends MY_Controller
                 $.ajaxPrefilter( "json script", function( options ) {
                     options.crossDomain = true;
                 });
-                $("#listData").dataTable({
+                $("#listData2").dataTable({
                     stateSave: true,
                     "stateSaveCallback": function (settings, data) {
                         localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
@@ -480,7 +544,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -578,7 +642,6 @@ class Modal_bootstrap_controller extends MY_Controller
                     "serverSide": true,
                     "bDestroy": true,
                     "autoWidth": false,
-                    "pagingType": "full_numbers",
                     "ajax": {
                         "url": "'.base_url().'modal_bootstrap_controller/ajax_list_0ns_console",
                         "type": "POST",
@@ -589,7 +652,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -703,7 +766,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -789,7 +852,7 @@ class Modal_bootstrap_controller extends MY_Controller
                 $.ajaxPrefilter( "json script", function( options ) {
                     options.crossDomain = true;
                 });
-                $("#listData").dataTable({
+                $("#listData2").dataTable({
                     stateSave: true,
                     "stateSaveCallback": function (settings, data) {
                         localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
@@ -817,7 +880,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -933,7 +996,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -1299,7 +1362,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -1381,24 +1444,12 @@ class Modal_bootstrap_controller extends MY_Controller
         <script src="'.base_url().'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
-                var buttonCommon = {
-                    exportOptions: {
-                        format: {
-                            body: function ( data, row, column, node ) {
-                                // Strip $ from salary column to make it numeric
-                                return column === 5 ?
-                                    data.replace( /[$,]/g, "" ) :
-                                    data;
-                            }
-                        }
-                    }
-                };
                 var date = "'.$tgl.'";
                 var kode_cabang = "'.$kode_cabang.'";
                 $.ajaxPrefilter( "json script", function( options ) {
                     options.crossDomain = true;
                 });
-                $("#listData").dataTable({
+                $("#listData2").dataTable({
                     stateSave: true,
                     "stateSaveCallback": function (settings, data) {
                         localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
@@ -1426,7 +1477,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -1535,7 +1586,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -1649,7 +1700,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -1736,7 +1787,7 @@ class Modal_bootstrap_controller extends MY_Controller
                 $.ajaxPrefilter( "json script", function( options ) {
                     options.crossDomain = true;
                 });
-                $("#listData").dataTable({
+                $("#listData2").dataTable({
                     stateSave: true,
                     "stateSaveCallback": function (settings, data) {
                         localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
@@ -1764,7 +1815,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -1873,7 +1924,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -1987,7 +2038,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -2073,7 +2124,7 @@ class Modal_bootstrap_controller extends MY_Controller
                 $.ajaxPrefilter( "json script", function( options ) {
                     options.crossDomain = true;
                 });
-                $("#listData").dataTable({
+                $("#listData2").dataTable({
                     stateSave: true,
                     "stateSaveCallback": function (settings, data) {
                         localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
@@ -2101,7 +2152,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                 });
@@ -2210,7 +2261,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -2324,7 +2375,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -2348,8 +2399,8 @@ class Modal_bootstrap_controller extends MY_Controller
         $tgl = $this->input->post('tgl');
         $kode_area = $this->input->post("kode_area");
 
-        $get_data_console_list = $this->model_dashboard_collection->get_dt_current_ratio_console_area_list(intval($start), intval($length),$search['value'], $tgl);
-        $get_total_data_console_list = $this->model_dashboard_collection->get_dt_total_current_ratio_console_area_list($search['value'],$tgl);
+        $get_data_console_list = $this->model_dashboard_collection->get_dt_current_ratio_console_area_list(intval($start), intval($length),$search['value'], $tgl,$kode_area);
+        $get_total_data_console_list = $this->model_dashboard_collection->get_dt_total_current_ratio_console_area_list($search['value'],$tgl,$kode_area);
         if($get_data_console_list->num_rows()>0){
             $i = ($start == 0) ? 1 : $start+1;
             foreach($get_data_console_list->result() as $row){
@@ -2411,7 +2462,7 @@ class Modal_bootstrap_controller extends MY_Controller
                 $.ajaxPrefilter( "json script", function( options ) {
                     options.crossDomain = true;
                 });
-                $("#listData").dataTable({
+                $("#listData2").dataTable({
                     stateSave: true,
                     "stateSaveCallback": function (settings, data) {
                         localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
@@ -2429,7 +2480,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     "autoWidth": false,
                     "pagingType": "full_numbers",
                     "ajax": {
-                        "url": "'.base_url().'modal_bootstrap_controller/ajax_list_current_ratio_console",
+                        "url": "'.base_url().'modal_bootstrap_controller/ajax_list_current_ratio_cabang",
                         "type": "POST",
                         "data":{
                             "tgl": date,
@@ -2439,7 +2490,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -2462,8 +2513,8 @@ class Modal_bootstrap_controller extends MY_Controller
         $tgl = $this->input->post('tgl');
         $kode_cabang = $this->input->post("kode_cabang");
 
-        $get_data_console_list = $this->model_dashboard_collection->get_dt_current_ratio_console_cabang_list(intval($start), intval($length),$search['value'], $tgl);
-        $get_total_data_console_list = $this->model_dashboard_collection->get_dt_total_current_ratio_console_cabang_list($search['value'],$tgl);
+        $get_data_console_list = $this->model_dashboard_collection->get_dt_current_ratio_console_cabang_list(intval($start), intval($length),$search['value'], $tgl,$kode_cabang);
+        $get_total_data_console_list = $this->model_dashboard_collection->get_dt_total_current_ratio_console_cabang_list($search['value'],$tgl,$kode_cabang);
         if($get_data_console_list->num_rows()>0){
             $i = ($start == 0) ? 1 : $start+1;
             foreach($get_data_console_list->result() as $row){
@@ -2666,7 +2717,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -2733,11 +2784,18 @@ class Modal_bootstrap_controller extends MY_Controller
         $tgl = $this->input->post('tgl');
         $data['tgl'] = $tgl;
         if(empty($tgl)){
-            $data['tgl'] = "CURDATE()";
+            $tgl = "CURDATE()";
+            $date_curr = new DateTime();
+            $result = $date_curr->format('d F Y');
+            $data['tgl'] = $result;
         }else {
-            $data['tgl'] = "DATE('$tgl')";
+            $set_date = new DateTime($tgl);
+            $tgl = "DATE('$tgl')";
+            $result = $set_date->format('d F Y');
+            $data['tgl'] = $result;
         }
-        $data['result'] = $this->model_dashboard_collection->get_data_bucket_roll($data['tgl']);
+        $data['result'] = $this->model_dashboard_collection->get_data_bucket_roll($tgl);
+        $data['file_export'] = "Bucket Roll Console ".date('Y-m-d');
         $this->load->view('master/collection/export/export_roll_console', $data);
 
 
@@ -2783,7 +2841,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -2844,11 +2902,18 @@ class Modal_bootstrap_controller extends MY_Controller
         $kode_area = $this->input->post('kode_area');
         $data['tgl'] = $tgl;
         if(empty($tgl)){
-            $data['tgl'] = "CURDATE()";
+            $tgl = "CURDATE()";
+            $date_curr = new DateTime();
+            $result = $date_curr->format('d F Y');
+            $data['tgl'] = $result;
         }else {
-            $data['tgl'] = "DATE('$tgl')";
+            $set_date = new DateTime($tgl);
+            $tgl = "DATE('$tgl')";
+            $result = $set_date->format('d F Y');
+            $data['tgl'] = $result;
         }
-        $data['result'] = $this->model_dashboard_collection->get_data_bucket_roll_area($data['tgl'],$kode_area);
+        $data['result'] = $this->model_dashboard_collection->get_data_bucket_roll_area($tgl,$kode_area);
+        $data['file_export'] = "Bucket Roll Area ".$kode_area." ".date('Y-m-d');
         $this->load->view('master/collection/export/export_roll_console', $data);
     }
     
@@ -2859,11 +2924,11 @@ class Modal_bootstrap_controller extends MY_Controller
         <script type="text/javascript">
             $(document).ready(function(){
                 var date = $(\'input[name="date_roll_console_cabang"]\').val();
-               var kode_cabang = $(\'input[name="kode_cabang"]\').val();
+                var kode_cabang = $(\'input[name="kode_cabang"]\').val();
                 $.ajaxPrefilter( "json script", function( options ) {
                     options.crossDomain = true;
                 });
-                $("#listData").dataTable({
+                $("#listData2").dataTable({
                     stateSave: true,
                     "stateSaveCallback": function (settings, data) {
                         localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
@@ -2891,7 +2956,7 @@ class Modal_bootstrap_controller extends MY_Controller
                     responsive:{details:{type:"column",target:"tr"}},
                     columnDefs:[{className:"control",orderable:1,targets:"_all"}],
                     order:[3,"asc"],
-                    lengthMenu:[[200,500,1000,20000],[20,50,100,200]],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
                     "pageLength":100,
                     dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
                     
@@ -2922,7 +2987,7 @@ class Modal_bootstrap_controller extends MY_Controller
             foreach($get_data_console_list->result() as $row){
                 $arrData['data'][] = array(
                     $i,
-                    $row->nama_cabang_kerja,
+                    $row->nama_area_kerja,
                     $row->no_rekening,
                     $row->nama_nasabah,
                     $row->tgl_realisasi,
@@ -2952,11 +3017,18 @@ class Modal_bootstrap_controller extends MY_Controller
         $kode_cabang = $this->input->post('kode_cabang');
         $data['tgl'] = $tgl;
         if(empty($tgl)){
-            $data['tgl'] = "CURDATE()";
+            $tgl = "CURDATE()";
+            $date_curr = new DateTime();
+            $result = $date_curr->format('d F Y');
+            $data['tgl'] = $result;
         }else {
-            $data['tgl'] = "DATE('$tgl')";
+            $set_date = new DateTime($tgl);
+            $tgl = "DATE('$tgl')";
+            $result = $set_date->format('d F Y');
+            $data['tgl'] = $result;
         }
-        $data['result'] = $this->model_dashboard_collection->get_data_bucket_roll_cabang($data['tgl'],$kode_cabang);
+        $data['result'] = $this->model_dashboard_collection->get_data_bucket_roll_cabang($tgl,$kode_cabang);
+        $data['file_export'] = "Bucket Roll Cabang ".$kode_cabang." ".date('Y-m-d');
         $this->load->view('master/collection/export/export_roll_console', $data);
     }
 
@@ -2984,9 +3056,41 @@ class Modal_bootstrap_controller extends MY_Controller
         }
         $data['result_console'] = $this->model_dashboard_collection->bucket_nol_console($data['tgl']);
         $data['result_area'] = $this->model_dashboard_collection->bucket_nol_console_area($data['tgl']);
-        $data['result_cabang'] = $this->model_dashboard_collection->bucket_nol_console_cabang($data['tgl']);
-        $styleArray = 
+        $data['result_cabang'] = $this->model_dashboard_collection->bucket_nol_console_cabang($data['tgl']); 
         $this->load->view('master/collection/export/export_list_result_bucket_0_all', $data);
     }
+
+    function modal_ns0_3month(){
+        $this->load->view('master/collection/modal/modal_result_0_ns_3month');
+    }
+
+     function modal_0_all_3month(){
+        $this->load->view('master/collection/modal/modal_result_0_all_3month');
+    }
+
+    function modal_fid_compre_3month(){
+        $this->load->view('master/collection/modal/modal_result_fid_compre_3month');
+    }
+
+    function modal_fid_ever_3month(){
+        $this->load->view('master/collection/modal/modal_result_fid_ever_3month');
+    }
+
+    function modal_npl_3month(){
+        $this->load->view('master/collection/modal/modal_result_npl_3month');
+    }
+
+    function modal_current_ratio_3month(){
+        $this->load->view('master/collection/modal/modal_result_current_ratio_3month');
+    }
+
+    function modal_deliquency_3month(){
+        $this->load->view('master/collection/modal/modal_result_deliquency_3month');
+    }
+
+    function modal_roll_3month(){
+        $this->load->view('master/collection/modal/modal_result_roll_3month');
+    }
+    
 }
 ?>

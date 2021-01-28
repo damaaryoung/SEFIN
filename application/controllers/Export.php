@@ -4,6 +4,9 @@ require('./application/third_party/phpoffice/vendor/autoload.php');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Helper\Sample;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Font;
 
 class Export extends CI_Controller
 {
@@ -768,5 +771,249 @@ class Export extends CI_Controller
 
       $writer->save('php://output');
     }
+  }
+
+  function export_report_collection_daily(){
+    $this->load->helper('General_helper');
+    $tgl = $this->input->post('data_tgl');
+    $data_tgl = tgl_indonesia($tgl);
+    if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+    $this->load->helper("General_helper"); 
+    $this->load->model('model_collection');
+      $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()->setCreator('Edwin Budiyanto Sunardi')->setLastModifiedBy('Edwin Budiyanto Sunardi')->setTitle('Microsoft Office 365 XLSX Test Document')->setSubject('IT MAN')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 365 openxml php')->setCategory('Test result file');
+    $spreadsheet->getActiveSheet(0)->setTitle('List Bucket 0 ALL');
+    $header_hk = $this->model_collection->data_collection_daily($tgl)->row();
+    $spreadsheet->setActiveSheetIndex(0)
+    ->setCellValue('A1', 'PT. BPR Kredit Mandiri Indonesia Pusat')
+    ->setCellValue('A2', 'Report Data Collection Daily')
+    ->setCellValue('A4', 'Tanggal: '.$data_tgl)
+    ->setCellValue('A5', 'Cabang')
+    ->setCellValue('B5','Angsuran Hari Ini')
+    ->setCellValue('B7', 'CURRENT')
+    ->setCellValue('C7', 'lancar+')
+    ->setCellValue('D7', 'DPK')
+    ->setCellValue('E7', 'DPK+')
+    ->setCellValue('F7', 'NPL')
+    ->setCellValue('G5','HK Hari ini')
+    ->setCellValue('G6',tgl_indonesia($header_hk->tgl_hi))
+    ->setCellValue('G7', 'CURRENT')
+    ->setCellValue('H7', 'lancar+')
+    ->setCellValue('I7', 'DPK')
+    ->setCellValue('J7', 'DPK+')
+    ->setCellValue('K7', 'NPL')
+    ->setCellValue('L5','HK Bulan Lalu')
+    ->setCellValue('L6',tgl_indonesia($header_hk->tgl_hl))
+    ->setCellValue('L7', 'CURRENT')
+    ->setCellValue('M7', 'lancar+')
+    ->setCellValue('N7', 'DPK')
+    ->setCellValue('O7', 'DPK+')
+    ->setCellValue('P7', 'NPL')
+    ->setCellValue('Q5','GAP (Hari ini VS Bulan Lalu)')
+    ->setCellValue('Q7', 'CURRENT')
+    ->setCellValue('R7', 'lancar+')
+    ->setCellValue('S7', 'DPK')
+    ->setCellValue('T7', 'DPK+')
+    ->setCellValue('U7', 'NPL')
+    ->setCellValue('V5','HK Next Bulan Lalu')
+    ->setCellValue('V6',tgl_indonesia($header_hk->tgl_hln))
+    ->setCellValue('V7', 'CURRENT')
+    ->setCellValue('W7', 'lancar+')
+    ->setCellValue('X7', 'DPK')
+    ->setCellValue('Y7', 'DPK+')
+    ->setCellValue('Z7', 'NPL')
+    ->setCellValue('AA5','GAP (Hari ini VS HK Next bulan lalu)')
+    ->setCellValue('AA7', 'CURRENT')
+    ->setCellValue('AB7', 'lancar+')
+    ->setCellValue('AC7', 'DPK')
+    ->setCellValue('AD7', 'DPK+')
+    ->setCellValue('AE7', 'NPL');
+    $spreadsheet->getActiveSheet()->mergeCells('B5:F6');
+    $spreadsheet->getActiveSheet()->mergeCells('G5:K5');
+    $spreadsheet->getActiveSheet()->mergeCells('G6:K6');
+    $spreadsheet->getActiveSheet()->mergeCells('L5:P5');
+    $spreadsheet->getActiveSheet()->mergeCells('L6:P6');
+    $spreadsheet->getActiveSheet()->mergeCells('Q5:U6');
+    $spreadsheet->getActiveSheet()->mergeCells('V5:Z5');
+    $spreadsheet->getActiveSheet()->mergeCells('V6:Z6');
+    $spreadsheet->getActiveSheet()->mergeCells('AA5:AE6');
+    $spreadsheet->getActiveSheet()->mergeCells('A5:A7');
+
+    $styleColor1 = [
+      'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'color' => [
+            'rgb'=> '66B2FF'
+        ]
+      ]
+    ];
+
+    $styleBorder = [
+      'alignment' => [
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+      ],
+      'borders' => [
+      'allBorders' => [
+          'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+          'color' => ['argb' => '00000000'],
+        ],
+      ],
+    ];
+    $styleArray = [
+           'font'=>[
+                'name'=>'Arial',
+                'bold'=> true,
+                'italic'=> true,
+                'size'  =>17,
+                'color' => [
+                  'rgb' => 'FF3333'
+                ]
+           ]
+        ];
+
+    $styleArray1 = [
+          'font'=>[
+          'name'=>'Arial',
+          'bold'=> true,
+          'italic'=> true,
+          'size'  =>15,
+          'color' => [
+          'rgb' => '000000'
+        ]
+      ]
+    ];
+
+    $styleFontColor1 = [
+                 'font'=>[
+                'color' => [
+                  'rgb' => 'EF3E36'
+                ]
+              ]
+    ];
+
+    $spreadsheet->getActiveSheet(0)->getStyle('A1:A3')->applyFromArray($styleArray);
+
+    $hk = $this->model_collection->data_collection_daily($tgl);
+
+    $i = 8;
+    $tot_ang_current = 0;
+    $tot_ang_lancar = 0;
+    $tot_ang_dpk = 0;
+    $tot_ang_dpk_dpk = 0;
+    $tot_ang_npl = 0;
+    $a = 1;
+    foreach($hk->result() as $row){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("A".$i,$row->nama_area_kerja);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("B".$i,"Rp. ".number_format($row->ang_current,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("C".$i,"Rp. ".number_format($row->ang_lancar,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("D".$i,"Rp. ".number_format($row->ang_dpk,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("E".$i,"Rp. ".number_format($row->ang_dpk_dpk,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("F".$i,"Rp. ".number_format($row->ang_npl,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("G".$i,$row->rasio_bucket_0_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("H".$i,$row->rasio_bucket_1_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("I".$i,$row->rasio_bucket_2_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("J".$i,$row->rasio_bucket_3_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("K".$i,$row->rasio_bucket_npl_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("L".$i,$row->rasio_bucket_0_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("M".$i,$row->rasio_bucket_1_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("N".$i,$row->rasio_bucket_2_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("O".$i,$row->rasio_bucket_3_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("P".$i,$row->rasio_bucket_npl_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Q".$i,$row->gap_current_hihl);
+      if(negative_check($row->gap_current_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("Q".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("R".$i,$row->gap_lancar_hihl);
+      if(negative_check($row->gap_lancar_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("R".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("S".$i,$row->gap_dpk_hihl);
+       if(negative_check($row->gap_dpk_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("S".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("T".$i,$row->gap_dpk_dpk_hihl);
+      if(negative_check($row->gap_dpk_dpk_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("T".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("U".$i,$row->gap_npl_hihl);
+      if(negative_check($row->gap_npl_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("U".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("V".$i,$row->rasio_bucket_0_hln);
+      if(negative_check($row->rasio_bucket_0_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("V".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("W".$i,$row->rasio_bucket_1_hln);
+      if(negative_check($row->rasio_bucket_1_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("W".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("X".$i,$row->rasio_bucket_2_hln);
+      if(negative_check($row->rasio_bucket_2_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("Y".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Y".$i,$row->rasio_bucket_3_hln);
+      if(negative_check($row->rasio_bucket_3_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("Y".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Z".$i,$row->rasio_bucket_npl_hln);
+      if(negative_check($row->rasio_bucket_npl_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("Z".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AA".$i,$row->gap_current_hihln);
+      if(negative_check($row->gap_current_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AA".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AB".$i,$row->gap_lancar_hihln);
+      if(negative_check($row->gap_lancar_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AB".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AC".$i,$row->gap_dpk_hihln);
+      if(negative_check($row->gap_dpk_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AC".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AD".$i,$row->gap_dpk_dpk_hihln);
+      if(negative_check($row->gap_dpk_dpk_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AD".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AE".$i,$row->gap_npl_hihln);
+      if(negative_check($row->gap_npl_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AE".$i)->applyFromArray($styleFontColor1);
+      }
+      $i++;
+      $a++;
+      // $tot_ang_current = $tot_ang_current + intval($row->ang_current);
+      // $tot_ang_lancar = $tot_ang_lancar  + intval($row->ang_lancar);
+      // $tot_ang_dpk = $tot_ang_dpk + intval($row->ang_dpk);
+      // $tot_ang_dpk_dpk = $tot_ang_dpk_dpk + intval($row->ang_dpk_dpk);
+      // $tot_ang_npl = $tot_ang_npl +intval($row->ang_npl);
+
+    }
+    $last = $i-1;
+    $last_a = $a-1;
+    if($last_a==intval($hk->num_rows())){
+        $spreadsheet->getActiveSheet(0)->getStyle("A".$last.":"."AE".$last)->applyFromArray($styleArray1);
+    }
+    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("A".$i,"Total (Konsolidasi)");
+    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("B".$i,"Rp. ".number_format($tot_ang_current,0));
+    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("C".$i,"Rp. ".number_format($tot_ang_lancar,0));
+    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("D".$i,"Rp. ".number_format($tot_ang_dpk,0));
+    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("E".$i,"Rp. ".number_format($tot_ang_dpk_dpk,0));
+    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("F".$i,"Rp. ".number_format($tot_ang_npl,0));
+
+    $spreadsheet->getActiveSheet(0)->getStyle('A5:AE7')->applyFromArray($styleColor1);
+    $spreadsheet->getActiveSheet(0)->getStyle('A5:AE'.$i)->applyFromArray($styleBorder);
+    $writer = new Xlsx($spreadsheet);
+
+      $filename = 'Export Data Report Collection Daily';
+
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+      header('Cache-Control: max-age=0');
+
+      $writer->save('php://output');
   }
 }

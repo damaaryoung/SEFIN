@@ -81,8 +81,8 @@
 
 
     var urlapi = "http://103.234.254.186/riskcan";
-    url = urlapi + "/dashboard/kredit/kredit_controller/bucket_nol_console_area";
-
+    // url = urlapi + "/dashboard/kredit/kredit_controller/bucket_nol_console_area";
+    url = urlapi + "/dashboard/kredit/kredit_controller/bucket_nol_col_console_area";
     var chart = new CanvasJS.Chart("BUCKET0_ALL_CONSOLE_AREA_" + kode_area, {
         title: {
             text: kode_area,

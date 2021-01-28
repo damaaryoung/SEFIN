@@ -6,7 +6,7 @@
     <input type="hidden" name="date_0_all_console_cabang" id="date_0_all_console_cabang"/>
     <input type="hidden" name="kode_cabang" id="kode_cabang"/>
     <div class="table-responsive">
-        <table id="listData" class="table table-striped table-bordered table-hover dataTable">
+        <table id="listData2" class="table table-striped table-bordered table-hover dataTable">
             <thead>
                 <tr>
                     <th>NO</th>

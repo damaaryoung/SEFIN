@@ -8,7 +8,7 @@
             <input type="hidden" name="date_deliquency" id="date_deliquency"/>
             <thead class="text-center">
                 <tr>
-                    <th colspan="12"><?php echo $tgl ?></th>
+                    <th colspan="16"><?php echo $tgl ?></th>
                 </tr>
                 <tr>
                     <th rowspan="2" style="vertical-align:middle">AREA KERJA</th>
@@ -18,6 +18,8 @@
                     <th colspan="2">30+</th>
                     <th colspan="2">60+</th>
                     <th colspan="2">90+</th>
+                    <th colspan="2">180+</th>
+                    <th colspan="2">360+</th>
                 </tr>
                 <tr>
                     <th>BAKI DEBET</th>
@@ -32,6 +34,12 @@
                     <th>BAKI DEBET</th>
                     <th>%</th>
                     
+                    <th>BAKI DEBET</th>
+                    <th>%</th>
+
+                    <th>BAKI DEBET</th>
+                    <th>%</th>
+
                     <th>BAKI DEBET</th>
                     <th>%</th>
                 </tr>
@@ -51,6 +59,13 @@
                     <td style="text-align: right"><?php echo $res->rasio_60_plus ?></td>
                     <td style="text-align: right"><?php echo number_format($res->bd_90_plus, 0, ',', '.') ?></td>
                     <td style="text-align: right"><?php echo $res->rasio_90_plus ?></td>
+                    <td style="text-align: right"><?php echo number_format($res->bd_180_plus, 0, ',', '.') ?>
+                    </td>
+                    <td style="text-align: right"><?php echo $res->rasio_180_plus ?></td>
+                    <td style="text-align: right"><?php echo number_format($res->bd_360_plus, 0, ',', '.') ?>
+                    </td>
+                    <td style="text-align: right"><?php echo $res->rasio_360_plus ?></td>
+
                 </tr>
                 <?php endforeach ?>
             </tbody>

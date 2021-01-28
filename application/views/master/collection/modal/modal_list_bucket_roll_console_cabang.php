@@ -3,10 +3,8 @@
     <center><font size="4"><b>Data Roll Kredit Cabang</b></font></center>
 </div>
 <div class="modal-body" style="height: 500px;overflow-x:auto">
-    <input type="text" name="date_roll_console_cabang" id="date_roll_console_cabang"/>
-    <input type="text" name="kode_cabang" id="kode_cabang"/>
     <div class="table-responsive">
-        <table id="listData" width="100%" class="table table-striped table-bordered" style="white-space: nowrap; font-size:10px">
+        <table id="listData2" width="100%" class="table table-striped table-bordered" style="white-space: nowrap; font-size:10px">
             <thead class="text-center">
                 <tr>
                     <th>NO</th>

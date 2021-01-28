@@ -279,24 +279,6 @@
         });
       });
 
-function bucket_roll_console_export(tgl,area) {
-    // var data_tgl = $('input[name="date_roll_console_area_<?php echo $row->kode_area ?>"]').val();
-    // var data_kode_area = "<?php echo $row->kode_area ?>";
-    var winURL        = "<?php echo base_url('modal_bootstrap_controller/bucket_roll_console_area_export') ?>";
-    var winName       = "LAPORAN";
-    var windowoption  = 'toolbar=no,location=no,status=yes,menubar=no,scrollbars=yes,height=350px, width=350px';
-
-    var input=[];
-    input.push("<input type='hidden' name='tgl' value='"+tgl+"'><input type='hidden' name='kode_area' value='"+area+"'>");
-
-
-    $('<form/>').css({'position':'relative'}).attr({'id':'frmprint','method':'post', 'action':winURL, 'target':winName})
-       .html(input.join(''))
-       .appendTo($('body'));
-
-    var myWindowPrint = window.open('', winName,windowoption);
-    $('body').find('form#frmprint').attr('target',winName).submit().remove();
-}
 
 <?php $i++; endforeach;?>
 function get_cabang_per_area(area){

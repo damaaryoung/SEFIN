@@ -87,7 +87,7 @@ function Bucket_0() {
     var date = $('input[name="date_0_all_console"]').val();
     $.ajax({
         type: "POST",
-        url: urlapi + "/dashboard/kredit/kredit_controller/bucket_nol_console",
+        url: urlapi + "/dashboard/kredit/kredit_controller/bucket_nol_col_console",
         async: false,
         data: {
             'api': 'Y',
@@ -363,7 +363,8 @@ function deliquency_console()
     var date = $('input[name="date_deliquency"]').val();
     $.ajax({
         type: "POST",
-        url: urlapi + "/dashboard/kredit/kreditrisk_controller/delinquensy_console",
+        // url: urlapi + "/dashboard/kredit/kreditrisk_controller/delinquensy_console",
+        url:"<?php echo base_url();?>modal_bootstrap_controller/json_deliquency_console",
         async: false,
         data: {
             'api': 'Y',
@@ -390,42 +391,49 @@ function deliquency_console()
                             y: parseFloat(result.rasio_current),
                             yn: parseFloat(result.noa_current),
                             yb: parseFloat(result.bd_current).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                            indexLabelFontSize: 12,
                             label: "Current"
                         },
                         {
                             y: parseFloat(result.rasio_0_plus),
                             yn: parseFloat(result.noa_0_plus),
                             yb: parseFloat(result.bd_0_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                            indexLabelFontSize: 12,
                             label: "0 Plus"
                         },
                         {
                             y: parseFloat(result.rasio_30_plus),
                             yn: parseFloat(result.noa_30_plus),
                             yb: parseFloat(result.bd_30_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                            indexLabelFontSize: 12,
                             label: "30 Plus"
                         },
                         {
                             y: parseFloat(result.rasio_60_plus),
                             yn: parseFloat(result.noa_60_plus),
                             yb: parseFloat(result.bd_60_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                            indexLabelFontSize: 12,
                             label: "60 Plus"
                         },
                         {
                             y: parseFloat(result.rasio_90_plus),
                             yn: parseFloat(result.noa_90_plus),
                             yb: parseFloat(result.bd_90_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                            indexLabelFontSize: 12,
                             label: "90 Plus"
                         },
                         {
                             y: parseFloat(result.rasio_180_plus),
                             yn: parseFloat(result.noa_180_plus),
                             yb: parseFloat(result.bd_180_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                            indexLabelFontSize: 12,
                             label: "180 Plus"
                         },
                         {
                             y: parseFloat(result.rasio_360_plus),
                             yn: parseFloat(result.noa_360_plus),
                             yb: parseFloat(result.bd_360_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                            indexLabelFontSize: 12,
                             label: "360 Plus"
                         },
                     ]

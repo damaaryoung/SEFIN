@@ -3,7 +3,7 @@
     header('Cache-control: private');
     header("Content-Type: application/vnd.ms-excel; charset=utf-8");
     header("Content-type: application/x-msexcel; charset=utf-8");
-    header("Content-Disposition: attachment; filename=Report-Data-Nasabah-NPL-By-MB-Area.xlsx");
+    header("Content-Disposition: attachment; filename=".$file_export.".xlsx");
     header("Pragma: no-cache");
     header("Expires: 0");
 ?>
@@ -11,7 +11,7 @@
 <table id="myTable" width="100%" class="table table-striped table-bordered" style="white-space: nowrap; font-size:10px">
     <thead class="text-center">
         <tr>
-            <th colspan="12"><?php echo date('F Y', strtotime($tgl)) ?></th>
+            <th colspan="12"><?php echo $tgl ?></th>
         </tr>
         <tr>
             <th>NO.</th>

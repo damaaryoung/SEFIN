@@ -9,7 +9,7 @@
                 <div class="row">
                  	<?php
                             $a = 0;
-                            foreach($output_deliquency_area as $res):?>
+                            foreach($output_deliquency_area->result() as $res):?>
                     	<div class="col-md-6">
 				            <div class="card">
 				              	<div class="card-header d-flex p-0">
@@ -37,7 +37,7 @@
                           </div>
 				              	</div>
 				              	<div class="card-body">
-                    				<div id="DELIQUENCY_CONSOLE_AREA_<?php echo $res->kode_area;?>" style="width:400px;height:400px"></div>
+                    				<div id="DELIQUENCY_CONSOLE_AREA_<?php echo $res->kode_area;?>" style="width:500px;height:500px"></div>
                                     <button type="button" class="btn btn-md btn-danger col-12" id="DELIQUENCY_CABANG_<?php echo $res->kode_area;?>" data-toggle="modal" onclick="get_cabang_per_area('<?php echo $res->kode_area;?>')">Tampilkan Cabang</button>
                                     <div id="div_deliquency_cabang_<?php echo $res->kode_area;?>"></div>
                     			</div>
@@ -52,7 +52,7 @@
   $('#close-modal-1').click(function(){
     $('#modal-1').modal('hide');
   });
-<?php $i=1; foreach($output_deliquency_area as $row):?>
+<?php $i=1; foreach($output_deliquency_area->result() as $row):?>
     var loading = '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>';
     var kode_area = "<?php echo $row->kode_area ?>";
     var rasio_current = "<?php echo $row->rasio_current;?>";
@@ -84,7 +84,7 @@
     var noa_360_plus = "<?php echo $row->noa_360_plus;?>";
 
     var urlapi = "http://103.234.254.186/riskcan";
-    url = urlapi + "/dashboard/kredit/kreditrisk_controller/delinquensy_console_area";
+    url = "<?php echo base_url();?>modal_bootstrap_controller/json_deliquency_area";
 
     var chart = new CanvasJS.Chart("DELIQUENCY_CONSOLE_AREA_" + kode_area, {
         title: {
@@ -98,7 +98,6 @@
         data: [{
             type: "funnel",
             toolTipContent: "Percentage : <strong>{y}</strong><br/>NOA : <strong>{yn}</strong><br/>BD : <strong>{yb}</strong>",
-            indexLabelFontSize: 18,
             indexLabel: "{label} - {y}",
             yValueFormatString: "###0.0\"%\"",
             click: explodePie,
@@ -106,42 +105,49 @@
                     y: parseFloat(rasio_current),
                     yn: parseFloat(noa_current),
                     yb: parseFloat(bd_current).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                    indexLabelFontSize: 12,
                     label: "Current"
                     },
                     {
                       y: parseFloat(rasio_0_plus),
                       yn: parseFloat(noa_0_plus),
                       yb: parseFloat(bd_0_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                      indexLabelFontSize: 12,
                       label: "0 Plus"
                     },
                     {
                       y: parseFloat(rasio_30_plus),
                       yn: parseFloat(noa_30_plus),
                       yb: parseFloat(bd_30_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                      indexLabelFontSize: 12,
                       label: "30 Plus"
                     },
                     {
                       y: parseFloat(rasio_60_plus),
                       yn: parseFloat(noa_60_plus),
                       yb: parseFloat(bd_60_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                      indexLabelFontSize: 12,
                       label: "60 Plus"
                     },
                     {
                       y: parseFloat(rasio_90_plus),
                       yn: parseFloat(noa_90_plus),
                       yb: parseFloat(bd_90_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                      indexLabelFontSize: 12,
                       label: "90 Plus"
                     },
                     {
                       y: parseFloat(rasio_180_plus),
                       yn: parseFloat(noa_180_plus),
                       yb: parseFloat(bd_180_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                      indexLabelFontSize: 12,
                       label: "180 Plus"
                     },
                     {
                       y: parseFloat(rasio_360_plus),
                       yn: parseFloat(noa_360_plus),
                       yb: parseFloat(bd_180_plus).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+                      indexLabelFontSize: 12,
                       label: "360 Plus"
                     },
             ]
@@ -182,7 +188,7 @@
               data: [{
                   type: "funnel",
                   toolTipContent: "Percentage : <strong>{y}</strong><br/>BD : <strong>{yn}</strong><br/>NOA : <strong>{yb}</strong>",
-                  indexLabelFontSize: 18,
+                  indexLabelFontSize: 12,
                   indexLabel: "{label} - {y}",
                   yValueFormatString: "###0.0\"%\"",
                   click: explodePie,

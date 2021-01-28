@@ -1,4 +1,4 @@
-<!-- <?php echo $params['custom_css'];?> -->
+<?php echo $params['custom_css'];?>
 <div class="modal-header">
     <center><font size="4"><b>Current Ratio Area</b></font></center>
 </div>
@@ -6,7 +6,7 @@
     <input type="hidden" name="date_current_ratio_area" id="date_current_ratio_area"/>
     <input type="hidden" name="kode_area" id="kode_area"/>
     <div class="table-responsive">
-        <table id="listData1" class="table table-striped table-bordered table-hover dataTable">
+        <table id="listData" class="table table-striped table-bordered table-hover dataTable">
             <thead>
                 <tr>
                     <th>NO</th>
@@ -60,4 +60,4 @@
     $('body').find('form#frmprint').attr('target',winName).submit().remove();
 }
 </script>
-<!-- <?php echo $params['custom_js'];?> -->
+<?php echo $params['custom_js'];?>

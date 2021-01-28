@@ -181,11 +181,11 @@ $('#preview_list_fid_compre_console_cabang_<?php echo str_replace(" ","",$row->n
     type     : "POST",
     data     : data,
     beforeSend: function(){
-      $('#modal-1-list').modal('show');
-      $('.modal-1-list').html('<center><p><i class="fa fa-spinner fa-spin fa-3x"></i></p>Loading..</center>');
+      $('#modal-2-list').modal('show');
+      $('.modal-2-list').html('<center><p><i class="fa fa-spinner fa-spin fa-3x"></i></p>Loading..</center>');
     },
     success: function(response){
-      $('.modal-1-list').html(response);
+      $('.modal-2-list').html(response);
       $('#date_fid_compre_console_cabang').val(date);
       $('#kode_cabang').val("<?php echo $row->nama_area_kerja;?>");
     },
