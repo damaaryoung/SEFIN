@@ -2,7 +2,7 @@
 
     header("Content-type: application/vnd-ms-excel");
 
-    header("Content-Disposition: attachment; filename=FUNNEL_LENDING_DETAIL.xlsx");
+    header("Content-Disposition: attachment; filename=FUNNEL_LENDING_DETAIL.xls");
 
 ?>
 
