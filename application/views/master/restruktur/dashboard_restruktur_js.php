@@ -585,116 +585,116 @@ function NSRestruktur(){
 }
 // NSRestruktur
 // NPL
-NPL();
-function NPL(){
-  $.ajax({
-      type: "POST",
-      url: urlapi+"/dashboard/kredit/kredit_controller/npl_console",
-      async: false,
-      data:{'api':'Y'},
-      dataType: "JSON",
-      beforeSend: function() {
-        $('[id="NPL"]').html(loading);
-      },
-      success: function(result) {
-        alert(urlapi+"/dashboard/kredit/kredit_controller/npl_console");
-        var chart = new CanvasJS.Chart("NPL", {
-        	theme: "light2",
-        	animationEnabled: true,
-        	data: [{
-        		type: "pie",
-            toolTipContent: "{label}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
-        		indexLabelFontSize: 18,
-        		radius: 80,
-        		indexLabel: "{label} - {y}",
-        		yValueFormatString: "###0.0\"%\"",
-        		click: explodePie,
-        		dataPoints: [
-        			{ y: parseFloat(result.rasio_npl),yn:parseFloat(result.noa_npl),yb:parseFloat(result.bd_npl), label: "NPL"},
-        			{ y: parseFloat(result.rasio_nonnpl),yn:parseFloat(result.noa_nonnpl),yb:parseFloat(result.bd_nonnpl), label: "Non NPL"}
-        		]
-        	}]
-        });
-        chart.render();
-        function explodePie(e) {
-        	for(var i = 0; i < e.dataSeries.dataPoints.length; i++) {
-        		if(i !== e.dataPointIndex)
-        			e.dataSeries.dataPoints[i].exploded = false;
-        	}
-        }
-      }
-  });
-}
+// NPL();
+// function NPL(){
+//   $.ajax({
+//       type: "POST",
+//       url: urlapi+"/dashboard/kredit/kredit_controller/npl_console",
+//       async: false,
+//       data:{'api':'Y'},
+//       dataType: "JSON",
+//       beforeSend: function() {
+//         $('[id="NPL"]').html(loading);
+//       },
+//       success: function(result) {
+//         alert(urlapi+"/dashboard/kredit/kredit_controller/npl_console");
+//         var chart = new CanvasJS.Chart("NPL", {
+//         	theme: "light2",
+//         	animationEnabled: true,
+//         	data: [{
+//         		type: "pie",
+//             toolTipContent: "{label}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+//         		indexLabelFontSize: 18,
+//         		radius: 80,
+//         		indexLabel: "{label} - {y}",
+//         		yValueFormatString: "###0.0\"%\"",
+//         		click: explodePie,
+//         		dataPoints: [
+//         			{ y: parseFloat(result.rasio_npl),yn:parseFloat(result.noa_npl),yb:parseFloat(result.bd_npl), label: "NPL"},
+//         			{ y: parseFloat(result.rasio_nonnpl),yn:parseFloat(result.noa_nonnpl),yb:parseFloat(result.bd_nonnpl), label: "Non NPL"}
+//         		]
+//         	}]
+//         });
+//         chart.render();
+//         function explodePie(e) {
+//         	for(var i = 0; i < e.dataSeries.dataPoints.length; i++) {
+//         		if(i !== e.dataPointIndex)
+//         			e.dataSeries.dataPoints[i].exploded = false;
+//         	}
+//         }
+//       }
+//   });
+// }
 // NPL
 // Bucket Zero
-Bucket_0();
-function Bucket_0(){
-  $.ajax({
-      type: "POST",
-      url: urlapi+"/dashboard/kredit/kredit_controller/bucket_nol_console",
-      async: false,
-      data:{'api':'Y'},
-      dataType: "JSON",
-      beforeSend: function() {
-        $('[id="Bucket_0"]').html(loading);
-      },
-      success: function(result) {
-        var chart = new CanvasJS.Chart("Bucket_0",
-      	{
-      		theme: "light2",
-      		data: [
-      		{
-      			type: "pie",
-            toolTipContent: "{indexLabel}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
-      			showInLegend: true,
-      			legendText: "{indexLabel}",
-      			dataPoints: [
-      				{  y: parseFloat(result.rasio_bucket_0),yn: parseFloat(result.noa_bucket_0),yb: parseFloat(result.bd_bucket_0), indexLabel: "Bucket 0" },
-      				{  y: parseFloat(result.rasio_bucket_1),yn: parseFloat(result.noa_bucket_1),yb: parseFloat(result.bd_bucket_1), indexLabel: "Bucket 1" },
-      				{  y: parseFloat(result.rasio_bucket_2),yn: parseFloat(result.noa_bucket_2),yb: parseFloat(result.bd_bucket_2), indexLabel: "Bucket 2" },
-      				{  y: parseFloat(result.rasio_npl),yn: parseFloat(result.noa_npl),yb: parseFloat(result.bd_npl), indexLabel: "NPL"}
-      			]
-      		}
-      		]
-      	});
-      	chart.render();
-      }
-  });
-}
+// Bucket_0();
+// function Bucket_0(){
+//   $.ajax({
+//       type: "POST",
+//       url: urlapi+"/dashboard/kredit/kredit_controller/bucket_nol_console",
+//       async: false,
+//       data:{'api':'Y'},
+//       dataType: "JSON",
+//       beforeSend: function() {
+//         $('[id="Bucket_0"]').html(loading);
+//       },
+//       success: function(result) {
+//         var chart = new CanvasJS.Chart("Bucket_0",
+//       	{
+//       		theme: "light2",
+//       		data: [
+//       		{
+//       			type: "pie",
+//             toolTipContent: "{indexLabel}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+//       			showInLegend: true,
+//       			legendText: "{indexLabel}",
+//       			dataPoints: [
+//       				{  y: parseFloat(result.rasio_bucket_0),yn: parseFloat(result.noa_bucket_0),yb: parseFloat(result.bd_bucket_0), indexLabel: "Bucket 0" },
+//       				{  y: parseFloat(result.rasio_bucket_1),yn: parseFloat(result.noa_bucket_1),yb: parseFloat(result.bd_bucket_1), indexLabel: "Bucket 1" },
+//       				{  y: parseFloat(result.rasio_bucket_2),yn: parseFloat(result.noa_bucket_2),yb: parseFloat(result.bd_bucket_2), indexLabel: "Bucket 2" },
+//       				{  y: parseFloat(result.rasio_npl),yn: parseFloat(result.noa_npl),yb: parseFloat(result.bd_npl), indexLabel: "NPL"}
+//       			]
+//       		}
+//       		]
+//       	});
+//       	chart.render();
+//       }
+//   });
+// }
 // Bucket Zero
 // 0NS
-ZeroNS();
-function ZeroNS(){
-  $.ajax({
-      type: "POST",
-      url: urlapi+"/dashboard/kredit/kreditrisk_controller/ns_console",
-      async: false,
-      data:{'api':'Y'},
-      dataType: "JSON",
-      beforeSend: function() {
-        $('[id="ZeroNS"]').html(loading);
-      },
-      success: function(result) {
-        var chart = new CanvasJS.Chart("ZeroNS",
-      	{
-      		theme: "light2",
-      		data: [
-      		{
-      			type: "pie",
-            toolTipContent: "{indexLabel}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
-      			showInLegend: true,
-      			legendText: "{indexLabel}",
-      			dataPoints: [
-      				{  y: parseFloat(result.rasio_paid),yn: parseFloat(result.noa_paid),yb: parseFloat(result.bd_paid), indexLabel: "Paid" },
-      				{  y: parseFloat(result.rasio_unpaid),yn: parseFloat(result.noa_unpaid),yb: parseFloat(result.bd_unpaid), indexLabel: "Unpaid" }
-      			]
-      		}
-      		]
-      	});
-      	chart.render();
-      }
-  });
-}
+// ZeroNS();
+// function ZeroNS(){
+//   $.ajax({
+//       type: "POST",
+//       url: urlapi+"/dashboard/kredit/kreditrisk_controller/ns_console",
+//       async: false,
+//       data:{'api':'Y'},
+//       dataType: "JSON",
+//       beforeSend: function() {
+//         $('[id="ZeroNS"]').html(loading);
+//       },
+//       success: function(result) {
+//         var chart = new CanvasJS.Chart("ZeroNS",
+//       	{
+//       		theme: "light2",
+//       		data: [
+//       		{
+//       			type: "pie",
+//             toolTipContent: "{indexLabel}, <strong>{y}</strong><br/>Noa, <strong>{yn}</strong><br/>baki debet, <strong>{yb}</strong>",
+//       			showInLegend: true,
+//       			legendText: "{indexLabel}",
+//       			dataPoints: [
+//       				{  y: parseFloat(result.rasio_paid),yn: parseFloat(result.noa_paid),yb: parseFloat(result.bd_paid), indexLabel: "Paid" },
+//       				{  y: parseFloat(result.rasio_unpaid),yn: parseFloat(result.noa_unpaid),yb: parseFloat(result.bd_unpaid), indexLabel: "Unpaid" }
+//       			]
+//       		}
+//       		]
+//       	});
+//       	chart.render();
+//       }
+//   });
+// }
 // 0NS
 
 // fidever

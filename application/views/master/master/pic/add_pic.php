@@ -283,7 +283,7 @@
                 $('#form_tambah_pic input[type=hidden][name=id]').val(data.user_id);
                 $('#form_tambah_pic input[name=nama_user]').val(data.nama);
                 })
-            $('#IDModal').modal('toggle') //or  $('#IDModal').modal('hide');
+            $('#IDModal').modal('toggle'); //or  $('#IDModal').modal('hide');
             .fail(function(jqXHR){
                 bootbox.alert('Data tidak ditemukan');
             });

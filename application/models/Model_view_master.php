@@ -7,9 +7,6 @@ class Model_view_master extends ci_model
         // return $this->db->query($query);
         $x = array('id_parameter =' => '06', 'nama_parameter =' => 'JUMLAH PENDAPATAN', 'flg_aktif' => '1');
         return $this->db->select('nama_detail' , 'id_detail_params')->where($x)->get('view_creditscoring');
-        // $query = "SELECT * from view_creditscoring WHERE nama_parameter='JUMLAH PENDAPATAN' AND id_parameter='06'";
-        // $data=$this->db->query($query)->result();
-        // return $data;
     }
     function pemasukan_perbulan()
     {

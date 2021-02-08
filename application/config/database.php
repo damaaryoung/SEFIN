@@ -75,12 +75,57 @@ $query_builder = TRUE;
 
 
 
-$db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => '103.31.232.148:3307',
-	'username' => 'u2Qi7Jfui',
-	'password' => 'qJ7ysIkg8ce!',
-	'database' => 'newwebtool',
+<<<<<<< HEAD
+ $db['default'] = array(
+ 	'dsn'	=> '',
+ 	'hostname' => '103.31.232.148:3307',
+ 	'username' => 'u2Qi7Jfui',
+ 	'password' => 'qJ7ysIkg8ce!',
+ 	'database' => 'newwebtool',
+ 	'dbdriver' => 'mysqli',
+ 	'dbprefix' => '',
+ 	'pconnect' => FALSE,
+ 	'db_debug' => (ENVIRONMENT !== 'production'),
+ 	'cache_on' => FALSE,
+ 	'cachedir' => '',
+ 	'char_set' => 'utf8',
+ 	'dbcollat' => 'utf8_general_ci',
+ 	'swap_pre' => '',
+ 	'encrypt' => FALSE,
+ 	'compress' => FALSE,
+ 	'stricton' => FALSE,
+ 	'failover' => array(),
+ 	'save_queries' => TRUE
+ );
+
+ $db['dpm_online'] = array(
+ 	'dsn'	=> '',
+ 	'hostname' => '103.31.232.148:3307',
+ 	'username' => 'u2Qi7Jfui',
+ 	'password' => 'qJ7ysIkg8ce!',
+ 	'database' => 'dpm_online',
+ 	'dbdriver' => 'mysqli',
+ 	'dbprefix' => '',
+ 	'pconnect' => FALSE,
+ 	'db_debug' => (ENVIRONMENT !== 'production'),
+ 	'cache_on' => FALSE,
+ 	'cachedir' => '',
+ 	'char_set' => 'utf8',
+ 	'dbcollat' => 'utf8_general_ci',
+ 	'swap_pre' => '',
+ 	'encrypt' => FALSE,
+ 	'compress' => FALSE,
+ 	'stricton' => FALSE,
+ 	'failover' => array(),
+ 	'save_queries' => TRUE
+ );
+
+/*$db['default'] = array(
+	'dsn'   => '',
+	'hostname' => '103.234.254.186:3308',
+	'username' => 'test', //username database kedua
+	'password' => 'test123!', //password database kedua
+	'database' => 'newwebtool', //nama database kedua
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -96,3 +141,33 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+$db['dpm_online'] = array(
+	'dsn'   => '',
+	'hostname' => '103.234.254.186:3308',
+	'username' => 'test', //username database kedua
+	'password' => 'test123!', //password database kedua
+	'database' => 'dpm_online', //nama database kedua
+=======
+$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => '103.31.232.148:3307',
+	'username' => 'u2Qi7Jfui',
+	'password' => 'qJ7ysIkg8ce!',
+	'database' => 'newwebtool',
+>>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);*/

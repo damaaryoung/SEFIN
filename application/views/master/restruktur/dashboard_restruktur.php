@@ -256,67 +256,67 @@
       </div>
     </div>
 
-    <div class="callout callout-info">
+    <!--div class="callout callout-info">
       <h5 class="text-center"><strong>Collection</strong></h5>
       <div class="row">
         <div class="col-md-6">
           <div class="card">
             <div class="card-header d-flex p-0">
               <h3 class="card-title p-3">NPL</h3>
-            </div><!-- /.card-header -->
+            </div>
             <div class="card-body">
               <div id="NPL" style="height: 300px; width: 100%;"></div>
-            </div><!-- /.card-body -->
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="card">
             <div class="card-header d-flex p-0">
               <h3 class="card-title p-3">Bucket 0</h3>
-            </div><!-- /.card-header -->
+            </div>
             <div class="card-body">
               <div id="Bucket_0" style="height: 300px; width: 100%;"></div>
-            </div><!-- /.card-body -->
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </div-->
 
-    <div class="callout callout-success">
+    <!--div class="callout callout-success">
       <h5 class="text-center"><strong>RISK</strong></h5>
       <div class="row">
         <div class="col-md-4">
           <div class="card">
             <div class="card-header d-flex p-0">
               <h3 class="card-title p-3">0 NS</h3>
-            </div><!-- /.card-header -->
+            </div>
             <div class="card-body">
               <div id="ZeroNS" style="height: 300px; width: 100%;"></div>
-            </div><!-- /.card-body -->
+            </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="card">
             <div class="card-header d-flex p-0">
               <h3 class="card-title p-3">FID Ever By 6 Mounth</h3>
-            </div><!-- /.card-header -->
+            </div>
             <div class="card-body">
               <div id="fid-ever" style="height: 300px; width: 100%;"></div>
-            </div><!-- /.card-body -->
+            </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="card">
             <div class="card-header d-flex p-0">
               <h3 class="card-title p-3">FID Compre By 6 Mounth</h3>
-            </div><!-- /.card-header -->
+            </div>
             <div class="card-body">
               <div id="fid-compre" style="height: 300px; width: 100%;"></div>
-            </div><!-- /.card-body -->
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </div-->
   </section>
 </div>
 <?php $this->view('master/restruktur/dashboard_restruktur_js.php'); ?>
