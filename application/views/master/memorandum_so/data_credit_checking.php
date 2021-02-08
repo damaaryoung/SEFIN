@@ -543,6 +543,18 @@
                             </div>
                             <div class="card-body collapse" id="collapse_6">
                                 <div class="row">
+                                    <div class="col-md-4" id="photo_deb">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Photo Debitur</label>
+                                            <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_photo_deb" data-id="65"><i class="fa fa-pencil-alt"></i></button>
+                                            <div class="form-group form-file-upload form-file-multiple">
+                                                <div class="col-md-6">
+                                                    <div class="well" id="gambar_photo">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-4" id="ktp">
                                         <div class="form-group">
                                             <label class="bmd-label-floating">KTP Debitur</label>
@@ -551,6 +563,19 @@
                                                 <div class="col-md-6">
                                                     <!--   <input type="file" name="ktp_deb" multiple value="kjefiej"> -->
                                                     <div class="well" id="gambar_ktp">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" id="npwp">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">NPWP</label>
+                                            <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_npwp" data-id="65"><i class="fa fa-pencil-alt"></i></button>
+                                            <div class="form-group form-file-upload form-file-multiple">
+                                                <div class="col-md-6">
+                                                    <!--   <input type="file" name="ktp_deb" multiple value="kjefiej"> -->
+                                                    <div class="well" id="gambar_npwp">
                                                     </div>
                                                 </div>
                                             </div>
@@ -599,6 +624,18 @@
                                             <div class="form-group form-file-upload form-file-multiple">
                                                 <div class="col-md-6">
                                                     <div class="well" id="gambar_imb">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" id="form_gambar_photo_pasangan">
+                                        <div class="form-group">
+                                            <label for="exampleInput1" class="bmd-label-floating">Photo Pasangan</label>
+                                            <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_photo_pasangan" data-id="65"><i class="fa fa-pencil-alt"></i></button>
+                                            <div class="form-group form-file-upload form-file-multiple">
+                                                <div class="col-md-6">
+                                                    <div class="well" id="gambar_photo_pasangan">
                                                     </div>
                                                 </div>
                                             </div>
@@ -671,6 +708,50 @@
                         <label for="exampleInputFile">Ubah Lampiran KTP Debitur</label>
                         <div class="input-group">
                             <input type="file" name="lamp_ktp_deb" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_photo_deb">
+    <input type="hidden" id="id_debitur_photo" name="id_debitur_photo">
+    <div class="modal fade in" id="modal_edit_photo_deb" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label for="exampleInputFile">Ubah Lampiran Photo Debitur</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_photo_deb" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_npwp">
+    <input type="hidden" id="id_debitur_npwp" name="id_debitur_npwp">
+    <div class="modal fade in" id="modal_edit_npwp" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label for="exampleInputFile">Ubah Lampiran NPWP</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_npwp" class="form-control" style="height: 45px">
                         </div>
                     </div>
                 </div>
@@ -781,6 +862,28 @@
                         <label for="exampleInputFile">Ubah KTP Pasangan</label>
                         <div class="input-group">
                             <input type="file" name="lamp_ktp_pas" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_photo_pas">
+    <input type="hidden" id="id_debitur_photo_pasangan" name="id_debitur_photo_pasangan">
+    <div class="modal fade in" id="modal_edit_photo_pasangan" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label for="exampleInputFile">Ubah KTP Pasangan</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_photo_pas" class="form-control" style="height: 45px">
                         </div>
                     </div>
                 </div>
@@ -1722,6 +1825,9 @@
             var html11 = [];
             var html12 = [];
             var html13 = [];
+            var html14 = [];
+            var html15 = [];
+            var html16 = [];
             var id = $(this).attr('data');
 
             get_detail_credit_checking = function(opts, id) {
@@ -1757,13 +1863,16 @@
                     $('#form_penjamin input[type=hidden][name=id_trans_so_pen]').val(data.id);
                     $('#form_detail input[type=hidden][name=id_fasilitas_pinjaman]').val(data.id);
                     $('#form_detail input[type=hidden][name=id_debitur]').val(data.calon_debitur.id);
+                    $('#form_edit_photo_deb input[type=hidden][name=id_debitur_photo]').val(data.calon_debitur.id);
                     $('#form_edit_ktp_deb input[type=hidden][name=id_debitur_ktp]').val(data.calon_debitur.id);
+                    $('#form_edit_npwp input[type=hidden][name=id_debitur_npwp]').val(data.calon_debitur.id);
                     $('#form_edit_kk_deb input[type=hidden][name=id_debitur_kk]').val(data.calon_debitur.id);
                     $('#form_edit_sertifikat_deb input[type=hidden][name=id_debitur_sertifikat]').val(data.calon_debitur.id);
                     $('#form_edit_imb_deb input[type=hidden][name=id_debitur_imb]').val(data.calon_debitur.id);
                     $('#form_edit_pbb_deb input[type=hidden][name=id_debitur_pbb]').val(data.calon_debitur.id);
                     $('#form_edit_agunan_rumah input[type=hidden][name=id_debitur_agunan_rumah]').val(data.calon_debitur.id);
                     $('#form_detail input[type=hidden][id=id_pasangan]').val(data.pasangan.id);
+                    $('#form_edit_photo_pas input[type=hidden][name=id_debitur_photo_pasangan]').val(data.pasangan.id);
                     $('#form_edit_ktp_pas input[type=hidden][name=id_debitur_ktp_pasangan]').val(data.pasangan.id);
                     $('#form_edit_buku_nikah_pas input[type=hidden][name=id_debitur_buku_nikah]').val(data.pasangan.id);
                     $('#form_detail input[name=nomor_so]').val(data.nomor_so);
@@ -2082,93 +2191,122 @@
                                 }
 
                                 if (data_debitur.lampiran.lamp_ktp == null) {
-                                    var a1 = [
+                                    var a = [
                                         '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                     ].join('\n');
-                                    html.push(a1);
+                                    html.push(a);
                                     $('#gambar_ktp').html(html);
                                 } else {
-                                    var a1 = [
+                                    var a = [
                                         '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img id="img_ktp_deb" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_ktp + '" /> </a>'
                                     ].join('\n');
-                                    html.push(a1);
+                                    html.push(a);
                                     $('#gambar_ktp').html(html);
+                                }
+
+                                if (data_debitur.lampiran.foto_cadeb == null) {
+                                    var b = [
+                                        '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                                    ].join('\n');
+                                    html1.push(b);
+                                    $('#gambar_photo').html(html1);
+                                } else {
+                                    var b = [
+                                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.foto_cadeb + '" data-lightbox="example-set" data-title="Lampiran Photo Debitur"><img id="img_photo_deb" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.foto_cadeb + '" /> </a>'
+                                    ].join('\n');
+                                    html1.push(b);
+                                    $('#gambar_photo').html(html1);
+                                }
+
+                                if (data_debitur.lampiran.lamp_npwp== null) {
+                                    var c = [
+                                        '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                                    ].join('\n');
+                                    html2.push(c);
+                                    $('#gambar_npwp').html(html2);
+                                } else {
+                                    var c = [
+                                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP"><img id="img_npwp" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_npwp + '" /> </a>'
+                                    ].join('\n');
+                                    html2.push(c);
+                                    $('#gambar_npwp').html(html2);
                                 }
 
                                 if (data_debitur.lampiran.lamp_kk == null) {
-                                    var b = [
+                                    var d = [
                                         '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                     ].join('\n');
-                                    html1.push(b);
-                                    $('#gambar_kk').html(html1);
+                                    html3.push(d);
+                                    $('#gambar_kk').html(html3);
                                 } else {
-                                    var b = [
+                                    var d = [
                                         '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KK Debitur"><img class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_kk + '" /> </a>'
                                     ].join('\n');
-                                    html1.push(b);
-                                    $('#gambar_kk').html(html1);
+                                    html3.push(d);
+                                    $('#gambar_kk').html(html3);
                                 }
 
                                 if (data_debitur.lampiran.lamp_sertifikat == null) {
-                                    var c = [
+                                    var e = [
                                         '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                     ].join('\n');
-                                    html2.push(c);
-                                    $('#gambar_sertifikat').html(html2);
+                                    html4.push(e);
+                                    $('#gambar_sertifikat').html(html4);
                                 } else {
-                                    var c = [
+                                    var e = [
                                         '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_sertifikat + '" data-lightbox="example-set" data-title="Lampiran Sertifkat Debitur"><img class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_sertifikat + '" /> </a>'
                                     ].join('\n');
-                                    html2.push(c);
-                                    $('#gambar_sertifikat').html(html2);
+                                    html4.push(e);
+                                    $('#gambar_sertifikat').html(html4);
                                 }
 
                                 if (data_debitur.lampiran.lamp_sttp_pbb == null) {
-                                    var d = [
+                                    var f = [
                                         '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                     ].join('\n');
-                                    html3.push(d);
-                                    $('#gambar_pbb').html(html3);
+                                    html5.push(f);
+                                    $('#gambar_pbb').html(html5);
                                 } else {
-                                    var d = [
+                                    var f = [
                                         '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_sttp_pbb + '" data-lightbox="example-set" data-title="Lampiran PBB Debitur"><img class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_sttp_pbb + '" /> </a>'
                                     ].join('\n');
-                                    html3.push(d);
-                                    $('#gambar_pbb').html(html3);
+                                    html5.push(f);
+                                    $('#gambar_pbb').html(html5);
                                 }
 
                                 if (data_debitur.lampiran.lamp_imb == null) {
-                                    var e = [
+                                    var g = [
                                         '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                     ].join('\n');
-                                    html4.push(e);
-                                    $('#gambar_imb').html(html4);
+                                    html6.push(g);
+                                    $('#gambar_imb').html(html6);
                                 } else {
-                                    var e = [
+                                    var g = [
                                         '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_imb + '" data-lightbox="example-set" data-title="Lampiran IMB Debitur"><img class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_imb + '" /> </a>'
                                     ].join('\n');
-                                    html4.push(e);
-                                    $('#gambar_imb').html(html4);
+                                    html6.push(g);
+                                    $('#gambar_imb').html(html6);
                                 }
 
                                 if (data_debitur.lampiran.foto_agunan_rumah == null) {
-                                    var p = [
+                                    var h = [
                                         '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                     ].join('\n');
-                                    html13.push(p);
-                                    $('#gambar_rumah_agunan').html(html13);
+                                    html7.push(h);
+                                    $('#gambar_rumah_agunan').html(html7);
                                 } else {
-                                    var p = [
+                                    var h = [
                                         '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.foto_agunan_rumah + '" data-lightbox="example-set" data-title="Lampiran IMB Debitur"><img class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.foto_agunan_rumah + '" /> </a>'
                                     ].join('\n');
-                                    html13.push(p);
-                                    $('#gambar_rumah_agunan').html(html13);
+                                    html7.push(h);
+                                    $('#gambar_rumah_agunan').html(html7);
                                 }
 
                             })
                     }
                     if (data.pasangan.id !== null) {
                         $('#form_pasangan_debitur').show();
+                        $('#form_gambar_photo_pasangan').show();
                         $('#form_gambar_ktp_pasangan').show();
                         $('#form_gambar_buku_nikah').show();
                         load_pasangan = function() {
@@ -2193,31 +2331,45 @@
                                     $('#form_detail input[name=no_telp_pas]').val(data_pasangan.no_telp);
 
                                     if (data_pasangan.lampiran.lamp_ktp == null) {
-                                        var f = [
+                                        var i = [
                                             '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                         ].join('\n');
-                                        html5.push(f);
-                                        $('#gambar_ktp_pasangan').html(html5);
+                                        html8.push(i);
+                                        $('#gambar_ktp_pasangan').html(html8);
                                     } else {
-                                        var f = [
+                                        var i = [
                                             '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lamp_ktp + '" /> </a>'
                                         ].join('\n');
-                                        html5.push(f);
-                                        $('#gambar_ktp_pasangan').html(html5);
+                                        html8.push(i);
+                                        $('#gambar_ktp_pasangan').html(html8);
+                                    }
+
+                                    if (data_pasangan.lampiran.foto_pasangan == null) {
+                                    var j = [
+                                        '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                                    ].join('\n');
+                                    html9.push(j);
+                                    $('#gambar_photo_pasangan').html(html9);
+                                    } else {
+                                        var j = [
+                                            '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" data-lightbox="example-set" data-title="Lampiran Photo Pasangan"><img id="img_photo_pas" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" /> </a>'
+                                        ].join('\n');
+                                        html9.push(j);
+                                        $('#gambar_photo_pasangan').html(html9);
                                     }
 
                                     if (data_pasangan.lampiran.lamp_buku_nikah == null) {
-                                        var g = [
+                                        var k = [
                                             '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                         ].join('\n');
-                                        html7.push(g);
-                                        $('#gambar_buku_nikah').html(html7);
+                                        html10.push(k);
+                                        $('#gambar_buku_nikah').html(html10);
                                     } else {
-                                        var g = [
+                                        var k = [
                                             '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran Buku Nikah"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lamp_buku_nikah + '" /> </a>'
                                         ].join('\n');
-                                        html7.push(g);
-                                        $('#gambar_buku_nikah').html(html7);
+                                        html10.push(k);
+                                        $('#gambar_buku_nikah').html(html10);
                                     }
                                 })
                         }
@@ -2225,7 +2377,6 @@
                     }
                     load_fasilitas();
                     load_debitur();
-
                 })
                 .fail(function(jqXHR) {
                     bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
@@ -2410,6 +2561,66 @@
             var formData = new FormData();
             //Data Debitur
             formData.append('lamp_ktp', $('input[name=lamp_ktp_deb]', this)[0].files[0]);
+
+            update_debitur(formData, id)
+                .done(function(res) {
+                    var data = res.data;
+                    bootbox.alert('Data berhasil diubah', function() {
+                        load_data_lampiran();
+                        $("#batal").click();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    }
+                    bootbox.alert(error, function() {
+                        $("#batal").click();
+                    });
+                });
+            $(".close_deb").click();
+        });
+
+        $('#form_edit_photo_deb ').on('submit', function(e) {
+            var id = $('input[name=id_debitur_photo]', this).val();
+            e.preventDefault();
+            var formData = new FormData();
+            //Data Debitur
+            formData.append('foto_cadeb', $('input[name=lamp_photo_deb]', this)[0].files[0]);
+
+            update_debitur(formData, id)
+                .done(function(res) {
+                    var data = res.data;
+                    bootbox.alert('Data berhasil diubah', function() {
+                        load_data_lampiran();
+                        $("#batal").click();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    }
+                    bootbox.alert(error, function() {
+                        $("#batal").click();
+                    });
+                });
+            $(".close_deb").click();
+        });
+
+        $('#form_edit_npwp ').on('submit', function(e) {
+            var id = $('input[name=id_debitur_npwp]', this).val();
+            e.preventDefault();
+            var formData = new FormData();
+            //Data Debitur
+            formData.append('lamp_npwp', $('input[name=lamp_npwp]', this)[0].files[0]);
 
             update_debitur(formData, id)
                 .done(function(res) {
@@ -2685,6 +2896,40 @@
             var formData = new FormData();
             //Data Debitur
             formData.append('lamp_ktp_pas', $('input[name=lamp_ktp_pas]', this)[0].files[0]);
+
+            update_pasangan(formData, id)
+                .done(function(res) {
+
+                    var data = res.data;
+                    bootbox.alert('Data berhasil diubah', function() {
+                        load_data_lampiran_pasangan();
+                        $("#batal").click();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    } else {
+                        $.each(data, function(index, item) {
+                            error += '<p>' + item + '</p>' + "\n";
+                        });
+                    }
+                    bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                        $("#batal").click();
+                    });
+                });
+        });
+
+        $('#form_edit_photo_pas').on('submit', function(e) {
+            var id = $('input[name=id_debitur_photo_pasangan]', this).val();
+            e.preventDefault();
+            var formData = new FormData();
+            //Data Debitur
+            formData.append('foto_pasangan', $('input[name=lamp_photo_pas]', this)[0].files[0]);
 
             update_pasangan(formData, id)
                 .done(function(res) {
@@ -3121,8 +3366,6 @@
                     });
                 });
         });
-
-        
         
         //CHANGE KTP PENJAMIN
         $('.add_lamp_ktp_penjamin').on('change', function(e) {
@@ -3422,6 +3665,34 @@
                         $('#gambar_ktp').html(html);
                     }
 
+                    if (data_debitur.lampiran.foto_cadeb == null) {
+                        var a2 = [
+                            '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                        ].join('\n');
+                        html6.push(a2);
+                        $('#gambar_photo').html(html6);
+                    } else {
+                        var a2 = [
+                            '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.foto_cadeb + '" data-lightbox="example-set" data-title="Lampiran Photo Debitur"><img id="img_photo_deb" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.foto_cadeb + '" /> </a>'
+                        ].join('\n');
+                        html6.push(a2);
+                        $('#gambar_photo').html(html6);
+                    }
+
+                    if (data_debitur.lampiran.lamp_npwp == null) {
+                        var a3 = [
+                            '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                        ].join('\n');
+                        html7.push(a3);
+                        $('#gambar_npwp').html(html7);
+                    } else {
+                        var a3 = [
+                            '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_npwp+ '" data-lightbox="example-set" data-title="Lampiran NPWPr"><img id="img_npwp" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_npwp + '" /> </a>'
+                        ].join('\n');
+                        html7.push(a3);
+                        $('#gambar_npwp').html(html7);
+                    }
+
                     if (data_debitur.lampiran.lamp_kk == null) {
                         var b = [
                             '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
@@ -3500,6 +3771,7 @@
             get_data_pasangan({}, id)
                 .done(function(response) {
                     var data_pasangan = response.data;
+                    var html = [];
                     var html1 = [];
                     var html2 = [];
 
@@ -3515,6 +3787,20 @@
                         ].join('\n');
                         html1.push(f);
                         $('#gambar_ktp_pasangan').html(html1);
+                    }
+
+                    if (data_pasangan.lampiran.foto_pasangan == null) {
+                        var aa = [
+                            '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                        ].join('\n');
+                        html.push(aa);
+                        $('#gambar_photo_pasangan').html(html);
+                    } else {
+                        var aa = [
+                            '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" data-lightbox="example-set" data-title="Lampiran Photo Pasangan"><img id="img_photo_pas" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" /> </a>'
+                        ].join('\n');
+                        html.push(aa);
+                        $('#gambar_photo_pasangan').html(html);
                     }
 
                     if (data_pasangan.lampiran.lamp_buku_nikah == null) {

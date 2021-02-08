@@ -38,9 +38,6 @@
                                             Nama Debitur
                                         </th>
                                         <th>
-                                            Total Pencairan
-                                        </th>
-                                        <th>
                                             Contacted
                                         </th>
                                         <th>
@@ -586,8 +583,10 @@
 
                     <div class="form-group" style="margin-top: 20px;">
                         <label style="font-style: bold; color: #383a3a;">Note Tele Sales</label>
-                        <textarea name="note_tele_sales_detail" id="note_tele_sales_detail" style="width: 100%" rows="5"></textarea>
+                        <textarea readonly name="note_tele_sales_detail" id="note_tele_sales_detail" style="width: 100%" rows="5"></textarea>
                     </div>
+
+                    <button type="button" class="btn btn-danger btn-sm back" id="click_back"><i class="fa fa-caret-left"> Kembali</i></button>
 
                 </div>
             </div>
@@ -905,6 +904,12 @@
             $('#detail_activity').show();
         });
 
+        $('#click_back').click(function(){
+            hide_all();
+            $('#detail_activity').hide();
+            $('#lihat_activity').show();
+        });
+
         tambah_activity = function(opts){
             var url = '<?php echo $this->config->item('api_url');?>/api/master/telesales/create';
             var data = opts;
@@ -1218,7 +1223,6 @@
                         '<td>'+ formatTanggalTelepon(item.tgl_telp) +'</td>',
                         '<td>'+ item.no_kontrak +'</td>',
                         '<td>'+ item.nama_debitur +'</td>',
-                        '<td>'+ item.total_pencairan +'</td>',
                         '<td>'+ nullChecker(item.result_contacted) +'</td>',
                         '<td>'+ nullChecker(item.result_uncontacted) +'</td>',
                         '<td>'+ nullChecker(item.result_unconnected) +'</td>',
@@ -1310,7 +1314,7 @@
 
             get_data_nasabah({}, nasabah_id)
                 .done(function(response) {
-                    var data = response.data;
+                    var data = response.data[0];
                     console.log(data);
 
                     $('#form_detail input[name=no_kontrak]').val(data.no_kontrak);
@@ -1356,29 +1360,29 @@
                     $('#form_show input[name=no_telp_1_detail]').val(data.no_telp_1);
                     $('#form_show input[name=no_telp_2_detail]').val(data.no_telp_2);
                     $('#form_show input[name=update_telp_detail]').val(data.no_telp_3);
-                    $('#form_show input[name=plafon_awal_detail]').val(data.plafon_awal);
+                    $('#form_show input[name=plafon_awal_detail]').val(formatNumber(data.plafon_awal));
                     $('#form_show input[name=angsuran_ke_detail]').val(data.angsuran_ke);
-                    $('#form_show input[name=sisa_angsuran_detail]').val(data.sisa_angsuran);
+                    $('#form_show input[name=sisa_angsuran_detail]').val(formatNumber(data.sisa_angsuran));
                     $('#form_show input[name=max_pastdue_detail]').val(data.max_pastdue);
-                    $('#form_show input[name=nominal_angsuran_detail]').val(data.nominal_angsuran);
-                    $('#form_show input[name=taksasi_agunan_detail]').val(data.taksasi_agunan);
-                    $('#form_show input[name=baki_debet_detail]').val(data.baki_debet);
-                    $('#form_show input[name=total_pelunasan_detail]').val(data.total_pelunasan);
+                    $('#form_show input[name=nominal_angsuran_detail]').val(formatNumber(data.nominal_angsuran));
+                    $('#form_show input[name=taksasi_agunan_detail]').val(formatNumber(data.taksasi_agunan));
+                    $('#form_show input[name=baki_debet_detail]').val(formatNumber(data.baki_debet));
+                    $('#form_show input[name=total_pelunasan_detail]').val(formatNumber(data.total_pelunasan));
                     $('#form_show input[name=jenis_agunan_detail]').val(data.jenis_agunan);
                     $('#form_show input[name=shgb_expired_detail]').val(data.shgb_expired);
 
-                    $('#form_show input[name=pengajuan_ro_detail]').val(data.pengajuan_ro);
+                    $('#form_show input[name=pengajuan_ro_detail]').val(formatNumber(data.pengajuan_ro));
                     $('#form_show input[name=tenor_detail]').val(data.tenor);
                     $('#form_show input[name=produk_kredit_detail]').val(data.produk_kredit);
-                    $('#form_show input[name=rate_detail]').val(data.rate_bulan);
-                    $('#form_show input[name=angsuran_detail]').val(data.angsuran);
-                    $('#form_show input[name=biaya_provisi_detail]').val(data.biaya_provisi);
-                    $('#form_show input[name=biaya_admin_detail]').val(data.biaya_adm);
-                    $('#form_show input[name=biaya_cc_detail]').val(data.biaya_cc);
-                    $('#form_show input[name=dsr_detail]').val(data.dsr);
-                    $('#form_show input[name=idir_detail]').val(data.idir);
-                    $('#form_show input[name=ltv_detail]').val(data.ltv);
-                    $('#form_show input[name=total_pencairan_detail]').val(data.total_pencairan);
+                    $('#form_show input[name=rate_detail]').val(formatNumber(data.rate_bulan));
+                    $('#form_show input[name=angsuran_detail]').val(formatNumber(data.angsuran));
+                    $('#form_show input[name=biaya_provisi_detail]').val(formatNumber(data.biaya_provisi));
+                    $('#form_show input[name=biaya_admin_detail]').val(formatNumber(data.biaya_adm));
+                    $('#form_show input[name=biaya_cc_detail]').val(formatNumber(data.biaya_cc));
+                    $('#form_show input[name=dsr_detail]').val(formatNumber(data.dsr));
+                    $('#form_show input[name=idir_detail]').val(formatNumber(data.idir));
+                    $('#form_show input[name=ltv_detail]').val(formatNumber(data.ltv));
+                    $('#form_show input[name=total_pencairan_detail]').val(formatNumber(data.total_pencairan));
                     
                     $('#form_show select[name=contacted_detail]').val(data.result_contacted);
                     $('#form_show select[name=uncontacted_detail]').val(data.result_uncontacted);

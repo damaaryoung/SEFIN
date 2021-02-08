@@ -95,13 +95,16 @@
 
     $('#form_lampiran').hide();
     $('#check_ktp_deb').hide();
+    $('#check_photo_deb').hide();
     $('#check_kk_deb').hide();
     $('#check_sertifikat').hide();
     $('#check_pbb').hide();
     $('#check_imb').hide();
     $('#check_ktp_pas').hide();
+    $('#check_photo_pas').hide();
     $('#check_buku_nikah').hide();
     $('#check_foto_agunan').hide();
+    $('#check_npwp').hide();
 
     $(function() {
         $('.select2').select2()
@@ -1048,7 +1051,9 @@
 
                     var data = res.data;
                     console.log(data);
+                    $('#form_edit_photo_deb input[type=hidden][name=id_debitur_photo]').val(data.id_calon_debitur);
                     $('#form_edit_ktp_deb input[type=hidden][name=id_debitur_ktp]').val(data.id_calon_debitur);
+                    $('#form_edit_npwp input[type=hidden][name=id_debitur_npwp]').val(data.id_calon_debitur);
                     $('#form_edit_kk_deb input[type=hidden][name=id_debitur_kk]').val(data.id_calon_debitur);
                     $('#form_edit_sertifikat_deb input[type=hidden][name=id_debitur_sertifikat]').val(data.id_calon_debitur);
                     $('#form_edit_imb_deb input[type=hidden][name=id_debitur_imb]').val(data.id_calon_debitur);
@@ -1057,6 +1062,7 @@
 
 
                     $('#form_edit_ktp_pas input[type=hidden][name=id_debitur_ktp_pasangan]').val(data.id_pasangan);
+                    $('#form_edit_photo_pas input[type=hidden][name=id_debitur_photo_pasangan]').val(data.id_pasangan);
                     $('#form_edit_buku_nikah_pas input[type=hidden][name=id_debitur_buku_nikah]').val(data.id_pasangan);
                     bootbox.alert('Lanjut Upload Lampiran', function() {
                         $("#batal").click();
@@ -1067,6 +1073,7 @@
                             $('#submit').hide();
                         } else {
                             $('#form_ktp_pasangan').hide();
+                            $('#form_photo_pasangan').hide();
                             $('#form_buku_nikah').hide();
                             $('#form_lampiran').show();
                             $('#submit').hide();
@@ -1193,6 +1200,34 @@
             });
         }
 
+        $('#form_edit_photo_deb ').on('submit', function(e) {
+            var id = $('input[name=id_debitur_photo]', this).val();
+            e.preventDefault();
+            var formData = new FormData();
+            //Data Debitur
+            formData.append('foto_cedeb', $('input[name=lamp_photo_deb]', this)[0].files[0]);
+            update_debitur(formData, id)
+                .done(function(res) {
+
+                    var data = res.data;
+                    bootbox.alert('Lampiran berhasil disimpan', function() {
+                        $("#batal").click();
+                        $(".close_deb").click();
+                        $('#check_photo_deb').show();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    var data = jqXHR.responseJSON.message;
+                    var error = "";
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    }
+                    bootbox.alert(error, function() {
+                        $("#batal").click();
+                    });
+                });
+
+        });
 
         $('#form_edit_ktp_deb ').on('submit', function(e) {
             var id = $('input[name=id_debitur_ktp]', this).val();
@@ -1208,6 +1243,35 @@
                         $("#batal").click();
                         $(".close_deb").click();
                         $('#check_ktp_deb').show();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    var data = jqXHR.responseJSON.message;
+                    var error = "";
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    }
+                    bootbox.alert(error, function() {
+                        $("#batal").click();
+                    });
+                });
+
+        });
+
+        $('#form_edit_npwp ').on('submit', function(e) {
+            var id = $('input[name=id_debitur_npwp]', this).val();
+            e.preventDefault();
+            var formData = new FormData();
+            //Data Debitur
+            formData.append('lamp_npwp', $('input[name=lamp_npwp]', this)[0].files[0]);
+            update_debitur(formData, id)
+                .done(function(res) {
+
+                    var data = res.data;
+                    bootbox.alert('Lampiran berhasil disimpan', function() {
+                        $("#batal").click();
+                        $(".close_deb").click();
+                        $('#check_npwp').show();
                     });
                 })
                 .fail(function(jqXHR) {
@@ -1374,6 +1438,38 @@
                 var data = jqXHR.responseJSON;
                 var error = "";
 
+                if (typeof data == 'string') {
+                    error = '<p>' + data + '</p>';
+                } else {
+                    $.each(data, function(index, item) {
+                        error += '<p>' + item + '</p>' + "\n";
+                    });
+                }
+                bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                    $("#batal").click();
+                });
+            });
+        });
+
+        $('#form_edit_photo_pas').on('submit', function(e) {
+            var id = $('input[name=id_debitur_photo_pasangan]', this).val();
+            e.preventDefault();
+            var formData = new FormData();
+            //Data Debitur
+            formData.append('foto_pasangan', $('input[name=lamp_photo_pas]', this)[0].files[0]);
+            update_pasangan(formData, id)
+            .done(function(res) {
+
+                var data = res.data;
+                bootbox.alert('Lampiran berhasil disimpan', function() {
+                    $('#check_photo_pas').show();
+                    $("#batal").click();
+                    $(".close_deb").click();
+                });
+            })
+            .fail(function(jqXHR) {
+                var data = jqXHR.responseJSON;
+                var error = "";
                 if (typeof data == 'string') {
                     error = '<p>' + data + '</p>';
                 } else {

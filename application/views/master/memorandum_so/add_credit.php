@@ -587,9 +587,22 @@
                             <div class="card-body collapse" id="collapse_5">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <div class="form-group">
+                                        <div class="form-group" id="photo_deb">
+                                            <label class="bmd-label-floating">Photo Debitur<span class="required_notification">*</span></label>
+                                            <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_photo_debitur"><i class="fa fa-paperclip"></i></button><i id="check_photo_deb" class="fa fa-check-circle" style="color: #ffc107"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group" id="ktp">
                                             <label class="bmd-label-floating">KTP Debitur<span class="required_notification">*</span></label>
                                             <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_ktp_debitur1"><i class="fa fa-paperclip"></i></button><i id="check_ktp_deb" class="fa fa-check-circle" style="color: #ffc107"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" id="npwp">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">NPWP<span class="required_notification">*</span></label>
+                                            <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_npwp"><i class="fa fa-paperclip"></i></button>
+                                            <i id="check_npwp" class="fa fa-check-circle" style="color: #ffc107"></i>
                                         </div>
                                     </div>
                                     <div class="col-md-3" id="kk">
@@ -599,6 +612,8 @@
                                             <i id="check_kk_deb" class="fa fa-check-circle" style="color: #ffc107"></i>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-3" id="sertifikat">
                                         <div class="form-group">
                                             <label>Sertifikat<span class="required_notification">*</span></label>
@@ -613,8 +628,6 @@
                                             <i id="check_pbb" class="fa fa-check-circle" style="color: #ffc107"></i>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-3" id="imb">
                                         <div class="form-group">
                                             <label for="exampleInput1" class="bmd-label-floating">IMB</label>
@@ -622,13 +635,15 @@
                                             <i id="check_imb" class="fa fa-check-circle" style="color: #ffc107"></i>
                                         </div>
                                     </div>
-                                    <div class="col-md-3" id="form_ktp_pasangan">
+                                    <div class="col-md-3" id="foto_agunan_rumah">
                                         <div class="form-group">
-                                            <label for="exampleInput1" class="bmd-label-floating">KTP Pasangan<span class="required_notification">*</span></label>
-                                            <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_ktp_pasangan"><i class="fa fa-paperclip"></i></button>
-                                            <i id="check_ktp_pas" class="fa fa-check-circle" style="color: #ffc107"></i>
+                                            <label for="exampleInput1" class="bmd-label-floating">Foto Agunan Rumah<span class="required_notification">*</span></label>
+                                            <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_agunan_rumah"><i class="fa fa-paperclip"></i></button>
+                                            <i id="check_foto_agunan" class="fa fa-check-circle" style="color: #ffc107"></i>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-3" id="form_buku_nikah">
                                         <div class="form-group">
                                             <label for="exampleInput1" class="bmd-label-floating">Buku Nikah<span class="required_notification">*</span></label>
@@ -636,11 +651,18 @@
                                             <i id="check_buku_nikah" class="fa fa-check-circle" style="color: #ffc107"></i>
                                         </div>
                                     </div>
-                                    <div class="col-md-3" id="foto_agunan_rumah">
+                                    <div class="col-md-3" id="form_photo_pasangan">
                                         <div class="form-group">
-                                            <label for="exampleInput1" class="bmd-label-floating">Foto Agunan Rumah<span class="required_notification">*</span></label>
-                                            <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_agunan_rumah"><i class="fa fa-paperclip"></i></button>
-                                            <i id="check_foto_agunan" class="fa fa-check-circle" style="color: #ffc107"></i>
+                                            <label for="exampleInput1" class="bmd-label-floating">Photo Pasangan<span class="required_notification">*</span></label>
+                                            <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_photo_pasangan"><i class="fa fa-paperclip"></i></button>
+                                            <i id="check_photo_pas" class="fa fa-check-circle" style="color: #ffc107"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" id="form_ktp_pasangan">
+                                        <div class="form-group">
+                                            <label for="exampleInput1" class="bmd-label-floating">KTP Pasangan<span class="required_notification">*</span></label>
+                                            <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_ktp_pasangan"><i class="fa fa-paperclip"></i></button>
+                                            <i id="check_ktp_pas" class="fa fa-check-circle" style="color: #ffc107"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -705,6 +727,32 @@
         </div>
     </form>
 
+    <form id="form_edit_photo_deb">
+        <input type="hidden" id="id_debitur_photo" name="id_debitur_photo">
+        <div class="modal fade rotate" id="modal_photo_debitur">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="container"></div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="exampleInputFile">Lampiran Photo Debitur</label>
+                            <div class="input-group">
+                                <input type="file" name="lamp_photo_deb" class="form-control" style="height: 45px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" data-dismiss="modal" class="btn btn-danger close_deb">Close</a>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <form id="form_edit_kk_deb">
         <input type="hidden" id="id_debitur_kk" name="id_debitur_kk">
         <div class="modal fade rotate" id="modal_edit_kk">
@@ -729,7 +777,6 @@
             </div>
         </div>
     </form>
-
 
     <form id="form_edit_sertifikat_deb">
         <input type="hidden" id="id_debitur_sertifikat" name="id_debitur_sertifikat">
@@ -819,6 +866,28 @@
         </div>
     </form>
 
+    <form id="form_edit_photo_pas">
+        <input type="hidden" id="id_debitur_photo_pasangan" name="id_debitur_photo_pasangan">
+        <div class="modal fade in" id="modal_edit_photo_pasangan">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class='modal-body text-center'>
+                        <div class="form-group">
+                            <label for="exampleInputFile">Lampiran Photo Pasangan</label>
+                            <div class="input-group">
+                                <input type="file" name="lamp_photo_pas" class="form-control" style="height: 45px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <form id="form_edit_buku_nikah_pas">
         <input type="hidden" id="id_debitur_buku_nikah" name="id_debitur_buku_nikah">
         <div class="modal fade in" id="modal_edit_buku_nikah" data-keyboard="false" data-backdrop="static">
@@ -851,6 +920,28 @@
                             <label for="exampleInputFile">Lampiran Agunan Rumah</label>
                             <div class="input-group">
                                 <input type="file" name="lamp_agunan_rumah" class="form-control" style="height: 45px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form id="form_edit_npwp">
+        <input type="hidden" id="id_debitur_npwp" name="id_debitur_npwp">
+        <div class="modal fade in" id="modal_edit_npwp" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class='modal-body text-center'>
+                        <div class="form-group">
+                            <label for="exampleInputFile">Lampiran NPWP</label>
+                            <div class="input-group">
+                                <input type="file" name="lamp_npwp" class="form-control" style="height: 45px">
                             </div>
                         </div>
                     </div>

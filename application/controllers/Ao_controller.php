@@ -48,6 +48,37 @@ class Ao_controller extends CI_Controller
         echo json_encode($output);
     }
 
+    function get_data_verifikasi()
+    {
+        $list = $this->Model_ao->get_datatables();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $field) {
+            $no++;
+
+            $id =  $field->id_trans_so;
+
+            $url = "report/memo_ao";
+
+            $row = array();
+            $row[] = $no;
+            $row[] = $field->tanggal;
+            $row[] = $field->nama_debitur;
+            $row[] = '<form method="post" style="text-align: center" target="_blank" action="' . $url . '"> <button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
+            <button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" data-target="#update" data="' . $id . '"><i style="color: #fff;" class="fas fa-eye"></i></button>
+            <input type="hidden" name ="id" value="' . $id . '"></a></form>';
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->Model_ao->count_all(),
+            "recordsFiltered" => $this->Model_ao->count_filtered(),
+            "data" => $data,
+        );
+        //output dalam format JSON
+        echo json_encode($output);
+    }
 
     function get_data_so_approve_hm()
     {

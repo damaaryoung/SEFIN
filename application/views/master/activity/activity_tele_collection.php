@@ -38,9 +38,6 @@
                                             Nama Debitur
                                         </th>
                                         <th>
-                                            Tanggal Jatuh Tempo
-                                        </th>
-                                        <th>
                                             Contacted
                                         </th>
                                         <th>
@@ -503,6 +500,9 @@
                         <label style="font-style: bold; color: #383a3a;">Note Tele Collection</label>
                         <textarea name="note_tele_col_detail" id ="note_tele_col_detail" style="width: 100%" rows="5"></textarea>
                     </div>
+
+                    <button type="button" class="btn btn-danger btn-sm back" id="click_back"><i class="fa fa-caret-left"> Kembali</i></button>
+
                 </div>
             </div>
         </div>
@@ -696,6 +696,12 @@
         $('#click_detail_activity').click(function(){
             hide_all();
             $('#detail_activity').show();
+        });
+
+        $('#click_back').click(function(){
+            hide_all();
+            $('#detail_activity').hide();
+            $('#lihat_activity').show();
         });
 
         tambah_activity = function(opts) {
@@ -899,7 +905,7 @@
             }
 
             return $.ajax({
-                // type : 'GET',
+                type : 'GET',
                 url: url,
                 data: data,
                 headers: {
@@ -920,7 +926,7 @@
             }
 
             return $.ajax({
-                // type : 'GET',
+                type : 'GET',
                 url: url,
                 data: data,
                 headers: {
@@ -955,7 +961,6 @@
                         '<td>'+ formatTanggalTelepon(item.tanggal_telpon) +'</td>',
                         '<td>'+ item.nomor_kontrak +'</td>',
                         '<td>'+ item.nama_debitur +'</td>',
-                        '<td>'+ item.tgl_jatuh_tempo +'</td>',
                         '<td>'+ nullChecker(item.contacted) +'</td>',
                         '<td>'+ nullChecker(item.uncontacted) +'</td>',
                         '<td>'+ nullChecker(item.unconnected) +'</td>',
@@ -1047,7 +1052,7 @@
 
             get_data_nasabah({}, nasabah_id)
                 .done(function(response) {
-                    var data = response.data;
+                    var data = response.data[0];
                     console.log(data);
 
                     $('#form_detail input[name=no_kontrak]').val(data.no_kontrak);
@@ -1092,17 +1097,17 @@
                     $('#form_show input[name=update_telp_detail]').val(data.no_telp_3);
                     $('#form_show input[name=sisa_angsuran_detail]').val(data.sisa_angsuran);
                     $('#form_show input[name=tgl_kredit_detail]').val(data.tgl_kredit_tabungan);
-                    $('#form_show input[name=total_denda_detail]').val(data.total_denda);
+                    $('#form_show input[name=total_denda_detail]').val(formatNumber(data.total_denda));
                     $('#form_show input[name=angsuran_ke_detail]').val(data.angsuran_ke);
                     $('#form_show input[name=tgl_tempo_detail]').val(data.tgl_jatuh_tempo);
                     $('#form_show input[name=pastdue_detail]').val(data.pastdue);
-                    $('#form_show input[name=nominal_angsuran_detail]').val(data.nominal_angsuran);
-                    $('#form_show input[name=baki_debet_detail]').val(data.baki_debet);
-                    $('#form_show input[name=total_pelunasan_detail]').val(data.total_pelunasan);
+                    $('#form_show input[name=nominal_angsuran_detail]').val(formatNumber(data.nominal_angsuran));
+                    $('#form_show input[name=baki_debet_detail]').val(formatNumber(data.baki_debet));
+                    $('#form_show input[name=total_pelunasan_detail]').val(formatNumber(data.total_pelunasan));
                     $('#form_show select[name=karakter_deb_detail]').val(data.karakter_debitur);
                     $('#form_show select[name=kondisi_pekerjaan_detail]').val(data.kondisi_kerja);
                     $('#form_show input[name=update_pekerjaan_detail]').val(data.update_pekerjaan);
-                    $('#form_show input[name=update_penghasilan_detail]').val(data.update_penghasilan);
+                    $('#form_show input[name=update_penghasilan_detail]').val(formatNumber(data.update_penghasilan));
                     $('#form_show select[name=contacted_detail]').val(data.contacted);
                     $('#form_show select[name=uncontacted_detail]').val(data.uncontacted);
                     $('#form_show select[name=unconnected_detail]').val(data.unconnected);
