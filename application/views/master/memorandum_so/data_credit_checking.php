@@ -1486,9 +1486,9 @@
                             '<td>' + item.das.status + '</td>',
                             '<td>' + item.hm.status + '</td>',
                             '<td style="width: 108px;">',
-                            '<form method="post" target="_blank" action="<?php echo base_url() . 'index.php/report/memo_so' ?>"> <button type="button" ' + disabled + ' class="btn btn-info btn-sm edit"   data-target="#update" data="' + item.id + '"><i class="fas fa-pencil-alt"></i></button>',
-                            '<button type="button" class="btn btn-warning btn-sm edit" onclick="click_detail()" data-target="#update" data="' + item.id + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
-                            '<input type="hidden" name ="id" value="' + item.id + '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
+                                '<form method="post" target="_blank" action="<?php echo base_url() . 'index.php/report/memo_so' ?>"> <button type="button" ' + disabled + ' class="btn btn-info btn-sm edit"   data-target="#update" data="' + item.id + '"><i class="fas fa-pencil-alt"></i></button>',
+                                '<button type="button" class="btn btn-warning btn-sm edit" onclick="click_detail()" data-target="#update" data="' + item.id + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
+                                '<input type="hidden" name ="id" value="' + item.id + '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
                             '</td>',
                             '</tr>'
                         ].join('\n');

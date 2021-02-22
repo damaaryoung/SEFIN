@@ -36,7 +36,7 @@
 					<h1><img src="<?= base_url(); ?>assets/dist/img/monitor.svg" width="10%"> Activity Head Marketing</h1>
 				</div>
 				<div class="col-sm-6">
-					<div class="float-sm-right">
+					<div class="float-sm-right" style="margin-top: 20px; margin-bottom: -20px">
 						<div class="input-group mb-3">
 							<select class="custom-select form template-selected-data" onchange="template();">
 								<option value="so">Sales Officer</option>
@@ -54,8 +54,7 @@
 				<div class="form-group">
 					<div class="input-group">
 						<div class="input-group-prepend">
-							<button type="button" class="input-group-text btn-primary btn-ao"><i class="fas fa-plus"></i></button>
-							<span class="input-group-text"><i class="fas fa-database"></i></span>
+							<button type="button" class="input-group-text btn-primary btn-ao"><i class="fas fa-plus" style="margin-right: 5px"></i>Tambah Assignment</button>
 						</div>
 						<select class="custom-select data-selected-view-ao" onchange="filter('ao');">
 							<option value="SURVEY">Survey</option>
@@ -68,8 +67,7 @@
 				<div class="form-group">
 					<div class="input-group">
 						<div class="input-group-prepend">
-							<button type="button" class="input-group-text btn-primary btn-so"><i class="fas fa-plus"></i></button>
-							<span class="input-group-text"><i class="fas fa-database"></i></span>
+							<button type="button" class="input-group-text btn-primary btn-so"><i class="fas fa-plus" style="margin-right: 5px"></i>Tambah Assignment</button>
 						</div>
 						<select class="custom-select data-selected-view-so" onchange="filter('so');">
 							<option value="VISIT%20RO">Visit RO</option>

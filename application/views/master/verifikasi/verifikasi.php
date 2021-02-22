@@ -10,10 +10,6 @@
     text-align: left;
     padding: 8px;
     }
-
-    img {
-        width: 70%;
-    }
 </style>
 
 <div id="lihat_data_credit" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
@@ -192,8 +188,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <button class="btn btn-danger btn-sm back" id="click_back"><i class="fa fa-caret-left"> Kembali</i></button>
         
                 </div>
             </div>
@@ -205,8 +199,13 @@
     tampil_data_verifikasi();
 
     var jabatan = '<?php echo $nama_user['data']['jabatan'] ?>';
-    if (jabatan == 'ADMIN LEGAL') {
+    if (jabatan == 'ADMIN LEGAL' || jabatan == 'IT STAFF' || jabatan == 'SUPERVISOR IT' || jabatan == 'HEAD IT') {
         $('#properti').show();
+        $('.verifikasiDebitur').hide();
+        $('.verifikasiPasangan').hide();
+        $('.verifikasiNpwp').hide();
+        $('.running_text').hide();
+        $('.warning_nama').hide();
     } else {
         $('#properti').hide();
     }
@@ -258,6 +257,34 @@
         $('.warning_nama').hide();
     }
 
+    function base64Encode(str) {
+        var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+        var out = "", i = 0, len = str.length, c1, c2, c3;
+        while (i < len) {
+            c1 = str.charCodeAt(i++) & 0xff;
+            if (i == len) {
+                out += CHARS.charAt(c1 >> 2);
+                out += CHARS.charAt((c1 & 0x3) << 4);
+                out += "==";
+                break;
+            }
+            c2 = str.charCodeAt(i++);
+            if (i == len) {
+                out += CHARS.charAt(c1 >> 2);
+                out += CHARS.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
+                out += CHARS.charAt((c2 & 0xF) << 2);
+                out += "=";
+                break;
+            }
+            c3 = str.charCodeAt(i++);
+            out += CHARS.charAt(c1 >> 2);
+            out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+            out += CHARS.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
+            out += CHARS.charAt(c3 & 0x3F);
+        }
+        return out;
+    }
+
     function verifikasiSimpanDebitur(isTesting, id_trans_so) {
 
         var photo_debitur = document.getElementById("photo_selfie_debitur");
@@ -277,17 +304,25 @@
             })
             .done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    trx_id : "VeriJelas" + $("#nik").text(),
-                    nik : $("#nik").text(),
-                    name : $("#name").text(),
-                    birthdate : $(formatTanggal("#birthdate")).text(),
-                    birthplace : $("#birthplace").text(),
-                    identity_photo : "",
-                    selfie_photo : base64Encode(data),
+                    "trx_id" : "BPR-KMI-" + $("#nik").text(),
+                    "nik" : $("#nik").text(),
+                    "name" : $("#name").text(),
+                    "birthdate" : $(formatTanggal("#birthdate")).text(),
+                    "birthplace" : $("#birthplace").text(),
+                    "identity_photo" : "",
+                    "selfie_photo" : base64Encode(data),
                 }
+                console.log(requestBody);
                 
                 if (isTesting) {
+                    
                     responseBody = responseDebiturPasangan(requestBody);
+                    
+                    if (responseBody.data == null) {
+                        bootbox.alert(responseBody.errors.selfie_photo);
+                    }
+
+                    var requestBody = requestMapperForStoreCadeb(responseBody);
                     var url = "api/master/verif/storecadeb/";
 
                     httpRequestBuilder(requestMapperForStoreCadeb(responseBody), url, id_trans_so, "POST")
@@ -298,18 +333,20 @@
                     })
                 } else {
                     $.ajax({
-                        url: '<?php echo config_item('api_verijelas')?>bprkm_poc/completeid',
+                        url: 'Verifikasi_controller/verifikasi_id',
                         type: 'POST',
                         data: requestBody,
-                        headers: {
-                            'token': 'c2a6ac14-14b9-44d5-98db-c8a3631d676c'
+                        beforeSend: function() {
+                            $('.verifikasiDebitur').html('<button class="btn btn-primary" ><i class="fas fa-spinner fa-pulse" ></i> Proses</button>');
+                        },
+                    })
+                    .done(function(res) {
+                        responseBody = JSON.parse(res);
+                        console.log(responseBody);
+
+                        if (responseBody.data == null) {
+                            bootbox.alert(responseBody.errors.selfie_photo);
                         }
-                    })
-                    .beforeSend(function() {
-                        $('.verifikasiDebitur').html('<a href="javascript:void(0)" class="btn btn-secondary"><i class="fas fa-spinner fa-pulse"></i> Proses</a>');
-                    })
-                    .success(function(res) {
-                        responseBody = res;
                 
                         var url = "api/master/verif/storecadeb/";
 
@@ -319,11 +356,12 @@
                             bootbox.alert("Berhasil Simpan Verifikasi Data Debitur!!");
                             $('.verifikasiDebitur').hide();
                         })
-                    });
+                    })
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                        bootbox.alert("Status: " + textStatus, "Error: " + errorThrown);
+                    })
                 }
-
-                console.log( requestBody);
-                console.log( responseBody);
+                
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
                 bootbox.alert("Gagal Verifikasi Data Debitur!!");
@@ -350,20 +388,24 @@
             })
             .done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    trx_id : "VeriJelas" + $("#nik").text(),
-                    nik : $("#nik").text(),
-                    name : $("#name").text(),
-                    birthdate : $(formatTanggal("#birthdate")).text(),
-                    birthplace : $("#birthplace").text(),
-                    identity_photo : "",
-                    selfie_photo : base64Encode(data),
+                    "trx_id" : "BPR-KMI-" + $("#nik").text() + "-update",
+                    "nik" : $("#nik").text(),
+                    "name" : $("#name").text(),
+                    "birthdate" : $(formatTanggal("#birthdate")).text(),
+                    "birthplace" : $("#birthplace").text(),
+                    "identity_photo" : "",
+                    "selfie_photo" : base64Encode(data),
                 }
-                
+
                 if(limitCallDebitur > 1) {
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!"); 
                 } else {
                     if (isTesting) {
                         responseBody = responseDebiturPasangan(requestBody);
+
+                        if (responseBody.data == null) {
+                            bootbox.alert(responseBody.errors.selfie_photo);
+                        }
 
                         var requestBody = requestMapperForUpdate(responseBody, true);
                         var url = "api/master/verif/updateVerif/";
@@ -376,18 +418,20 @@
                         })
                     } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_verijelas')?>bprkm_poc/completeid',
+                            url: 'Verifikasi_controller/verifikasi_id',
                             type: 'POST',
                             data: requestBody,
-                            headers: {
-                                'token': 'c2a6ac14-14b9-44d5-98db-c8a3631d676c'
+                            beforeSend: function() {
+                                $('.verifikasiDebitur').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
+                            },
+                        })
+                        .done(function(res) {
+                            responseBody = JSON.parse(res);
+                            console.log(responseBody);
+
+                            if (responseBody.data == null) {
+                                bootbox.alert(responseBody.errors.selfie_photo);
                             }
-                        })
-                        .beforeSend(function() {
-                            $('.verifikasiDebitur').html('<a href="javascript:void(0)" class="btn btn-secondary"><i class="fas fa-spinner fa-pulse"></i> Proses</a>');
-                        })
-                        .success(function(res) {
-                            responseBody = res;
 
                             var requestBody = requestMapperForUpdateCadeb(responseBody);
                             var url = "api/master/verif/updateVerif/";
@@ -398,12 +442,13 @@
                                 bootbox.alert("Berhasil Update Verifikasi Data Debitur!!");
                                 $('.verifikasiDebitur').hide();
                             })
-                            
-                        });
-                    }
-
-                    console.log( requestBody);
-                    console.log( responseBody);
+                        })
+                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                        })
+        
+                    } 
+                    
                 }
 
             })
@@ -431,16 +476,21 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    trx_id : "VeriJelas" + $("#nik").text(),
-                    nik : $("#nik_pasangan").text(),
-                    name : $("#name_pasangan").text(),
-                    birthdate : $("#birthdate_pasangan").text(),
-                    birthplace : $("#birthplace_pasangan").text(),
-                    identity_photo : "",
-                    selfie_photo : base64Encode(data),
+                    "trx_id" : "BPR-KMI-" + $("#nik").text(),
+                    "nik" : $("#nik_pasangan").text(),
+                    "name" : $("#name_pasangan").text(),
+                    "birthdate" : $("#birthdate_pasangan").text(),
+                    "birthplace" : $("#birthplace_pasangan").text(),
+                    "identity_photo" : "",
+                    "selfie_photo" : base64Encode(data),
                 }
+                
                 if (isTesting) {
                     responseBody = responseDebiturPasangan(requestBody);
+
+                    if (responseBody.data == null) {
+                        bootbox.alert(responseBody.errors.selfie_photo);
+                    }
 
                     var url = "api/master/verif/storepasangan/";
 
@@ -453,34 +503,36 @@
                    
                 } else {
                     $.ajax({
-                        url: '<?php echo config_item('api_verijelas')?>bprkm_poc/completeid',
+                        url: 'Verifikasi_controller/verifikasi_id',
                         type: 'POST',
                         data: requestBody,
-                        headers: {
-                            'token': 'c2a6ac14-14b9-44d5-98db-c8a3631d676c'
-                        }
+                        beforeSend: function() {
+                            $('.verifikasiPasangan').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
+                        },
                     })
-                    .beforeSend(function() {
-                            $('.verifikasiPasangan').html('<a href="javascript:void(0)" class="btn btn-secondary"><i class="fas fa-spinner fa-pulse"></i> Proses</a>');
-                        })
-                    .success(function(res) {
-                        responseBody = res;
+                    .done(function(res) {
+                        responseBody = JSON.parse(res);
+                        console.log(responseBody);
 
-                        var requestBody = requestMapperForSimpanPasangan(responseBody);
+                        if (responseBody.data == null) {
+                            bootbox.alert(responseBody.errors.selfie_photo);
+                        }
+
+                        var requestBody = requestMapperForStorePasangan(responseBody);
                         var url = "api/master/verif/storepasangan/";
 
-                        httpRequestBuilder(requestMapperForSimpanPasangan(responseBody), url, id_trans_so, "POST")
+                        httpRequestBuilder(requestMapperForStorePasangan(responseBody), url, id_trans_so, "POST")
                         .done( (response) => {
                             mappingResponsePasangan(responseBody);
                             bootbox.alert("Berhasil Simpan Verifikasi Data Pasangan!!");
                             $('.verifikasiPasangan').hide();
                         })
-                        
-                    });
+                    })
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                    })
+                    
                 }
-
-                console.log( requestBody);
-                console.log( responseBody);
                 
             }).fail(function( jqXHR, textStatus, errorThrown ) {
                 bootbox.alert("Gagal Verifikasi Data Pasangan!!");
@@ -506,13 +558,13 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    trx_id : "VeriJelas" + $("#nik").text(),
-                    nik : $("#nik_pasangan").text(),
-                    name : $("#name_pasangan").text(),
-                    birthdate : $("#birthdate_pasangan").text(),
-                    birthplace : $("#birthplace_pasangan").text(),
-                    identity_photo : "",
-                    selfie_photo : base64Encode(data),
+                    "trx_id" : "BPR-KMI-" + $("#nik").text() + "-update",
+                    "nik" : $("#nik_pasangan").text(),
+                    "name" : $("#name_pasangan").text(),
+                    "birthdate" : $("#birthdate_pasangan").text(),
+                    "birthplace" : $("#birthplace_pasangan").text(),
+                    "identity_photo" : "",
+                    "selfie_photo" : base64Encode(data),
                 }
 
                 if(limitCallPasangan == 2) {
@@ -520,6 +572,10 @@
                 } else {
                     if (isTesting) {
                         responseBody = responseDebiturPasangan(requestBody);
+
+                        if (responseBody.data == null) {
+                            bootbox.alert(responseBody.errors.selfie_photo);
+                        }
 
                         var url = "api/master/verif/updateVerif/";
 
@@ -532,18 +588,20 @@
                     
                     } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_verijelas')?>bprkm_poc/completeid',
+                            url: 'Verifikasi_controller/verifikasi_id',
                             type: 'POST',
                             data: requestBody,
-                            headers: {
-                                'token': 'c2a6ac14-14b9-44d5-98db-c8a3631d676c'
+                            beforeSend: function() {
+                                $('.verifikasiPasangan').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
+                            },
+                        })
+                        .done(function(res) {
+                            responseBody = JSON.parse(res);
+                            console.log(responseBody);
+
+                            if (responseBody.data == null) {
+                                bootbox.alert(responseBody.errors.selfie_photo);
                             }
-                        })
-                        .beforeSend(function() {
-                            $('.verifikasiPasangan').html('<a href="javascript:void(0)" class="btn btn-secondary"><i class="fas fa-spinner fa-pulse"></i> Proses</a>');
-                        })
-                        .success(function(res) {
-                            responseBody = res;
 
                             var requestBody = requestMapperForUpdatePasangan(responseBody);
                             var url = "api/master/verif/updateVerif/";
@@ -554,12 +612,12 @@
                                 bootbox.alert("Berhasil Update Verifikasi Data Pasangan!!");
                                 $('.verifikasiPasangan').hide();
                             })
-                            
-                        });
+                        })
+                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                        })
+                        
                     }
-
-                    console.log( requestBody);
-                    console.log( responseBody);
 
                 }
                 
@@ -578,21 +636,27 @@
         } else {
             $.ajax({
             type: 'GET',
-
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    trx_id : "VeriJelas" + $("#no_npwp").text(),
-                    nik : $("#nik").text(),
-                    npwp : $("#no_npwp").text(),
-                    name : $("#name_npwp").text(),
-                    birthdate : $("#birthdate_npwp").text(),
-                    birthplace : $("#birthplace_npwp").text(),
-                    income : $("#income_npwp").text(),
+                    "trx_id" : "BPR-KMI-" + $("#no_npwp").text(),
+                    "npwp" : $("#no_npwp").text(),
+                    "nik" : $("#nik").text(),
+                    "income" : Number($("#income_npwp").text()),
+                    "name" : $("#name_npwp").text(),
+                    "birthdate" : $("#birthdate_npwp").text(),
+                    "birthplace" : $("#birthplace_npwp").text()
+                    // "income" : $("#income_npwp").text(),
                 }
+
+                console.log(requestBody);
 
                 if (isTesting) {
                     responseBody = responseNpwp(requestBody);
-        
+                    
+                    if (responseBody.errors != null) {
+                        bootbox.alert(responseBody.errors.message);
+                    }
+                    
                     var url = "api/master/verif/storenpwp/";
 
                     httpRequestBuilder(requestMapperForStoreNpwp(responseBody), url, id_trans_so, "POST")
@@ -604,18 +668,20 @@
                     
                 } else {
                     $.ajax({
-                        url: '<?php echo config_item('api_verijelas')?>bprkm_poc/pendapatan',
+                        url: 'Verifikasi_controller/verifikasi_npwp',
                         type: 'POST',
                         data: requestBody,
-                        headers: {
-                            'token': 'c2a6ac14-14b9-44d5-98db-c8a3631d676c'
+                        beforeSend: function() {
+                            $('.verifikasiNpwp').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
+                        },
+                    })
+                    .done(function(res) {
+                        responseBody = JSON.parse(res);
+                        console.log( responseBody);
+
+                        if (responseBody.errors != null) {
+                            bootbox.alert(responseBody.errors.message);
                         }
-                    })
-                    .beforeSend(function() {
-                        $('.verifikasiNpwp').html('<a href="javascript:void(0)" class="btn btn-secondary"><i class="fas fa-spinner fa-pulse"></i> Proses</a>');
-                    })
-                    .success(function(res) {
-                        responseBody = res;
 
                         var url = "api/master/verif/storenpwp/";
 
@@ -625,14 +691,13 @@
                             bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
                             $('.verifikasiNpwp').hide();
                         })
-
-                    });
-
+                    })
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                    })
+                    
                 }
 
-                console.log( requestBody);
-                console.log( responseBody);
-                   
             }).fail(function( jqXHR, textStatus, errorThrown ) {
                 bootbox.alert("Gagal Verifikasi Data NPWP!!");
             });
@@ -648,16 +713,16 @@
         } else {
             $.ajax({
             type: 'GET',
-
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    trx_id : "VeriJelas" + $("#no_npwp").text(),
-                    nik : $("#nik").text(),
-                    npwp : $("#no_npwp").text(),
-                    name : $("#name_npwp").text(),
-                    birthdate : $("#birthdate_npwp").text(),
-                    birthplace : $("#birthplace_npwp").text(),
-                    income : $("#income_npwp").text(),
+                    "trx_id" : "BPR-KMI-" + $("#no_npwp").text() + "-update",
+                    "nik" : $("#nik").text(),
+                    "npwp" : $("#no_npwp").text(),
+                    "name" : $("#name_npwp").text(),
+                    "birthdate" : $("#birthdate_npwp").text(),
+                    "birthplace" : $("#birthplace_npwp").text(),
+                    // "income" : $("#income_npwp").text(),
+                    "income" : Number($("#income_npwp").text())
                 }
 
                 if(limitCallNpwp == 2) {
@@ -677,18 +742,20 @@
                         
                     } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_verijelas')?>bprkm_poc/pendapatan',
+                            url: 'Verifikasi_controller/verifikasi_npwp',
                             type: 'POST',
                             data: requestBody,
-                            headers: {
-                                'token': 'c2a6ac14-14b9-44d5-98db-c8a3631d676c'
+                            beforeSend: function() {
+                                $('.verifikasiNpwp').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
+                            },
+                        })
+                        .done(function(res) {
+                            responseBody = JSON.parse(res);
+                            console.log( responseBody);
+
+                            if (responseBody.errors != null) {
+                                bootbox.alert(responseBody.errors.message);
                             }
-                        })
-                        .beforeSend(function() {
-                            $('.verifikasiNpwp').html('<a href="javascript:void(0)" class="btn btn-secondary"><i class="fas fa-spinner fa-pulse"></i> Proses</a>');
-                        })
-                        .success(function(res) {
-                            responseBody = res;
 
                             var url = "api/master/verif/updateVerif/";
 
@@ -698,13 +765,12 @@
                                 bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
                                 $('.verifikasiNpwp').hide();
                             })
-
-                        });
-
+                        })
+                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                        })
+                        
                     }
-
-                    console.log( requestBody);
-                    console.log( responseBody);
 
                 }
                    
@@ -723,25 +789,32 @@
         } else {
             $.ajax({
             type: 'GET',
-
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    trx_id : "VeriJelas" + $("#nop").text(),
-                    nop : $("#nop").text(),
-                    property_name : $("#property_name").text(),
-                    property_building_area : $("#property_building_area").text(),
-                    property_surface_area : $("#property_surface_area").text(),
-                    property_estimation : $("#property_estimation").text(),
-                    nik : $("#nik").text(),
-                    certificate_id : $("#certificate_id").text(),
-                    certificate_name : $("#certificate_name").text(),
-                    certificate_type : $("#certificate_type").text(),
-                    certificate_date : $("#certificate_date").text(), 
-                   
+                    "trx_id" : "BPR-KMI-" + $("#nop").text(),
+                    "nop" : $("#nop").text(),
+                    "property_name" : $("#property_name").text(),
+                    // "property_building_area" : $("#property_building_area").text(),
+                    // "property_surface_area" : $("#property_surface_area").text(),
+                    // "property_estimation" : $("#property_estimation").text(),
+                    "property_building_area" : Number($("#property_building_area").text()),
+                    "property_surface_area" : Number($("#property_surface_area").text()),
+                    "property_estimation" : Number($("#property_estimation").text()),
+                    "nik" : $("#nik").text(),
+                    "certificate_id" : $("#certificate_id").text(),
+                    "certificate_name" : $("#certificate_name").text(),
+                    "certificate_type" : $("#certificate_type").text(),
+                    "certificate_date" : $(formatTanggal("#certificate_date")).text()
                 }
+                console.log(requestBody);
 
                 if (isTesting) {
                     responseBody = responseProperti(requestBody);
+                    console.log(responseBody);
+
+                    if (responseBody.errors != null) {
+                        bootbox.alert(responseBody.errors.message);
+                    }
         
                     var url = "api/master/verif/storeproperti/";
 
@@ -754,18 +827,20 @@
                     
                 } else {
                     $.ajax({
-                        url: '<?php echo config_item('api_verijelas')?>bprkm_poc/properti',
+                        url: 'Verifikasi_controller/verifikasi_properti',
                         type: 'POST',
                         data: requestBody,
-                        headers: {
-                            'token': 'c2a6ac14-14b9-44d5-98db-c8a3631d676c'
+                        beforeSend: function() {
+                            $('.verifikasiProperti').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
+                        },
+                    })
+                    .done(function(res) {
+                        responseBody = JSON.parse(res);
+                        console.log(responseBody);
+
+                        if (responseBody.errors != null) {
+                            bootbox.alert(responseBody.errors.message);
                         }
-                    })
-                    .beforeSend(function() {
-                        $('.verifikasiProperti').html('<a href="javascript:void(0)" class="btn btn-secondary"><i class="fas fa-spinner fa-pulse"></i> Proses</a>');
-                    })
-                    .success(function(res) {
-                        responseBody = res;
 
                         var url = "api/master/verif/storeproperti/";
 
@@ -775,11 +850,11 @@
                             bootbox.alert("Berhasil Simpan Verifikasi Data Properti!!");
                             $('.verifikasiProperti').hide();
                         })
-                    });
+                    })
+                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                    })
                 }
-
-                console.log( requestBody);
-                console.log( responseBody);
                    
             }).fail(function( jqXHR, textStatus, errorThrown ) {
                 bootbox.alert("Gagal Verifikasi Data Properti!!");
@@ -789,34 +864,6 @@
 
     function verifikasiUpdateProperti() {
         bootbox.alert("Data Verifikasi Properti Sudah Ada, Tidak Dapat Update Verifikasi!!");
-    }
-
-    function base64Encode(str) {
-        var CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-        var out = "", i = 0, len = str.length, c1, c2, c3;
-        while (i < len) {
-            c1 = str.charCodeAt(i++) & 0xff;
-            if (i == len) {
-                out += CHARS.charAt(c1 >> 2);
-                out += CHARS.charAt((c1 & 0x3) << 4);
-                out += "==";
-                break;
-            }
-            c2 = str.charCodeAt(i++);
-            if (i == len) {
-                out += CHARS.charAt(c1 >> 2);
-                out += CHARS.charAt(((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4));
-                out += CHARS.charAt((c2 & 0xF) << 2);
-                out += "=";
-                break;
-            }
-            c3 = str.charCodeAt(i++);
-            out += CHARS.charAt(c1 >> 2);
-            out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
-            out += CHARS.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
-            out += CHARS.charAt(c3 & 0x3F);
-        }
-        return out;
     }
 
     function checkVerified(elementId, isVerified) {
@@ -850,9 +897,14 @@
     }
 
     function formatTanggal (tanggal) {
-        var formattedTanggal = tanggal.split("-").reverse().join("-");
+        if (tanggal != null) {
+            var formattedTanggal = tanggal.split("-").reverse().join("-");
 
-        return `${formattedTanggal}`
+            return `${formattedTanggal}`
+        } else {
+            return tanggal
+        }
+        
     }
 
     function mappingResponseDebitur(responseBody) {
@@ -899,15 +951,10 @@
             timestamp: new Date()*1,
             status: 200,
             errors: {
-                identity_photo: "invalid"
+                identity_photo: "invalid",
+                selfie_photo: "no face detected"
             },
-            data: {
-                name: true,
-                birthdate: false,
-                birthplace: true,
-                selfie_photo: 98.0,
-                address: "JL C*M*R *ND*H 7 N*.32"  
-            },
+            data: null,
             trx_id: requestBody.trx_id,
             ref_id: "aW50ZxJuYWw=-120389080017203"
         }
@@ -937,7 +984,11 @@
         return {
             timestamp: new Date()*1,
             status: 200,
-            errors: {},
+            errors: {
+                certificate_date: "invalid",
+                message: "Data not found",
+                nop: "invalid",
+            },
             data: {
                 property_address: "K* C*P*N*NG *ND*H **10 RW 00 RT 000",
                 property_name: true,
@@ -1065,12 +1116,6 @@
 
         $('#lihat_data_credit').show();
 
-        $('#click_back').click(function(){
-            hide_all();
-            $('#lihat_detail').hide();
-            $('#lihat_data_credit').show();
-        });
-
         get_data = function(opts, id) {
             var url = '<?php echo config_item('api_url') ?>api/master/mca/';
 
@@ -1092,7 +1137,7 @@
         }
 
         get_detail = function(opts, id) {
-            var url = '<?php echo config_item('api_url_2') ?>api/master/verif/showVerif/';
+            var url = '<?php echo config_item('api_url') ?>api/master/verif/showVerif/';
 
             if (id != undefined) {
                 url += id;
@@ -1113,7 +1158,7 @@
         }
 
         httpRequestBuilder = function(data, url, id, httpMethod) {
-            var baseUrl = '<?php echo config_item('api_url_2') ?>';
+            var baseUrl = '<?php echo config_item('api_url') ?>';
             baseUrl += url;
 
             if (id != undefined) {
@@ -1146,37 +1191,37 @@
                     
                     if (data[0] == null) {
                         $("#verifikasi_debitur").on('click', function() {
-                            verifikasiSimpanDebitur(true, id);
+                            verifikasiSimpanDebitur(false, id);
                         });
                     } else {
                         $("#verifikasi_debitur").on('click', function() {
-                            verifikasiUpdateDebitur(true, data[0].limit_call, id);
+                            verifikasiUpdateDebitur(false, data[0].limit_call, id);
                         });
                     }
                     
                     if (data[1] == null) {
                         $("#verifikasi_pasangan").on('click', function() {
-                            verifikasiSimpanPasangan(true, id);
+                            verifikasiSimpanPasangan(false, id);
                         });
                     } else {
                         $("#verifikasi_pasangan").on('click', function() {
-                            verifikasiUpdatePasangan(true, data[1].limit_call, id);
+                            verifikasiUpdatePasangan(false, data[1].limit_call, id);
                         });
                     }
 
                     if (data[2] == null) {
                         $("#verifikasi_npwp").on('click', function() {
-                            verifikasiSimpanNpwp(true, id);
+                            verifikasiSimpanNpwp(false, id);
                         });
                     } else {
                         $("#verifikasi_npwp").on('click', function() {
-                            verifikasiUpdateNpwp(true, data[2].limit_call, id);
+                            verifikasiUpdateNpwp(false, data[2].limit_call, id);
                         });
                     }
 
                     if (data[3] == null) {
                         $("#verifikasi_properti").on('click', function() {
-                            verifikasiSimpanProperti(true, id);
+                            verifikasiSimpanProperti(false, id);
                         });
                     } else {
                         $("#verifikasi_properti").on('click', function() {
@@ -1194,12 +1239,12 @@
                     var data_debitur = [
                         '<tr>',
                             '<td>Foto KTP Debitur</td>',
-                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '"><img src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '" </img></a></td>',
+                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '" </img></a></td>',
                             '<td id="ktp_photo_result"></td>',
                         '</tr>',
                         '<tr>',
                             '<td>Foto Selfie Debitur</td>',
-                            '<td name="selfie_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"><img id="photo_selfie_debitur" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"</img></a></td>',
+                            '<td name="selfie_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"><img id="photo_selfie_debitur" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"</img></a></td>',
                             '<td id="selfie_photo_result"></td>',
                         '</tr>',
                         '<tr>',
@@ -1229,12 +1274,12 @@
                     var data_pasangan = [
                         '<tr>',
                             '<td>Foto KTP Pasangan</td>',
-                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '"><img src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '" </img></a></td>',
+                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '" </img></a></td>',
                             '<td id="ktp_photo_result"></td>',
                         '</tr>',
                         '<tr>',
                             '<td>Foto Selfie Pasangan</td>',
-                            '<td name="selfie_photo"  id="selfie_photo_pasangan"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '"><img id="photo_selfie_pasangan" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '" </img></a></td>',
+                            '<td name="selfie_photo"  id="selfie_photo_pasangan"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '"><img id="photo_selfie_pasangan" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '" </img></a></td>',
                             '<td id="selfie_photo_pasangan_result"></td>',
                         '</tr>',
                         '<tr>',
@@ -1264,7 +1309,7 @@
                     var data_npwp = [
                         '<tr>',
                             '<td>Foto NPWP</td>',
-                            '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '"><img src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '" </img></a></td>',
+                            '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '" </img></a></td>',
                             '<td id="npwp_photo_result"></td>',
                         '</tr>',
                         '<tr>',
@@ -1349,7 +1394,7 @@
                             '</tr>',
                             '<tr>',
                                 '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date" id="certificate_date">' + data.data_agunan.agunan_tanah[0].tgl_sertifikat + '</td>',
+                                '<td name="certificate_date" id="certificate_date">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
                                 '<td id=certificate_date_result></td>',
                             '</tr>',
                         ].join('\n');
@@ -1381,7 +1426,191 @@
             var html_pas = [];
             var html_npwp = [];
             var html_properti = [];
+            
+            get_data({}, id)
+                .done(function(response) {
+                    var data = response.data;
+                    console.log(data);
 
+                    var data_debitur = [
+                        '<tr>',
+                            '<td>Foto KTP Debitur</td>',
+                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '" </img></a></td>',
+                            '<td id="ktp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Foto Selfie Debitur</td>',
+                            '<td name="selfie_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"><img id="photo_selfie_debitur" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"</img></a></td>',
+                            '<td id="selfie_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik">' + data.data_debitur.no_ktp + '</td>',
+                            '<td id="nik_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap</td>',
+                            '<td name="name" id="name">' + data.data_debitur.nama_lengkap + '</td>',
+                            '<td id="name_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir</td>',
+                            '<td name="birthplace" id="birthplace">' + data.data_debitur.tempat_lahir + '</td>',
+                            '<td id=birthplace_result></td>',
+                        '</tr>',
+                        '<tr>',
+                             '<td>Tanggal Lahir</td>',
+                            '<td name="birthdate" id="birthdate">' + formatTanggal(data.data_debitur.tgl_lahir) + '</td>',
+                            '<td id="birthdate_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_deb.push(data_debitur);
+                    $("#data_debitur").html(html_deb);
+
+                    var data_pasangan = [
+                        '<tr>',
+                            '<td>Foto KTP Pasangan</td>',
+                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '" </img></a></td>',
+                            '<td id="ktp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Foto Selfie Pasangan</td>',
+                            '<td name="selfie_photo"  id="selfie_photo_pasangan"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '"><img id="photo_selfie_pasangan" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '" </img></a></td>',
+                            '<td id="selfie_photo_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik_pasangan">' + data.data_pasangan.no_ktp + '</td>',
+                            '<td id="nik_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap</td>',
+                            '<td name="name" id="name_pasangan">' + data.data_pasangan.nama_lengkap + '</td>',
+                            '<td id="name_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir</td>',
+                            '<td name="birthplace" id="birthplace_pasangan">' + data.data_pasangan.tempat_lahir + '</td>',
+                            '<td id=birthplace_pasangan_result></td>',
+                        '</tr>',
+                        '<tr>',
+                             '<td>Tanggal Lahir</td>',
+                            '<td name="birthdate" id="birthdate_pasangan">' + data.data_pasangan.tgl_lahir + '</td>',
+                            '<td id="birthdate_pasangan_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_pas.push(data_pasangan);
+                    $("#data_pasangan").html(html_pas);
+
+                    var data_npwp = [
+                        '<tr>',
+                            '<td>Foto NPWP</td>',
+                            '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '" </img></a></td>',
+                            '<td id="npwp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>No. NPWP</td>',
+                            '<td name="npwp" id="no_npwp">' + data.data_debitur.no_npwp + '</td>',
+                            '<td id="npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik">' + data.data_debitur.no_ktp + '</td>',
+                            '<td id="nik_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Match Result</td>',
+                            '<td id="match_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap berdasarkan NPWP</td>',
+                            '<td name="name_npwp" id="name_npwp">' + data.data_debitur.nama_lengkap + '</td>',
+                            '<td id="name_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir berdasarkan NPWP</td>',
+                            '<td name="birthplace_npwp" id="birthplace_npwp">' + data.data_debitur.tempat_lahir + '</td>',
+                            '<td id=birthplace_npwp_result></td>',
+                        '</tr>',
+                        '<tr>',
+                             '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                            '<td name="birthdate_npwp" id="birthdate_npwp"> ' + formatTanggal(data.data_debitur.tgl_lahir) + '</td>',
+                            '<td id="birthdate_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                             '<td>Pendapatan Bulanan</td>',
+                            '<td name="income_npwp" id="income_npwp">' + data.kapasitas_bulanan.pemasukan_cadebt + '</td>',
+                            '<td id="income_npwp_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_npwp.push(data_npwp);
+                    $("#data_npwp").html(html_npwp);
+
+                    if (data.data_agunan.agunan_tanah.length != 0) {
+                        var data_properti = [
+                            '<tr>',
+                                '<td>NOP</td>',
+                                '<td name="nop" id="nop">' + data.data_agunan.agunan_tanah[0].njop + '</td>',
+                                '<td id="nop_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Properti</td>',
+                                '<td name="property_name" id="property_name">' + data.data_debitur.nama_lengkap + '</td>',
+                                '<td id="property_name_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Luas Bangunan Properti</td>',
+                                '<td name="property_building_area" id="property_building_area">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                '<td id="property_building_area_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Luas Tanah Properti</td>',
+                                '<td name="property_surface_area" id="property_surface_area">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                '<td id="property_surface_area_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Estimasi Properti</td>',
+                                '<td name="property_estimation" id="property_estimation">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                '<td id="property_estimation_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. Sertifikat</td>',
+                                '<td name="certificate_id" id="certificate_id">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                '<td id=certificate_id_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Pemilik Sertifikat</td>',
+                                '<td name="certificate_name" id="certificate_name">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                '<td id=certificate_name_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tipe Sertifikat</td>',
+                                '<td name="certificate_type" id="certificate_type">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                '<td id=certificate_type_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Sertifikat</td>',
+                                '<td name="certificate_date" id="certificate_date">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                '<td id=certificate_date_result></td>',
+                            '</tr>',
+                        ].join('\n');
+                        html_properti.push(data_properti);
+                        $("#data_properti").html(html_properti);
+                    } else {
+                        var data_properti = [
+                            '<tr>',
+                                '<td colspan="3" style="text-align: center">Tidak ada agunan!</td>',
+                            '</tr>',
+                            ].join('\n');
+                        html_properti.push(data_properti);
+                        $("#data_properti").html(html_properti);
+                    }
+                    
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
+
+                })
             get_detail({}, id)
                 .done(function(response) {
                     var data = response.data;
@@ -1428,192 +1657,7 @@
                 .fail(function(jqXHR) {
                     bootbox.alert('Data Belum Pernah Di Verifikasi!!');
                 })
-
-            get_data({}, id)
-                .done(function(response) {
-                    var data = response.data;
-                    console.log(data);
-
-                    var data_debitur = [
-                        '<tr>',
-                            '<td>Foto KTP Debitur</td>',
-                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '"><img src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '" </img></a></td>',
-                            '<td id="ktp_photo_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>Foto Selfie Debitur</td>',
-                            '<td name="selfie_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"><img id="photo_selfie_debitur" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"</img></a></td>',
-                            '<td id="selfie_photo_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>NIK</td>',
-                            '<td name="nik" id="nik">' + data.data_debitur.no_ktp + '</td>',
-                            '<td id="nik_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>Nama Lengkap</td>',
-                            '<td name="name" id="name">' + data.data_debitur.nama_lengkap + '</td>',
-                            '<td id="name_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>Tempat Lahir</td>',
-                            '<td name="birthplace" id="birthplace">' + data.data_debitur.tempat_lahir + '</td>',
-                            '<td id=birthplace_result></td>',
-                        '</tr>',
-                        '<tr>',
-                             '<td>Tanggal Lahir</td>',
-                            '<td name="birthdate" id="birthdate">' + formatTanggal(data.data_debitur.tgl_lahir) + '</td>',
-                            '<td id="birthdate_result"></td>',
-                        '</tr>'
-                    ].join('\n');
-                    html_deb.push(data_debitur);
-                    $("#data_debitur").html(html_deb);
-
-                    var data_pasangan = [
-                        '<tr>',
-                            '<td>Foto KTP Pasangan</td>',
-                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '"><img src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '" </img></a></td>',
-                            '<td id="ktp_photo_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>Foto Selfie Pasangan</td>',
-                            '<td name="selfie_photo"  id="selfie_photo_pasangan"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '"><img id="photo_selfie_pasangan" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '" </img></a></td>',
-                            '<td id="selfie_photo_pasangan_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>NIK</td>',
-                            '<td name="nik" id="nik_pasangan">' + data.data_pasangan.no_ktp + '</td>',
-                            '<td id="nik_pasangan_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>Nama Lengkap</td>',
-                            '<td name="name" id="name_pasangan">' + data.data_pasangan.nama_lengkap + '</td>',
-                            '<td id="name_pasangan_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>Tempat Lahir</td>',
-                            '<td name="birthplace" id="birthplace_pasangan">' + data.data_pasangan.tempat_lahir + '</td>',
-                            '<td id=birthplace_pasangan_result></td>',
-                        '</tr>',
-                        '<tr>',
-                             '<td>Tanggal Lahir</td>',
-                            '<td name="birthdate" id="birthdate_pasangan">' + data.data_pasangan.tgl_lahir + '</td>',
-                            '<td id="birthdate_pasangan_result"></td>',
-                        '</tr>'
-                    ].join('\n');
-                    html_pas.push(data_pasangan);
-                    $("#data_pasangan").html(html_pas);
-
-                    var data_npwp = [
-                        '<tr>',
-                            '<td>Foto NPWP</td>',
-                            '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '"><img src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '" </img></a></td>',
-                            '<td id="npwp_photo_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>No. NPWP</td>',
-                            '<td name="npwp" id="no_npwp">' + data.data_debitur.no_npwp + '</td>',
-                            '<td id="npwp_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>NIK</td>',
-                            '<td name="nik" id="nik">' + data.data_debitur.no_ktp + '</td>',
-                            '<td id="nik_npwp_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td colspan="2">Match Result</td>',
-                            '<td id="match_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>Nama Lengkap berdasarkan NPWP</td>',
-                            '<td name="name_npwp" id="name_npwp">' + data.data_debitur.nama_lengkap + '</td>',
-                            '<td id="name_npwp_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                            '<td>Tempat Lahir berdasarkan NPWP</td>',
-                            '<td name="birthplace_npwp" id="birthplace_npwp">' + data.data_debitur.tempat_lahir + '</td>',
-                            '<td id=birthplace_npwp_result></td>',
-                        '</tr>',
-                        '<tr>',
-                             '<td>Tanggal Lahir berdasarkan NPWP</td>',
-                            '<td name="birthdate_npwp" id="birthdate_npwp"> ' + formatTanggal(data.data_debitur.tgl_lahir) + '</td>',
-                            '<td id="birthdate_npwp_result"></td>',
-                        '</tr>',
-                        '<tr>',
-                             '<td>Pendapatan Bulanan</td>',
-                            '<td name="income_npwp" id="income_npwp">' + data.kapasitas_bulanan.pemasukan_cadebt + '</td>',
-                            '<td id="income_npwp_result"></td>',
-                        '</tr>'
-                    ].join('\n');
-                    html_npwp.push(data_npwp);
-                    $("#data_npwp").html(html_npwp);
-
-                    if (data.data_agunan.agunan_tanah.length != 0) {
-                        var data_properti = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop" id="nop">' + data.data_agunan.agunan_tanah[0].njop + '</td>',
-                                '<td id="nop_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name" id="property_name">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area" id="property_building_area">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area" id="property_surface_area">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation" id="property_estimation">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id" id="certificate_id">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name" id="certificate_name">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type" id="certificate_type">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date" id="certificate_date">' + data.data_agunan.agunan_tanah[0].tgl_sertifikat + '</td>',
-                                '<td id=certificate_date_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti.push(data_properti);
-                        $("#data_properti").html(html_properti);
-                    } else {
-                        var data_properti = [
-                            '<tr>',
-                                '<td colspan="3" style="text-align: center">Tidak ada agunan!</td>',
-                            '</tr>',
-                            ].join('\n');
-                        html_properti.push(data_properti);
-                        $("#data_properti").html(html_properti);
-                    }
-                    
-                })
-                .fail(function(jqXHR) {
-                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
-
-                })
-
+            
             $('#lihat_data_credit').hide();
             $('#lihat_detail').show();
         }); 

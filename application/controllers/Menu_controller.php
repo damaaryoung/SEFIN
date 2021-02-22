@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 class Menu_controller extends CI_Controller
 {
     function __construct()
-    {
+    {   
         parent::__construct();
         $this->load->model('model_menu');
         $this->load->model('model_auth');
@@ -542,6 +542,26 @@ class Menu_controller extends CI_Controller
     public function dashboard_target_lending()
     {
         $this->load->view('master/target_lending/target_lending_template');
+    }
+
+    public function activity_tele_collection()
+    {
+        $this->load->view('master/activity/activity_tele_collection');
+    }
+
+    public function activity_tele_sales()
+    {
+        $this->load->view('master/activity/activity_tele_sales');
+    }
+
+    public function dashboard_tele()
+    {
+        $this->load->view('master/tele_center/dashboard_tele');
+    }
+
+    public function pipeline_lending()
+    {
+        $this->load->view('master/cek_sertifikat/pipeline_lending');
     }
 
     public function activity_sales_officer()

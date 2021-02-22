@@ -128,6 +128,43 @@ class ActivityHMController extends CI_Controller
       $data['data']=$data['data']['data'];
       $this->load->view('master/activity/head-marketing/view-so/datatable/data_so',$data);
   }
+  function data_no_kontrak(){
+    if (isset($_POST['page'])) {
+        $page=$_POST['page'];
+      }else {
+        $page="1";
+      }
+      $data=$this->Model_hm_activity->tampil_data_cadeb($page);
+      $data['pagination']=$data['data']['last_page'];
+      $data['page']=$data['data']['current_page'];
+      $data['data']=$data['data']['data'];
+      $this->load->view('master/activity/head-marketing/view-so/datatable/data_no_kontrak',$data);
+  }
+  function data_nama_mb(){
+    if (isset($_POST['page'])) {
+        $page=$_POST['page'];
+      }else {
+        $page="1";
+      }
+      $data=$this->Model_hm_activity->tampil_data_cadeb($page);
+      $data['pagination']=$data['data']['last_page'];
+      $data['page']=$data['data']['current_page'];
+      $data['data']=$data['data']['data'];
+      $this->load->view('master/activity/head-marketing/view-so/datatable/data_nama_mb',$data);
+  }
+
+  function data_visit(){
+    if (isset($_POST['page'])) {
+        $page=$_POST['page'];
+      }else {
+        $page="1";
+      }
+      $data=$this->Model_hm_activity->tampil_data_cadeb($page);
+      $data['pagination']=$data['data']['last_page'];
+      $data['page']=$data['data']['current_page'];
+      $data['data']=$data['data']['data'];
+      $this->load->view('master/activity/head-marketing/view-ao/datatable/data_visit',$data);
+  }
   
 }
 ?>

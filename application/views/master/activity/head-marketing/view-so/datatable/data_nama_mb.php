@@ -1,13 +1,13 @@
 <div class="d-flex justify-content-center">
-	<div class="spinner-grow" role="status" id="loading-pic" style="display:none">
+	<div class="spinner-grow" role="status" id="loading_nama_mb" style="display:none">
 		<span class="sr-only">Loading...</span>
 	</div>
 </div>	
-
-<table class="table table-sm table-hover table-bordered" width="100%" id="table-pic">
+<table class="table table-sm table-hover table-bordered" width="100%" id="table_nama_mb">
 	<thead>
 		<tr>
-			<th>Nama PIC</th>
+            <th>Nama MB</th>
+            <th>Alamat MB</th>
 			<th width="10">ACT</th>
 		</tr>
 	</thead>
@@ -19,10 +19,11 @@
 		?>
 		<?php foreach ($data as $key): ?>
 			<tr>
-				<td><?= $key['nama']; ?></td>
+                <td><?= $key['nama_lengkap']; ?></td>
+                <td><?= $key['alamat_debitur']; ?></td>
 				<td>
 					<div class="btn-group">
-						<button type="button" class="btn btn-secondary btn-sm" onclick="pickPIC('<?= $key['nama']; ?>');" data-toggle="tooltip" data-placement="left" title="Pick Data <?= $key['nama']; ?>"><i class="fas fa-hand-pointer"></i></button>
+						<button type="button" class="btn btn-secondary btn-sm" onclick="pick_nama_mb('<?= $key['nama_lengkap']; ?>', '<?= $key['alamat_debitur']; ?>' );" data-toggle="tooltip" data-placement="left" title="Pilih Nama MB <?= $key['nama_lengkap']; ?>"><i class="fas fa-hand-pointer"></i></button>
 					</div>
 				</td>
 			</tr>
@@ -39,17 +40,17 @@
     $end_number = ($page < ($jumlah_page - $jumlah_number))? $page + $jumlah_number : $jumlah_page;
 
     if($page == 1){
-    	echo '<li class="page-item disabled" onclick="paginationpic(1);"><a class="page-link" href="#">First</a></li>';
-    	echo '<li class="page-item disabled" onclick="paginationpic(1);"><a class="page-link" href="#"><span aria-hidden="true">&laquo;</span></a></li>';
+    	echo '<li class="page-item disabled" onclick="pagination_nama_mb(1);"><a class="page-link" href="#">First</a></li>';
+    	echo '<li class="page-item disabled" onclick="pagination_nama_mb(1);"><a class="page-link" href="#"><span aria-hidden="true">&laquo;</span></a></li>';
     } else {
     	$link_prev = ($page > 1)? $page - 1 : 1;
-    	echo '<li class="page-item halaman" onclick="paginationpic(1);"><a class="page-link" href="#">First</a></li>';
-    	echo '<li class="page-item halaman" onclick="paginationpic('.$link_prev.');"><a class="page-link" href="#"><span aria-hidden="true">&laquo;</span></a></li>';
+    	echo '<li class="page-item halaman" onclick="pagination_nama_mb(1);"><a class="page-link" href="#">First</a></li>';
+    	echo '<li class="page-item halaman" onclick="pagination_nama_mb('.$link_prev.');"><a class="page-link" href="#"><span aria-hidden="true">&laquo;</span></a></li>';
     }
 
     for($i = $start_number; $i <= $end_number; $i++){
     	$link_active = ($page == $i)? ' active' : '';
-    	echo '<li class="page-item halaman '.$link_active.'" onclick="paginationpic('.$i.');"><a class="page-link" href="#">'.$i.'</a></li>';
+    	echo '<li class="page-item halaman '.$link_active.'" onclick="pagination_nama_mb('.$i.');"><a class="page-link" href="#">'.$i.'</a></li>';
     }
 
     if($page == $jumlah_page){

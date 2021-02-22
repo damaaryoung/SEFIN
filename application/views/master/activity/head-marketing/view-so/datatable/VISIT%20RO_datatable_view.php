@@ -6,7 +6,7 @@
 			<th>Nama Debitur</th>
 			<th>Alamat Debitur</th>
 			<th>PIC</th>
-			<th width="10">ACT</th>
+			<th width="10">Action</th>
 		</tr>
 	</thead>
 	<tbody style="font-size: 13px !important;">
@@ -17,11 +17,11 @@
 		?>
 		<?php foreach ($data as $key): ?>
 			<tr>
-				<td><i class="fas fa-calendar-alt"></i> <?= date('d F Y', strtotime(substr($key['tgl_assign'], 0,9))); ?> | <i class="fas fa-clock"></i> <?= substr($key['tgl_assign'],11);?></td>
-				<td><span class="btn btn-outline-secondary btn-sm"><i class="fas fa-key"> <?= $key['no_kontrak']; ?></span></td>
-					<td><i class="fas fa-user"></i> <?= $key['nama_debitur']; ?></td>
-					<td><i class="fas fa-map-marked-alt"></i> <?= $key['alamat_debitur']; ?></td>
-					<td><i class="fas fa-user-secret"></i> <?= $key['nama_pic']; ?></td>
+				<td> <?= date('d F Y', strtotime($key['tgl_assign'])); ?> - <?= substr($key['tgl_assign'],11);?></td>
+				<td><?= $key['no_kontrak']; ?></td>
+					<td> <?= $key['nama_debitur']; ?></td>
+					<td> <?= $key['alamat_debitur']; ?></td>
+					<td> <?= $key['nama_pic']; ?></td>
 					<td>
 						<div class="btn-group">
 							<button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>','VISIT RO');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_debitur']; ?>"><i class="fas fa-wrench"></i></button>
@@ -31,16 +31,6 @@
 				</tr>
 				<?php $no++; endforeach; ?>
 			</tbody>
-			<tfoot>
-				<tr>
-					<th>Tanggal</th>
-					<th>No. Kontrak</th>
-					<th>Nama Debitur</th>
-					<th>Alamat Debitur</th>
-					<th>PIC</th>
-					<th width="10">ACT</th>
-				</tr>
-			</tfoot>
 		</table>
 		<div class="text-center">
 			<ul class="pagination">

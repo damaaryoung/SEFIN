@@ -1,7 +1,7 @@
 <table class="table table-sm table-hover table-bordered" width="100%">
 	<thead>
 		<tr>
-			<th>Tanggal Asign</th>
+			<th>Tanggal</th>
 			<th>NO. Kontrak</th>
 			<th>Nama Debitur</th>
 			<th>Alamat Debitur</th>
@@ -17,7 +17,7 @@
 		?>
 		<?php foreach ($data as $key): ?>
 			<tr>
-				<td><?= date('d F Y', strtotime(substr($key['tgl_assign'], 0,9))); ?> - <?= substr($key['tgl_assign'],11);?></td>
+				<td><?= date('d F Y', strtotime($key['tgl_assign'])); ?> - <?= substr($key['tgl_assign'],11);?></td>
 				<td><?= $key['no_kontrak']; ?></td>
 				<td><?= $key['nama_debitur']; ?></td>
 				<td><?= $key['alamat_debitur']; ?></td>
@@ -31,16 +31,6 @@
 			</tr>
 			<?php $no++; endforeach; ?>
 		</tbody>
-		<tfoot>
-			<tr>
-				<th>Tanggal Asign</th>
-				<th>NO. Kontrak</th>
-				<th>Nama Debitur</th>
-				<th>Alamat Debitur</th>
-				<th>PIC</th>
-				<th width="10">ACT</th>
-			</tr>
-		</tfoot>
 	</table>
 	<div class="text-center">
 		<ul class="pagination">

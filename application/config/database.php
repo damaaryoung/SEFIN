@@ -75,7 +75,6 @@ $query_builder = TRUE;
 
 
 
-<<<<<<< HEAD
  $db['default'] = array(
  	'dsn'	=> '',
  	'hostname' => '103.31.232.148:3307',
@@ -148,14 +147,6 @@ $db['dpm_online'] = array(
 	'username' => 'test', //username database kedua
 	'password' => 'test123!', //password database kedua
 	'database' => 'dpm_online', //nama database kedua
-=======
-$db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => '103.31.232.148:3307',
-	'username' => 'u2Qi7Jfui',
-	'password' => 'qJ7ysIkg8ce!',
-	'database' => 'newwebtool',
->>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

@@ -96,20 +96,28 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                <label>No. Kontrak<span class="required_notification">*</span></label>
-                                    <div class="input-group" style="margin-bottom: 16px">
-                                        <input type="text" id="no_kontrak" name="no_kontrak" class="form-control">
-                                            <span class="input-group-append">
-                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-no_kontrak">Pilih No Kontrak</button>
-                                        </span>
+                                    <div class="form-group">
+                                        <label>No. Kontrak<span class="required_notification">*</span></label>
+                                        <div class="input-group">
+                                            <input type="text" id="no_kontrak" name="no_kontrak" class="form-control">
+                                                <span class="input-group-append">
+                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-no_kontrak">Pilih No Kontrak</button>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Nama Debitur<span class="required_notification">*</span></label>
                                         <input type="text" class="form-control" name="nama_deb" id="nama_deb">
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Tanggal Lahir Debitur<span class="required_notification">*</span></label>
+                                            <input type="date" class="form-control" name="tgl_lahir_deb" id="tgl_lahir_deb"  onchange="changeBirthDate()">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Umur<span class="required_notification">*</span></label>
+                                            <input type="text" id="umur" name="umur" class="form-control" readonly="">
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
@@ -122,8 +130,24 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label>Update No. Telepon (jika ada)</label>
+                                        <input type="text" class="form-control" name="update_telp" id="update_telp" onkeypress=" return keyCode(event)">
+                                    </div>
+                                    <div class="form-group">
                                         <label>Alamat<span class="required_notification">*</span></label>
                                         <textarea name="alamat" id="alamat" class="form-control " rows="5" cols="40"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Update Pekerjaan (jika ada)</label>
+                                            <input type="text" class="form-control" id="update_pekerjaan" name="update_pekerjaan";>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Update Penghasilan (jika ada)</label>
+                                            <input type="text" class="form-control" id="update_penghasilan" name="update_penghasilan";>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
@@ -137,50 +161,6 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label>Nominal Angsuran<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" name="nominal_angsuran" id="nominal_angsuran">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Taksasi Agunan<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" name="taksasi_agunan" id="taksasi_agunan">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label>Jenis Agunan<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" id="jenis_agunan" name="jenis_agunan";>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Tanggal SHGB Expired<span class="required_notification">*</span></label>
-                                            <input type="date" class="form-control" name="shgb_expired" id="shgb_expired">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label>Tanggal Lahir Debitur<span class="required_notification">*</span></label>
-                                            <input type="date" class="form-control" name="tgl_lahir_deb" id="tgl_lahir_deb"  onchange="changeBirthDate()">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Umur<span class="required_notification">*</span></label>
-                                            <input type="text" id="umur" name="umur" class="form-control" readonly="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Update No. Telepon (jika ada)</label>
-                                        <input type="text" class="form-control" name="update_telp" id="update_telp" onkeypress=" return keyCode(event)">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Update Pekerjaan<span class="required_notification">*</span></label>
-                                        <input type="text" class="form-control" id="update_pekerjaan" name="update_pekerjaan";>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Update Penghasilan<span class="required_notification">*</span></label>
-                                        <input type="text" class="form-control" id="update_penghasilan" name="update_penghasilan";>
-                                    </div>
-                                    <div class="row" style="margin-top: 25px">
-                                        <div class="form-group col-md-6">
                                             <label>Sisa Angsuran<span class="required_notification">*</span></label>
                                             <input type="text" class="form-control" id="sisa_angsuran" name="sisa_angsuran" onkeypress=" return keyCode(event)">
                                         </div>
@@ -189,13 +169,39 @@
                                             <input type="text" class="form-control" name="max_pastdue" id="max_pastdue" onkeypress=" return keyCode(event)">
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Nominal Angsuran<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" name="nominal_angsuran" id="nominal_angsuran">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Taksasi Agunan</label>
+                                            <input type="text" class="form-control" name="taksasi_agunan" id="taksasi_agunan">
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label>Baki Debet<span class="required_notification">*</span></label>
                                         <input type="text" class="form-control" id="baki_debet" name="baki_debet";>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Total Pelunasan<span class="required_notification">*</span></label>
-                                        <input type="text" class="form-control" id="total_pelunasan" name="total_pelunasan";>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Total Denda</label>
+                                            <input type="text" class="form-control" id="total_denda" name="total_denda";>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Total Pelunasan<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" id="total_pelunasan" name="total_pelunasan";>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Jenis Agunan</label>
+                                            <input type="text" class="form-control" id="jenis_agunan" name="jenis_agunan";>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Tanggal SHGB Expired</label>
+                                            <input type="date" class="form-control" name="shgb_expired" id="shgb_expired">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -233,11 +239,11 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label>DSR (35%)<span class="required_notification">*</span></label>
+                                            <label>DSR (35%)</label>
                                             <input type="text" class="form-control" id="dsr" name="dsr" >
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label>IDIR (80%)<span class="required_notification">*</span></label>
+                                            <label>IDIR (80%)</label>
                                             <input type="text" class="form-control" id="idir" name="idir" >
                                         </div>
                                     </div>
@@ -265,7 +271,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label>LTV (70%)<span class="required_notification">*</span></label>
+                                            <label>LTV (70%)</label>
                                             <input type="text" class="form-control" id="ltv" name="ltv"  >
                                         </div>
                                         <div class="form-group col-md-6">
@@ -361,17 +367,25 @@
                         <div class="card-body collapse" id="collapse_1">
                             <div class="row">
                                 <div class="col-md-6">
-                                <label>No. Kontrak<span class="required_notification">*</span></label>
-                                    <div class="input-group" style="margin-bottom: 16px">
-                                        <input type="text" id="no_kontrak_detail" name="no_kontrak_detail" class="form-control">
+                                    <div class="form-group">
+                                        <label>No. Kontrak<span class="required_notification">*</span></label>
+                                        <div class="input-group" style="margin-bottom: 16px">
+                                            <input type="text" id="no_kontrak_detail" name="no_kontrak_detail" class="form-control">
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Nama Debitur<span class="required_notification">*</span></label>
                                         <input type="text" class="form-control" name="nama_deb_detail" id="nama_deb_detail">
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Tanggal Lahir Debitur<span class="required_notification">*</span></label>
+                                            <input type="date" class="form-control" name="tgl_lahir_deb_detail" id="tgl_lahir_deb_detail"  onchange="changeBirthDate()">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Umur<span class="required_notification">*</span></label>
+                                            <input type="text" id="umur_detail" name="umur_detail" class="form-control" readonly="">
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
@@ -384,8 +398,24 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label>Update No. Telepon (jika ada)</label>
+                                        <input type="text" class="form-control" name="update_telp_detail" id="update_telp_detail" onkeypress=" return keyCode(event)">
+                                    </div>
+                                    <div class="form-group">
                                         <label>Alamat<span class="required_notification">*</span></label>
                                         <textarea name="alamat_detail" id="alamat_detail" class="form-control " rows="5" cols="40"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Update Pekerjaan (jika ada)</label>
+                                            <input type="text" class="form-control" id="update_pekerjaan_detail" name="update_pekerjaan_detail";>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Update Penghasilan (jika ada)</label>
+                                            <input type="text" class="form-control" id="update_penghasilan_detail" name="update_penghasilan_detail";>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
@@ -399,50 +429,6 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label>Nominal Angsuran<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" name="nominal_angsuran_detail" id="nominal_angsuran_detail">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Taksasi Agunan<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" name="taksasi_agunan_detail" id="taksasi_agunan_detail">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label>Jenis Agunan<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" id="jenis_agunan_detail" name="jenis_agunan_detail";>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Tanggal SHGB Expired<span class="required_notification">*</span></label>
-                                            <input type="date" class="form-control" name="shgb_expired_detail" id="shgb_expired_detail">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label>Tanggal Lahir Debitur<span class="required_notification">*</span></label>
-                                            <input type="date" class="form-control" name="tgl_lahir_deb_detail" id="tgl_lahir_deb_detail"  onchange="changeBirthDate()">
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label>Umur<span class="required_notification">*</span></label>
-                                            <input type="text" id="umur_detail" name="umur_detail" class="form-control" readonly="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Update No. Telepon (jika ada)</label>
-                                        <input type="text" class="form-control" name="update_telp_detail" id="update_telp_detail" onkeypress=" return keyCode(event)">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Update Pekerjaan<span class="required_notification">*</span></label>
-                                        <input type="text" class="form-control" id="update_pekerjaan_detail" name="update_pekerjaan_detail";>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Update Penghasilan<span class="required_notification">*</span></label>
-                                        <input type="text" class="form-control" id="update_penghasilan_detail" name="update_penghasilan_detail";>
-                                    </div>
-                                    <div class="row" style="margin-top: 25px">
-                                        <div class="form-group col-md-6">
                                             <label>Sisa Angsuran<span class="required_notification">*</span></label>
                                             <input type="text" class="form-control" id="sisa_angsuran_detail" name="sisa_angsuran_detail";>
                                         </div>
@@ -451,13 +437,39 @@
                                             <input type="text" class="form-control" name="max_pastdue_detail" id="max_pastdue_detail" onkeypress=" return keyCode(event)">
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Nominal Angsuran<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" name="nominal_angsuran_detail" id="nominal_angsuran_detail">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Taksasi Agunan</label>
+                                            <input type="text" class="form-control" name="taksasi_agunan_detail" id="taksasi_agunan_detail">
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label>Baki Debet<span class="required_notification">*</span></label>
                                         <input type="text" class="form-control" id="baki_debet_detail" name="baki_debet_detail";>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Total Pelunasan<span class="required_notification">*</span></label>
-                                        <input type="text" class="form-control" id="total_pelunasan_detail" name="total_pelunasan_detail";>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label>Total Denda</label>
+                                            <input type="text" class="form-control" id="total_denda_detail" name="total_denda_detail";>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Total Pelunasan<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" id="total_pelunasan_detail" name="total_pelunasan_detail";>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Jenis Agunan</label>
+                                            <input type="text" class="form-control" id="jenis_agunan_detail" name="jenis_agunan_detail";>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Tanggal SHGB Expired</label>
+                                            <input type="date" class="form-control" name="shgb_expired_detail" id="shgb_expired_detail">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -495,11 +507,11 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label>DSR (35%)<span class="required_notification">*</span></label>
+                                            <label>DSR (35%)</label>
                                             <input type="text" class="form-control" id="dsr_detail" name="dsr_detail" >
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label>IDIR (80%)<span class="required_notification">*</span></label>
+                                            <label>IDIR (80%)</label>
                                             <input type="text" class="form-control" id="idir_detail" name="idir_detail" >
                                         </div>
                                     </div>
@@ -527,7 +539,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label>LTV (70%)<span class="required_notification">*</span></label>
+                                            <label>LTV (70%)</label>
                                             <input type="text" class="form-control" id="ltv_detail" name="ltv_detail"  >
                                         </div>
                                         <div class="form-group col-md-6">
@@ -701,6 +713,17 @@
 	});
 	
 	baki_debet.addEventListener('keydown', function(event)
+	{
+		limitCharacter(event);
+    });
+
+    var total_denda = document.getElementById('total_denda');
+	total_denda.addEventListener('keyup', function(e)
+	{
+		total_denda.value = formatRupiah(this.value);
+	});
+	
+	total_denda.addEventListener('keydown', function(event)
 	{
 		limitCharacter(event);
     });
@@ -880,6 +903,8 @@
 
     function click_detail() {
         $('#form_show .form-control').prop('disabled', true);
+        hide_all();
+        $('#detail_activity').show();
     }
 
     $(function(){
@@ -897,11 +922,6 @@
         $('#click_tambah_activity').click(function(){
             hide_all();
             $('#tambah_activity').show();
-        });
-
-        $('#click_detail_activity').click(function(){
-            hide_all();
-            $('#detail_activity').show();
         });
 
         $('#click_back').click(function(){
@@ -968,20 +988,12 @@
                 bootbox.alert("Nominal Angsuran Tidak Boleh Kosong !!!");
                 return (false);
             }
-            if (document.getElementById('taksasi_agunan').value == "") {
-                bootbox.alert("Taksasi Agunan Tidak Boleh Kosong !!!");
-                return (false);
-            }
             if (document.getElementById('baki_debet').value == "") {
                 bootbox.alert("Baki Debet Tidak Boleh Kosong !!!");
                 return (false);
             }
             if (document.getElementById('jenis_agunan').value == "") {
                 bootbox.alert("Jenis Agunan Tidak Boleh Kosong !!!");
-                return (false);
-            }
-            if (document.getElementById('shgb_expired').value == "") {
-                bootbox.alert("Tanggal SHGB Expired Tidak Boleh Kosong !!!");
                 return (false);
             }
             if (document.getElementById('total_pelunasan').value == "") {
@@ -1018,18 +1030,6 @@
             }
             if (document.getElementById('biaya_cc').value == "") {
                 bootbox.alert("Biaya Credit Checking Tidak Boleh Kosong !!!");
-                return (false);
-            }
-            if (document.getElementById('dsr').value == "") {
-                bootbox.alert("DSR Tidak Boleh Kosong !!!");
-                return (false);
-            }
-            if (document.getElementById('idir').value == "") {
-                bootbox.alert("IDIR Tidak Boleh Kosong !!!");
-                return (false);
-            }
-            if (document.getElementById('ltv').value == "") {
-                bootbox.alert("LTV Tidak Boleh Kosong !!!");
                 return (false);
             }
             if (document.getElementById('total_pencairan').value == "") {
@@ -1069,9 +1069,10 @@
             formData.append('baki_debet', removePoint($('input[name=baki_debet]',this).val()));
             formData.append('jenis_agunan', $('input[name=jenis_agunan]',this).val());
             formData.append('shgb_expired',$('input[name=shgb_expired]',this).val());
+            formData.append('total_denda', removePoint($('input[name=total_denda]',this).val()));
             formData.append('total_pelunasan', removePoint($('input[name=total_pelunasan]',this).val()));
             
-            formData.append('pengajuan_ro', removePoint($('input[name=total_pelunasan]',this).val()));
+            formData.append('pengajuan_ro', removePoint($('input[name=pengajuan_ro]',this).val()));
             formData.append('tenor', $('input[name=tenor]',this).val());
             formData.append('produk_kredit', $('input[name=produk_kredit]',this).val());
             formData.append('rate', removePoint($('input[name=rate]',this).val()));
@@ -1084,9 +1085,9 @@
             formData.append('ltv', removePoint($('input[name=ltv]',this).val()));
             formData.append('total_pencairan', removePoint($('input[name=total_pencairan]',this).val()));
             
-            formData.append('result_contacted',$('select[name=contacted]',this).val());
-            formData.append('result_uncontacted',$('select[name=uncontacted]',this).val());
-            formData.append('result_unconnected',$('select[name=unconnected]',this).val());
+            formData.append('contacted',$('select[name=contacted]',this).val());
+            formData.append('uncontacted',$('select[name=uncontacted]',this).val());
+            formData.append('unconnected',$('select[name=unconnected]',this).val());
             formData.append('note_tele_sales',$('textarea[name=note_tele_sales]',this).val());
 
 
@@ -1227,7 +1228,8 @@
                         '<td>'+ nullChecker(item.result_uncontacted) +'</td>',
                         '<td>'+ nullChecker(item.result_unconnected) +'</td>',
                         '<td style="text-align: center">',
-                            '<button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" id="click_detail_activity" data="' + item.id + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
+                            '<form method="post" target="_blank" action="<?php echo base_url() . 'index.php/report/Memo_telesales' ?>"><button type="button"class="btn btn-warning btn-sm detail" onclick="click_detail()" data="' + item.id + '"><i style="color: #fff" class="fas fa-eye"></i></button>',
+                            '<input type="hidden" name ="id" value="' + item.id + '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
                         '</td>',
                     '</tr>'
                     ].join('\n');
@@ -1367,6 +1369,7 @@
                     $('#form_show input[name=nominal_angsuran_detail]').val(formatNumber(data.nominal_angsuran));
                     $('#form_show input[name=taksasi_agunan_detail]').val(formatNumber(data.taksasi_agunan));
                     $('#form_show input[name=baki_debet_detail]').val(formatNumber(data.baki_debet));
+                    $('#form_show input[name=total_denda_detail]').val(formatNumber(data.total_denda));
                     $('#form_show input[name=total_pelunasan_detail]').val(formatNumber(data.total_pelunasan));
                     $('#form_show input[name=jenis_agunan_detail]').val(data.jenis_agunan);
                     $('#form_show input[name=shgb_expired_detail]').val(data.shgb_expired);
