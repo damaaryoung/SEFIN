@@ -41,7 +41,6 @@
                             ?>
                             <select id="kode_area" class="form-control" name="kode_area">
                                 <option value="" selected="selected">- Pilih Area -</option>
-                                <option value="KONSOLIDASI">KONSOLIDASI</option>
                                 <?php foreach($kode_area as $r): ?>
                                     <option value="<?php echo $r->id; ?>"><?php echo $r->nama; ?></option>
                                 <?php endforeach; ?>
@@ -55,7 +54,6 @@
                             ?>
                             <select id="kode_kantor" class="form-control" name="kode_kantor">
                                 <option value="" selected="selected">- Pilih Cabang -</option>
-                                <option value="Konsolidasi">Konsolidasi</option>
                                 <?php foreach($kode_kantor as $r): ?>
                                     <option value="<?php echo $r->id; ?>"><?php echo $r->nama; ?></option>
                                 <?php endforeach; ?>
@@ -1299,16 +1297,73 @@
 
     function filter_data_verifikasi() {
         var requestBody = {
-            kode_kantor  : $("#kode_kantor option:selected").val(),
-            kode_area    : $("#kode_area option:selected").val(),
+            cabang : $("#kode_kantor option:selected").val(),
+            area    : $("#kode_area option:selected").val(),
         }
 
         if (requestBody.kode_area == "" && requestBody.kode_kantor == "") {
             bootbox.alert("Salah satu dari Area atau Cabang tidak boleh kosong!");
-        } else if (requestBody.kode_area == "KONSOLIDASI" || requestBody.kode_kantor == "Konsolidasi") {
-            tampil_data_verifikasi();
         } else {
             // call AJAX data verifikasi yang sudah di filter berdasarkan area dan kantor
+            $.ajax({
+                url: '<?php echo config_item('api_url') ?>api/master/verif/filter',
+                type: 'POST',
+                data: requestBody,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+            })
+            .done(function(res) {
+                var data = res.data.data;
+                console.log(data);
+                var html = [];
+                var no   = 0;
+                
+                if(data.length === 0 ){
+                    var tr =[
+                    '<tr align="middle">',
+                        '<td colspan="5" style="text-align: center">Tidak ada data</td>',
+                    '</tr>'
+                    ].join('\n');
+                    $('#data_verifikasi').html(tr);
+
+                    return;
+                } else {
+                    $.each(data, function(index,item){
+                        no++;
+                        var tr = [
+                        '<tr>',
+                            '<td style="text-align: center">'+ no +'</td>',
+                            '<td>'+ formatUpdated(item.tgl_transaksi) +'</td>',
+                            '<td>'+ item.nomor_so+'</td>',
+                            '<td>'+ item.nama_debitur +'</td>',
+                            '<td style="text-align: center">',
+                            '<form method="post" style="text-align: center" target="_blank" action="report/memo_verifikasi">',
+                            '<button type="button"  class="btn btn-primary btn-sm change" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-pencil-alt"></i></button>',
+                            '<button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" data-target="#update" data="' + item.id_trans_so + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
+                            '<button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-check"></i></button>',
+                            '<input type="hidden" name ="id" value="' + item.id_trans_so + '">',
+                            '<button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
+                            '</td>',
+                        '</tr>'
+                        ].join('\n');
+                        html.push(tr);
+                    });
+    
+                    $('#data_verifikasi').html(html);
+                    $('#table_verifikasi').DataTable({
+                        "paging": true,
+                        "retrieve": true,
+                        "lengthChange": true,
+                        "searching": true,
+                        "ordering": false,
+                        "info": true,
+                        "autoWidth": false,
+                    });
+
+                }
+
+            });
         }
     }
 
@@ -4407,6 +4462,21 @@
         }
     }
 
+    function formatUpdated(tanggal) {
+        if (tanggal != null) {
+            var splittedTanggal = tanggal.split(" ");
+
+            var objTanggal = {
+                tanggal : splittedTanggal[0],
+                waktu   : splittedTanggal[1]
+            }
+
+            var formattedTanggal = objTanggal.tanggal.split("-").reverse().join("-");
+
+            return `${formattedTanggal} | ${objTanggal.waktu}`
+        }
+    }
+
     function formatTanggal(tanggal) {
         if (tanggal != null) {
             var formattedTanggal = tanggal.split("-").reverse().join("-");
@@ -5438,7 +5508,7 @@
                         $('#form_npwp_pen_5').hide();
 
                         $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
-                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_agunan.agunan_tanah[0].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
 
                         var data_penjamin_1 = [
                             '<tr>',
@@ -5535,8 +5605,8 @@
 
                         $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
                         $('#form_penjamin_2 input[type=hidden][name=id_penjamin_2]').val(data.data_penjamin[1].id);
-                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_agunan.agunan_tanah[0].id);
-                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_agunan.agunan_tanah[1].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
 
                         var data_penjamin_1 = [
                             '<tr>',
@@ -5716,9 +5786,9 @@
                         $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
                         $('#form_penjamin_2 input[type=hidden][name=id_penjamin_2]').val(data.data_penjamin[1].id);
                         $('#form_penjamin_3 input[type=hidden][name=id_penjamin_3]').val(data.data_penjamin[2].id);
-                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_agunan.agunan_tanah[0].id);
-                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_agunan.agunan_tanah[1].id);
-                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_agunan.agunan_tanah[2].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_penjamin[2].id);
 
                         var data_penjamin_1 = [
                             '<tr>',
@@ -5981,10 +6051,10 @@
                         $('#form_penjamin_2 input[type=hidden][name=id_penjamin_2]').val(data.data_penjamin[1].id);
                         $('#form_penjamin_3 input[type=hidden][name=id_penjamin_3]').val(data.data_penjamin[2].id);
                         $('#form_penjamin_4 input[type=hidden][name=id_penjamin_4]').val(data.data_penjamin[3].id);
-                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_agunan.agunan_tanah[0].id);
-                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_agunan.agunan_tanah[1].id);
-                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_agunan.agunan_tanah[2].id);
-                        $('#form_npwp_pen_4 input[type=hidden][name=id_npwp_penjamin_4]').val(data.data_agunan.agunan_tanah[3].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_penjamin[2].id);
+                        $('#form_npwp_pen_4 input[type=hidden][name=id_npwp_penjamin_4]').val(data.data_penjamin[3].id);
 
                         var data_penjamin_1 = [
                             '<tr>',
@@ -6329,11 +6399,11 @@
                         $('#form_penjamin_3 input[type=hidden][name=id_penjamin_3]').val(data.data_penjamin[2].id);
                         $('#form_penjamin_4 input[type=hidden][name=id_penjamin_4]').val(data.data_penjamin[3].id);
                         $('#form_penjamin_5 input[type=hidden][name=id_penjamin_5]').val(data.data_penjamin[4].id);
-                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_agunan.agunan_tanah[0].id);
-                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_agunan.agunan_tanah[1].id);
-                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_agunan.agunan_tanah[2].id);
-                        $('#form_npwp_pen_4 input[type=hidden][name=id_npwp_penjamin_4]').val(data.data_agunan.agunan_tanah[3].id);
-                        $('#form_npwp_pen_5 input[type=hidden][name=id_npwp_penjamin_5]').val(data.data_agunan.agunan_tanah[4].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_penjamin[2].id);
+                        $('#form_npwp_pen_4 input[type=hidden][name=id_npwp_penjamin_4]').val(data.data_penjamin[3].id);
+                        $('#form_npwp_pen_5 input[type=hidden][name=id_npwp_penjamin_5]').val(data.data_penjamin[4].id);
 
                         var data_penjamin_1 = [
                             '<tr>',
@@ -6858,791 +6928,872 @@
                     $("#data_npwp_pasangan").html(html_npwp_pas);
                         
                     if(data.data_agunan.agunan_tanah.length == 1) {
-                        $('#form_properti_2').hide();
-                        $('#form_properti_3').hide();
-                        $('#form_properti_4').hide();
-                        $('#form_properti_5').hide();
+                        if(data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
 
-                        $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
                     } else if(data.data_agunan.agunan_tanah.length == 2) {
-                        $('#form_properti_3').hide();
-                        $('#form_properti_4').hide();
-                        $('#form_properti_5').hide();
-
-                        $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
-                        $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
-
-                        var data_properti_2 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
-                                '<td id="nop_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
-                                '<td id="property_building_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
-                                '<td id="property_surface_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
-                                '<td id=certificate_id_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_2_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_2.push(data_properti_2);
-                        $("#data_properti_2").html(html_properti_2);
+                        if(data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+                            $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
                         
                     } else if (data.data_agunan.agunan_tanah.length == 3) {
-                        $('#form_properti_4').hide();
-                        $('#form_properti_5').hide();
-
-                        $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
-                        $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
-                        $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
-
-                        var data_properti_2 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
-                                '<td id="nop_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
-                                '<td id="property_building_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
-                                '<td id="property_surface_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
-                                '<td id=certificate_id_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_2_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_2.push(data_properti_2);
-                        $("#data_properti_2").html(html_properti_2);
-
-                        var data_properti_3 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
-                                '<td id="nop_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
-                                '<td id="property_building_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
-                                '<td id="property_surface_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
-                                '<td id=certificate_id_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_3_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_3.push(data_properti_3);
-                        $("#data_properti_3").html(html_properti_3);
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+                            $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
+                            $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
                     } else if (data.data_agunan.agunan_tanah.length == 4) {
-                        $('#form_properti_5').hide();
-
-                        $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
-                        $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
-                        $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
-                        $('#form_properti_4 input[type=hidden][name=id_properti_4]').val(data.data_agunan.agunan_tanah[3].id);
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
-
-                        var data_properti_2 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
-                                '<td id="nop_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
-                                '<td id="property_building_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
-                                '<td id="property_surface_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
-                                '<td id=certificate_id_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_2_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_2.push(data_properti_2);
-                        $("#data_properti_2").html(html_properti_2);
-
-                        var data_properti_3 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
-                                '<td id="nop_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
-                                '<td id="property_building_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
-                                '<td id="property_surface_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
-                                '<td id=certificate_id_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_3_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_3.push(data_properti_3);
-                        $("#data_properti_3").html(html_properti_3);
-
-                        var data_properti_4 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
-                                '<td id="nop_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
-                                '<td id="property_building_area_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
-                                '<td id="property_surface_area_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
-                                '<td id=certificate_id_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_4_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_4.push(data_properti_4);
-                        $("#data_properti_4").html(html_properti_4);
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_5').hide();
+    
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+                            $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
+                            $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
+                            $('#form_properti_4 input[type=hidden][name=id_properti_4]').val(data.data_agunan.agunan_tanah[3].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+    
+                            var data_properti_4 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
+                                    '<td id="nop_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_4_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_4.push(data_properti_4);
+                            $("#data_properti_4").html(html_properti_4);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
                     } else if (data.data_agunan.agunan_tanah.length == 5) {
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+                            $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
+                            $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
+                            $('#form_properti_4 input[type=hidden][name=id_properti_4]').val(data.data_agunan.agunan_tanah[3].id);
+                            $('#form_properti_5 input[type=hidden][name=id_properti_5]').val(data.data_agunan.agunan_tanah[4].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+    
+                            var data_properti_4 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
+                                    '<td id="nop_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_4_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_4.push(data_properti_4);
+                            $("#data_properti_4").html(html_properti_4);
+    
+                            var data_properti_5 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_5" id="nop_5">' + data.data_agunan.agunan_tanah[4].nop + '</td>',
+                                    '<td id="nop_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_5" id="property_name_5">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_5" id="property_building_area_5">' + data.data_agunan.agunan_tanah[4].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_5" id="property_surface_area_5">' + data.data_agunan.agunan_tanah[4].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_5" id="property_estimation_5">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_5" id="certificate_id_5">' + data.data_agunan.agunan_tanah[4].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_5" id="certificate_name_5">' + data.data_agunan.agunan_tanah[4].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_5" id="certificate_type_5">' + data.data_agunan.agunan_tanah[4].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_5" id="certificate_date_5">' + formatTanggal(data.data_agunan.agunan_tanah[4].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_5_result></td>',
+                                '</tr>',
+                            ].join('\n');
+                            html_properti_5.push(data_properti_5);
+                            $("#data_properti_5").html(html_properti_5);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
 
-                        $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
-                        $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
-                        $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
-                        $('#form_properti_4 input[type=hidden][name=id_properti_4]').val(data.data_agunan.agunan_tanah[3].id);
-                        $('#form_properti_5 input[type=hidden][name=id_properti_5]').val(data.data_agunan.agunan_tanah[4].id);
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
-
-                        var data_properti_2 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
-                                '<td id="nop_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
-                                '<td id="property_building_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
-                                '<td id="property_surface_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
-                                '<td id=certificate_id_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_2_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_2.push(data_properti_2);
-                        $("#data_properti_2").html(html_properti_2);
-
-                        var data_properti_3 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
-                                '<td id="nop_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
-                                '<td id="property_building_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
-                                '<td id="property_surface_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
-                                '<td id=certificate_id_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_3_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_3.push(data_properti_3);
-                        $("#data_properti_3").html(html_properti_3);
-
-                        var data_properti_4 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
-                                '<td id="nop_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
-                                '<td id="property_building_area_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
-                                '<td id="property_surface_area_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
-                                '<td id=certificate_id_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_4_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_4.push(data_properti_4);
-                        $("#data_properti_4").html(html_properti_4);
-
-                        var data_properti_5 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_5" id="nop_5">' + data.data_agunan.agunan_tanah[4].nop + '</td>',
-                                '<td id="nop_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_5" id="property_name_5">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_5" id="property_building_area_5">' + data.data_agunan.agunan_tanah[4].luas_bangunan + '</td>',
-                                '<td id="property_building_area_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_5" id="property_surface_area_5">' + data.data_agunan.agunan_tanah[4].luas_tanah + '</td>',
-                                '<td id="property_surface_area_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_5" id="property_estimation_5">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_5" id="certificate_id_5">' + data.data_agunan.agunan_tanah[4].no_sertifikat + '</td>',
-                                '<td id=certificate_id_5_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_5" id="certificate_name_5">' + data.data_agunan.agunan_tanah[4].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_5_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_5" id="certificate_type_5">' + data.data_agunan.agunan_tanah[4].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_5_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_5" id="certificate_date_5">' + formatTanggal(data.data_agunan.agunan_tanah[4].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_5_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_5.push(data_properti_5);
-                        $("#data_properti_5").html(html_properti_5);
                     } else {
                         $('#form_properti_2').hide();
                         $('#form_properti_3').hide();
@@ -7656,6 +7807,7 @@
                             ].join('\n');
                         html_properti_1.push(data_properti_1);
                         $("#data_properti_1").html(html_properti_1);
+                        $('.verifikasiProperti_1').hide();
                     }
                         
                 get_detail({}, id)
@@ -8219,6 +8371,11 @@
                             '<td>Alamat</td>',
                             '<td name="address" id="address">' + data.data_debitur.alamat_ktp.alamat_singkat + '</td>',
                             '<td id="address_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Diverifikasi Oleh</td>',
+                            '<td id="verif_debitur_result"></td>',
+                            '<td id="verif_debitur_update_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_deb.push(data_debitur);
@@ -8259,6 +8416,11 @@
                             '<td>Alamat</td>',
                             '<td name="address_pasangan" id="address_pasangan">' + data.data_pasangan.alamat_ktp + '</td>',
                             '<td id="address_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Diverifikasi Oleh</td>',
+                            '<td id="verif_pasangan_result"></td>',
+                            '<td id="verif_pasangan_update_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_pas.push(data_pasangan);
@@ -8310,6 +8472,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -8354,6 +8521,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -8403,6 +8575,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -8443,6 +8620,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_2_result"></td>',
+                                '<td id="verif_penjamin_2_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -8487,6 +8669,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -8531,6 +8718,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_2_result"></td>',
+                                '<td id="verif_npwp_pen_2_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -8578,6 +8770,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -8618,6 +8815,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_2_result"></td>',
+                                '<td id="verif_penjamin_2_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -8658,6 +8860,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_3_result"></td>',
+                                '<td id="verif_penjamin_3_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -8702,6 +8909,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -8746,6 +8958,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_2_result"></td>',
+                                '<td id="verif_npwp_pen_2_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -8790,6 +9007,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_3_result"></td>',
+                                '<td id="verif_npwp_pen_3_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -8835,6 +9057,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -8875,6 +9102,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_2_result"></td>',
+                                '<td id="verif_penjamin_2_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -8915,6 +9147,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_3_result"></td>',
+                                '<td id="verif_penjamin_3_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -8955,6 +9192,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_4" id="address_penjamin_4">' + data.data_penjamin[3].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_4_result"></td>',
+                                '<td id="verif_penjamin_4_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_4.push(data_penjamin_4);
@@ -8999,6 +9241,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -9043,6 +9290,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_2_result"></td>',
+                                '<td id="verif_npwp_pen_2_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -9087,6 +9339,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_3_result"></td>',
+                                '<td id="verif_npwp_pen_3_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -9131,6 +9388,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_4" id="income_npwp_pen_4">' + data.data_penjamin[3].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_4_result"></td>',
+                                '<td id="verif_npwp_pen_4_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_4.push(data_npwp_pen_4);
@@ -9172,6 +9434,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -9212,6 +9479,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_2_result"></td>',
+                                '<td id="verif_penjamin_2_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -9252,6 +9524,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_3_result"></td>',
+                                '<td id="verif_penjamin_3_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -9292,6 +9569,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_4" id="address_penjamin_4">' + data.data_penjamin[3].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_4_result"></td>',
+                                '<td id="verif_penjamin_4_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_4.push(data_penjamin_4);
@@ -9332,6 +9614,11 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_5" id="address_penjamin_5">' + data.data_penjamin[4].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_5_result"></td>',
+                                '<td id="verif_penjamin_5_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_5.push(data_penjamin_5);
@@ -9376,6 +9663,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -9420,6 +9712,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_2_result"></td>',
+                                '<td id="verif_npwp_pen_2_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -9464,6 +9761,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_3_result"></td>',
+                                '<td id="verif_npwp_pen_3_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -9508,6 +9810,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_4" id="income_npwp_pen_4">' + data.data_penjamin[3].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_4_result"></td>',
+                                '<td id="verif_npwp_pen_4_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_4.push(data_npwp_pen_4);
@@ -9552,6 +9859,11 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_5" id="income_npwp_pen_5">' + data.data_penjamin[4].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_5_result"></td>',
+                                '<td id="verif_npwp_pen_5_update_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_5.push(data_npwp_pen_5);
@@ -9610,6 +9922,11 @@
                              '<td>Pendapatan Bulanan</td>',
                             '<td name="income_npwp" id="income_npwp">' + data.kapasitas_bulanan.pemasukan_cadebt + '</td>',
                             '<td id="income_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Diverifikasi Oleh</td>',
+                            '<td id="verif_npwp_result"></td>',
+                            '<td id="verif_npwp_update_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_npwp.push(data_npwp);
@@ -9654,776 +9971,932 @@
                             '<td>Pendapatan Bulanan</td>',
                             '<td name="income_npwp_pas" id="income_npwp_pas">' + data.kapasitas_bulanan.pemasukan_pasangan + '</td>',
                             '<td id="income_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Diverifikasi Oleh</td>',
+                            '<td id="verif_npwp_pas_result"></td>',
+                            '<td id="verif_npwp_pas_update_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_npwp_pas.push(data_npwp_pas);
                     $("#data_npwp_pasangan").html(html_npwp_pas);
 
                     if(data.data_agunan.agunan_tanah.length == 1) {
-                        $('#form_properti_2').hide();
-                        $('#form_properti_3').hide();
-                        $('#form_properti_4').hide();
-                        $('#form_properti_5').hide();
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
+                        if(data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
                     } else if(data.data_agunan.agunan_tanah.length == 2) {
-                        $('#form_properti_3').hide();
-                        $('#form_properti_4').hide();
-                        $('#form_properti_5').hide();
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
-
-                        var data_properti_2 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
-                                '<td id="nop_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
-                                '<td id="property_building_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
-                                '<td id="property_surface_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
-                                '<td id=certificate_id_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_2_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_2.push(data_properti_2);
-                        $("#data_properti_2").html(html_properti_2);
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_2_result"></td>',
+                                    '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
                         
                     } else if (data.data_agunan.agunan_tanah.length == 3) {
-                        $('#form_properti_4').hide();
-                        $('#form_properti_5').hide();
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
-
-                        var data_properti_2 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
-                                '<td id="nop_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
-                                '<td id="property_building_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
-                                '<td id="property_surface_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
-                                '<td id=certificate_id_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_2_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_2.push(data_properti_2);
-                        $("#data_properti_2").html(html_properti_2);
-
-                        var data_properti_3 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
-                                '<td id="nop_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
-                                '<td id="property_building_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
-                                '<td id="property_surface_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
-                                '<td id=certificate_id_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_3_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_3.push(data_properti_3);
-                        $("#data_properti_3").html(html_properti_3);
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_2_result"></td>',
+                                    '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_3_result"></td>',
+                                    '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
                     } else if (data.data_agunan.agunan_tanah.length == 4) {
-                        $('#form_properti_5').hide();
-
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
-
-                        var data_properti_2 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
-                                '<td id="nop_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
-                                '<td id="property_building_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
-                                '<td id="property_surface_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
-                                '<td id=certificate_id_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_2_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_2.push(data_properti_2);
-                        $("#data_properti_2").html(html_properti_2);
-
-                        var data_properti_3 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
-                                '<td id="nop_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
-                                '<td id="property_building_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
-                                '<td id="property_surface_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
-                                '<td id=certificate_id_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_3_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_3.push(data_properti_3);
-                        $("#data_properti_3").html(html_properti_3);
-
-                        var data_properti_4 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
-                                '<td id="nop_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
-                                '<td id="property_building_area_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
-                                '<td id="property_surface_area_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
-                                '<td id=certificate_id_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_4_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_4.push(data_properti_4);
-                        $("#data_properti_4").html(html_properti_4);
+                        if(data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_5').hide();
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_2_result"></td>',
+                                    '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_3_result"></td>',
+                                    '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+    
+                            var data_properti_4 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
+                                    '<td id="nop_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_4_result"></td>',
+                                    '<td id="verif_properti_4_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_4.push(data_properti_4);
+                            $("#data_properti_4").html(html_properti_4);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
                     } else if (data.data_agunan.agunan_tanah.length == 5) {
-                        var data_properti_1 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
-                                '<td id="nop_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
-                                '<td id="property_building_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
-                                '<td id="property_surface_area_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_1_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
-                                '<td id=certificate_id_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_1_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_1_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_1.push(data_properti_1);
-                        $("#data_properti_1").html(html_properti_1);
-
-                        var data_properti_2 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
-                                '<td id="nop_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
-                                '<td id="property_building_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
-                                '<td id="property_surface_area_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_2_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
-                                '<td id=certificate_id_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_2_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_2_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_2.push(data_properti_2);
-                        $("#data_properti_2").html(html_properti_2);
-
-                        var data_properti_3 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
-                                '<td id="nop_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
-                                '<td id="property_building_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
-                                '<td id="property_surface_area_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_3_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
-                                '<td id=certificate_id_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_3_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_3_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_3.push(data_properti_3);
-                        $("#data_properti_3").html(html_properti_3);
-
-                        var data_properti_4 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
-                                '<td id="nop_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
-                                '<td id="property_building_area_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
-                                '<td id="property_surface_area_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_4_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
-                                '<td id=certificate_id_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_4_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_4_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_4.push(data_properti_4);
-                        $("#data_properti_4").html(html_properti_4);
-
-                        var data_properti_5 = [
-                            '<tr>',
-                                '<td>NOP</td>',
-                                '<td name="nop_5" id="nop_5">' + data.data_agunan.agunan_tanah[4].nop + '</td>',
-                                '<td id="nop_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Properti</td>',
-                                '<td name="property_name_5" id="property_name_5">' + data.data_debitur.nama_lengkap + '</td>',
-                                '<td id="property_name_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Bangunan Properti</td>',
-                                '<td name="property_building_area_5" id="property_building_area_5">' + data.data_agunan.agunan_tanah[4].luas_bangunan + '</td>',
-                                '<td id="property_building_area_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Luas Tanah Properti</td>',
-                                '<td name="property_surface_area_5" id="property_surface_area_5">' + data.data_agunan.agunan_tanah[4].luas_tanah + '</td>',
-                                '<td id="property_surface_area_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Estimasi Properti</td>',
-                                '<td name="property_estimation_5" id="property_estimation_5">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
-                                '<td id="property_estimation_5_result"></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>No. Sertifikat</td>',
-                                '<td name="certificate_id_5" id="certificate_id_5">' + data.data_agunan.agunan_tanah[4].no_sertifikat + '</td>',
-                                '<td id=certificate_id_5_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Nama Pemilik Sertifikat</td>',
-                                '<td name="certificate_name_5" id="certificate_name_5">' + data.data_agunan.agunan_tanah[4].nama_pemilik_sertifikat + '</td>',
-                                '<td id=certificate_name_5_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tipe Sertifikat</td>',
-                                '<td name="certificate_type_5" id="certificate_type_5">' + data.data_agunan.agunan_tanah[4].jenis_sertifikat + '</td>',
-                                '<td id=certificate_type_5_result></td>',
-                            '</tr>',
-                            '<tr>',
-                                '<td>Tanggal Sertifikat</td>',
-                                '<td name="certificate_date_5" id="certificate_date_5">' + formatTanggal(data.data_agunan.agunan_tanah[4].tgl_sertifikat) + '</td>',
-                                '<td id=certificate_date_5_result></td>',
-                            '</tr>',
-                        ].join('\n');
-                        html_properti_5.push(data_properti_5);
-                        $("#data_properti_5").html(html_properti_5);
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_2_result"></td>',
+                                    '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_3_result"></td>',
+                                    '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+    
+                            var data_properti_4 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
+                                    '<td id="nop_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_4_result"></td>',
+                                    '<td id="verif_properti_4_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_4.push(data_properti_4);
+                            $("#data_properti_4").html(html_properti_4);
+    
+                            var data_properti_5 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_5" id="nop_5">' + data.data_agunan.agunan_tanah[4].nop + '</td>',
+                                    '<td id="nop_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_5" id="property_name_5">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_5" id="property_building_area_5">' + data.data_agunan.agunan_tanah[4].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_5" id="property_surface_area_5">' + data.data_agunan.agunan_tanah[4].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_5" id="property_estimation_5">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_5" id="certificate_id_5">' + data.data_agunan.agunan_tanah[4].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_5" id="certificate_name_5">' + data.data_agunan.agunan_tanah[4].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_5" id="certificate_type_5">' + data.data_agunan.agunan_tanah[4].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_5" id="certificate_date_5">' + formatTanggal(data.data_agunan.agunan_tanah[4].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_5_result"></td>',
+                                    '<td id="verif_properti_5_update_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_5.push(data_properti_5);
+                            $("#data_properti_5").html(html_properti_5);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
                     } else {
                         $('#form_properti_2').hide();
                         $('#form_properti_3').hide();
@@ -10444,48 +10917,234 @@
                             var data = response.data;
                             console.log(data);
 
-                            if(data[0] != null) {
-                                $("#selfie_photo_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data[0].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data[0].selfie_foto}%'>${data[0].selfie_foto}%</div></div>`);
-                                checkResult("nik_result", data[0].nama);
-                                checkResult("name_result", data[0].nama);
-                                checkResult("birthdate_result", data[0].tgl_lahir);
-                                checkResult("birthplace_result", data[0].tempat_lahir);
-                                $("#address_result").html(`${data[0].alamat}`);
+                            if(data.cadebt != null) {
+                                $("#selfie_photo_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.cadebt.selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.cadebt.selfie_foto}%'>${data.cadebt.selfie_foto}%</div></div>`);
+                                checkResult("nik_result", data.cadebt.nama);
+                                checkResult("name_result", data.cadebt.nama);
+                                checkResult("birthdate_result", data.cadebt.tgl_lahir);
+                                checkResult("birthplace_result", data.cadebt.tempat_lahir);
+                                $("#address_result").html(`${data.cadebt.alamat}`);
+                                $("#verif_debitur_result").html(`${data.cadebt.nama_user}`);
+                                $("#verif_debitur_update_result").html(`${formatUpdated(data.cadebt.updated_at)}`);
                             }
                             
-                            if (data[1] != null) {
-                                $("#selfie_photo_pasangan_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data[1].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data[1].selfie_foto}%'>${data[1].selfie_foto}%</div></div>`);
-                                checkResult("nik_pasangan_result", data[1].nama);
-                                checkResult("name_pasangan_result", data[1].nama);
-                                checkResult("birthdate_pasangan_result", data[1].tgl_lahir);
-                                checkResult("birthplace_pasangan_result", data[1].tempat_lahir);
-                                $("#address_pasangan_result").html(`${data[1].alamat}`);
-                            }
-                            
-                            if (data[2] != null) {
-                                checkResult("npwp_result", data[2].npwp);
-                                checkResult("nik_npwp_result", data[2].nik);
-                                checkResult("name_npwp_result", data[2].nama);
-                                checkResult("birthdate_npwp_result", data[2].tgl_lahir);
-                                checkResult("birthplace_npwp_result", data[2].tmp_lahir);
-                                checkIncome("income_npwp_result", data[2].income);
-                                checkResult("match_result", data[2].match_result);
+                            if (data.pasangan != null) {
+                                $("#selfie_photo_pasangan_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.pasangan.selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.pasangan.selfie_foto}%'>${data.pasangan.selfie_foto}%</div></div>`);
+                                checkResult("nik_pasangan_result", data.pasangan.nama);
+                                checkResult("name_pasangan_result", data.pasangan.nama);
+                                checkResult("birthdate_pasangan_result", data.pasangan.tgl_lahir);
+                                checkResult("birthplace_pasangan_result", data.pasangan.tempat_lahir);
+                                $("#address_pasangan_result").html(`${data.pasangan.alamat}`);
+                                $("#verif_pasangan_result").html(`${data.pasangan.nama_user}`);
+                                $("#verif_pasangan_update_result").html(`${formatUpdated(data.pasangan.updated_at)}`);
                             }
 
-                            if (data[3] != null) {
-                                checkResult("property_name_result", data[3].property_name);
-                                checkResult("property_building_area_result", data[3].property_building_area);
-                                checkResult("property_surface_area_result", data[3].property_surface_area);
-                                checkIncome("property_estimation_result", data[3].property_estimation);
-                                checkResult("certificate_id_result", data[3].certificate_id);
-                                checkResult("certificate_name_result", data[3].certificate_name);
-                                checkResult("certificate_type_result", data[3].certificate_type);
-                                checkResult("certificate_date_result", data[3].certificate_date);
-                                
+                            if (data.penjamin[0] != null) {
+                                $("#selfie_photo_penjamin_1_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[0].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[0].selfie_foto}%'>${data.penjamin[0].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_1_result", data.penjamin[0].nama);
+                                checkResult("name_penjamin_1_result", data.penjamin[0].nama);
+                                checkResult("birthdate_penjamin_1_result", data.penjamin[0].tgl_lahir);
+                                checkResult("birthplace_penjamin_1_result", data.penjamin[0].tempat_lahir);
+                                $("#address_penjamin_1_result").html(`${data.penjamin[0].alamat}`);
+                                $("#verif_penjamin_1_result").html(`${data.penjamin[0].nama_user}`);
+                                $("#verif_penjamin_1_update_result").html(`${formatUpdated(data.penjamin[0].updated_at)}`);
+                            }
+
+                            if (data.penjamin[1] != null) {
+                                $("#selfie_photo_penjamin_2_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[1].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[1].selfie_foto}%'>${data.penjamin[1].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_2_result", data.penjamin[1].nama);
+                                checkResult("name_penjamin_2_result", data.penjamin[1].nama);
+                                checkResult("birthdate_penjamin_2_result", data.penjamin[1].tgl_lahir);
+                                checkResult("birthplace_penjamin_2_result", data.penjamin[1].tempat_lahir);
+                                $("#address_penjamin_2_result").html(`${data.penjamin[1].alamat}`);
+                                $("#verif_penjamin_2_result").html(`${data.penjamin[1].nama_user}`);
+                                $("#verif_penjamin_2_update_result").html(`${formatUpdated(data.penjamin[1].updated_at)}`);
+                            }
+
+                            if (data.penjamin[2] != null) {
+                                $("#selfie_photo_penjamin_3_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[2].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[2].selfie_foto}%'>${data.penjamin[2].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_3_result", data.penjamin[2].nama);
+                                checkResult("name_penjamin_3_result", data.penjamin[2].nama);
+                                checkResult("birthdate_penjamin_3_result", data.penjamin[2].tgl_lahir);
+                                checkResult("birthplace_penjamin_3_result", data.penjamin[2].tempat_lahir);
+                                $("#address_penjamin_3_result").html(`${data.penjamin[2].alamat}`);
+                                $("#verif_penjamin_3_result").html(`${data.penjamin[2].nama_user}`);
+                                $("#verif_penjamin_3_update_result").html(`${formatUpdated(data.penjamin[2].updated_at)}`);
+                            }
+
+                            if (data.penjamin[3] != null) {
+                                $("#selfie_photo_penjamin_4_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[3].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[3].selfie_foto}%'>${data.penjamin[3].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_4_result", data.penjamin[3].nama);
+                                checkResult("name_penjamin_4_result", data.penjamin[3].nama);
+                                checkResult("birthdate_penjamin_4_result", data.penjamin[3].tgl_lahir);
+                                checkResult("birthplace_penjamin_4_result", data.penjamin[3].tempat_lahir);
+                                $("#address_penjamin_4_result").html(`${data.penjamin[3].alamat}`);
+                                $("#verif_penjamin_4_result").html(`${data.penjamin[3].nama_user}`);
+                                $("#verif_penjamin_4_update_result").html(`${formatUpdated(data.penjamin[3].updated_at)}`);
+                            }
+
+                            if (data.penjamin[4] != null) {
+                                $("#selfie_photo_penjamin_5_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[4].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[4].selfie_foto}%'>${data.penjamin[4].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_5_result", data.penjamin[4].nama);
+                                checkResult("name_penjamin_5_result", data.penjamin[4].nama);
+                                checkResult("birthdate_penjamin_5_result", data.penjamin[4].tgl_lahir);
+                                checkResult("birthplace_penjamin_5_result", data.penjamin[4].tempat_lahir);
+                                $("#address_penjamin_5_result").html(`${data.penjamin[4].alamat}`);
+                                $("#verif_penjamin_5_result").html(`${data.penjamin[4].nama_user}`);
+                                $("#verif_penjamin_5_update_result").html(`${formatUpdated(data.penjamin[4].updated_at)}`);
+                            }
+                            
+                            if (data.npwp[0] != null) {
+                                checkResult("npwp_result", data.npwp[0].npwp);
+                                checkResult("nik_npwp_result", data.npwp[0].nik);
+                                checkResult("name_npwp_result", data.npwp[0].nama);
+                                checkResult("birthdate_npwp_result", data.npwp[0].tgl_lahir);
+                                checkResult("birthplace_npwp_result", data.npwp[0].tmp_lahir);
+                                checkIncome("income_npwp_result", data.npwp[0].income);
+                                checkResult("match_result", data.npwp[0].match_result);
+                                $("#verif_npwp_result").html(`${data.npwp[0].nama_user}`);
+                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp[0].updated_at)}`);
+                            }
+
+                            if (data.npwp[1] != null) {
+                                checkResult("npwp_pas_result", data.npwp[1].npwp);
+                                checkResult("nik_npwp_pas_result", data.npwp[1].nik);
+                                checkResult("name_npwp_pas_result", data.npwp[1].nama);
+                                checkResult("birthdate_npwp_pas_result", data.npwp[1].tgl_lahir);
+                                checkResult("birthplace_npwp_pas_result", data.npwp[1].tmp_lahir);
+                                checkIncome("income_npwp_pas_result", data.npwp[1].income);
+                                checkResult("match_pas_result", data.npwp[1].match_result);
+                                $("#verif_npwp_pas_result").html(`${data.npwp[1].nama_user}`);
+                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp[1].updated_at)}`);
+                            }
+
+                            if (data.npwp[2] != null) {
+                                checkResult("npwp_pen_1_result", data.npwp[2].npwp);
+                                checkResult("nik_npwp_pen_1_result", data.npwp[2].nik);
+                                checkResult("name_npwp_pen_1_result", data.npwp[2].nama);
+                                checkResult("birthdate_npwp_pen_1_result", data.npwp[2].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_1_result", data.npwp[2].tmp_lahir);
+                                checkIncome("income_npwp_pen_1_result", data.npwp[2].income);
+                                checkResult("match_pen_1_result", data.npwp[2].match_result);
+                                $("#verif_npwp_pen_1_result").html(`${data.npwp[2].nama_user}`);
+                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp[2].updated_at)}`);
+                            }
+
+                            if (data.npwp[3] != null) {
+                                checkResult("npwp_pen_2_result", data.npwp[3].npwp);
+                                checkResult("nik_npwp_pen_2_result", data.npwp[3].nik);
+                                checkResult("name_npwp_pen_2_result", data.npwp[3].nama);
+                                checkResult("birthdate_npwp_pen_2_result", data.npwp[3].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_2_result", data.npwp[3].tmp_lahir);
+                                checkIncome("income_npwp_pen_2_result", data.npwp[3].income);
+                                checkResult("match_pen_2_result", data.npwp[3].match_result);
+                                $("#verif_npwp_pen_2_result").html(`${data.npwp[3].nama_user}`);
+                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp[3].updated_at)}`);
+                            }
+
+                            if (data.npwp[4] != null) {
+                                checkResult("npwp_pen_3_result", data.npwp[4].npwp);
+                                checkResult("nik_npwp_pen_3_result", data.npwp[4].nik);
+                                checkResult("name_npwp_pen_3_result", data.npwp[4].nama);
+                                checkResult("birthdate_npwp_pen_3_result", data.npwp[4].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_3_result", data.npwp[4].tmp_lahir);
+                                checkIncome("income_npwp_pen_3_result", data.npwp[4].income);
+                                checkResult("match_pen_3_result", data.npwp[4].match_result);
+                                $("#verif_npwp_pen_3_result").html(`${data.npwp[4].nama_user}`);
+                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp[4].updated_at)}`);
+                            }
+
+                            if (data.npwp[5] != null) {
+                                checkResult("npwp_pen_4_result", data.npwp[5].npwp);
+                                checkResult("nik_npwp_pen_4_result", data.npwp[5].nik);
+                                checkResult("name_npwp_pen_4_result", data.npwp[5].nama);
+                                checkResult("birthdate_npwp_pen_4_result", data.npwp[5].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_4_result", data.npwp[5].tmp_lahir);
+                                checkIncome("income_npwp_pen_4_result", data.npwp[5].income);
+                                checkResult("match_pen_4_result", data.npwp[5].match_result);
+                                $("#verif_npwp_pen_4_result").html(`${data.npwp[5].nama_user}`);
+                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp[5].updated_at)}`);
+                            }
+
+                            if (data.npwp[6] != null) {
+                                checkResult("npwp_pen_5_result", data.npwp[6].npwp);
+                                checkResult("nik_npwp_pen_5_result", data.npwp[6].nik);
+                                checkResult("name_npwp_pen_5_result", data.npwp[6].nama);
+                                checkResult("birthdate_npwp_pen_5_result", data.npwp[6].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_5_result", data.npwp[6].tmp_lahir);
+                                checkIncome("income_npwp_pen_5_result", data.npwp[6].income);
+                                checkResult("match_pen_5_result", data.npwp[6].match_result);
+                                $("#verif_npwp_pen_5_result").html(`${data.npwp[6].nama_user}`);
+                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp[6].updated_at)}`);
+                            }
+                            
+                            if (data.property[0] != null) {
+                                checkResult("property_name_1_result", data.property[0].property_name);
+                                checkResult("property_building_area_1_result", data.property[0].property_building_area);
+                                checkResult("property_surface_area_1_result", data.property[0].property_surface_area);
+                                checkIncome("property_estimation_1_result", data.property[0].property_estimation);
+                                checkResult("certificate_id_1_result", data.property[0].certificate_id);
+                                checkResult("certificate_name_1_result", data.property[0].certificate_name);
+                                checkResult("certificate_type_1_result", data.property[0].certificate_type);
+                                checkResult("certificate_date_1_result", data.property[0].certificate_date);
+                                $("#verif_properti_1_result").html(`${data.property[0].nama_user}`);
+                                $("#verif_properti_1_update_result").html(`${formatUpdated(data.property[0].updated_at)}`);
+                            }
+
+                            if (data.property[1] != null) {
+                                checkResult("property_name_2_result", data.property[1].property_name);
+                                checkResult("property_building_area_2_result", data.property[1].property_building_area);
+                                checkResult("property_surface_area_2_result", data.property[1].property_surface_area);
+                                checkIncome("property_estimation_2_result", data.property[1].property_estimation);
+                                checkResult("certificate_id_2_result", data.property[1].certificate_id);
+                                checkResult("certificate_name_2_result", data.property[1].certificate_name);
+                                checkResult("certificate_type_2_result", data.property[1].certificate_type);
+                                checkResult("certificate_date_2_result", data.property[1].certificate_date);
+                                $("#verif_properti_2_result").html(`${data.property[1].nama_user}`);
+                                $("#verif_properti_2_update_result").html(`${formatUpdated(data.property[1].updated_at)}`);
+                            }
+
+                            if (data.property[2] != null) {
+                                checkResult("property_name_3_result", data.property[2].property_name);
+                                checkResult("property_building_area_3_result", data.property[2].property_building_area);
+                                checkResult("property_surface_area_3_result", data.property[2].property_surface_area);
+                                checkIncome("property_estimation_3_result", data.property[2].property_estimation);
+                                checkResult("certificate_id_3_result", data.property[2].certificate_id);
+                                checkResult("certificate_name_3_result", data.property[2].certificate_name);
+                                checkResult("certificate_type_3_result", data.property[2].certificate_type);
+                                checkResult("certificate_date_3_result", data.property[2].certificate_date);
+                                $("#verif_properti_3_result").html(`${data.property[2].nama_user}`);
+                                $("#verif_properti_3_update_result").html(`${formatUpdated(data.property[2].updated_at)}`);
+                            }
+
+                            if (data.property[3] != null) {
+                                checkResult("property_name_4_result", data.property[3].property_name);
+                                checkResult("property_building_area_4_result", data.property[3].property_building_area);
+                                checkResult("property_surface_area_4_result", data.property[3].property_surface_area);
+                                checkIncome("property_estimation_4_result", data.property[3].property_estimation);
+                                checkResult("certificate_id_4_result", data.property[3].certificate_id);
+                                checkResult("certificate_name_4_result", data.property[3].certificate_name);
+                                checkResult("certificate_type_4_result", data.property[3].certificate_type);
+                                checkResult("certificate_date_4_result", data.property[3].certificate_date);
+                                $("#verif_properti_4_result").html(`${data.property[3].nama_user}`);
+                                $("#verif_properti_4_update_result").html(`${formatUpdated(data.property[3].updated_at)}`);
+                            }
+
+                            if (data.property[4] != null) {
+                                checkResult("property_name_5_result", data.property[4].property_name);
+                                checkResult("property_building_area_5_result", data.property[4].property_building_area);
+                                checkResult("property_surface_area_5_result", data.property[4].property_surface_area);
+                                checkIncome("property_estimation_5_result", data.property[4].property_estimation);
+                                checkResult("certificate_id_5_result", data.property[4].certificate_id);
+                                checkResult("certificate_name_5_result", data.property[4].certificate_name);
+                                checkResult("certificate_type_5_result", data.property[4].certificate_type);
+                                checkResult("certificate_date_5_result", data.property[4].certificate_date);
+                                $("#verif_properti_5_result").html(`${data.property[4].nama_user}`);
+                                $("#verif_properti_5_update_result").html(`${formatUpdated(data.property[4].updated_at)}`);
                             }
                         })
                         .fail(function(jqXHR) {
-                            bootbox.alert('Data Belum Pernah Di Verifikasi!!');
+                            bootbox.alert('Tidak dapat menampilkan hasil Verifikasi!!');
                         })
                     
                 })
