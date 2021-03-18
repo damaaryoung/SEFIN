@@ -7819,23 +7819,23 @@
                             if (data.property.length == 0) {
 
                                 $("#verifikasi_properti_1").on('click', function() {
-                                    verifikasiSimpanProperti_1(true, id);
+                                    verifikasiSimpanProperti_1(false, id);
                                 });
 
                                 $("#verifikasi_properti_2").on('click', function() {
-                                    verifikasiSimpanProperti_2(true, id);
+                                    verifikasiSimpanProperti_2(false, id);
                                 });
 
                                 $("#verifikasi_properti_3").on('click', function() {
-                                    verifikasiSimpanProperti_3(true, id);
+                                    verifikasiSimpanProperti_3(false, id);
                                 });
 
                                 $("#verifikasi_properti_4").on('click', function() {
-                                    verifikasiSimpanProperti_4(true, id);
+                                    verifikasiSimpanProperti_4(false, id);
                                 });
 
                                 $("#verifikasi_properti_5").on('click', function() {
-                                    verifikasiSimpanProperti_5(true, id);
+                                    verifikasiSimpanProperti_5(false, id);
                                 });
 
                             } else {
@@ -7848,7 +7848,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_1").on('click', function() {
-                                        verifikasiSimpanProperti_1(true, id);
+                                        verifikasiSimpanProperti_1(false, id);
                                     });
                                 }
 
@@ -7861,7 +7861,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_2").on('click', function() {
-                                        verifikasiSimpanProperti_2(true, id);
+                                        verifikasiSimpanProperti_2(false, id);
                                     });
                                 }
 
@@ -7874,7 +7874,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_3").on('click', function() {
-                                        verifikasiSimpanProperti_3(true, id);
+                                        verifikasiSimpanProperti_3(false, id);
                                     });
                                 }
 
@@ -7887,7 +7887,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_4").on('click', function() {
-                                        verifikasiSimpanProperti_4(true, id);
+                                        verifikasiSimpanProperti_4(false, id);
                                     });
                                 }
 
@@ -7900,7 +7900,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_5").on('click', function() {
-                                        verifikasiSimpanProperti_5(true, id);
+                                        verifikasiSimpanProperti_5(false, id);
                                     });
                                 }
 
@@ -7911,23 +7911,23 @@
                                 if (data.property.length == 0) {
 
                                     $("#verifikasi_properti_1").on('click', function() {
-                                        verifikasiSimpanProperti_1(true, id);
+                                        verifikasiSimpanProperti_1(false, id);
                                     });
 
                                     $("#verifikasi_properti_2").on('click', function() {
-                                        verifikasiSimpanProperti_2(true, id);
+                                        verifikasiSimpanProperti_2(false, id);
                                     });
 
                                     $("#verifikasi_properti_3").on('click', function() {
-                                        verifikasiSimpanProperti_3(true, id);
+                                        verifikasiSimpanProperti_3(false, id);
                                     });
 
                                     $("#verifikasi_properti_4").on('click', function() {
-                                        verifikasiSimpanProperti_4(true, id);
+                                        verifikasiSimpanProperti_4(false, id);
                                     });
 
                                     $("#verifikasi_properti_5").on('click', function() {
-                                        verifikasiSimpanProperti_5(true, id);
+                                        verifikasiSimpanProperti_5(false, id);
                                     });
 
                                 } else {
@@ -7940,7 +7940,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_1").on('click', function() {
-                                            verifikasiSimpanProperti_1(true, id);
+                                            verifikasiSimpanProperti_1(false, id);
                                         });
                                     }
 
@@ -7953,7 +7953,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_2").on('click', function() {
-                                            verifikasiSimpanProperti_2(true, id);
+                                            verifikasiSimpanProperti_2(false, id);
                                         });
                                     }
 
@@ -7966,7 +7966,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_3").on('click', function() {
-                                            verifikasiSimpanProperti_3(true, id);
+                                            verifikasiSimpanProperti_3(false, id);
                                         });
                                     }
 
@@ -7979,7 +7979,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_4").on('click', function() {
-                                            verifikasiSimpanProperti_4(true, id);
+                                            verifikasiSimpanProperti_4(false, id);
                                         });
                                     }
 
@@ -7992,7 +7992,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_5").on('click', function() {
-                                            verifikasiSimpanProperti_5(true, id);
+                                            verifikasiSimpanProperti_5(false, id);
                                         });
                                     }
 
@@ -8001,34 +8001,34 @@
 
                             if (data.cadebt == null) {
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiSimpanDebitur(true, id);
+                                    verifikasiSimpanDebitur(false, id);
                                 });
                             } else {
                                 if (data.cadebt.limit_call == 1) {
                                     $("#verifikasi_debitur").on('click', function() {
-                                        verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
+                                        verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
                                     });
                                 } else { 
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
                                     $("#verifikasi_debitur").on('click', function() {
-                                        verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
+                                        verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
                                     });
                                 }
                             }
                             
                             if (data.pasangan == null) {
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiSimpanPasangan(true, id);
+                                    verifikasiSimpanPasangan(false, id);
                                 });
                             } else {
                                 if (data.pasangan.limit_call == 1) {
                                     $("#verifikasi_pasangan").on('click', function() {
-                                        verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
+                                        verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
                                     });
                                 } else{
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
                                     $("#verifikasi_pasangan").on('click', function() {
-                                        verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
+                                        verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
                                     });
                                 }
                             }
@@ -8036,108 +8036,108 @@
                             if (data.penjamin.length == 0) {
 
                                 $("#verifikasi_penjamin_1").on('click', function() {
-                                    verifikasiSimpanPenjamin_1(true, id);
+                                    verifikasiSimpanPenjamin_1(false, id);
                                 });
 
                                 $("#verifikasi_penjamin_2").on('click', function() {
-                                    verifikasiSimpanPenjamin_2(true, id);
+                                    verifikasiSimpanPenjamin_2(false, id);
                                 });
 
                                 $("#verifikasi_penjamin_3").on('click', function() {
-                                    verifikasiSimpanPenjamin_3(true, id);
+                                    verifikasiSimpanPenjamin_3(false, id);
                                 });
 
                                 $("#verifikasi_penjamin_4").on('click', function() {
-                                    verifikasiSimpanPenjamin_4(true, id);
+                                    verifikasiSimpanPenjamin_4(false, id);
                                 });
 
                                 $("#verifikasi_penjamin_5").on('click', function() {
-                                    verifikasiSimpanPenjamin_5(true, id);
+                                    verifikasiSimpanPenjamin_5(false, id);
                                 });
 
                             } else {
                                 if (data.penjamin[0] != null) {
                                     if(data.penjamin[0].limit_call == 1) {
                                         $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                         $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiSimpanPenjamin_1(true, id);
+                                        verifikasiSimpanPenjamin_1(false, id);
                                     });
                                 }
 
                                 if (data.penjamin[1] != null) {
                                     if(data.penjamin[1].limit_call == 1) {
                                         $("#verifikasi_penjamin_2").on('click', function() {
-                                            verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                            verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
                                         $("#verifikasi_penjamin_2").on('click', function() {
-                                            verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                            verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_2").on('click', function() {
-                                        verifikasiSimpanPenjamin_2(true, id);
+                                        verifikasiSimpanPenjamin_2(false, id);
                                     });
                                 }
 
                                 if (data.penjamin[2] != null) {
                                     if(data.penjamin[2].limit_call == 1) {
                                         $("#verifikasi_penjamin_3").on('click', function() {
-                                            verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                            verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
                                         $("#verifikasi_penjamin_3").on('click', function() {
-                                            verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                            verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_3").on('click', function() {
-                                        verifikasiSimpanPenjamin_3(true, id);
+                                        verifikasiSimpanPenjamin_3(false, id);
                                     });
                                 }
 
                                 if (data.penjamin[3] != null) {
                                     if(data.penjamin[3].limit_call == 1) {
                                         $("#verifikasi_penjamin_4").on('click', function() {
-                                            verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                            verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
                                         $("#verifikasi_penjamin_4").on('click', function() {
-                                            verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                            verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_4").on('click', function() {
-                                        verifikasiSimpanPenjamin_4(true, id);
+                                        verifikasiSimpanPenjamin_4(false, id);
                                     });
                                 }
 
                                 if (data.penjamin[4] != null) {
                                     if(data.penjamin[4].limit_call == 1) {
                                         $("#verifikasi_penjamin_5").on('click', function() {
-                                            verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                            verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
                                         $("#verifikasi_penjamin_5").on('click', function() {
-                                            verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                            verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_5").on('click', function() {
-                                        verifikasiSimpanPenjamin_5(true, id);
+                                        verifikasiSimpanPenjamin_5(false, id);
                                     });
                                 }
 
@@ -8145,149 +8145,149 @@
         
                             if (data.npwp.length == 0) {
                                 $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiSimpanNpwp(true, id);
+                                    verifikasiSimpanNpwp(false, id);
                                 });
 
                                 $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiSimpanNpwpPasangan(true, id);
+                                    verifikasiSimpanNpwpPasangan(false, id);
                                 });
     
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
-                                    verifikasiSimpanNpwpPen_1(true, id);
+                                    verifikasiSimpanNpwpPen_1(false, id);
                                 });
                                 
                                 $("#verifikasi_npwp_pen_2").on('click', function() {
-                                    verifikasiSimpanNpwpPen_2(true, id);
+                                    verifikasiSimpanNpwpPen_2(false, id);
                                 });
     
                                 $("#verifikasi_npwp_pen_3").on('click', function() {
-                                    verifikasiSimpanNpwpPen_3(true, id);
+                                    verifikasiSimpanNpwpPen_3(false, id);
                                 });
     
                                 $("#verifikasi_npwp_pen_4").on('click', function() {
-                                    verifikasiSimpanNpwpPen_4(true, id);
+                                    verifikasiSimpanNpwpPen_4(false, id);
                                 });
     
                                 $("#verifikasi_npwp_pen_5").on('click', function() {
-                                    verifikasiSimpanNpwpPen_5(true, id);
+                                    verifikasiSimpanNpwpPen_5(false, id);
                                 });
                             } else {
                                 if (data.npwp[0] != null) {
                                     if(data.npwp[0].limit_call == 1) {
                                         $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(true, data.npwp[0].limit_call, id, data.npwp[0].id);
+                                            verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
                                         $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(true, data.npwp[0].limit_call, id, data.npwp[0].id);
+                                            verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiSimpanNpwp(true, id);
+                                        verifikasiSimpanNpwp(false, id);
                                     });
                                 }
 
                                 if (data.npwp[1] != null) {
                                     if(data.npwp[1].limit_call == 1) {
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(true, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
+                                            verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(true, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
+                                            verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiSimpanNpwpPasangan(true, id);
+                                        verifikasiSimpanNpwpPasangan(false, id);
                                     });
                                 }
 
                                 if (data.npwp[2] != null) {
                                     if(data.npwp[2].limit_call == 1) {
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(true, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                            verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(true, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                            verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiSimpanNpwpPen_1(true, id);
+                                        verifikasiSimpanNpwpPen_1(false, id);
                                     });
                                 }
 
                                 if (data.npwp[3] != null) {
                                     if(data.npwp[3].limit_call == 1) {
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(true, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                            verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(true, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                            verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiSimpanNpwpPen_2(true, id);
+                                        verifikasiSimpanNpwpPen_2(false, id);
                                     });
                                 }
 
                                 if (data.npwp[4] != null) {
                                     if(data.npwp[4].limit_call == 1) {
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(true, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                            verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(true, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                            verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiSimpanNpwpPen_3(true, id);
+                                        verifikasiSimpanNpwpPen_3(false, id);
                                     });
                                 }
 
                                 if (data.npwp[5] != null) {
                                     if(data.npwp[5].limit_call == 1) {
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(true, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                            verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(true, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                            verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiSimpanNpwpPen_4(true, id);
+                                        verifikasiSimpanNpwpPen_4(false, id);
                                     });
                                 }
 
                                 if (data.npwp[6] != null) {
                                     if(data.npwp[6].limit_call == 1) {
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(true, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                            verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(true, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                            verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
                                         });
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiSimpanNpwpPen_5(true, id);
+                                        verifikasiSimpanNpwpPen_5(false, id);
                                     });
                                 }
                             }
