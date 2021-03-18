@@ -17,6 +17,11 @@
         <td>2</td>
 
         <?php
+        $date_now = date('Y-m-d');
+        $hari_pertama = $this->db->query("SELECT dpm_online.get_som('$date_now') as som")->row();
+        $hari_terakhir = $this->db->query("SELECT dpm_online.get_eom('$date_now') as eom")->row();
+        $total_kerja = $this->db->query("SELECT dpm_online.get_jumlah_kerja ('$hari_pertama->som','$hari_terakhir->eom') as total")->row()->total;
+
         $arrayProspek = array();
         if (!empty($prospek)){
           foreach ($prospek as $key) {

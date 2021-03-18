@@ -57,16 +57,34 @@ class Ao_controller extends CI_Controller
             $no++;
 
             $id =  $field->id_trans_so;
+            $nama_debitur = $field->nama_debitur;
 
-            $url = "report/memo_ao";
+            $check_verif = $this->db->query(
+                "SELECT a.id AS id
+                FROM verif_cadebt AS a
+                LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
+                WHERE a.id_trans_so = $id
+            ")->row();
+            
+            if($check_verif == null ) {
+                $nama_deb = $nama_debitur;
+            } else {
+                $nama_deb = '<p style="background-color: #00d807;">' . $nama_debitur . '</p>';
+            }
+
+            $url = "report/memo_verifikasi";
 
             $row = array();
             $row[] = $no;
             $row[] = $field->tanggal;
-            $row[] = $field->nama_debitur;
-            $row[] = '<form method="post" style="text-align: center" target="_blank" action="' . $url . '"> <button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
+            $row[] = $field->nomor_so;
+            $row[] = $nama_deb;
+            $row[] = '<form method="post" style="text-align: center" target="_blank" action="' . $url . '"> 
+            <button type="button"  class="btn btn-primary btn-sm change" data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
             <button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" data-target="#update" data="' . $id . '"><i style="color: #fff;" class="fas fa-eye"></i></button>
-            <input type="hidden" name ="id" value="' . $id . '"></a></form>';
+            <button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' . $id . '"><i class="fas fa-check"></i></button>
+            <input type="hidden" name ="id" value="' . $id . '">
+            <button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>';
             $data[] = $row;
         }
 
@@ -76,8 +94,10 @@ class Ao_controller extends CI_Controller
             "recordsFiltered" => $this->Model_ao->count_filtered(),
             "data" => $data,
         );
+
         //output dalam format JSON
         echo json_encode($output);
+        
     }
 
     function get_data_so_approve_hm()
@@ -87,6 +107,7 @@ class Ao_controller extends CI_Controller
         $no = $_POST['start'];
         foreach ($list as $field) {
             $no++;
+
 
             $id =  $field->id_trans_so;
             $row = array();

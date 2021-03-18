@@ -597,16 +597,16 @@ class Menu_controller extends CI_Controller
     public function verifikasi()
     {
         $data['nama_user'] = $this->model_menu->getUser();
-        $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
-        $data['data_collateral'] = $this->Model_view_master->data_collateral();
+        // $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
+        // $data['data_collateral'] = $this->Model_view_master->data_collateral();
         $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
-        $data['data_sumber_penghasilan'] =  $this->Model_view_master->sumber_penghasilan();
-        $data['data_pemasukan_perbulan'] =  $this->Model_view_master->pemasukan_perbulan();
-        $data['data_frek_trans_pemasukan'] =  $this->Model_view_master->frek_trans_pemasukan();
-        $data['data_sumber_data_untuk_setoran'] =  $this->Model_view_master->sumber_data_untuk_setoran();
-        $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
-        $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
-        $data['pendidikan'] = $this->Model_view_master->tampil_data_pendidikan();
+        // $data['data_sumber_penghasilan'] =  $this->Model_view_master->sumber_penghasilan();
+        // $data['data_pemasukan_perbulan'] =  $this->Model_view_master->pemasukan_perbulan();
+        // $data['data_frek_trans_pemasukan'] =  $this->Model_view_master->frek_trans_pemasukan();
+        // $data['data_sumber_data_untuk_setoran'] =  $this->Model_view_master->sumber_data_untuk_setoran();
+        // $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
+        // $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
+        // $data['pendidikan'] = $this->Model_view_master->tampil_data_pendidikan();
         
         $this->load->view('master/verifikasi/verifikasi', $data);
     }

@@ -417,7 +417,16 @@
                                                     Hubungan Debitur
                                                 </th>
                                                 <th>
+                                                    Pemasukan Bulanan
+                                                </th>
+                                                <th>
+                                                    Photo Selfie Penjamin
+                                                </th>
+                                                <th>
                                                     Lampiran KTP
+                                                </th>
+                                                <th>
+                                                    Lampiran NPWP
                                                 </th>
                                                 <th>
                                                     Lampiran KTP Pasangan
@@ -539,6 +548,17 @@
                                             <div class="form-group form-file-upload form-file-multiple">
                                                 <div class="col-md-6">
                                                     <div class="well" id="gambar_ktp_pasangan">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" id="npwp_pasangan">
+                                        <div class="form-group">
+                                            <label for="exampleInput1" class="bmd-label-floating">NPWP Pasangan</label>
+                                            <div class="form-group form-file-upload form-file-multiple">
+                                                <div class="col-md-6">
+                                                    <div class="well" id="gambar_npwp_pasangan">
                                                     </div>
                                                 </div>
                                             </div>
@@ -870,6 +890,7 @@
         var html9 = [];
         var html10 = [];
         var html11 = [];
+        var html12 = [];
         var htmlideb = [];
         var htmlpefindo = [];
         var htmlktppenjamin = [];
@@ -882,6 +903,8 @@
         get_credit_checking_detail({}, id)
             .done(function(response) {
                 var data = response.data;
+                console.log(data);
+                
                 id = data.id;
                 $('#form_detail_credit input[type=hidden][name=id]').val(data.id);
                 $('#form_detail_credit input[name=nomor_so]').val(data.nomor_so);
@@ -1085,6 +1108,16 @@
                     $('#gambar_ktp_pasangan').html(html9);
                 }
 
+                if (data.data_pasangan.lampiran_npwp == null) {
+                    $('#npwp_pasangan').hide();
+                } else {
+                    var ii = [
+                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran_npwp + '" /> </a>'
+                    ].join('\n');
+                    html12.push(ii);
+                    $('#gambar_npwp_pasangan').html(html12);
+                }
+
                 var htmlpenjamin = [];
 
                 $.each(data.data_penjamin, function(index, item) {
@@ -1109,10 +1142,13 @@
                         '<td style="width:285px">' + item.alamat_ktp + '</td>',
                         '<td>' + item.no_telp + '</td>',
                         '<td style="width:185px">' + item.hubungan_debitur + '</td>',
-                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
-                        '<td style="width:200px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
-                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px"style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
-                        '<td style="width:180px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
+                        '<td style="width:135px">' + item.pemasukan_penjamin + '</td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_penjamin + '" data-lightbox="example-set" data-title="Lampiran Photo Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_penjamin + '" /> </a> </td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_npwp + '" /> </a> </td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
 
                         '</tr>'
                     ].join('\n');

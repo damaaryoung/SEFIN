@@ -96,7 +96,9 @@
         $('#add-lamp-penjamin').hide();
         $("#form_input_data_penjamin").show();
         $("#add_simpan_penjamin").show();
+        $(".add-lamp-photo-penjamin").html('');
         $(".add-lamp-ktp-penjamin").html('');
+        $(".add-lamp-npwp-penjamin").html('');
         $(".add-lamp-kk-penjamin").html('');
         $(".add-lamp-ktp-pas-penjamin").html('');
         $(".add-lamp-buku-nikah-penjamin").html('');
@@ -446,6 +448,32 @@
             // type : 'GET',
             url: url,
             data: data,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+    }
+
+    tambah_penjamin = function(opts, id) {
+        var data = opts;
+        var url = '<?php echo $this->config->item('api_url'); ?>api/penjamin/tambah/' + id;
+        return $.ajax({
+            url: url,
+            data: data,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            beforeSend: function() {
+                let html =
+                    "<div width='100%' class='text-center'>" +
+                    "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                    "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
+                    "</div>";
+
+                $('#load_data').html(html);
+                $('#modal_load_data').modal('show');
+            },
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             }
@@ -2717,6 +2745,9 @@
             var html15 = [];
             var html16 = [];
             var html17 = [];
+            var html18 = [];
+            var html19 = [];
+            var html20 = [];
 
             var htmlideb = [];
             var htmlpefindo = [];
@@ -3351,11 +3382,13 @@
                             '<td style="width:160px">' + jenis_kelamin_pen + '</td>',
                             '<td style="width:285px">' + item.alamat_ktp + '</td>',
                             '<td>' + item.no_telp + '</td>',
-                            '<td style="width:185px">' + item.hubungan_debitur + '</td>',
-                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
-                            '<td style="width:200px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
-                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px"style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
-                            '<td style="width:180px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
+                            '<td style="width:135px">' + item.pemasukan_penjamin + '</td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" data-lightbox="example-set" data-title="Lampiran Photo Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" /> </a> </td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lampiran_npwp + '" /> </a> </td>',
+                            '<td style="width:200px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
+                            '<td style="width:180px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
                             '</tr>'
                         ].join('\n');
                         htmlpenjamin.push(tr);
@@ -4280,10 +4313,13 @@
                             '<td style="width:285px">' + item.alamat_ktp + '</td>',
                             '<td>' + item.no_telp + '</td>',
                             '<td style="width:185px">' + item.hubungan_debitur + '</td>',
-                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
-                            '<td style="width:200px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
-                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px"style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
-                            '<td style="width:180px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
+                            '<td style="width:135px">' + item.pemasukan_penjamin + '</td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" data-lightbox="example-set" data-title="Lampiran Photo Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" /> </a> </td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lampiran_npwp + '" /> </a> </td>',
+                            '<td style="width:200px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
+                            '<td style="width:180px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
 
                             '</tr>'
                         ].join('\n');
@@ -5545,6 +5581,7 @@
             formData.append('nama_ibu_kandung_pen', $('input[name=nama_ibu_kandung_pen]', this).val());
             formData.append('no_ktp_pen', $('input[name=no_ktp_pen]', this).val());
             formData.append('no_npwp_pen', $('input[name=no_npwp_pen]', this).val());
+            formData.append('pemasukan_penjamin', $('input[name=pemasukan_pen]', this).val());
             formData.append('tempat_lahir_pen', $('input[name=tempat_lahir_pen]', this).val());
             formData.append('tgl_lahir_pen', $('input[name=tgl_lahir_pen]', this).val());
             formData.append('jenis_kelamin_pen', $('select[name=jenis_kelamin_pen]', this).val());
@@ -7276,10 +7313,13 @@
                 $('#form_edit_penjamin input[name=nama_ibu_kandung_pen]').val(data.nama_ibu_kandung);
                 $('#form_edit_penjamin input[name=no_ktp_pen]').val(data.no_ktp);
                 $('#form_edit_penjamin input[name=no_npwp_pen]').val(data.no_npwp);
+                $('#form_edit_penjamin input[name=pemasukan_pen]').val(data.lampiran.pemasukan_penjamin);
                 $('#form_edit_penjamin input[name=tempat_lahir_pen]').val(data.tempat_lahir);
                 $('#form_edit_penjamin input[name=tgl_lahir_pen]').val(data.tgl_lahir);
 
                 $('#form_edit_ktp_penjamin input[type=hidden][name=id_ktp_pen]').val(data.id);
+                $('#form_edit_photo_penjamin input[type=hidden][name=id_photo_pen]').val(data.id);
+                $('#form_edit_npwp_penjamin input[type=hidden][name=id_npwp_pen]').val(data.id);
                 $('#form_edit_kk_penjamin input[type=hidden][name=id_kk_pen]').val(data.id);
                 $('#form_edit_ktp_pas_penjamin input[type=hidden][name=id_ktp_pasangan_pen]').val(data.id);
                 $('#form_edit_buku_nikah_penjamin input[type=hidden][name=id_buku_nikah_pen]').val(data.id);
@@ -7487,6 +7527,76 @@
                 var data = res.data;
                 bootbox.alert('Data berhasil diubah', function() {
                     $('#form_edit_ktp_penjamin')[0].reset();
+                    $("#batal").click();
+                    $(".close_deb").click();
+                    load_data_penjamin();
+                });
+            })
+            .fail(function(jqXHR) {
+                var data = jqXHR.responseJSON;
+                var error = "";
+
+                if (typeof data == 'string') {
+                    error = '<p>' + data + '</p>';
+                } else {
+                    $.each(data, function(index, item) {
+                        error += '<p>' + item + '</p>' + "\n";
+                    });
+                }
+                bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                    $("#batal").click();
+                });
+            });
+    });
+
+    //SUBMIT EDIT PHOTO PENJAMIN
+    $('#form_edit_photo_penjamin').on('submit', function(e) {
+        var id = $('input[name=id_photo_pen]', this).val();
+        e.preventDefault();
+        var formData = new FormData();
+
+        formData.append('foto_selfie_penjamin', $('input[name=lamp_photo_pen]', this)[0].files[0]);
+
+        update_penjamin(formData, id)
+            .done(function(res) {
+                var data = res.data;
+                bootbox.alert('Data berhasil diubah', function() {
+                    $('#form_edit_photo_penjamin')[0].reset();
+                    $("#batal").click();
+                    $(".close_deb").click();
+                    load_data_penjamin();
+                });
+            })
+            .fail(function(jqXHR) {
+                var data = jqXHR.responseJSON;
+                var error = "";
+
+                if (typeof data == 'string') {
+                    error = '<p>' + data + '</p>';
+                } else {
+                    $.each(data, function(index, item) {
+                        error += '<p>' + item + '</p>' + "\n";
+                    });
+                }
+                bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                    $("#batal").click();
+                });
+            });
+    });
+
+    //SUBMIT EDIT NPWP PENJAMIN
+    $('#form_edit_npwp_penjamin').on('submit', function(e) {
+        var id = $('input[name=id_npwp_pen]', this).val();
+        e.preventDefault();
+        var formData = new FormData();
+
+        formData.append('lampiran_npwp', $('input[name=lamp_npwp_pen]', this)[0].files[0]);
+
+        update_penjamin(formData, id)
+            .done(function(res) {
+                var data = res.data;
+                bootbox.alert('Data berhasil diubah', function() {
+                    $('#form_edit_npwp_penjamin')[0].reset();
                     $("#batal").click();
                     $(".close_deb").click();
                     load_data_penjamin();
@@ -7965,10 +8075,13 @@
                         '<td style="width:285px">' + item.alamat_ktp + '</td>',
                         '<td>' + item.no_telp + '</td>',
                         '<td style="width:185px">' + item.hubungan_debitur + '</td>',
-                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
-                        '<td style="width:200px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
-                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px"style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
-                        '<td style="width:180px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:45px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
+                        '<td style="width:135px">' + item.pemasukan_penjamin + '</td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" data-lightbox="example-set" data-title="Lampiran Photo Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" /> </a> </td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lampiran_npwp + '" /> </a> </td>',
+                        '<td style="width:200px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp_pasangan + '" /> </a> </td>',
+                        '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_kk + '" /> </a> </td>',
+                        '<td style="width:180px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_buku_nikah + '" /> </a> </td>',
 
 
                         '</tr>'
@@ -8906,6 +9019,110 @@
 
         var formData = new FormData();
         formData.append('lamp_ktp_pen', $('input[name="add_lamp_ktp_penjamin"]')[0].files[0]);
+
+        $.ajax({
+            url: url,
+            data: formData,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            beforeSend: function() {
+                let html =
+                    "<div width='100%' class='text-center'>" +
+                    "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                    "Mohon tunggu sedang upload...<br><br>" +
+                    "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
+                    "</div>";
+
+                $('#load_data').html(html);
+                $('#modal_load_data').modal('show');
+            }
+        }).done(function(e) {
+            let html =
+                "<div width='100%' class='text-center'>" +
+                "<i class='fa fa-check fa-4x text-success'></i><br><br>" +
+                "Upload berhasil<br><br>" +
+                "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
+                "</div>";
+            $('#load_data').html(html);
+            load_data_penjamin();
+            $(".add-lamp-ktp-penjamin").html(' <i class="fa fa-check text-success"></i>');
+        }).fail(function(e) {
+            let html =
+                "<div width='100%' class='text-center'>" +
+                "<i class='fa fa-times fa-4x text-danger'></i><br><br>" +
+                "Upload gagal<br><br>" +
+                "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
+                "</div>";
+            $('#load_data').html(html);
+        })
+    });
+
+    //CHANGE PHOTO PENJAMIN
+    $('.add_lamp_photo_penjamin').on('change', function(e) {
+        e.preventDefault();
+        var id = $('#add_id_penjamin').val();
+        var url = '<?php echo $this->config->item('api_url'); ?>api/penjamin/' + id;
+
+
+        var formData = new FormData();
+        formData.append('foto_selfie_penjamin', $('input[name="add_lamp_photo_penjamin"]')[0].files[0]);
+
+        $.ajax({
+            url: url,
+            data: formData,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+            beforeSend: function() {
+                let html =
+                    "<div width='100%' class='text-center'>" +
+                    "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                    "Mohon tunggu sedang upload...<br><br>" +
+                    "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
+                    "</div>";
+
+                $('#load_data').html(html);
+                $('#modal_load_data').modal('show');
+            }
+        }).done(function(e) {
+            let html =
+                "<div width='100%' class='text-center'>" +
+                "<i class='fa fa-check fa-4x text-success'></i><br><br>" +
+                "Upload berhasil<br><br>" +
+                "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
+                "</div>";
+            $('#load_data').html(html);
+            load_data_penjamin();
+            $(".add-lamp-ktp-penjamin").html(' <i class="fa fa-check text-success"></i>');
+        }).fail(function(e) {
+            let html =
+                "<div width='100%' class='text-center'>" +
+                "<i class='fa fa-times fa-4x text-danger'></i><br><br>" +
+                "Upload gagal<br><br>" +
+                "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
+                "</div>";
+            $('#load_data').html(html);
+        })
+    });
+
+    //CHANGE NPWP PENJAMIN
+    $('.add_lamp_npwp_penjamin').on('change', function(e) {
+        e.preventDefault();
+        var id = $('#add_id_penjamin').val();
+        var url = '<?php echo $this->config->item('api_url'); ?>api/penjamin/' + id;
+
+
+        var formData = new FormData();
+        formData.append('lampiran_npwp', $('input[name="add_lamp_npwp_penjamin"]')[0].files[0]);
 
         $.ajax({
             url: url,

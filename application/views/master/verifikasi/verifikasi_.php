@@ -1449,7 +1449,6 @@
                 if (isTesting) {
                     
                     responseBody = responseCompleteID(requestBody);
-                    console.log(responseBody);
                     
                     if (responseBody.data == null) {
                         if(responseBody.errors.selfie_photo == "no face detected") {
@@ -1457,6 +1456,7 @@
                             $('.verifikasiDebitur').hide();
                         }
                     } else {
+                        var requestBody = requestMapperForStoreCadeb(responseBody);
                         var url = "api/master/verif/storecadeb/";
     
                         httpRequestBuilder(requestMapperForStoreCadeb(responseBody), url, id_trans_so, "POST")
@@ -1537,14 +1537,12 @@
                     "identity_photo" : "",
                     "selfie_photo" : base64Encode(data),
                 }
-                console.log(requestBody);
 
-                if(limitCallDebitur == 2) {
+                if(limitCallDebitur > 1) {
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!"); 
                 } else {
                     if (isTesting) {
                         responseBody = responseCompleteID(requestBody);
-                        console.log(responseBody);
 
                         if (responseBody.data == null) {
                             if(responseBody.errors.selfie_photo == "no face detected") {
@@ -1552,6 +1550,7 @@
                                 $('.verifikasiDebitur').hide();
                             }
                         } else {
+                            var requestBody = requestMapperForUpdate(responseBody, true);
                             var url = "api/master/verif/updateVerif/";
     
                             httpRequestBuilder(requestMapperForUpdateCadeb(responseBody), url, id_trans_so, "POST")
@@ -1582,6 +1581,7 @@
                                     $('.verifikasiDebitur').hide();
                                 }
                             } else {
+                                var requestBody = requestMapperForUpdateCadeb(responseBody);
                                 var url = "api/master/verif/updateVerif/";
     
                                 httpRequestBuilder(requestMapperForUpdateCadeb(responseBody), url, id_trans_so, "POST")
@@ -1635,11 +1635,9 @@
                     "identity_photo" : "",
                     "selfie_photo" : base64Encode(data),
                 }
-                console.log(requestBody);
                 
                 if (isTesting) {
                     responseBody = responseCompleteID(requestBody);
-                    console.log(responseBody);
 
                     if (responseBody.data == null) {
                         if(responseBody.errors.selfie_photo == "no face detected") {
@@ -1677,6 +1675,7 @@
                                 $('.verifikasiPasangan').hide();
                             }
                         } else {
+                            var requestBody = requestMapperForStorePasangan(responseBody);
                             var url = "api/master/verif/storepasangan/";
     
                             httpRequestBuilder(requestMapperForStorePasangan(responseBody), url, id_trans_so, "POST")
@@ -1727,14 +1726,12 @@
                     "identity_photo" : "",
                     "selfie_photo" : base64Encode(data),
                 }
-                console.log(requestBody);
 
                 if(limitCallPasangan == 2) {
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!"); 
                 } else {
                     if (isTesting) {
                         responseBody = responseCompleteID(requestBody);
-                        console.log(responseBody);
 
                         if (responseBody.data == null) {
                             if(responseBody.errors.selfie_photo == "no face detected") {
@@ -1772,6 +1769,7 @@
                                     $('.verifikasiPasangan').hide();
                                 }
                             } else {
+                                var requestBody = requestMapperForUpdatePasangan(responseBody);
                                 var url = "api/master/verif/updateVerif/";
     
                                 httpRequestBuilder(requestMapperForUpdatePasangan(responseBody), url, id_trans_so, "POST")
@@ -1825,11 +1823,9 @@
                     "identity_photo" : "",
                     "selfie_photo" : base64Encode(data),
                 }
-                console.log(requestBody);
                 
                 if (isTesting) {
                     responseBody = responseCompleteID(requestBody);
-                    console.log(responseBody);
 
                     if (responseBody.data == null) {
                         if(responseBody.errors.selfie_photo == "no face detected") {
@@ -1867,9 +1863,10 @@
                                 $('.verifikasiPenjamin_1').hide();
                             }
                         } else {
+                            var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
                             var url = "api/master/verif/storepenjamin/";
 
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody), url, id_trans_so, "POST")
                             .done( (response) => {
                                 mappingResponsePenjamin_1(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
@@ -2259,496 +2256,6 @@
         }
     }
 
-    function verifikasiUpdatePenjamin_1(isTesting, limitCallPenjamin_1, id_trans_so) {
-
-        var id_pen = $('#id_penjamin_1').val();
-        var photo_penjamin_1 = document.getElementById("photo_selfie_penjamin_1");
-        var base64_selfiePenjamin_1 = "";
-        var responseBody;
-
-        if (photo_penjamin_1.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_1.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#nik_penjamin_1").text() + "-update",
-                    "nik" : $("#nik_penjamin_1").text(),
-                    "name" : $("#name_penjamin_1").text(),
-                    "birthdate" : $("#birthdate_penjamin_1").text(),
-                    "birthplace" : $("#birthplace_penjamin_1").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                console.log(requestBody);
-
-                if(limitCallPenjamin_1 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                bootbox.alert("No Face Detected!!!");
-                                $('.verifikasiPenjamin_1').hide();
-                            }
-                        } else {
-                            var url = "api/master/verif/updatePenjamin/";
-    
-                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_1(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                $('.verifikasiPenjamin_1').hide();
-                            })
-
-                        }
-                    
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_id',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiPenjamin_1').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log(responseBody);
-
-                            if (responseBody.data == null) {
-                                if(responseBody.errors.selfie_photo == "no face detected") {
-                                    bootbox.alert("No Face Detected!!!");
-                                    $('.verifikasiPenjamin_1').hide();
-                                }
-                            } else {
-                                var url = "api/master/verif/updatePenjamin/";
-    
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_1(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                    $('.verifikasiPenjamin').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Pasangan!!");
-            });
-        }
-    }
-
-    function verifikasiUpdatePenjamin_2(isTesting, limitCallPenjamin_2, id_trans_so) {
-
-        var id_pen = $('#id_penjamin_2').val();
-        var photo_penjamin_2 = document.getElementById("photo_selfie_penjamin_2");
-        var base64_selfiePenjamin_2 = "";
-        var responseBody;
-
-        if (photo_penjamin_2.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_2.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#nik_penjamin_2").text() + "-update",
-                    "nik" : $("#nik_penjamin_2").text(),
-                    "name" : $("#name_penjamin_2").text(),
-                    "birthdate" : $("#birthdate_penjamin_2").text(),
-                    "birthplace" : $("#birthplace_penjamin_2").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                console.log(requestBody);
-
-                if(limitCallPenjamin_2 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                bootbox.alert("No Face Detected!!!");
-                                $('.verifikasiPenjamin_2').hide();
-                            }
-                        } else {
-                            var url = "api/master/verif/updatePenjamin/";
-    
-                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_2(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                $('.verifikasiPenjamin_2').hide();
-                            })
-
-                        }
-                    
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_id',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiPenjamin_2').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log(responseBody);
-
-                            if (responseBody.data == null) {
-                                if(responseBody.errors.selfie_photo == "no face detected") {
-                                    bootbox.alert("No Face Detected!!!");
-                                    $('.verifikasiPenjamin_2').hide();
-                                }
-                            } else {
-                                var url = "api/master/verif/updatePenjamin/";
-    
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_2(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                    $('.verifikasiPenjamin').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Pasangan!!");
-            });
-        }
-    }
-
-    function verifikasiUpdatePenjamin_3(isTesting, limitCallPenjamin_3, id_trans_so) {
-
-        var id_pen = $('#id_penjamin_3').val();
-        var photo_penjamin_3 = document.getElementById("photo_selfie_penjamin_1");
-        var base64_selfiePenjamin_3 = "";
-        var responseBody;
-
-        if (photo_penjamin_3.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_3.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#nik_penjamin_3").text() + "-update",
-                    "nik" : $("#nik_penjamin_3").text(),
-                    "name" : $("#name_penjamin_3").text(),
-                    "birthdate" : $("#birthdate_penjamin_3").text(),
-                    "birthplace" : $("#birthplace_penjamin_3").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                console.log(requestBody);
-
-                if(limitCallPenjamin_3 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                bootbox.alert("No Face Detected!!!");
-                                $('.verifikasiPenjamin_3').hide();
-                            }
-                        } else {
-                            var url = "api/master/verif/updatePenjamin/";
-    
-                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_3(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                $('.verifikasiPenjamin_3').hide();
-                            })
-
-                        }
-                    
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_id',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiPenjamin_3').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log(responseBody);
-
-                            if (responseBody.data == null) {
-                                if(responseBody.errors.selfie_photo == "no face detected") {
-                                    bootbox.alert("No Face Detected!!!");
-                                    $('.verifikasiPenjamin_3').hide();
-                                }
-                            } else {
-                                var url = "api/master/verif/updatePenjamin/";
-    
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_3(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                    $('.verifikasiPenjamin').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Pasangan!!");
-            });
-        }
-    }
-
-    function verifikasiUpdatePenjamin_4(isTesting, limitCallPenjamin_4, id_trans_so) {
-
-        var id_pen = $('#id_penjamin_4').val();
-        var photo_penjamin_4 = document.getElementById("photo_selfie_penjamin_1");
-        var base64_selfiePenjamin_4 = "";
-        var responseBody;
-
-        if (photo_penjamin_4.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_4.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#nik_penjamin_4").text() + "-update",
-                    "nik" : $("#nik_penjamin_4").text(),
-                    "name" : $("#name_penjamin_4").text(),
-                    "birthdate" : $("#birthdate_penjamin_4").text(),
-                    "birthplace" : $("#birthplace_penjamin_4").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                console.log(requestBody);
-
-                if(limitCallPenjamin_4 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                bootbox.alert("No Face Detected!!!");
-                                $('.verifikasiPenjamin_4').hide();
-                            }
-                        } else {
-                            var url = "api/master/verif/updatePenjamin/";
-    
-                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_4(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                $('.verifikasiPenjamin_4').hide();
-                            })
-
-                        }
-                    
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_id',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiPenjamin_4').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log(responseBody);
-
-                            if (responseBody.data == null) {
-                                if(responseBody.errors.selfie_photo == "no face detected") {
-                                    bootbox.alert("No Face Detected!!!");
-                                    $('.verifikasiPenjamin_4').hide();
-                                }
-                            } else {
-                                var url = "api/master/verif/updatePenjamin/";
-    
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_4(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                    $('.verifikasiPenjamin').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Pasangan!!");
-            });
-        }
-    }
-
-    function verifikasiUpdatePenjamin_5(isTesting, limitCallPenjamin_5, id_trans_so) {
-
-        var id_pen = $('#id_penjamin_5').val();
-        var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_1");
-        var base64_selfiePenjamin_5 = "";
-        var responseBody;
-
-        if (photo_penjamin_5.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_5.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#nik_penjamin_5").text() + "-update",
-                    "nik" : $("#nik_penjamin_5").text(),
-                    "name" : $("#name_penjamin_5").text(),
-                    "birthdate" : $("#birthdate_penjamin_5").text(),
-                    "birthplace" : $("#birthplace_penjamin_5").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                console.log(requestBody);
-
-                if(limitCallPenjamin_5 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                bootbox.alert("No Face Detected!!!");
-                                $('.verifikasiPenjamin_5').hide();
-                            }
-                        } else {
-                            var url = "api/master/verif/updatePenjamin/";
-    
-                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_5(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                $('.verifikasiPenjamin_5').hide();
-                            })
-
-                        }
-                    
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_id',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiPenjamin_5').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log(responseBody);
-
-                            if (responseBody.data == null) {
-                                if(responseBody.errors.selfie_photo == "no face detected") {
-                                    bootbox.alert("No Face Detected!!!");
-                                    $('.verifikasiPenjamin_5').hide();
-                                }
-                            } else {
-                                var url = "api/master/verif/updatePenjamin/";
-    
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_5(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                    $('.verifikasiPenjamin').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Pasangan!!");
-            });
-        }
-    }
-
     function verifikasiSimpanNpwp(isTesting, id_trans_so) {
         var responseBody;
         var no_npwp = $("#no_npwp").text();
@@ -2769,11 +2276,11 @@
                     "birthplace" : $("#birthplace_npwp").text()
                     // "income" : $("#income_npwp").text(),
                 }
+
                 console.log(requestBody);
 
                 if (isTesting) {
                     responseBody = responseNpwp(requestBody);
-                    console.log(responseBody);
 
                     if (responseBody.data == null) {
                         bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Debitur!!!");
@@ -2831,7 +2338,7 @@
         }
     }
 
-    function verifikasiUpdateNpwp(isTesting, limitCallNpwp, id_trans_so, id_verif) {
+    function verifikasiUpdateNpwp(isTesting, limitCallNpwp, id_trans_so) {
         var responseBody;
         var no_npwp = $("#no_npwp").text();
 
@@ -2851,22 +2358,20 @@
                     // "income" : $("#income_npwp").text(),
                     "income" : Number($("#income_npwp").text())
                 }
-                console.log(requestBody);
 
                 if(limitCallNpwp == 2) {
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP!!"); 
                 } else {
                     if (isTesting) {
                         responseBody = responseNpwp(requestBody);
-                        console.log(responseBody);
 
                         if (responseBody.data == null) {
                             bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Debitur!!!");
                             $('.verifikasiNpwp').hide();
                         } else {
-                            var url = "api/master/verif/updateNpwp/";
+                            var url = "api/master/verif/updateVerif/";
     
-                            httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_verif, "POST")
+                            httpRequestBuilder(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                             .done( (response) => {
                                 mappingResponseNpwp(responseBody);
                                 bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -2892,9 +2397,9 @@
                                 bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Debitur!!!");
                                 $('.verifikasiNpwp').hide();
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateVerif/";
     
-                                httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_verif, "POST")
+                                httpRequestBuilder(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
                                     mappingResponseNpwp(responseBody);
                                     bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -2939,11 +2444,11 @@
                     "birthplace" : $("#birthplace_npwp_pas").text()
                     // "income" : $("#income_npwp_pas").text(),
                 }
+
                 console.log(requestBody);
 
                 if (isTesting) {
                     responseBody = responseNpwp(requestBody);
-                    console.log(responseBody);
 
                     if (responseBody.data == null) {
                         bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Pasangan!!!");
@@ -3001,93 +2506,6 @@
         }
     }
 
-    function verifikasiUpdateNpwpPasangan(isTesting, limitCallNpwpPasangan, id_trans_so, id_pasangan) {
-        var responseBody;
-        var no_npwp = $("#no_npwp").text();
-
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Pasangan Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#no_npwp_pas").text() + "-update",
-                    "nik" : $("#nik_pas").text(),
-                    "npwp" : $("#no_npwp_pas").text(),
-                    "name" : $("#name_npwp_pas").text(),
-                    "birthdate" : $("#birthdate_npwp_pas").text(),
-                    "birthplace" : $("#birthplace_npwp_pas").text(),
-                    // "income" : $("#income_npwp_pas").text(),
-                    "income" : Number($("#income_npwp_pas").text())
-                }
-                console.log(requestBody);
-
-                if(limitCallNpwpPasangan == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseNpwp(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Pasangan!!!");
-                            $('.verifikasiNpwpPasangan').hide();
-                        } else {
-                            var url = "api/master/verif/updateNpwp/";
-    
-                            httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPasangan(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                $('.verifikasiNpwpPasangan').hide();
-                            })
-
-                        }
-                        
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_npwp',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiNpwpPasangan').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log( responseBody);
-
-                            if (responseBody.data == null) {
-                                bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Pasangan!!!");
-                                $('.verifikasiNpwpPasangan').hide();
-                            } else {
-                                var url = "api/master/verif/updateNpwp/";
-    
-                                httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPasangan(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                    $('.verifikasiNpwpPasangan').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                   
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
-    }
-
     function verifikasiSimpanNpwpPen_1(isTesting, id_trans_so) {
         var responseBody;
         var no_npwp = $("#no_npwp_pen_1").text();
@@ -3109,11 +2527,11 @@
                     "birthplace" : $("#birthplace_npwp_pen_1").text()
                     // "income" : $("#income_npwp_pen_1").text(),
                 }
+
                 console.log(requestBody);
 
                 if (isTesting) {
                     responseBody = responseNpwp(requestBody);
-                    console.log(responseBody);
 
                     if (responseBody.data == null) {
                         bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Penjamin!!!");
@@ -3497,441 +2915,6 @@
                     
                 }
 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
-    }
-
-    function verifikasiUpdateNpwpPen_1(isTesting, limitCallNpwpPenjamin_1, id_trans_so, id_penjamin) {
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_1").text();
-
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#no_npwp_pen_1").text() + "-update",
-                    "nik" : $("#nik_pen_1").text(),
-                    "npwp" : $("#no_npwp_pen_1").text(),
-                    "name" : $("#name_npwp_pen_1").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_1").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_1").text(),
-                    // "income" : $("#income_npwp_pen_1").text(),
-                    "income" : Number($("#income_npwp_pen_1").text())
-                }
-                console.log(requestBody);
-
-                if(limitCallNpwpPenjamin_1 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseNpwp(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Pasangan!!!");
-                            $('.verifikasiNpwpPenjamin_1').hide();
-                        } else {
-                            var url = "api/master/verif/updateNpwp/";
-    
-                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_1(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                $('.verifikasiNpwpPenjamin_1').hide();
-                            })
-
-                        }
-                        
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_npwp',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiNpwpPenjamin_1').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log( responseBody);
-
-                            if (responseBody.data == null) {
-                                bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Penjamin!!!");
-                                $('.verifikasiNpwpPenjamin_1').hide();
-                            } else {
-                                var url = "api/master/verif/updateNpwp/";
-    
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_1(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                    $('.verifikasiNpwpPenjamin_1').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                   
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
-    }
-
-    function verifikasiUpdateNpwpPen_2(isTesting, limitCallNpwpPenjamin_2, id_trans_so, id_penjamin) {
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_2").text();
-
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#no_npwp_pen_2").text() + "-update",
-                    "nik" : $("#nik_pen_2").text(),
-                    "npwp" : $("#no_npwp_pen_2").text(),
-                    "name" : $("#name_npwp_pen_2").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_2").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_2").text(),
-                    // "income" : $("#income_npwp_pen_2").text(),
-                    "income" : Number($("#income_npwp_pen_2").text())
-                }
-                console.log(requestBody);
-
-                if(limitCallNpwpPenjamin_2 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseNpwp(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Pasangan!!!");
-                            $('.verifikasiNpwpPenjamin_2').hide();
-                        } else {
-                            var url = "api/master/verif/updateNpwp/";
-    
-                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_2(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                $('.verifikasiNpwpPenjamin_2').hide();
-                            })
-
-                        }
-                        
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_npwp',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiNpwpPenjamin_2').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log( responseBody);
-
-                            if (responseBody.data == null) {
-                                bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Penjamin!!!");
-                                $('.verifikasiNpwpPenjamin_2').hide();
-                            } else {
-                                var url = "api/master/verif/updateNpwp/";
-    
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_2(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                    $('.verifikasiNpwpPenjamin_2').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                   
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
-    }
-
-    function verifikasiUpdateNpwpPen_3(isTesting, limitCallNpwpPenjamin_3, id_trans_so, id_penjamin) {
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_3").text();
-
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#no_npwp_pen_3").text() + "-update",
-                    "nik" : $("#nik_pen_3").text(),
-                    "npwp" : $("#no_npwp_pen_3").text(),
-                    "name" : $("#name_npwp_pen_3").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_3").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_3").text(),
-                    // "income" : $("#income_npwp_pen_3").text(),
-                    "income" : Number($("#income_npwp_pen_3").text())
-                }
-                console.log(requestBody);
-
-                if(limitCallNpwpPenjamin_3 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseNpwp(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Pasangan!!!");
-                            $('.verifikasiNpwpPenjamin_3').hide();
-                        } else {
-                            var url = "api/master/verif/updateNpwp/";
-    
-                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_3(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                $('.verifikasiNpwpPenjamin_3').hide();
-                            })
-
-                        }
-                        
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_npwp',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiNpwpPenjamin_3').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log( responseBody);
-
-                            if (responseBody.data == null) {
-                                bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Penjamin!!!");
-                                $('.verifikasiNpwpPenjamin_3').hide();
-                            } else {
-                                var url = "api/master/verif/updateNpwp/";
-    
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_3(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                    $('.verifikasiNpwpPenjamin_3').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                   
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
-    }
-
-    function verifikasiUpdateNpwpPen_4(isTesting, limitCallNpwpPenjamin_4, id_trans_so, id_penjamin) {
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_4").text();
-
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#no_npwp_pen_4").text() + "-update",
-                    "nik" : $("#nik_pen_4").text(),
-                    "npwp" : $("#no_npwp_pen_4").text(),
-                    "name" : $("#name_npwp_pen_4").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_4").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_4").text(),
-                    // "income" : $("#income_npwp_pen_4").text(),
-                    "income" : Number($("#income_npwp_pen_4").text())
-                }
-                console.log(requestBody);
-
-                if(limitCallNpwpPenjamin_4 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseNpwp(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Pasangan!!!");
-                            $('.verifikasiNpwpPenjamin_4').hide();
-                        } else {
-                            var url = "api/master/verif/updateNpwp/";
-    
-                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_4(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                $('.verifikasiNpwpPenjamin_4').hide();
-                            })
-
-                        }
-                        
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_npwp',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiNpwpPenjamin_4').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log( responseBody);
-
-                            if (responseBody.data == null) {
-                                bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Penjamin!!!");
-                                $('.verifikasiNpwpPenjamin_4').hide();
-                            } else {
-                                var url = "api/master/verif/updateNpwp/";
-    
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_4(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                    $('.verifikasiNpwpPenjamin_4').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                   
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
-    }
-
-    function verifikasiUpdateNpwpPen_5(isTesting, limitCallNpwpPenjamin_5, id_trans_so, id_penjamin) {
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_5").text();
-
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "VeriJelas-BPR-KMI-" + $("#no_npwp_pen_5").text() + "-update",
-                    "nik" : $("#nik_pen_5").text(),
-                    "npwp" : $("#no_npwp_pen_5").text(),
-                    "name" : $("#name_npwp_pen_5").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_5").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_5").text(),
-                    // "income" : $("#income_npwp_pen_5").text(),
-                    "income" : Number($("#income_npwp_pen_5").text())
-                }
-                console.log(requestBody);
-
-                if(limitCallNpwpPenjamin_5 == 2) {
-                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP!!"); 
-                } else {
-                    if (isTesting) {
-                        responseBody = responseNpwp(requestBody);
-                        console.log(responseBody);
-
-                        if (responseBody.data == null) {
-                            bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Pasangan!!!");
-                            $('.verifikasiNpwpPenjamin_5').hide();
-                        } else {
-                            var url = "api/master/verif/updateNpwp/";
-    
-                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_5(responseBody);
-                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                $('.verifikasiNpwpPenjamin_5').hide();
-                            })
-
-                        }
-                        
-                    } else {
-                        $.ajax({
-                            url: 'Verifikasi_controller/verifikasi_npwp',
-                            type: 'POST',
-                            data: requestBody,
-                            beforeSend: function() {
-                                $('.verifikasiNpwpPenjamin_5').html('<button class="btn btn-primary"><i class="fas fa-spinner fa-pulse"></i> Proses</button>');
-                            },
-                        })
-                        .done(function(res) {
-                            responseBody = JSON.parse(res);
-                            console.log( responseBody);
-
-                            if (responseBody.data == null) {
-                                bootbox.alert("Gagal Verifikasi!! Silahkan Cek Kembali Data NPWP Penjamin!!!");
-                                $('.verifikasiNpwpPenjamin_5').hide();
-                            } else {
-                                var url = "api/master/verif/updateNpwp/";
-    
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_5(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                    $('.verifikasiNpwpPenjamin_5').hide();
-                                })
-
-                            }
-
-                        })
-                        .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                            alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                        })
-                        
-                    }
-
-                }
-                   
             }).fail(function( jqXHR, textStatus, errorThrown ) {
                 bootbox.alert("Gagal Verifikasi Data NPWP!!");
             });
@@ -4373,8 +3356,8 @@
         }
     }
 
-    function verifikasiUpdateProperti () {
-        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti!!")
+    function verifikasiUpdateProperti() {
+        bootbox.alert("Data Verifikasi Properti Sudah Ada!!!");
     }
 
     function checkVerified(elementId, isVerified) {
@@ -4677,7 +3660,7 @@
                 npwp: true,
                 nik: true,
                 match_result: true,
-                income: "ABOVE",
+                income: null,
                 name: true,
                 birthdate: true,
                 birthplace: true
@@ -4768,7 +3751,7 @@
             limit_call: 1,
         }
     }
-    
+
     function requestMapperForStoreNpwpPasangan(responseBody, id_pas) {
         return {
             id_pasangan: id_pas,
@@ -4784,7 +3767,7 @@
             limit_call: 1,
         }
     }
-    
+
     function requestMapperForStoreNpwpPenjamin(responseBody, id_pen) {
         return {
             id_penjamin: id_pen,
@@ -4800,7 +3783,7 @@
             limit_call: 1,
         }
     }
-    
+
     function requestMapperForStoreProperti(responseBody, id_properti) {
         return {
             id_agunan_tanah: id_properti,
@@ -4845,35 +3828,19 @@
         }
     }
 
-    function requestMapperForUpdatePenjamin(responseBody, id_pen) {
-        return {
-            id_penjamin: id_pen,
-            nama_penjamin: responseBody.data.name ? 1 : 2,
-            tempat_lahir_penjamin: responseBody.data.birthplace ? 1 : 2,
-            tgl_lahir_penjamin: responseBody.data.birthdate ? 1 : 2,
-            alamat_penjamin: responseBody.data.address,
-            selfie_foto_penjamin: responseBody.data.selfie_photo,
-            trx_id_penjamin: responseBody.trx_id,
-            ref_id_penjamin: responseBody.ref_id,
-            limit_call_penjamin: 2,
-        }
-    }
-
     function requestMapperForUpdateNpwp(responseBody) {
         return {
-            npwp: responseBody.data.npwp ? 1 : 2,
-            nik: responseBody.data.nik ? 1 : 2,
-            match_result: responseBody.data.match_result ? 1 : 2,
-            income: responseBody.data.income,
-            nama: responseBody.data.name ? 1 : 2,
-            tmp_lahir: responseBody.data.birthplace ? 1 : 2,
-            tgl_lahir: responseBody.data.birthdate ? 1 : 2,
-            trx_id: responseBody.trx_id,
-            ref_id: responseBody.ref_id,
-            limit_call: 2,
+            npwp_pendapatan: responseBody.data.npwp ? 1 : 2,
+            nik_pendapatan: responseBody.data.nik ? 1 : 2,
+            match_result_pendapatan: responseBody.data.match_result ? 1 : 2,
+            nama_pendapatan: responseBody.data.name ? 1 : 2,
+            tmp_lahir_pendapatan: responseBody.data.birthplace ? 1 : 2,
+            tgl_lahir_pendapatan: responseBody.data.birthdate ? 1 : 2,
+            trx_id_pendapatan: responseBody.trx_id,
+            ref_id_pendapatan: responseBody.ref_id,
+            limit_call_npwp: 2
         }
     }
-
 
     $(function(){
         
@@ -5186,90 +4153,6 @@
 
             if (id != undefined) {
                 baseUrl += id;
-            }
-
-            return $.ajax({
-                type: httpMethod,
-                url: baseUrl,
-                data: data,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }
-            })
-        }
-
-        httpRequestBuilderPenjamin = function(data, url, id, id_penjamin, httpMethod) {
-            var baseUrl = '<?php echo config_item('api_url') ?>';
-            baseUrl += url;
-
-            if (id != undefined) {
-                baseUrl += ("trans/" + id);
-                if (id_penjamin != undefined) {
-                    baseUrl += ("/idpenjamin/" + id_penjamin);
-                }
-            }
-
-            return $.ajax({
-                type: httpMethod,
-                url: baseUrl,
-                data: data,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }
-            })
-        }
-
-        httpRequestBuilderNpwp = function(data, url, id, id_verif, httpMethod) {
-            var baseUrl = '<?php echo config_item('api_url') ?>';
-            baseUrl += url;
-
-            if (id != undefined) {
-                baseUrl += ("trans/" + id);
-                if (id_verif != undefined) {
-                    baseUrl += ("/id/" + id_verif);
-                }
-            }
-
-            return $.ajax({
-                type: httpMethod,
-                url: baseUrl,
-                data: data,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }
-            })
-        }
-
-        httpRequestBuilderNpwpPasangan = function(data, url, id, id_pasangan, httpMethod) {
-            var baseUrl = '<?php echo config_item('api_url') ?>';
-            baseUrl += url;
-
-            if (id != undefined) {
-                baseUrl += ("trans/" + id);
-                if (id_pasangan != undefined) {
-                    baseUrl += ("/idpasangan/" + id_pasangan);
-                }
-            }
-
-            return $.ajax({
-                type: httpMethod,
-                url: baseUrl,
-                data: data,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                }
-            })
-        }
-
-        httpRequestBuilderNpwpPenjamin = function(data, url, id, id_penjamin, httpMethod) {
-            var baseUrl = '<?php echo config_item('api_url') ?>';
-            baseUrl += url;
-
-            if (id != undefined) {
-                baseUrl += ("trans/" + id);
-                if (id_penjamin != undefined) {
-                    baseUrl += ("/idpenjamin/" + id_penjamin);
-                }
             }
 
             return $.ajax({
@@ -7688,11 +6571,8 @@
 
                             } else {
                                 if (data.property[0] != null) {
-                                    if(data.property[0].property_name == 1) {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 1!!");
-                                        $("#verifikasi_properti_1").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
+                                    if(data.property[0].limitcall == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 1!!")
                                     }
                                 } else {
                                     $("#verifikasi_properti_1").on('click', function() {
@@ -7701,11 +6581,8 @@
                                 }
 
                                 if(data.property[1] != null) {
-                                    if(data.property[1].property_name == 1) {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 2!!");
-                                        $("#verifikasi_properti_2").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
+                                    if(data.property[1].limitcall == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 2!!")
                                     }
                                 } else {
                                     $("#verifikasi_properti_2").on('click', function() {
@@ -7714,11 +6591,8 @@
                                 }
 
                                 if(data.property[2] != null) {
-                                    if(data.property[2].property_name == 1) {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 3!!");
-                                        $("#verifikasi_properti_3").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
+                                    if(data.property[2].limitcall == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 3!!")
                                     }
                                 } else {
                                     $("#verifikasi_properti_3").on('click', function() {
@@ -7727,11 +6601,8 @@
                                 }
 
                                 if(data.property[3] != null) {
-                                    if(data.property[3].property_name == 1) {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 4!!");
-                                        $("#verifikasi_properti_4").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
+                                    if(data.property[3].limitcall == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 4!!")
                                     }
                                 } else {
                                     $("#verifikasi_properti_4").on('click', function() {
@@ -7740,11 +6611,8 @@
                                 }
 
                                 if(data.property[4] != null) {
-                                    if(data.property[4].property_name == 1) {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!");
-                                        $("#verifikasi_properti_5").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
+                                    if(data.property[4].limitcall == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!")
                                     }
                                 } else {
                                     $("#verifikasi_properti_5").on('click', function() {
@@ -7780,11 +6648,8 @@
 
                                 } else {
                                     if (data.property[0] != null) {
-                                        if(data.property[0].property_name == 1) {
-                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 1!!");
-                                            $("#verifikasi_properti_1").on('click', function() {
-                                                verifikasiUpdateProperti();
-                                            });
+                                        if(data.property[0].limitcall == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 1!!")
                                         }
                                     } else {
                                         $("#verifikasi_properti_1").on('click', function() {
@@ -7793,11 +6658,8 @@
                                     }
 
                                     if(data.property[1] != null) {
-                                        if(data.property[1].property_name == 1) {
-                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 2!!");
-                                            $("#verifikasi_properti_2").on('click', function() {
-                                                verifikasiUpdateProperti();
-                                            });
+                                        if(data.property[1].limitcall == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 2!!")
                                         }
                                     } else {
                                         $("#verifikasi_properti_2").on('click', function() {
@@ -7806,11 +6668,8 @@
                                     }
 
                                     if(data.property[2] != null) {
-                                        if(data.property[2].property_name == 1) {
-                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 3!!");
-                                            $("#verifikasi_properti_3").on('click', function() {
-                                                verifikasiUpdateProperti();
-                                            });
+                                        if(data.property[2].limitcall == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 3!!")
                                         }
                                     } else {
                                         $("#verifikasi_properti_3").on('click', function() {
@@ -7819,11 +6678,8 @@
                                     }
 
                                     if(data.property[3] != null) {
-                                        if(data.property[3].property_name == 1) {
-                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 4!!");
-                                            $("#verifikasi_properti_4").on('click', function() {
-                                                verifikasiUpdateProperti();
-                                            });
+                                        if(data.property[3].limitcall == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 4!!")
                                         }
                                     } else {
                                         $("#verifikasi_properti_4").on('click', function() {
@@ -7832,11 +6688,8 @@
                                     }
 
                                     if(data.property[4] != null) {
-                                        if(data.property[4].property_name == 1) {
-                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!");
-                                            $("#verifikasi_properti_5").on('click', function() {
-                                                verifikasiUpdateProperti();
-                                            });
+                                        if(data.property[4].limitcall == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!")
                                         }
                                     } else {
                                         $("#verifikasi_properti_5").on('click', function() {
@@ -7858,9 +6711,6 @@
                                     });
                                 } else { 
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
-                                    $("#verifikasi_debitur").on('click', function() {
-                                        verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
-                                    });
                                 }
                             }
                             
@@ -7875,9 +6725,6 @@
                                     });
                                 } else{
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
-                                    $("#verifikasi_pasangan").on('click', function() {
-                                        verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
-                                    });
                                 }
                             }
                             
@@ -7911,9 +6758,6 @@
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
-                                        $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
-                                        });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_1").on('click', function() {
@@ -7928,9 +6772,6 @@
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
-                                        $("#verifikasi_penjamin_2").on('click', function() {
-                                            verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
-                                        });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_2").on('click', function() {
@@ -7945,9 +6786,6 @@
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
-                                        $("#verifikasi_penjamin_3").on('click', function() {
-                                            verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
-                                        });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_3").on('click', function() {
@@ -7962,9 +6800,6 @@
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
-                                        $("#verifikasi_penjamin_4").on('click', function() {
-                                            verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
-                                        });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_4").on('click', function() {
@@ -7979,9 +6814,6 @@
                                         });
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
-                                        $("#verifikasi_penjamin_5").on('click', function() {
-                                            verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
-                                        });
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_5").on('click', function() {
@@ -7991,7 +6823,7 @@
 
                             }
         
-                            if (data.npwp.length == 0) {
+                            if (data.npwp.length == null) {
                                 $("#verifikasi_npwp").on('click', function() {
                                     verifikasiSimpanNpwp(true, id);
                                 });
@@ -8020,124 +6852,7 @@
                                     verifikasiSimpanNpwpPen_5(true, id);
                                 });
                             } else {
-                                if (data.npwp[0] != null) {
-                                    if(data.npwp[0].limit_call == 1) {
-                                        $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(true, data.npwp[0].limit_call, id, data.npwp[0].id);
-                                        });
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
-                                        $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(true, data.npwp[0].limit_call, id, data.npwp[0].id);
-                                        });
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiSimpanNpwp(true, id);
-                                    });
-                                }
 
-                                if (data.npwp[1] != null) {
-                                    if(data.npwp[1].limit_call == 1) {
-                                        $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(true, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
-                                        });
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
-                                        $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(true, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
-                                        });
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiSimpanNpwpPasangan(true, id);
-                                    });
-                                }
-
-                                if (data.npwp[2] != null) {
-                                    if(data.npwp[2].limit_call == 1) {
-                                        $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(true, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
-                                        });
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
-                                        $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(true, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
-                                        });
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiSimpanNpwpPen_1(true, id);
-                                    });
-                                }
-
-                                if (data.npwp[3] != null) {
-                                    if(data.npwp[3].limit_call == 1) {
-                                        $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(true, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
-                                        });
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
-                                        $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(true, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
-                                        });
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiSimpanNpwpPen_2(true, id);
-                                    });
-                                }
-
-                                if (data.npwp[4] != null) {
-                                    if(data.npwp[4].limit_call == 1) {
-                                        $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(true, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
-                                        });
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
-                                        $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(true, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
-                                        });
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiSimpanNpwpPen_3(true, id);
-                                    });
-                                }
-
-                                if (data.npwp[5] != null) {
-                                    if(data.npwp[5].limit_call == 1) {
-                                        $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(true, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
-                                        });
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
-                                        $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(true, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
-                                        });
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiSimpanNpwpPen_4(true, id);
-                                    });
-                                }
-
-                                if (data.npwp[6] != null) {
-                                    if(data.npwp[6].limit_call == 1) {
-                                        $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(true, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
-                                        });
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
-                                        $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(true, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
-                                        });
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiSimpanNpwpPen_5(true, id);
-                                    });
-                                }
                             }
                             
                         }      
