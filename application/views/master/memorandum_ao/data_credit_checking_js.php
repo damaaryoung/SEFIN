@@ -5368,6 +5368,17 @@
                 bootbox.alert("Pekerjaan Debitur Belum Di Pilih !!!");
                 return (false);
             }
+
+            if(document.getElementById('pekerjaan_deb').value == "01" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && document.getElementById('plafon_deb').value >= "150000000") {
+                bootbox.alert("Pekerjaan Debitur adalah Karyawan dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
+                return (false);
+            }
+
+            if(document.getElementById('pekerjaan_deb').value == "02" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && document.getElementById('plafon_deb').value >= "200000000") {
+                bootbox.alert("Pekerjaan Debitur adalah Wiraswasta dengan Plafon > 200jt maka Wajib Mengisi No. NPWP!!!");
+                return (false);
+            }
+            
             if (document.getElementById('nama_perusahaan').value == "") {
                 bootbox.alert("Nama Perusahaan Debitur Tidak Boleh Kosong !!!");
                 return (false);
@@ -6609,7 +6620,6 @@
 
         });
 
-
         $('#form_surat_keterangan_usaha_usaha ').on('submit', function(e) {
             var id = $('input[name=id_debitur_surat_keterangan_usaha]', this).val();
 
@@ -6782,6 +6792,17 @@
                     bootbox.alert("Pekerjaan Debitur Belum Di Pilih !!!");
                     return (false);
                 }
+
+                if(document.getElementById('pekerjaan_deb').value == "01" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && document.getElementById('plafon_deb').value >= "150000000") {
+                    bootbox.alert("Pekerjaan Debitur adalah Karyawan dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
+                    return (false);
+                }
+
+                if(document.getElementById('pekerjaan_deb').value == "02" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && document.getElementById('plafon_deb').value >= "200000000") {
+                    bootbox.alert("Pekerjaan Debitur adalah Wiraswasta dengan Plafon > 200jt maka Wajib Mengisi No. NPWP!!!");
+                    return (false);
+                }
+            
                 if (document.getElementById('nama_perusahaan').value == "") {
                     bootbox.alert("Nama Perusahaan Debitur Tidak Boleh Kosong !!!");
                     return (false);
@@ -6883,7 +6904,6 @@
                     bootbox.alert("Catatan Verifikasi Belum Di Isi !!!");
                     return (false);
                 }
-
 
                 if (document.getElementById('val_calon_debitur').value == "") {
                     bootbox.alert("Validasi Calon Debitur Belum Di Pilih !!!");
@@ -7269,7 +7289,6 @@
                     $("#batal").click();
                 });
         });
-
 
     });
 

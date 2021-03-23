@@ -280,7 +280,7 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label>No NPWP</label>
-                                                <input type="text" class="form-control" name="no_npwp" maxlength="15" onkeypress="return hanyaAngka(event)">
+                                                <input type="text" class="form-control" name="no_npwp" id="no_npwp" maxlength="15" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
                                         <div class="form-row">

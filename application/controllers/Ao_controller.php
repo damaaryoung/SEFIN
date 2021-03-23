@@ -132,4 +132,58 @@ class Ao_controller extends CI_Controller
         //output dalam format JSON
         echo json_encode($output);
     }
+
+    function get_data_verifikasi_filter() {
+
+        $url = $this->config->item('api_url').'api/master/verif/filter';
+        $token = $this->session->userdata('SESSION_TOKEN');
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Authorization: Bearer '.$token,
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+            "cabang" => $_POST['cabang'],
+            "area" => $_POST['area']
+            // tambah parameter disini untuk pagination
+        ]));
+
+        $res = curl_exec($ch);
+        curl_close($ch);
+
+        $data = array();
+        $no = $_POST['draw'] * 10;
+        foreach (json_decode($res)->data as $datum) {
+            $no++;
+            $id = $datum->id_trans_so;
+            $row = array();
+            $row[] = $no;
+            $row[] = $datum->tgl_transaksi;
+            $row[] = $datum->nomor_so;
+            $row[] = $datum->nama_debitur;
+            $row[] = '<form method="post" style="text-align: center" target="_blank" action="report/memo_verifikasi"> 
+                <button type="button"  class="btn btn-primary btn-sm change" data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
+                <button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" data-target="#update" data="' . $id . '"><i style="color: #fff;" class="fas fa-eye"></i></button>
+                <button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' . $id . '"><i class="fas fa-check"></i></button>
+                <input type="hidden" name ="id" value="' . $id . '">
+                <button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>';
+            $data[] = $row;
+        };
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => "310", // ganti dengan total dari $res
+            "recordsFiltered" => "10",
+            "data" => $data,
+            "cabang"=> $_POST['cabang'],
+            "area"=>$_POST['area'],
+        );
+
+        echo json_encode($output);
+    }
 }

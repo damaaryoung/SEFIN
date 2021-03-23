@@ -96,6 +96,29 @@
                                 <tbody id="data_verifikasi" style="font-size: 13px">
                                 </tbody>
                             </table>
+                            <!-- <table id="table_verifikasi_filter" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                            <thead style="font-size: 15px" class="bg-danger">
+                                    <tr>
+                                        <th>
+                                            No
+                                        </th>
+                                        <th>
+                                            Tanggal Transaksi
+                                        </th>
+                                        <th>
+                                            No. SO
+                                        </th>
+                                        <th>
+                                            Nama Debitur
+                                        </th>
+                                        <th>
+                                            Aksi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data_verifikasi_filter" style="font-size: 13px">
+                                </tbody>
+                            </table> -->
                         </div>
                     </div>
                 </div>
@@ -1301,73 +1324,93 @@
             area    : $("#kode_area option:selected").val(),
         }
 
+        $("#table_verifikasi_wrapper").hide();
+
         if (requestBody.kode_area == "" && requestBody.kode_kantor == "") {
             bootbox.alert("Salah satu dari Area atau Cabang tidak boleh kosong!");
         } else {
-            // call AJAX data verifikasi yang sudah di filter berdasarkan area dan kantor
-            $.ajax({
-                url: '<?php echo config_item('api_url') ?>api/master/verif/filter',
-                type: 'POST',
-                data: requestBody,
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-            })
-            .done(function(res) {
-                var data = res.data.data;
-                console.log(data);
-                var html = [];
-                var no   = 0;
-                
-                if(data.length === 0 ){
-                    var tr =[
-                    '<tr align="middle">',
-                        '<td colspan="5" style="text-align: center">Tidak ada data</td>',
-                    '</tr>'
-                    ].join('\n');
-                    $('#data_verifikasi').html(tr);
+                // $("#table_verifikasi_filter").DataTable({
 
-                    return;
-                } else {
-                    $.each(data, function(index,item){
-                        no++;
-                        var tr = [
-                        '<tr>',
-                            '<td style="text-align: center">'+ no +'</td>',
-                            '<td>'+ formatUpdated(item.tgl_transaksi) +'</td>',
-                            '<td>'+ item.nomor_so+'</td>',
-                            '<td>'+ item.nama_debitur +'</td>',
-                            '<td style="text-align: center">',
-                            '<form method="post" style="text-align: center" target="_blank" action="report/memo_verifikasi">',
-                            '<button type="button"  class="btn btn-primary btn-sm change" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-pencil-alt"></i></button>',
-                            '<button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" data-target="#update" data="' + item.id_trans_so + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
-                            '<button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-check"></i></button>',
-                            '<input type="hidden" name ="id" value="' + item.id_trans_so + '">',
-                            '<button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
-                            '</td>',
+                //     "processing": true,
+                //     "serverSide": true,
+                //     'destroy': true,
+                //     "order": [],
+
+                //     "paging": true,
+                //     "retrieve": true,
+                //     "lengthChange": true,
+                //     "searching": true,
+                //     "ordering": false,
+                //     "info": true,
+                //     "autoWidth": false,
+
+                //     "ajax": {
+                //         "url": "<?php echo site_url('Ao_controller/get_data_verifikasi_filter') ?>",
+                //         "type": "POST",
+                //         "data": requestBody
+                //     },
+
+                //     "columnDefs": [{
+                //         "targets": [0],
+                //         "orderable": false,
+                //     }, ],
+
+                // })
+
+                // call AJAX data verifikasi yang sudah di filter berdasarkan area dan kantor
+                $.ajax({
+                    url: '<?php // echo config_item('api_url') ?>api/master/verif/filter',
+                    type: 'POST',
+                    data: requestBody,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                })
+                .done(function(res) {
+                    var data = res.data.data;
+                    console.log(res);
+                    var html = [];
+                    var no   = 0;
+                    if(data.length === 0 ){
+                        var tr =[
+                        '<tr align="middle">',
+                            '<td colspan="5" style="text-align: center">Tidak ada data</td>',
                         '</tr>'
                         ].join('\n');
-                        html.push(tr);
-                    });
-    
-                    $('#data_verifikasi').html(html);
-                    $('#table_verifikasi').DataTable({
-                        "paging": true,
-                        "retrieve": true,
-                        "lengthChange": true,
-                        "searching": true,
-                        "ordering": false,
-                        "info": true,
-                        "autoWidth": false,
-                    });
+                        $('#data_verifikasi_filter').html(tr);
+                        return;
+                    } else {
+                        $.each(data, function(index,item){
+                            no++;
+                            var tr = [
+                            '<tr>',
+                                '<td style="text-align: center">'+ no +'</td>',
+                                '<td>'+ formatUpdated(item.tgl_transaksi) +'</td>',
+                                '<td>'+ item.nomor_so+'</td>',
+                                '<td>'+ item.nama_debitur +'</td>',
+                                '<td style="text-align: center">',
+                                '<form method="post" style="text-align: center" target="_blank" action="report/memo_verifikasi">',
+                                '<button type="button"  class="btn btn-primary btn-sm change" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-pencil-alt"></i></button>',
+                                '<button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" data-target="#update" data="' + item.id_trans_so + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
+                                '<button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-check"></i></button>',
+                                '<input type="hidden" name ="id" value="' + item.id_trans_so + '">',
+                                '<button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
+                                '</td>',
+                            '</tr>'
+                            ].join('\n');
+                            html.push(tr);
+                        });
+        
+                        $('#data_verifikasi_filter').html(html);
 
-                }
+                    }
 
-            });
+                });
         }
     }
 
     function tampil_data_verifikasi() {
+        $('#table_verifikasi_filter').hide();
         $('#table_verifikasi').DataTable({
 
             "processing": true,
@@ -5451,6 +5494,10 @@
                             '<td>Alamat</td>',
                             '<td name="address" id="address">' + data.data_debitur.alamat_ktp.alamat_singkat + '</td>',
                             '<td id="address_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_debitur_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_deb.push(data_debitur);
@@ -5491,6 +5538,10 @@
                             '<td>Alamat</td>',
                             '<td name="address_pasangan" id="address_pasangan">' + data.data_pasangan.alamat_ktp + '</td>',
                             '<td id="address_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_pasangan_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_pas.push(data_pasangan);
@@ -5545,6 +5596,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -5589,6 +5644,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -5643,6 +5702,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -5683,6 +5746,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -5727,6 +5794,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -5771,6 +5842,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -5825,6 +5900,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -5865,6 +5944,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -5905,6 +5988,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -5949,6 +6036,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -5993,6 +6084,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -6037,6 +6132,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -6091,6 +6190,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -6131,6 +6234,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -6171,6 +6278,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -6211,6 +6322,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_4" id="address_penjamin_4">' + data.data_penjamin[3].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_4_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_4.push(data_penjamin_4);
@@ -6255,6 +6370,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -6299,6 +6418,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -6343,6 +6466,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -6387,6 +6514,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_4" id="income_npwp_pen_4">' + data.data_penjamin[3].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_4_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_4.push(data_npwp_pen_4);
@@ -6440,6 +6571,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -6480,6 +6615,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -6520,6 +6659,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -6560,6 +6703,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_4" id="address_penjamin_4">' + data.data_penjamin[3].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_4_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_4.push(data_penjamin_4);
@@ -6600,6 +6747,10 @@
                                 '<td>Alamat</td>',
                                 '<td name="address_penjamin_5" id="address_penjamin_5">' + data.data_penjamin[4].alamat_ktp + '</td>',
                                 '<td id="address_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_5_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_5.push(data_penjamin_5);
@@ -6644,6 +6795,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -6688,6 +6843,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -6732,6 +6891,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -6776,6 +6939,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_4" id="income_npwp_pen_4">' + data.data_penjamin[3].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_4_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_4.push(data_npwp_pen_4);
@@ -6820,6 +6987,10 @@
                                 '<td>Pendapatan Bulanan</td>',
                                 '<td name="income_npwp_pen_5" id="income_npwp_pen_5">' + data.data_penjamin[4].pemasukan_penjamin + '</td>',
                                 '<td id="income_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_5_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_5.push(data_npwp_pen_5);
@@ -6878,6 +7049,10 @@
                             '<td>Pendapatan Bulanan</td>',
                             '<td name="income_npwp" id="income_npwp">' + data.kapasitas_bulanan.pemasukan_cadebt + '</td>',
                             '<td id="income_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_npwp_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_npwp.push(data_npwp);
@@ -6922,6 +7097,10 @@
                             '<td>Pendapatan Bulanan</td>',
                             '<td name="income_npwp_pas" id="income_npwp_pas">' + data.kapasitas_bulanan.pemasukan_pasangan + '</td>',
                             '<td id="income_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_npwp_pas_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_npwp_pas.push(data_npwp_pas);
@@ -6982,6 +7161,10 @@
                                     '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_1_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
                             $("#data_properti_1").html(html_properti_1);
@@ -7056,6 +7239,10 @@
                                     '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_1_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
                             $("#data_properti_1").html(html_properti_1);
@@ -7106,6 +7293,10 @@
                                     '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_2_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_2.push(data_properti_2);
                             $("#data_properti_2").html(html_properti_2);
@@ -7180,6 +7371,10 @@
                                     '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_1_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
                             $("#data_properti_1").html(html_properti_1);
@@ -7230,6 +7425,10 @@
                                     '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_2_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_2.push(data_properti_2);
                             $("#data_properti_2").html(html_properti_2);
@@ -7280,6 +7479,10 @@
                                     '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_3_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_3.push(data_properti_3);
                             $("#data_properti_3").html(html_properti_3);
@@ -7353,6 +7556,10 @@
                                     '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_1_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
                             $("#data_properti_1").html(html_properti_1);
@@ -7403,6 +7610,10 @@
                                     '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_2_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_2.push(data_properti_2);
                             $("#data_properti_2").html(html_properti_2);
@@ -7453,6 +7664,10 @@
                                     '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_3_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_3.push(data_properti_3);
                             $("#data_properti_3").html(html_properti_3);
@@ -7503,6 +7718,10 @@
                                     '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_4_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_4_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_4.push(data_properti_4);
                             $("#data_properti_4").html(html_properti_4);
@@ -7575,6 +7794,10 @@
                                     '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_1_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
                             $("#data_properti_1").html(html_properti_1);
@@ -7625,6 +7848,10 @@
                                     '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_2_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_2.push(data_properti_2);
                             $("#data_properti_2").html(html_properti_2);
@@ -7675,6 +7902,10 @@
                                     '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_3_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_3.push(data_properti_3);
                             $("#data_properti_3").html(html_properti_3);
@@ -7725,6 +7956,10 @@
                                     '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_4_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_4_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_4.push(data_properti_4);
                             $("#data_properti_4").html(html_properti_4);
@@ -7775,6 +8010,10 @@
                                     '<td name="certificate_date_5" id="certificate_date_5">' + formatTanggal(data.data_agunan.agunan_tanah[4].tgl_sertifikat) + '</td>',
                                     '<td id=certificate_date_5_result></td>',
                                 '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_5_result"></td>',
+                                '</tr>'
                             ].join('\n');
                             html_properti_5.push(data_properti_5);
                             $("#data_properti_5").html(html_properti_5);
@@ -7821,22 +8060,27 @@
                                 $("#verifikasi_properti_1").on('click', function() {
                                     verifikasiSimpanProperti_1(false, id);
                                 });
+                                $("#limit_call_properti_1_result").html("1");
 
                                 $("#verifikasi_properti_2").on('click', function() {
                                     verifikasiSimpanProperti_2(false, id);
                                 });
+                                $("#limit_call_properti_2_result").html("1");
 
                                 $("#verifikasi_properti_3").on('click', function() {
                                     verifikasiSimpanProperti_3(false, id);
                                 });
+                                $("#limit_call_properti_3_result").html("1");
 
                                 $("#verifikasi_properti_4").on('click', function() {
                                     verifikasiSimpanProperti_4(false, id);
                                 });
+                                $("#limit_call_properti_4_result").html("1");
 
                                 $("#verifikasi_properti_5").on('click', function() {
                                     verifikasiSimpanProperti_5(false, id);
                                 });
+                                $("#limit_call_properti_5_result").html("1");
 
                             } else {
                                 if (data.property[0] != null) {
@@ -7845,11 +8089,13 @@
                                         $("#verifikasi_properti_1").on('click', function() {
                                             verifikasiUpdateProperti();
                                         });
+                                        $("#limit_call_properti_1_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_properti_1").on('click', function() {
                                         verifikasiSimpanProperti_1(false, id);
                                     });
+                                    $("#limit_call_properti_1_result").html("1");
                                 }
 
                                 if(data.property[1] != null) {
@@ -7858,11 +8104,13 @@
                                         $("#verifikasi_properti_2").on('click', function() {
                                             verifikasiUpdateProperti();
                                         });
+                                        $("#limit_call_properti_2_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_properti_2").on('click', function() {
                                         verifikasiSimpanProperti_2(false, id);
                                     });
+                                    $("#limit_call_properti_2_result").html("1");
                                 }
 
                                 if(data.property[2] != null) {
@@ -7871,11 +8119,13 @@
                                         $("#verifikasi_properti_3").on('click', function() {
                                             verifikasiUpdateProperti();
                                         });
+                                        $("#limit_call_properti_3_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_properti_3").on('click', function() {
                                         verifikasiSimpanProperti_3(false, id);
                                     });
+                                    $("#limit_call_properti_3_result").html("1");
                                 }
 
                                 if(data.property[3] != null) {
@@ -7884,11 +8134,13 @@
                                         $("#verifikasi_properti_4").on('click', function() {
                                             verifikasiUpdateProperti();
                                         });
+                                        $("#limit_call_properti_4_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_properti_4").on('click', function() {
                                         verifikasiSimpanProperti_4(false, id);
                                     });
+                                    $("#limit_call_properti_4_result").html("1");
                                 }
 
                                 if(data.property[4] != null) {
@@ -7897,11 +8149,13 @@
                                         $("#verifikasi_properti_5").on('click', function() {
                                             verifikasiUpdateProperti();
                                         });
+                                        $("#limit_call_properti_5_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_properti_5").on('click', function() {
                                         verifikasiSimpanProperti_5(false, id);
                                     });
+                                    $("#limit_call_properti_5_result").html("1");
                                 }
 
                             }
@@ -7913,22 +8167,27 @@
                                     $("#verifikasi_properti_1").on('click', function() {
                                         verifikasiSimpanProperti_1(false, id);
                                     });
+                                    $("#limit_call_properti_1_result").html("1");
 
                                     $("#verifikasi_properti_2").on('click', function() {
                                         verifikasiSimpanProperti_2(false, id);
                                     });
+                                    $("#limit_call_properti_2_result").html("1");
 
                                     $("#verifikasi_properti_3").on('click', function() {
                                         verifikasiSimpanProperti_3(false, id);
                                     });
+                                    $("#limit_call_properti_3_result").html("1");
 
                                     $("#verifikasi_properti_4").on('click', function() {
                                         verifikasiSimpanProperti_4(false, id);
                                     });
+                                    $("#limit_call_properti_4_result").html("1");
 
                                     $("#verifikasi_properti_5").on('click', function() {
                                         verifikasiSimpanProperti_5(false, id);
                                     });
+                                    $("#limit_call_properti_5_result").html("1");
 
                                 } else {
                                     if (data.property[0] != null) {
@@ -7937,11 +8196,13 @@
                                             $("#verifikasi_properti_1").on('click', function() {
                                                 verifikasiUpdateProperti();
                                             });
+                                            $("#limit_call_properti_1_result").html("0");
                                         }
                                     } else {
                                         $("#verifikasi_properti_1").on('click', function() {
                                             verifikasiSimpanProperti_1(false, id);
                                         });
+                                        $("#limit_call_properti_1_result").html("1");
                                     }
 
                                     if(data.property[1] != null) {
@@ -7950,11 +8211,13 @@
                                             $("#verifikasi_properti_2").on('click', function() {
                                                 verifikasiUpdateProperti();
                                             });
+                                            $("#limit_call_properti_2_result").html("0");
                                         }
                                     } else {
                                         $("#verifikasi_properti_2").on('click', function() {
                                             verifikasiSimpanProperti_2(false, id);
                                         });
+                                        $("#limit_call_properti_2_result").html("1");
                                     }
 
                                     if(data.property[2] != null) {
@@ -7963,11 +8226,13 @@
                                             $("#verifikasi_properti_3").on('click', function() {
                                                 verifikasiUpdateProperti();
                                             });
+                                            $("#limit_call_properti_3_result").html("0");
                                         }
                                     } else {
                                         $("#verifikasi_properti_3").on('click', function() {
                                             verifikasiSimpanProperti_3(false, id);
                                         });
+                                        $("#limit_call_properti_3_result").html("1");
                                     }
 
                                     if(data.property[3] != null) {
@@ -7976,11 +8241,13 @@
                                             $("#verifikasi_properti_4").on('click', function() {
                                                 verifikasiUpdateProperti();
                                             });
+                                            $("#limit_call_properti_4_result").html("0");
                                         }
                                     } else {
                                         $("#verifikasi_properti_4").on('click', function() {
                                             verifikasiSimpanProperti_4(false, id);
                                         });
+                                        $("#limit_call_properti_4_result").html("1");
                                     }
 
                                     if(data.property[4] != null) {
@@ -7989,11 +8256,13 @@
                                             $("#verifikasi_properti_5").on('click', function() {
                                                 verifikasiUpdateProperti();
                                             });
+                                            $("#limit_call_properti_5_result").html("0");
                                         }
                                     } else {
                                         $("#verifikasi_properti_5").on('click', function() {
                                             verifikasiSimpanProperti_5(false, id);
                                         });
+                                        $("#limit_call_properti_5_result").html("1");
                                     }
 
                                 }
@@ -8003,16 +8272,19 @@
                                 $("#verifikasi_debitur").on('click', function() {
                                     verifikasiSimpanDebitur(false, id);
                                 });
+                                $("#limit_call_debitur_result").html("2");
                             } else {
                                 if (data.cadebt.limit_call == 1) {
                                     $("#verifikasi_debitur").on('click', function() {
                                         verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
                                     });
+                                    $("#limit_call_debitur_result").html("1");
                                 } else { 
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
                                     $("#verifikasi_debitur").on('click', function() {
                                         verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
                                     });
+                                    $("#limit_call_debitur_result").html("0");
                                 }
                             }
                             
@@ -8020,16 +8292,19 @@
                                 $("#verifikasi_pasangan").on('click', function() {
                                     verifikasiSimpanPasangan(false, id);
                                 });
+                                $("#limit_call_pasangan_result").html("2");
                             } else {
                                 if (data.pasangan.limit_call == 1) {
                                     $("#verifikasi_pasangan").on('click', function() {
                                         verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
                                     });
+                                    $("#limit_call_pasangan_result").html("1");
                                 } else{
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
                                     $("#verifikasi_pasangan").on('click', function() {
                                         verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
                                     });
+                                    $("#limit_call_pasangan_result").html("0");
                                 }
                             }
                             
@@ -8038,22 +8313,27 @@
                                 $("#verifikasi_penjamin_1").on('click', function() {
                                     verifikasiSimpanPenjamin_1(false, id);
                                 });
+                                $("#limit_call_penjamin_1_result").html("2");
 
                                 $("#verifikasi_penjamin_2").on('click', function() {
                                     verifikasiSimpanPenjamin_2(false, id);
                                 });
+                                $("#limit_call_penjamin_2_result").html("2");
 
                                 $("#verifikasi_penjamin_3").on('click', function() {
                                     verifikasiSimpanPenjamin_3(false, id);
                                 });
+                                $("#limit_call_penjamin_3_result").html("2");
 
                                 $("#verifikasi_penjamin_4").on('click', function() {
                                     verifikasiSimpanPenjamin_4(false, id);
                                 });
+                                $("#limit_call_penjamin_4_result").html("2");
 
                                 $("#verifikasi_penjamin_5").on('click', function() {
                                     verifikasiSimpanPenjamin_5(false, id);
                                 });
+                                $("#limit_call_penjamin_5_result").html("2");
 
                             } else {
                                 if (data.penjamin[0] != null) {
@@ -8061,16 +8341,19 @@
                                         $("#verifikasi_penjamin_1").on('click', function() {
                                             verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_1_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                         $("#verifikasi_penjamin_1").on('click', function() {
                                             verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_1_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_1").on('click', function() {
                                         verifikasiSimpanPenjamin_1(false, id);
                                     });
+                                    $("#limit_call_penjamin_1_result").html("2");
                                 }
 
                                 if (data.penjamin[1] != null) {
@@ -8078,16 +8361,19 @@
                                         $("#verifikasi_penjamin_2").on('click', function() {
                                             verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_2_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
                                         $("#verifikasi_penjamin_2").on('click', function() {
                                             verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_2_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_2").on('click', function() {
                                         verifikasiSimpanPenjamin_2(false, id);
                                     });
+                                    $("#limit_call_penjamin_2_result").html("2");
                                 }
 
                                 if (data.penjamin[2] != null) {
@@ -8095,16 +8381,19 @@
                                         $("#verifikasi_penjamin_3").on('click', function() {
                                             verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_3_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
                                         $("#verifikasi_penjamin_3").on('click', function() {
                                             verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_3_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_3").on('click', function() {
                                         verifikasiSimpanPenjamin_3(false, id);
                                     });
+                                    $("#limit_call_penjamin_3_result").html("2");
                                 }
 
                                 if (data.penjamin[3] != null) {
@@ -8112,16 +8401,19 @@
                                         $("#verifikasi_penjamin_4").on('click', function() {
                                             verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_4_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
                                         $("#verifikasi_penjamin_4").on('click', function() {
                                             verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_4_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_4").on('click', function() {
                                         verifikasiSimpanPenjamin_4(false, id);
                                     });
+                                    $("#limit_call_penjamin_4_result").html("2");
                                 }
 
                                 if (data.penjamin[4] != null) {
@@ -8129,16 +8421,19 @@
                                         $("#verifikasi_penjamin_5").on('click', function() {
                                             verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_5_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
                                         $("#verifikasi_penjamin_5").on('click', function() {
                                             verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                         });
+                                        $("#limit_call_penjamin_5_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_5").on('click', function() {
                                         verifikasiSimpanPenjamin_5(false, id);
                                     });
+                                    $("#limit_call_penjamin_5_result").html("2");
                                 }
 
                             }
@@ -8147,46 +8442,56 @@
                                 $("#verifikasi_npwp").on('click', function() {
                                     verifikasiSimpanNpwp(false, id);
                                 });
+                                $("#limit_call_npwp_result").html("2");
 
                                 $("#verifikasi_npwp_pasangan").on('click', function() {
                                     verifikasiSimpanNpwpPasangan(false, id);
                                 });
+                                $("#limit_call_npwp_pas_result").html("2");
     
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
                                     verifikasiSimpanNpwpPen_1(false, id);
                                 });
+                                $("#limit_call_npwp_pen_1_result").html("2");
                                 
                                 $("#verifikasi_npwp_pen_2").on('click', function() {
                                     verifikasiSimpanNpwpPen_2(false, id);
                                 });
+                                $("#limit_call_npwp_pen_2_result").html("2");
     
                                 $("#verifikasi_npwp_pen_3").on('click', function() {
                                     verifikasiSimpanNpwpPen_3(false, id);
                                 });
+                                $("#limit_call_npwp_pen_3_result").html("2");
     
                                 $("#verifikasi_npwp_pen_4").on('click', function() {
                                     verifikasiSimpanNpwpPen_4(false, id);
                                 });
+                                $("#limit_call_npwp_pen_4_result").html("2");
     
                                 $("#verifikasi_npwp_pen_5").on('click', function() {
                                     verifikasiSimpanNpwpPen_5(false, id);
                                 });
+                                $("#limit_call_npwp_pen_5_result").html("2");
                             } else {
                                 if (data.npwp[0] != null) {
                                     if(data.npwp[0].limit_call == 1) {
                                         $("#verifikasi_npwp").on('click', function() {
                                             verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
                                         });
+                                        $("#limit_call_npwp_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
                                         $("#verifikasi_npwp").on('click', function() {
                                             verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
                                         });
+                                        $("#limit_call_npwp_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_npwp").on('click', function() {
                                         verifikasiSimpanNpwp(false, id);
                                     });
+                                    $("#limit_call_npwp_result").html("2");
                                 }
 
                                 if (data.npwp[1] != null) {
@@ -8194,16 +8499,19 @@
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
                                             verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
                                         });
+                                        $("#limit_call_npwp_pas_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
                                             verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
                                         });
+                                        $("#limit_call_npwp_pas_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pasangan").on('click', function() {
                                         verifikasiSimpanNpwpPasangan(false, id);
                                     });
+                                    $("#limit_call_npwp_pas_result").html("2");
                                 }
 
                                 if (data.npwp[2] != null) {
@@ -8211,16 +8519,19 @@
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
                                             verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_1_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
                                             verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_1_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
                                         verifikasiSimpanNpwpPen_1(false, id);
                                     });
+                                    $("#limit_call_npwp_pen_1_result").html("2");
                                 }
 
                                 if (data.npwp[3] != null) {
@@ -8228,16 +8539,19 @@
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
                                             verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_2_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
                                             verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_2_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
                                         verifikasiSimpanNpwpPen_2(false, id);
                                     });
+                                    $("#limit_call_npwp_pen_2_result").html("2");
                                 }
 
                                 if (data.npwp[4] != null) {
@@ -8245,16 +8559,19 @@
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
                                             verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_3_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
                                             verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_3_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
                                         verifikasiSimpanNpwpPen_3(false, id);
                                     });
+                                    $("#limit_call_npwp_pen_3_result").html("2");
                                 }
 
                                 if (data.npwp[5] != null) {
@@ -8262,16 +8579,19 @@
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
                                             verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_4_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
                                             verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_4_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
                                         verifikasiSimpanNpwpPen_4(false, id);
                                     });
+                                    $("#limit_call_npwp_pen_4_result").html("2");
                                 }
 
                                 if (data.npwp[6] != null) {
@@ -8279,16 +8599,19 @@
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
                                             verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_5_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
                                             verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
                                         });
+                                        $("#limit_call_npwp_pen_5_result").html("0");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
                                         verifikasiSimpanNpwpPen_5(false, id);
                                     });
+                                    $("#limit_call_npwp_pen_5_result").html("2");
                                 }
                             }
                             
@@ -8376,6 +8699,10 @@
                             '<td>Diverifikasi Oleh</td>',
                             '<td id="verif_debitur_result"></td>',
                             '<td id="verif_debitur_update_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_debitur_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_deb.push(data_debitur);
@@ -8421,6 +8748,10 @@
                             '<td>Diverifikasi Oleh</td>',
                             '<td id="verif_pasangan_result"></td>',
                             '<td id="verif_pasangan_update_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_pasangan_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_pas.push(data_pasangan);
@@ -8477,6 +8808,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_1_result"></td>',
                                 '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                                '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -8526,6 +8861,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_1_result"></td>',
                                 '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -8580,6 +8919,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_1_result"></td>',
                                 '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -8625,6 +8968,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_2_result"></td>',
                                 '<td id="verif_penjamin_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -8674,6 +9021,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_1_result"></td>',
                                 '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -8723,6 +9074,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_2_result"></td>',
                                 '<td id="verif_npwp_pen_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -8775,6 +9130,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_1_result"></td>',
                                 '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -8820,6 +9179,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_2_result"></td>',
                                 '<td id="verif_penjamin_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -8865,6 +9228,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_3_result"></td>',
                                 '<td id="verif_penjamin_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -8914,6 +9281,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_1_result"></td>',
                                 '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -8963,6 +9334,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_2_result"></td>',
                                 '<td id="verif_npwp_pen_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -9012,6 +9387,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_3_result"></td>',
                                 '<td id="verif_npwp_pen_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -9062,6 +9441,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_1_result"></td>',
                                 '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -9107,6 +9490,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_2_result"></td>',
                                 '<td id="verif_penjamin_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -9152,6 +9539,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_3_result"></td>',
                                 '<td id="verif_penjamin_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -9197,6 +9588,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_4_result"></td>',
                                 '<td id="verif_penjamin_4_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_4_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_4.push(data_penjamin_4);
@@ -9246,6 +9641,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_1_result"></td>',
                                 '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -9295,6 +9694,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_2_result"></td>',
                                 '<td id="verif_npwp_pen_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -9344,6 +9747,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_3_result"></td>',
                                 '<td id="verif_npwp_pen_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -9393,6 +9800,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_4_result"></td>',
                                 '<td id="verif_npwp_pen_4_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_4_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_4.push(data_npwp_pen_4);
@@ -9439,6 +9850,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_1_result"></td>',
                                 '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_1.push(data_penjamin_1);
@@ -9484,6 +9899,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_2_result"></td>',
                                 '<td id="verif_penjamin_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_2.push(data_penjamin_2);
@@ -9529,6 +9948,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_3_result"></td>',
                                 '<td id="verif_penjamin_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_3.push(data_penjamin_3);
@@ -9574,6 +9997,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_4_result"></td>',
                                 '<td id="verif_penjamin_4_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_4_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_4.push(data_penjamin_4);
@@ -9619,6 +10046,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_penjamin_5_result"></td>',
                                 '<td id="verif_penjamin_5_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_5_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_pen_5.push(data_penjamin_5);
@@ -9668,6 +10099,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_1_result"></td>',
                                 '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_1.push(data_npwp_pen_1);
@@ -9717,6 +10152,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_2_result"></td>',
                                 '<td id="verif_npwp_pen_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_2.push(data_npwp_pen_2);
@@ -9766,6 +10205,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_3_result"></td>',
                                 '<td id="verif_npwp_pen_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_3.push(data_npwp_pen_3);
@@ -9815,6 +10258,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_4_result"></td>',
                                 '<td id="verif_npwp_pen_4_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_4_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_4.push(data_npwp_pen_4);
@@ -9864,6 +10311,10 @@
                                 '<td>Diverifikasi Oleh</td>',
                                 '<td id="verif_npwp_pen_5_result"></td>',
                                 '<td id="verif_npwp_pen_5_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_5_result"></td>',
                             '</tr>'
                         ].join('\n');
                         html_npwp_pen_5.push(data_npwp_pen_5);
@@ -9927,6 +10378,10 @@
                             '<td>Diverifikasi Oleh</td>',
                             '<td id="verif_npwp_result"></td>',
                             '<td id="verif_npwp_update_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_npwp_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_npwp.push(data_npwp);
@@ -9976,6 +10431,10 @@
                             '<td>Diverifikasi Oleh</td>',
                             '<td id="verif_npwp_pas_result"></td>',
                             '<td id="verif_npwp_pas_update_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_npwp_pas_result"></td>',
                         '</tr>'
                     ].join('\n');
                     html_npwp_pas.push(data_npwp_pas);
@@ -10038,6 +10497,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_1_result"></td>',
                                     '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
@@ -10112,6 +10575,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_1_result"></td>',
                                     '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
@@ -10167,6 +10634,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_2_result"></td>',
                                     '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_2.push(data_properti_2);
@@ -10241,6 +10712,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_1_result"></td>',
                                     '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
@@ -10296,6 +10771,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_2_result"></td>',
                                     '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_2.push(data_properti_2);
@@ -10351,6 +10830,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_3_result"></td>',
                                     '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_3.push(data_properti_3);
@@ -10423,6 +10906,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_1_result"></td>',
                                     '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_1.push(data_properti_1);
@@ -10478,6 +10965,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_2_result"></td>',
                                     '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_2.push(data_properti_2);
@@ -10533,6 +11024,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_3_result"></td>',
                                     '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_3.push(data_properti_3);
@@ -10588,6 +11083,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_4_result"></td>',
                                     '<td id="verif_properti_4_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_4_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_4.push(data_properti_4);
@@ -10658,6 +11157,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_1_result"></td>',
                                     '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             
@@ -10714,6 +11217,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_2_result"></td>',
                                     '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_2.push(data_properti_2);
@@ -10769,6 +11276,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_3_result"></td>',
                                     '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_3.push(data_properti_3);
@@ -10824,6 +11335,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_4_result"></td>',
                                     '<td id="verif_properti_4_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_4_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_4.push(data_properti_4);
@@ -10879,6 +11394,10 @@
                                     '<td>Diverifikasi Oleh</td>',
                                     '<td id="verif_properti_5_result"></td>',
                                     '<td id="verif_properti_5_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_5_result"></td>',
                                 '</tr>'
                             ].join('\n');
                             html_properti_5.push(data_properti_5);
@@ -10926,6 +11445,13 @@
                                 $("#address_result").html(`${data.cadebt.alamat}`);
                                 $("#verif_debitur_result").html(`${data.cadebt.nama_user}`);
                                 $("#verif_debitur_update_result").html(`${formatUpdated(data.cadebt.updated_at)}`);
+                                if(data.cadebt.limit_call == "1") {
+                                    $("#limit_call_debitur_result").html("1");
+                                } else if (data.cadebt.limit_call == "2") {
+                                    $("#limit_call_debitur_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_debitur_result").html("2");
                             }
                             
                             if (data.pasangan != null) {
@@ -10937,6 +11463,13 @@
                                 $("#address_pasangan_result").html(`${data.pasangan.alamat}`);
                                 $("#verif_pasangan_result").html(`${data.pasangan.nama_user}`);
                                 $("#verif_pasangan_update_result").html(`${formatUpdated(data.pasangan.updated_at)}`);
+                                if(data.pasangan.limit_call == "1") {
+                                    $("#limit_call_pasangan_result").html("1");
+                                } else if (data.pasangan.limit_call == "2") {
+                                    $("#limit_call_pasangan_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_pasangan_result").html("2");
                             }
 
                             if (data.penjamin[0] != null) {
@@ -10948,6 +11481,13 @@
                                 $("#address_penjamin_1_result").html(`${data.penjamin[0].alamat}`);
                                 $("#verif_penjamin_1_result").html(`${data.penjamin[0].nama_user}`);
                                 $("#verif_penjamin_1_update_result").html(`${formatUpdated(data.penjamin[0].updated_at)}`);
+                                if(data.penjamin[0].limit_call == "1") {
+                                    $("#limit_call_penjamin_1_result").html("1");
+                                } else if (data.penjamin[0].limit_call == "2") {
+                                    $("#limit_call_penjamin_1_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_1_result").html("2");
                             }
 
                             if (data.penjamin[1] != null) {
@@ -10959,6 +11499,13 @@
                                 $("#address_penjamin_2_result").html(`${data.penjamin[1].alamat}`);
                                 $("#verif_penjamin_2_result").html(`${data.penjamin[1].nama_user}`);
                                 $("#verif_penjamin_2_update_result").html(`${formatUpdated(data.penjamin[1].updated_at)}`);
+                                if(data.penjamin[1].limit_call == "1") {
+                                    $("#limit_call_penjamin_2_result").html("1");
+                                } else if (data.penjamin[1].limit_call == "2") {
+                                    $("#limit_call_penjamin_2_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_2_result").html("2");
                             }
 
                             if (data.penjamin[2] != null) {
@@ -10970,6 +11517,13 @@
                                 $("#address_penjamin_3_result").html(`${data.penjamin[2].alamat}`);
                                 $("#verif_penjamin_3_result").html(`${data.penjamin[2].nama_user}`);
                                 $("#verif_penjamin_3_update_result").html(`${formatUpdated(data.penjamin[2].updated_at)}`);
+                                if(data.penjamin[2].limit_call == "1") {
+                                    $("#limit_call_penjamin_3_result").html("1");
+                                } else if (data.penjamin[2].limit_call == "2") {
+                                    $("#limit_call_penjamin_3_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_3_result").html("2");
                             }
 
                             if (data.penjamin[3] != null) {
@@ -10981,6 +11535,13 @@
                                 $("#address_penjamin_4_result").html(`${data.penjamin[3].alamat}`);
                                 $("#verif_penjamin_4_result").html(`${data.penjamin[3].nama_user}`);
                                 $("#verif_penjamin_4_update_result").html(`${formatUpdated(data.penjamin[3].updated_at)}`);
+                                if(data.penjamin[3].limit_call == "1") {
+                                    $("#limit_call_penjamin_4_result").html("1");
+                                } else if (data.penjamin[3].limit_call == "2") {
+                                    $("#limit_call_penjamin_4_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_4_result").html("2");
                             }
 
                             if (data.penjamin[4] != null) {
@@ -10992,6 +11553,13 @@
                                 $("#address_penjamin_5_result").html(`${data.penjamin[4].alamat}`);
                                 $("#verif_penjamin_5_result").html(`${data.penjamin[4].nama_user}`);
                                 $("#verif_penjamin_5_update_result").html(`${formatUpdated(data.penjamin[4].updated_at)}`);
+                                if(data.penjamin[4].limit_call == "1") {
+                                    $("#limit_call_penjamin_5_result").html("1");
+                                } else if (data.penjamin[4].limit_call == "2") {
+                                    $("#limit_call_penjamin_5_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_5_result").html("2");
                             }
                             
                             if (data.npwp[0] != null) {
@@ -11004,6 +11572,13 @@
                                 checkResult("match_result", data.npwp[0].match_result);
                                 $("#verif_npwp_result").html(`${data.npwp[0].nama_user}`);
                                 $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp[0].updated_at)}`);
+                                if(data.npwp[0].limit_call == "1") {
+                                    $("#limit_call_npwp_result").html("1");
+                                } else if (data.penjamin[0].limit_call == "2") {
+                                    $("#limit_call_npwp_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_result").html("2");
                             }
 
                             if (data.npwp[1] != null) {
@@ -11016,6 +11591,13 @@
                                 checkResult("match_pas_result", data.npwp[1].match_result);
                                 $("#verif_npwp_pas_result").html(`${data.npwp[1].nama_user}`);
                                 $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp[1].updated_at)}`);
+                                if(data.npwp[1].limit_call == "1") {
+                                    $("#limit_call_npwp_pas_result").html("1");
+                                } else if (data.npwp[1].limit_call == "2") {
+                                    $("#limit_call_npwp_pas_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pas_result").html("2");
                             }
 
                             if (data.npwp[2] != null) {
@@ -11028,6 +11610,13 @@
                                 checkResult("match_pen_1_result", data.npwp[2].match_result);
                                 $("#verif_npwp_pen_1_result").html(`${data.npwp[2].nama_user}`);
                                 $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp[2].updated_at)}`);
+                                if(data.npwp[2].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_1_result").html("1");
+                                } else if (data.npwp[2].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_1_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_1_result").html("2");
                             }
 
                             if (data.npwp[3] != null) {
@@ -11040,6 +11629,13 @@
                                 checkResult("match_pen_2_result", data.npwp[3].match_result);
                                 $("#verif_npwp_pen_2_result").html(`${data.npwp[3].nama_user}`);
                                 $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp[3].updated_at)}`);
+                                if(data.npwp[3].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_2_result").html("1");
+                                } else if (data.npwp[3].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_2_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_2_result").html("2");
                             }
 
                             if (data.npwp[4] != null) {
@@ -11052,6 +11648,13 @@
                                 checkResult("match_pen_3_result", data.npwp[4].match_result);
                                 $("#verif_npwp_pen_3_result").html(`${data.npwp[4].nama_user}`);
                                 $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp[4].updated_at)}`);
+                                if(data.npwp[4].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_3_result").html("1");
+                                } else if (data.npwp[4].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_3_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_3_result").html("2");
                             }
 
                             if (data.npwp[5] != null) {
@@ -11064,6 +11667,13 @@
                                 checkResult("match_pen_4_result", data.npwp[5].match_result);
                                 $("#verif_npwp_pen_4_result").html(`${data.npwp[5].nama_user}`);
                                 $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp[5].updated_at)}`);
+                                if(data.npwp[5].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_4_result").html("1");
+                                } else if (data.npwp[5].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_4_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_4_result").html("2");
                             }
 
                             if (data.npwp[6] != null) {
@@ -11076,6 +11686,13 @@
                                 checkResult("match_pen_5_result", data.npwp[6].match_result);
                                 $("#verif_npwp_pen_5_result").html(`${data.npwp[6].nama_user}`);
                                 $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp[6].updated_at)}`);
+                                if(data.npwp[6].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_5_result").html("1");
+                                } else if (data.npwp[6].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_5_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_5_result").html("2");
                             }
                             
                             if (data.property[0] != null) {
@@ -11089,6 +11706,13 @@
                                 checkResult("certificate_date_1_result", data.property[0].certificate_date);
                                 $("#verif_properti_1_result").html(`${data.property[0].nama_user}`);
                                 $("#verif_properti_1_update_result").html(`${formatUpdated(data.property[0].updated_at)}`);
+                                if(data.property[0].limit_call == "1") {
+                                    $("#limit_call_properti_1_result").html("1");
+                                } else if (data.property[0].limit_call == "2") {
+                                    $("#limit_call_properti_1_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_1_result").html("2");
                             }
 
                             if (data.property[1] != null) {
@@ -11102,6 +11726,13 @@
                                 checkResult("certificate_date_2_result", data.property[1].certificate_date);
                                 $("#verif_properti_2_result").html(`${data.property[1].nama_user}`);
                                 $("#verif_properti_2_update_result").html(`${formatUpdated(data.property[1].updated_at)}`);
+                                if(data.property[1].limit_call == "1") {
+                                    $("#limit_call_properti_2_result").html("1");
+                                } else if (data.property[1].limit_call == "2") {
+                                    $("#limit_call_properti_2_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_2_result").html("2");
                             }
 
                             if (data.property[2] != null) {
@@ -11115,6 +11746,13 @@
                                 checkResult("certificate_date_3_result", data.property[2].certificate_date);
                                 $("#verif_properti_3_result").html(`${data.property[2].nama_user}`);
                                 $("#verif_properti_3_update_result").html(`${formatUpdated(data.property[2].updated_at)}`);
+                                if(data.property[2].limit_call == "1") {
+                                    $("#limit_call_properti_3_result").html("1");
+                                } else if (data.property[2].limit_call == "2") {
+                                    $("#limit_call_properti_3_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_3_result").html("2");
                             }
 
                             if (data.property[3] != null) {
@@ -11128,6 +11766,13 @@
                                 checkResult("certificate_date_4_result", data.property[3].certificate_date);
                                 $("#verif_properti_4_result").html(`${data.property[3].nama_user}`);
                                 $("#verif_properti_4_update_result").html(`${formatUpdated(data.property[3].updated_at)}`);
+                                if(data.property[3].limit_call == "1") {
+                                    $("#limit_call_properti_4_result").html("1");
+                                } else if (data.property[3].limit_call == "2") {
+                                    $("#limit_call_properti_4_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_4_result").html("2");
                             }
 
                             if (data.property[4] != null) {
@@ -11141,6 +11786,13 @@
                                 checkResult("certificate_date_5_result", data.property[4].certificate_date);
                                 $("#verif_properti_5_result").html(`${data.property[4].nama_user}`);
                                 $("#verif_properti_5_update_result").html(`${formatUpdated(data.property[4].updated_at)}`);
+                                if(data.property[4].limit_call == "1") {
+                                    $("#limit_call_properti_5_result").html("1");
+                                } else if (data.property[4].limit_call == "2") {
+                                    $("#limit_call_properti_5_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_5_result").html("2");
                             }
                         })
                         .fail(function(jqXHR) {
