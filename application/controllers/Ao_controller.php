@@ -135,7 +135,7 @@ class Ao_controller extends CI_Controller
 
     function get_data_verifikasi_filter() {
 
-        $url = $this->config->item('api_url').'api/master/verif/filter';
+        $url = $this->config->item('api_url').'api/master/verif/filter?page='.$_POST['draw'];
         $token = $this->session->userdata('SESSION_TOKEN');
         $ch = curl_init();
 
@@ -150,38 +150,41 @@ class Ao_controller extends CI_Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
             "cabang" => $_POST['cabang'],
             "area" => $_POST['area']
-            // tambah parameter disini untuk pagination
         ]));
 
-        $res = curl_exec($ch);
+        $res = json_decode(curl_exec($ch));
         curl_close($ch);
 
         $data = array();
-        $no = $_POST['draw'] * 10;
-        foreach (json_decode($res)->data as $datum) {
-            $no++;
+        $no = $res->data->from;
+        foreach($res->data->data as $datum) {
             $id = $datum->id_trans_so;
             $row = array();
-            $row[] = $no;
-            $row[] = $datum->tgl_transaksi;
-            $row[] = $datum->nomor_so;
-            $row[] = $datum->nama_debitur;
-            $row[] = '<form method="post" style="text-align: center" target="_blank" action="report/memo_verifikasi"> 
+            $row["no"] = $no;
+            $row["tgl_transaksi"] = $datum->tgl_transaksi;
+            $row["nomor_so"] = $datum->nomor_so;
+            $row["nama_debitur"] = $datum->nama_debitur;
+            $row["action"] = '<form method="post" style="text-align: center" target="_blank" action="report/memo_verifikasi"> 
                 <button type="button"  class="btn btn-primary btn-sm change" data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
                 <button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" data-target="#update" data="' . $id . '"><i style="color: #fff;" class="fas fa-eye"></i></button>
                 <button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' . $id . '"><i class="fas fa-check"></i></button>
                 <input type="hidden" name ="id" value="' . $id . '">
                 <button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>';
             $data[] = $row;
-        };
+            $no++;
+        }
 
         $output = array(
-            "draw" => $_POST['draw'],
-            "recordsTotal" => "310", // ganti dengan total dari $res
-            "recordsFiltered" => "10",
+            "recordsTotal" => $res->data->total, // ganti dengan total dari $res
+            "recordsFiltered" => $res->data->per_page,
             "data" => $data,
-            "cabang"=> $_POST['cabang'],
-            "area"=>$_POST['area'],
+            "current_page" => $res->data->current_page,
+            "first_page_url" => $res->data->first_page_url,
+            "from" => $res->data->from,
+            "to" => $res->data->to,
+            "last_page" => $res->data->last_page,
+            "last_page_url" => $res->data->last_page_url,
+            "prev_page_url" => $res->data->prev_page_url
         );
 
         echo json_encode($output);

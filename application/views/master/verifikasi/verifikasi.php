@@ -72,7 +72,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="box-body table-responsive no-padding">
+                        <div class="box-body table-responsive no-padding" id="table_not_filter">
                             <table id="table_verifikasi" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
                                 <thead style="font-size: 15px" class="bg-danger">
                                     <tr>
@@ -96,8 +96,10 @@
                                 <tbody id="data_verifikasi" style="font-size: 13px">
                                 </tbody>
                             </table>
-                            <!-- <table id="table_verifikasi_filter" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
-                            <thead style="font-size: 15px" class="bg-danger">
+                        </div>
+                        <div class="box-body table-responsive no-padding" id="table_filter">
+                            <table id="table_verifikasi_filter" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                <thead style="font-size: 15px" class="bg-danger">
                                     <tr>
                                         <th>
                                             No
@@ -118,7 +120,9 @@
                                 </thead>
                                 <tbody id="data_verifikasi_filter" style="font-size: 13px">
                                 </tbody>
-                            </table> -->
+                            </table>
+                            <div id="paginationBar">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1319,98 +1323,93 @@
     }
 
     function filter_data_verifikasi() {
+
+        $("#table_not_filter").hide();
+        $("#table_filter").show();
+
         var requestBody = {
             cabang : $("#kode_kantor option:selected").val(),
             area    : $("#kode_area option:selected").val(),
+            draw: 1
         }
 
-        $("#table_verifikasi_wrapper").hide();
 
         if (requestBody.kode_area == "" && requestBody.kode_kantor == "") {
             bootbox.alert("Salah satu dari Area atau Cabang tidak boleh kosong!");
         } else {
-                // $("#table_verifikasi_filter").DataTable({
-
-                //     "processing": true,
-                //     "serverSide": true,
-                //     'destroy': true,
-                //     "order": [],
-
-                //     "paging": true,
-                //     "retrieve": true,
-                //     "lengthChange": true,
-                //     "searching": true,
-                //     "ordering": false,
-                //     "info": true,
-                //     "autoWidth": false,
-
-                //     "ajax": {
-                //         "url": "<?php echo site_url('Ao_controller/get_data_verifikasi_filter') ?>",
-                //         "type": "POST",
-                //         "data": requestBody
-                //     },
-
-                //     "columnDefs": [{
-                //         "targets": [0],
-                //         "orderable": false,
-                //     }, ],
-
-                // })
-
                 // call AJAX data verifikasi yang sudah di filter berdasarkan area dan kantor
-                $.ajax({
-                    url: '<?php // echo config_item('api_url') ?>api/master/verif/filter',
-                    type: 'POST',
-                    data: requestBody,
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                    },
-                })
-                .done(function(res) {
-                    var data = res.data.data;
-                    console.log(res);
-                    var html = [];
-                    var no   = 0;
-                    if(data.length === 0 ){
-                        var tr =[
-                        '<tr align="middle">',
-                            '<td colspan="5" style="text-align: center">Tidak ada data</td>',
-                        '</tr>'
-                        ].join('\n');
-                        $('#data_verifikasi_filter').html(tr);
-                        return;
-                    } else {
-                        $.each(data, function(index,item){
-                            no++;
-                            var tr = [
-                            '<tr>',
-                                '<td style="text-align: center">'+ no +'</td>',
-                                '<td>'+ formatUpdated(item.tgl_transaksi) +'</td>',
-                                '<td>'+ item.nomor_so+'</td>',
-                                '<td>'+ item.nama_debitur +'</td>',
-                                '<td style="text-align: center">',
-                                '<form method="post" style="text-align: center" target="_blank" action="report/memo_verifikasi">',
-                                '<button type="button"  class="btn btn-primary btn-sm change" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-pencil-alt"></i></button>',
-                                '<button type="button" class="btn btn-warning btn-sm detail" onclick="click_detail()" data-target="#update" data="' + item.id_trans_so + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
-                                '<button type="button"  class="btn btn-info btn-sm edit" onclick="click_edit()" data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-check"></i></button>',
-                                '<input type="hidden" name ="id" value="' + item.id_trans_so + '">',
-                                '<button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
-                                '</td>',
-                            '</tr>'
-                            ].join('\n');
-                            html.push(tr);
-                        });
-        
-                        $('#data_verifikasi_filter').html(html);
-
-                    }
-
-                });
+                hit_filter_data_pagination(requestBody)
+                
         }
     }
 
+    function hit_filter_data_pagination(requestBody) {
+        $.ajax({
+            url: "<?php echo site_url('Ao_controller/get_data_verifikasi_filter') ?>",
+            type: 'POST',
+            data: requestBody,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        })
+        .done(function(res) {
+            res = JSON.parse(res);
+            var html = [];
+            if(res.data.length == 0){
+                var tr =[
+                '<tr align="middle">',
+                    '<td colspan="5" style="text-align: center">Tidak ada data</td>',
+                '</tr>'
+                ].join('\n');
+                $('#data_verifikasi_filter').html(tr);
+                return;
+            } else {
+                $.each(res.data, function(index,item){
+                    var tr = [
+                    '<tr>',
+                        '<td style="text-align: center">'+ item.no +'</td>',
+                        '<td>'+ formatUpdated(item.tgl_transaksi) +'</td>',
+                        '<td>'+ item.nomor_so+'</td>',
+                        '<td>'+ item.nama_debitur +'</td>',
+                        '<td style="text-align: center">' + item.action + '</td>',
+                    '</tr>'
+                    ].join('\n');
+                    html.push(tr);
+                });
+
+                $('#data_verifikasi_filter').html(html);
+
+                $("#paginationBar").html(`
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination" id="paginationList">
+                        </ul>
+                    </nav>
+                `);
+
+                // var previous = `<li class="page-item"><a class="page-link" href="#">Previous</a></li>`;
+                // var next = `<li class="page-item"><a class="page-link" href="#">Next</a></li>`;
+                for (var i=1; i<=res.last_page; i++) {
+                    if (i == requestBody.draw) {
+                        $("#paginationList").append(`<li class="page-item active"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
+                    } else {
+                        $("#paginationList").append(`<li class="page-item"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
+                    }
+                    
+                    document.getElementById(`${i}id`).addEventListener("click", (e) => {
+                        requestBody.draw = e.target.getAttribute("data-value");
+                        hit_filter_data_pagination(requestBody);
+                        $("#paginationList").empty();
+                    })
+                }
+
+            }
+
+        });
+    }
+
     function tampil_data_verifikasi() {
-        $('#table_verifikasi_filter').hide();
+        $("#table_not_filter").show();
+        $("#table_filter").hide();
         $('#table_verifikasi').DataTable({
 
             "processing": true,
@@ -11810,6 +11809,6561 @@
         }); 
 
         $('#data_verifikasi').on('click', '.change', function(e) {
+                e.preventDefault();
+                
+                var id = $(this).attr('data');
+
+                get_data({}, id)
+                .done(function(response) {
+                    var data = response.data;
+                    console.log(data);
+
+                    $('#form_edit_photo_deb input[type=hidden][name=id_debitur_photo]').val(data.data_debitur.id);
+                    $('#form_edit_ktp_deb input[type=hidden][name=id_debitur_ktp]').val(data.data_debitur.id);
+                    $('#form_edit_npwp_deb input[type=hidden][name=id_debitur_npwp]').val(data.data_debitur.id);
+
+                    $('#form_edit_photo_pas input[type=hidden][name=id_pasangan_photo]').val(data.data_pasangan.id);
+                    $('#form_edit_ktp_pas input[type=hidden][name=id_pasangan_ktp]').val(data.data_pasangan.id);
+                    $('#form_edit_npwp_pas input[type=hidden][name=id_pasangan_npwp]').val(data.data_pasangan.id);
+
+                    $('#form_debitur input[type=hidden][name=id_trans_so]').val(data.id_trans_so);
+                    $('#form_debitur input[type=hidden][name=id_debitur]').val(data.data_debitur.id);
+                    $('#form_debitur input[name=no_ktp_deb]').val(data.data_debitur.no_ktp);
+                    $('#form_debitur input[name=no_npwp_deb]').val(data.data_debitur.no_npwp);
+                    $('#form_debitur input[name=nama_deb]').val(data.data_debitur.nama_lengkap);
+                    $('#form_debitur input[name=tempat_lahir_deb]').val(data.data_debitur.tempat_lahir);
+                    $('#form_debitur input[name=tgl_lahir_deb]').val(data.data_debitur.tgl_lahir);
+                    $('#form_debitur textarea[name=alamat_deb]').val(data.data_debitur.alamat_ktp.alamat_singkat);
+                    
+                    $('#form_pasangan input[type=hidden][name=id_pasangan]').val(data.data_pasangan.id);
+                    $('#form_pasangan input[name=no_ktp_pas]').val(data.data_pasangan.no_ktp);
+                    $('#form_pasangan input[name=no_npwp_pas]').val(data.data_pasangan.no_npwp);
+                    $('#form_pasangan input[name=nama_pas]').val(data.data_pasangan.nama_lengkap);
+                    $('#form_pasangan input[name=tempat_lahir_pas]').val(data.data_pasangan.tempat_lahir);
+                    $('#form_pasangan input[name=tgl_lahir_pas]').val(formatTanggal(data.data_pasangan.tgl_lahir));
+                    $('#form_pasangan textarea[name=alamat_pas]').val(data.data_pasangan.alamat_ktp);
+
+                    $('#form_penjamin input[type=hidden][name=id_trans_so_pen]').val(data.id_trans_so);
+
+                    var photo_selfie_deb = [];
+                    var photo_ktp_deb = [];
+                    var photo_npwp_deb = [];
+                    var photo_selfie_pas = [];
+                    var photo_ktp_pas = [];
+                    var photo_npwp_pas = [];
+
+                    var selfie_deb = [
+                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '" data-lightbox="example-set" data-title="Photo Debitur"><img id="img_photo_deb" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '" /> </a>'
+                    ].join('\n');
+                    photo_selfie_deb.push(selfie_deb);
+                    $('#gambar_photo_deb').html(photo_selfie_deb);
+
+                    var ktp_deb = [
+                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="KTP Debitur"><img id="img_ktp_deb" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '" /> </a>'
+                    ].join('\n');
+                    photo_ktp_deb.push(ktp_deb);
+                    $('#gambar_ktp_deb').html(photo_ktp_deb);
+
+                    var npwp_deb = [
+                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '" data-lightbox="example-set" data-title="NPWP Debitur"><img id="img_npwp_deb" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '" /> </a>'
+                    ].join('\n');
+                    photo_npwp_deb.push(npwp_deb);
+                    $('#gambar_npwp_deb').html(photo_npwp_deb);
+
+                    var selfie_pas = [
+                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '" data-lightbox="example-set" data-title="Photo Pasangan"><img id="img_photo_pas" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '" /> </a>'
+                    ].join('\n');
+                    photo_selfie_pas.push(selfie_pas);
+                    $('#gambar_photo_pas').html(photo_selfie_pas);
+
+                    var ktp_pas = [
+                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="KTP Pasangan"><img id="img_ktp_pas" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '" /> </a>'
+                    ].join('\n');
+                    photo_ktp_pas.push(ktp_pas);
+                    $('#gambar_ktp_pas').html(photo_ktp_pas);
+
+                    var npwp_pas = [
+                        '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="NPWP Pasangan"><img id="img_npwp_pas" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '" /> </a>'
+                    ].join('\n');
+                    photo_npwp_pas.push(npwp_pas);
+                    $('#gambar_npwp_pas').html(photo_npwp_pas);
+
+                    var htmlpenjamin = [];
+                    var id_penjamin = {};
+                    $.each(data.data_penjamin, function(index, item) {
+
+                        var id_penjamin = [];
+                        id_penjamin = item.id;
+
+                        var tr = [
+                            '<tr>',
+                            '<td style="width:50px"><button type="button" class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_penjamin "data="' + item.id + '"><i class="fas fa-pencil-alt"></i></button></td>',
+                            '<td style="width:210px">' + item.nama_ktp + '</td>',
+                            '<td>' + item.no_ktp + '</td>',
+                            '<td>' + item.no_npwp + '</td>',
+                            '<td style="width:135px">' + item.tempat_lahir + '</td>',
+                            '<td style="width:137px">' + item.tgl_lahir + '</td>',
+                            '<td style="width:285px">' + item.alamat_ktp + '</td>',
+                            '<td style="width:135px">' + item.pemasukan_penjamin + '</td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" data-lightbox="example-set" data-title="Lampiran Photo Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" /> </a> </td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
+                            '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lampiran_npwp + '" /> </a> </td>',
+                            '</tr>'
+                        ].join('\n');
+                        htmlpenjamin.push(tr);
+                    })
+                    $('#data_penjamin').html(htmlpenjamin);
+
+                    var htmlagunantanah = [];
+                    var id_agunan_tanah = {};
+                    var no = 0;
+                    $.each(data.data_agunan.agunan_tanah, function(index, item) {
+
+                        var id_agunan_tanah = [];
+                        id_agunan_tanah = item.id;
+
+                        no++;
+
+                        var tr = [
+                            '<tr>',
+                            '<td><button type="button" class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_agunan"data="' + item.id + '"><i class="fas fa-pencil-alt"></i></button></td>',
+                            '<td>' + no + '</td>',
+                            '<td>' + item.nop + '</td>',
+                            '<td>' + item.luas_bangunan + '</td>',
+                            '<td>' + item.luas_tanah + '</td>',
+                            '<td>' + item.no_sertifikat + '</td>',
+                            '<td>' + item.nama_pemilik_sertifikat + '</td>',
+                            '<td>' + item.jenis_sertifikat + '</td>',
+                            '</tr>'
+                        ].join('\n');
+                        htmlagunantanah.push(tr);
+                    })
+                    $('#data_agunan').html(htmlagunantanah);
+
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
+
+                })
+            $('#lihat_data_credit').hide();
+            $('#edit_detail').show();
+        });
+
+        $('#data_verifikasi_filter').on('click', '.edit', function(e) {
+            e.preventDefault();
+            
+            var id = $(this).attr('data');
+            var html_deb = [];
+            var html_pas = [];
+            var html_pen_1 = [];
+            var html_pen_2 = [];
+            var html_pen_3 = [];
+            var html_pen_4 = [];
+            var html_pen_5 = [];
+            var html_npwp = [];
+            var html_npwp_pas = [];
+            var html_npwp_pen_1 = [];
+            var html_npwp_pen_2 = [];
+            var html_npwp_pen_3 = [];
+            var html_npwp_pen_4 = [];
+            var html_npwp_pen_5 = [];
+            var html_properti_1 = [];
+            var html_properti_2 = [];
+            var html_properti_3 = [];
+            var html_properti_4 = [];
+            var html_properti_5 = [];
+            var html_report = [];
+
+            var jabatan = '<?php echo $nama_user['data']['jabatan'] ?>';
+            if (jabatan == 'ADMIN LEGAL') {
+                click_detail();
+                $('#form_properti_1').show();
+                $('#form_properti_2').show();
+                $('#form_properti_3').show();
+                $('#form_properti_4').show();
+                $('#form_properti_5').show();
+                $('.verifikasiProperti_1').show();
+                $('.verifikasiProperti_2').show();
+                $('.verifikasiProperti_3').show();
+                $('.verifikasiProperti_4').show();
+                $('.verifikasiProperti_5').show();
+            } else if (jabatan == 'IT STAFF' || jabatan == 'SUPERVISOR IT' || jabatan == 'HEAD IT') {
+                $('#form_properti_1').show();
+                $('#form_properti_2').show();
+                $('#form_properti_3').show();
+                $('#form_properti_4').show();
+                $('#form_properti_5').show();
+                $('.verifikasiProperti_1').show();
+                $('.verifikasiProperti_2').show();
+                $('.verifikasiProperti_3').show();
+                $('.verifikasiProperti_4').show();
+                $('.verifikasiProperti_5').show();
+            } else {
+                $('#form_properti_1').hide();
+                $('#form_properti_2').hide();
+                $('#form_properti_3').hide();
+                $('#form_properti_4').hide();
+                $('#form_properti_5').hide();
+            }
+
+            get_data({}, id)
+                .done(function(response) {
+                    var data = response.data;
+                    console.log(data);
+
+                    $('#form_npwp_pasangan input[type=hidden][name=id_pasangan]').val(data.data_pasangan.id);
+
+                    var data_debitur = [
+                        '<tr>',
+                            '<td>Foto KTP Debitur</td>',
+                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '" </img></a></td>',
+                            '<td id="ktp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Foto Selfie Debitur</td>',
+                            '<td name="selfie_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"><img id="photo_selfie_debitur" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"</img></a></td>',
+                            '<td id="selfie_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik">' + data.data_debitur.no_ktp + '</td>',
+                            '<td id="nik_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap</td>',
+                            '<td name="name" id="name">' + data.data_debitur.nama_lengkap + '</td>',
+                            '<td id="name_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir</td>',
+                            '<td name="birthplace" id="birthplace">' + data.data_debitur.tempat_lahir + '</td>',
+                            '<td id=birthplace_result></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tanggal Lahir</td>',
+                            '<td name="birthdate" id="birthdate">' + formatTanggal(data.data_debitur.tgl_lahir) + '</td>',
+                            '<td id="birthdate_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Alamat</td>',
+                            '<td name="address" id="address">' + data.data_debitur.alamat_ktp.alamat_singkat + '</td>',
+                            '<td id="address_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_debitur_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_deb.push(data_debitur);
+                    $("#data_debitur").html(html_deb);
+
+                    var data_pasangan = [
+                        '<tr>',
+                            '<td>Foto KTP Pasangan</td>',
+                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '" </img></a></td>',
+                            '<td id="ktp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Foto Selfie Pasangan</td>',
+                            '<td name="selfie_photo"  id="selfie_photo_pasangan"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '"><img id="photo_selfie_pasangan" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '" </img></a></td>',
+                            '<td id="selfie_photo_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik_pasangan">' + data.data_pasangan.no_ktp + '</td>',
+                            '<td id="nik_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap</td>',
+                            '<td name="name" id="name_pasangan">' + data.data_pasangan.nama_lengkap + '</td>',
+                            '<td id="name_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir</td>',
+                            '<td name="birthplace" id="birthplace_pasangan">' + data.data_pasangan.tempat_lahir + '</td>',
+                            '<td id=birthplace_pasangan_result></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tanggal Lahir</td>',
+                            '<td name="birthdate" id="birthdate_pasangan">' + data.data_pasangan.tgl_lahir + '</td>',
+                            '<td id="birthdate_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Alamat</td>',
+                            '<td name="address_pasangan" id="address_pasangan">' + data.data_pasangan.alamat_ktp + '</td>',
+                            '<td id="address_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_pasangan_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_pas.push(data_pasangan);
+                    $("#data_pasangan").html(html_pas);
+
+                    if(data.data_penjamin.length == 1){
+                        $('#form_penjamin_2').hide();
+                        $('#form_penjamin_3').hide();
+                        $('#form_penjamin_4').hide();
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_2').hide();
+                        $('#form_npwp_pen_3').hide();
+                        $('#form_npwp_pen_4').hide();
+                        $('#form_npwp_pen_5').hide();
+
+                        $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                    } else if (data.data_penjamin.length == 2) {
+                        $('#form_penjamin_3').hide();
+                        $('#form_penjamin_4').hide();
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_3').hide();
+                        $('#form_npwp_pen_4').hide();
+                        $('#form_npwp_pen_5').hide();
+
+                        $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_penjamin_2 input[type=hidden][name=id_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_penjamin_2 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_2"  id="selfie_photo_penjamin_2"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_2" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_2">' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_2.push(data_penjamin_2);
+                        $("#data_penjamin_2").html(html_pen_2);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                        var data_npwp_pen_2 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_2" id="no_npwp_pen_2">' + data.data_penjamin[1].no_npwp + '</td>',
+                                '<td id="npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_2" id="nik_pen_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_2" id="name_npwp_pen_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_2" id="birthplace_npwp_pen_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_2" id="birthdate_npwp_pen_2"> ' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_2.push(data_npwp_pen_2);
+                        $("#data_npwp_pen_2").html(html_npwp_pen_2);
+
+                    } else if (data.data_penjamin.length == 3) {
+                        $('#form_penjamin_4').hide();
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_4').hide();
+                        $('#form_npwp_pen_5').hide();
+
+                        $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_penjamin_2 input[type=hidden][name=id_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_penjamin_3 input[type=hidden][name=id_penjamin_3]').val(data.data_penjamin[2].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_penjamin[2].id);
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_penjamin_2 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_2"  id="selfie_photo_penjamin_2"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_2" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_2">' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_2.push(data_penjamin_2);
+                        $("#data_penjamin_2").html(html_pen_2);
+
+                        var data_penjamin_3 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_3"  id="selfie_photo_penjamin_3"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_3" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_3">' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_3.push(data_penjamin_3);
+                        $("#data_penjamin_3").html(html_pen_3);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                        var data_npwp_pen_2 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_2" id="no_npwp_pen_2">' + data.data_penjamin[1].no_npwp + '</td>',
+                                '<td id="npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_2" id="nik_pen_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_2" id="name_npwp_pen_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_2" id="birthplace_npwp_pen_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_2" id="birthdate_npwp_pen_2"> ' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_2.push(data_npwp_pen_2);
+                        $("#data_npwp_pen_2").html(html_npwp_pen_2);
+
+                        var data_npwp_pen_3 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_3" id="no_npwp_pen_3">' + data.data_penjamin[2].no_npwp + '</td>',
+                                '<td id="npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_3" id="nik_pen_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_3" id="name_npwp_pen_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_3" id="birthplace_npwp_pen_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_3" id="birthdate_npwp_pen_3"> ' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_3.push(data_npwp_pen_3);
+                        $("#data_npwp_pen_3").html(html_npwp_pen_3);
+
+                    } else if (data.data_penjamin.length == 4) {
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_5').hide();
+
+                        $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_penjamin_2 input[type=hidden][name=id_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_penjamin_3 input[type=hidden][name=id_penjamin_3]').val(data.data_penjamin[2].id);
+                        $('#form_penjamin_4 input[type=hidden][name=id_penjamin_4]').val(data.data_penjamin[3].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_penjamin[2].id);
+                        $('#form_npwp_pen_4 input[type=hidden][name=id_npwp_penjamin_4]').val(data.data_penjamin[3].id);
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_penjamin_2 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_2"  id="selfie_photo_penjamin_2"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_2" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_2">' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_2.push(data_penjamin_2);
+                        $("#data_penjamin_2").html(html_pen_2);
+
+                        var data_penjamin_3 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_3"  id="selfie_photo_penjamin_3"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_3" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_3">' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_3.push(data_penjamin_3);
+                        $("#data_penjamin_3").html(html_pen_3);
+
+                        var data_penjamin_4 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_4"  id="selfie_photo_penjamin_4"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_4" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_4">' + data.data_penjamin[3].no_ktp + '</td>',
+                                '<td id="nik_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_4">' + data.data_penjamin[3].nama_ktp + '</td>',
+                                '<td id="name_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_4">' + data.data_penjamin[3].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_4_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_4">' + data.data_penjamin[3].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_4" id="address_penjamin_4">' + data.data_penjamin[3].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_4_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_4.push(data_penjamin_4);
+                        $("#data_penjamin_4").html(html_pen_4);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                        var data_npwp_pen_2 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_2" id="no_npwp_pen_2">' + data.data_penjamin[1].no_npwp + '</td>',
+                                '<td id="npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_2" id="nik_pen_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_2" id="name_npwp_pen_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_2" id="birthplace_npwp_pen_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_2" id="birthdate_npwp_pen_2"> ' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_2.push(data_npwp_pen_2);
+                        $("#data_npwp_pen_2").html(html_npwp_pen_2);
+
+                        var data_npwp_pen_3 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_3" id="no_npwp_pen_3">' + data.data_penjamin[2].no_npwp + '</td>',
+                                '<td id="npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_3" id="nik_pen_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_3" id="name_npwp_pen_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_3" id="birthplace_npwp_pen_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_3" id="birthdate_npwp_pen_3"> ' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_3.push(data_npwp_pen_3);
+                        $("#data_npwp_pen_3").html(html_npwp_pen_3);
+
+                        var data_npwp_pen_4 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_4" id="no_npwp_pen_4">' + data.data_penjamin[3].no_npwp + '</td>',
+                                '<td id="npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_4" id="nik_pen_4">' + data.data_penjamin[3].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_4" id="name_npwp_pen_4">' + data.data_penjamin[3].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_4" id="birthplace_npwp_pen_4">' + data.data_penjamin[3].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_4_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_4" id="birthdate_npwp_pen_4"> ' + data.data_penjamin[3].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_4" id="income_npwp_pen_4">' + data.data_penjamin[3].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_4_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_4.push(data_npwp_pen_4);
+                        $("#data_npwp_pen_4").html(html_npwp_pen_4);
+
+                    } else if (data.data_penjamin.length == 5) {
+                        
+                        $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_penjamin_2 input[type=hidden][name=id_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_penjamin_3 input[type=hidden][name=id_penjamin_3]').val(data.data_penjamin[2].id);
+                        $('#form_penjamin_4 input[type=hidden][name=id_penjamin_4]').val(data.data_penjamin[3].id);
+                        $('#form_penjamin_5 input[type=hidden][name=id_penjamin_5]').val(data.data_penjamin[4].id);
+                        $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
+                        $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
+                        $('#form_npwp_pen_3 input[type=hidden][name=id_npwp_penjamin_3]').val(data.data_penjamin[2].id);
+                        $('#form_npwp_pen_4 input[type=hidden][name=id_npwp_penjamin_4]').val(data.data_penjamin[3].id);
+                        $('#form_npwp_pen_5 input[type=hidden][name=id_npwp_penjamin_5]').val(data.data_penjamin[4].id);
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_penjamin_2 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_2"  id="selfie_photo_penjamin_2"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_2" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_2">' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_2.push(data_penjamin_2);
+                        $("#data_penjamin_2").html(html_pen_2);
+
+                        var data_penjamin_3 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_3"  id="selfie_photo_penjamin_3"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_3" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_3">' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_3.push(data_penjamin_3);
+                        $("#data_penjamin_3").html(html_pen_3);
+
+                        var data_penjamin_4 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_4"  id="selfie_photo_penjamin_4"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_4" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_4">' + data.data_penjamin[3].no_ktp + '</td>',
+                                '<td id="nik_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_4">' + data.data_penjamin[3].nama_ktp + '</td>',
+                                '<td id="name_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_4">' + data.data_penjamin[3].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_4_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_4">' + data.data_penjamin[3].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_4" id="address_penjamin_4">' + data.data_penjamin[3].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_4_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_4.push(data_penjamin_4);
+                        $("#data_penjamin_4").html(html_pen_4);
+
+                        var data_penjamin_5 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_5"  id="selfie_photo_penjamin_5"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_5" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_5">' + data.data_penjamin[4].no_ktp + '</td>',
+                                '<td id="nik_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_5">' + data.data_penjamin[4].nama_ktp + '</td>',
+                                '<td id="name_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_5">' + data.data_penjamin[4].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_5_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_5">' + data.data_penjamin[4].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_5" id="address_penjamin_5">' + data.data_penjamin[4].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_5_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_5.push(data_penjamin_5);
+                        $("#data_penjamin_5").html(html_pen_5);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                        var data_npwp_pen_2 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_2" id="no_npwp_pen_2">' + data.data_penjamin[1].no_npwp + '</td>',
+                                '<td id="npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_2" id="nik_pen_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_2" id="name_npwp_pen_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_2" id="birthplace_npwp_pen_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_2" id="birthdate_npwp_pen_2"> ' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_2.push(data_npwp_pen_2);
+                        $("#data_npwp_pen_2").html(html_npwp_pen_2);
+
+                        var data_npwp_pen_3 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_3" id="no_npwp_pen_3">' + data.data_penjamin[2].no_npwp + '</td>',
+                                '<td id="npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_3" id="nik_pen_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_3" id="name_npwp_pen_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_3" id="birthplace_npwp_pen_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_3" id="birthdate_npwp_pen_3"> ' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_3.push(data_npwp_pen_3);
+                        $("#data_npwp_pen_3").html(html_npwp_pen_3);
+
+                        var data_npwp_pen_4 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_4" id="no_npwp_pen_4">' + data.data_penjamin[3].no_npwp + '</td>',
+                                '<td id="npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_4" id="nik_pen_4">' + data.data_penjamin[3].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_4" id="name_npwp_pen_4">' + data.data_penjamin[3].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_4" id="birthplace_npwp_pen_4">' + data.data_penjamin[3].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_4_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_4" id="birthdate_npwp_pen_4"> ' + data.data_penjamin[3].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_4" id="income_npwp_pen_4">' + data.data_penjamin[3].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_4_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_4.push(data_npwp_pen_4);
+                        $("#data_npwp_pen_4").html(html_npwp_pen_4);
+
+                        var data_npwp_pen_5 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_5" id="no_npwp_pen_5">' + data.data_penjamin[4].no_npwp + '</td>',
+                                '<td id="npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_5" id="nik_pen_5">' + data.data_penjamin[4].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_5" id="name_npwp_pen_5">' + data.data_penjamin[4].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_5" id="birthplace_npwp_pen_5">' + data.data_penjamin[4].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_5_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_5" id="birthdate_npwp_pen_5"> ' + data.data_penjamin[4].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_5" id="income_npwp_pen_5">' + data.data_penjamin[4].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_5_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_5.push(data_npwp_pen_5);
+                        $("#data_npwp_pen_5").html(html_npwp_pen_5);
+
+                    } else {
+                        $('#form_penjamin_1').hide();
+                        $('#form_penjamin_2').hide();
+                        $('#form_penjamin_3').hide();
+                        $('#form_penjamin_4').hide();
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_1').hide();
+                        $('#form_npwp_pen_2').hide();
+                        $('#form_npwp_pen_3').hide();
+                        $('#form_npwp_pen_4').hide();
+                        $('#form_npwp_pen_5').hide();
+                    }
+
+                    var data_npwp = [
+                        '<tr>',
+                            '<td>Foto NPWP</td>',
+                            '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '" </img></a></td>',
+                            '<td id="npwp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>No. NPWP</td>',
+                            '<td name="npwp" id="no_npwp">' + data.data_debitur.no_npwp + '</td>',
+                            '<td id="npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik">' + data.data_debitur.no_ktp + '</td>',
+                            '<td id="nik_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Match Result</td>',
+                            '<td id="match_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap berdasarkan NPWP</td>',
+                            '<td name="name_npwp" id="name_npwp">' + data.data_debitur.nama_lengkap + '</td>',
+                            '<td id="name_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir berdasarkan NPWP</td>',
+                            '<td name="birthplace_npwp" id="birthplace_npwp">' + data.data_debitur.tempat_lahir + '</td>',
+                            '<td id=birthplace_npwp_result></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                            '<td name="birthdate_npwp" id="birthdate_npwp"> ' + formatTanggal(data.data_debitur.tgl_lahir) + '</td>',
+                            '<td id="birthdate_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Pendapatan Bulanan</td>',
+                            '<td name="income_npwp" id="income_npwp">' + data.kapasitas_bulanan.pemasukan_cadebt + '</td>',
+                            '<td id="income_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_npwp_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_npwp.push(data_npwp);
+                    $("#data_npwp").html(html_npwp);
+
+                    var data_npwp_pas = [
+                        '<tr>',
+                            '<td>Foto NPWP</td>',
+                            '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '" </img></a></td>',
+                            '<td id="npwp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>No. NPWP</td>',
+                            '<td name="npwp_pas" id="no_npwp_pas">' + data.data_pasangan.no_npwp + '</td>',
+                            '<td id="npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik_pas" id="nik_pas">' + data.data_pasangan.no_ktp + '</td>',
+                            '<td id="nik_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Match Result</td>',
+                            '<td id="match_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap berdasarkan NPWP</td>',
+                            '<td name="name_npwp_pas" id="name_npwp_pas">' + data.data_pasangan.nama_lengkap + '</td>',
+                            '<td id="name_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir berdasarkan NPWP</td>',
+                            '<td name="birthplace_npwp_pas" id="birthplace_npwp_pas">' + data.data_pasangan.tempat_lahir + '</td>',
+                            '<td id=birthplace_npwp_pas_result></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                            '<td name="birthdate_npwp_pas" id="birthdate_npwp_pas"> ' + data.data_pasangan.tgl_lahir + '</td>',
+                            '<td id="birthdate_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Pendapatan Bulanan</td>',
+                            '<td name="income_npwp_pas" id="income_npwp_pas">' + data.kapasitas_bulanan.pemasukan_pasangan + '</td>',
+                            '<td id="income_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_npwp_pas_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_npwp_pas.push(data_npwp_pas);
+                    $("#data_npwp_pasangan").html(html_npwp_pas);
+                        
+                    if(data.data_agunan.agunan_tanah.length == 1) {
+                        if(data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
+
+                    } else if(data.data_agunan.agunan_tanah.length == 2) {
+                        if(data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+                            $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
+                        
+                    } else if (data.data_agunan.agunan_tanah.length == 3) {
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+                            $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
+                            $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
+                    } else if (data.data_agunan.agunan_tanah.length == 4) {
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_5').hide();
+    
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+                            $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
+                            $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
+                            $('#form_properti_4 input[type=hidden][name=id_properti_4]').val(data.data_agunan.agunan_tanah[3].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+    
+                            var data_properti_4 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
+                                    '<td id="nop_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_4_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_4.push(data_properti_4);
+                            $("#data_properti_4").html(html_properti_4);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
+                    } else if (data.data_agunan.agunan_tanah.length == 5) {
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
+                            $('#form_properti_2 input[type=hidden][name=id_properti_2]').val(data.data_agunan.agunan_tanah[1].id);
+                            $('#form_properti_3 input[type=hidden][name=id_properti_3]').val(data.data_agunan.agunan_tanah[2].id);
+                            $('#form_properti_4 input[type=hidden][name=id_properti_4]').val(data.data_agunan.agunan_tanah[3].id);
+                            $('#form_properti_5 input[type=hidden][name=id_properti_5]').val(data.data_agunan.agunan_tanah[4].id);
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+    
+                            var data_properti_4 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
+                                    '<td id="nop_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_4_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_4.push(data_properti_4);
+                            $("#data_properti_4").html(html_properti_4);
+    
+                            var data_properti_5 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_5" id="nop_5">' + data.data_agunan.agunan_tanah[4].nop + '</td>',
+                                    '<td id="nop_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_5" id="property_name_5">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_5" id="property_building_area_5">' + data.data_agunan.agunan_tanah[4].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_5" id="property_surface_area_5">' + data.data_agunan.agunan_tanah[4].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_5" id="property_estimation_5">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_5" id="certificate_id_5">' + data.data_agunan.agunan_tanah[4].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_5" id="certificate_name_5">' + data.data_agunan.agunan_tanah[4].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_5" id="certificate_type_5">' + data.data_agunan.agunan_tanah[4].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_5" id="certificate_date_5">' + formatTanggal(data.data_agunan.agunan_tanah[4].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_5_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_5.push(data_properti_5);
+                            $("#data_properti_5").html(html_properti_5);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                            $('.verifikasiProperti_1').hide();
+                        }
+
+                    } else {
+                        $('#form_properti_2').hide();
+                        $('#form_properti_3').hide();
+                        $('#form_properti_4').hide();
+                        $('#form_properti_5').hide();
+
+                        var data_properti_1 = [
+                            '<tr>',
+                                '<td colspan="3" style="text-align: center">Tidak ada agunan!</td>',
+                            '</tr>',
+                            ].join('\n');
+                        html_properti_1.push(data_properti_1);
+                        $("#data_properti_1").html(html_properti_1);
+                        $('.verifikasiProperti_1').hide();
+                    }
+                        
+                get_detail({}, id)
+                    .done(function(response) {
+                        var data = response.data;
+                        console.log(data);
+
+                        if (jabatan == 'ADMIN LEGAL') {
+                            if (data.property.length == 0) {
+
+                                $("#verifikasi_properti_1").on('click', function() {
+                                    verifikasiSimpanProperti_1(false, id);
+                                });
+                                $("#limit_call_properti_1_result").html("1");
+
+                                $("#verifikasi_properti_2").on('click', function() {
+                                    verifikasiSimpanProperti_2(false, id);
+                                });
+                                $("#limit_call_properti_2_result").html("1");
+
+                                $("#verifikasi_properti_3").on('click', function() {
+                                    verifikasiSimpanProperti_3(false, id);
+                                });
+                                $("#limit_call_properti_3_result").html("1");
+
+                                $("#verifikasi_properti_4").on('click', function() {
+                                    verifikasiSimpanProperti_4(false, id);
+                                });
+                                $("#limit_call_properti_4_result").html("1");
+
+                                $("#verifikasi_properti_5").on('click', function() {
+                                    verifikasiSimpanProperti_5(false, id);
+                                });
+                                $("#limit_call_properti_5_result").html("1");
+
+                            } else {
+                                if (data.property[0] != null) {
+                                    if(data.property[0].property_name == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 1!!");
+                                        $("#verifikasi_properti_1").on('click', function() {
+                                            verifikasiUpdateProperti();
+                                        });
+                                        $("#limit_call_properti_1_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_properti_1").on('click', function() {
+                                        verifikasiSimpanProperti_1(false, id);
+                                    });
+                                    $("#limit_call_properti_1_result").html("1");
+                                }
+
+                                if(data.property[1] != null) {
+                                    if(data.property[1].property_name == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 2!!");
+                                        $("#verifikasi_properti_2").on('click', function() {
+                                            verifikasiUpdateProperti();
+                                        });
+                                        $("#limit_call_properti_2_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_properti_2").on('click', function() {
+                                        verifikasiSimpanProperti_2(false, id);
+                                    });
+                                    $("#limit_call_properti_2_result").html("1");
+                                }
+
+                                if(data.property[2] != null) {
+                                    if(data.property[2].property_name == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 3!!");
+                                        $("#verifikasi_properti_3").on('click', function() {
+                                            verifikasiUpdateProperti();
+                                        });
+                                        $("#limit_call_properti_3_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_properti_3").on('click', function() {
+                                        verifikasiSimpanProperti_3(false, id);
+                                    });
+                                    $("#limit_call_properti_3_result").html("1");
+                                }
+
+                                if(data.property[3] != null) {
+                                    if(data.property[3].property_name == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 4!!");
+                                        $("#verifikasi_properti_4").on('click', function() {
+                                            verifikasiUpdateProperti();
+                                        });
+                                        $("#limit_call_properti_4_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_properti_4").on('click', function() {
+                                        verifikasiSimpanProperti_4(false, id);
+                                    });
+                                    $("#limit_call_properti_4_result").html("1");
+                                }
+
+                                if(data.property[4] != null) {
+                                    if(data.property[4].property_name == 1) {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!");
+                                        $("#verifikasi_properti_5").on('click', function() {
+                                            verifikasiUpdateProperti();
+                                        });
+                                        $("#limit_call_properti_5_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_properti_5").on('click', function() {
+                                        verifikasiSimpanProperti_5(false, id);
+                                    });
+                                    $("#limit_call_properti_5_result").html("1");
+                                }
+
+                            }
+
+                        } else {
+                            if(jabatan == 'IT STAFF' || jabatan == 'SUPERVISOR IT' || jabatan == 'HEAD IT') {
+                                if (data.property.length == 0) {
+
+                                    $("#verifikasi_properti_1").on('click', function() {
+                                        verifikasiSimpanProperti_1(false, id);
+                                    });
+                                    $("#limit_call_properti_1_result").html("1");
+
+                                    $("#verifikasi_properti_2").on('click', function() {
+                                        verifikasiSimpanProperti_2(false, id);
+                                    });
+                                    $("#limit_call_properti_2_result").html("1");
+
+                                    $("#verifikasi_properti_3").on('click', function() {
+                                        verifikasiSimpanProperti_3(false, id);
+                                    });
+                                    $("#limit_call_properti_3_result").html("1");
+
+                                    $("#verifikasi_properti_4").on('click', function() {
+                                        verifikasiSimpanProperti_4(false, id);
+                                    });
+                                    $("#limit_call_properti_4_result").html("1");
+
+                                    $("#verifikasi_properti_5").on('click', function() {
+                                        verifikasiSimpanProperti_5(false, id);
+                                    });
+                                    $("#limit_call_properti_5_result").html("1");
+
+                                } else {
+                                    if (data.property[0] != null) {
+                                        if(data.property[0].property_name == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 1!!");
+                                            $("#verifikasi_properti_1").on('click', function() {
+                                                verifikasiUpdateProperti();
+                                            });
+                                            $("#limit_call_properti_1_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_properti_1").on('click', function() {
+                                            verifikasiSimpanProperti_1(false, id);
+                                        });
+                                        $("#limit_call_properti_1_result").html("1");
+                                    }
+
+                                    if(data.property[1] != null) {
+                                        if(data.property[1].property_name == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 2!!");
+                                            $("#verifikasi_properti_2").on('click', function() {
+                                                verifikasiUpdateProperti();
+                                            });
+                                            $("#limit_call_properti_2_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_properti_2").on('click', function() {
+                                            verifikasiSimpanProperti_2(false, id);
+                                        });
+                                        $("#limit_call_properti_2_result").html("1");
+                                    }
+
+                                    if(data.property[2] != null) {
+                                        if(data.property[2].property_name == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 3!!");
+                                            $("#verifikasi_properti_3").on('click', function() {
+                                                verifikasiUpdateProperti();
+                                            });
+                                            $("#limit_call_properti_3_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_properti_3").on('click', function() {
+                                            verifikasiSimpanProperti_3(false, id);
+                                        });
+                                        $("#limit_call_properti_3_result").html("1");
+                                    }
+
+                                    if(data.property[3] != null) {
+                                        if(data.property[3].property_name == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 4!!");
+                                            $("#verifikasi_properti_4").on('click', function() {
+                                                verifikasiUpdateProperti();
+                                            });
+                                            $("#limit_call_properti_4_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_properti_4").on('click', function() {
+                                            verifikasiSimpanProperti_4(false, id);
+                                        });
+                                        $("#limit_call_properti_4_result").html("1");
+                                    }
+
+                                    if(data.property[4] != null) {
+                                        if(data.property[4].property_name == 1) {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!");
+                                            $("#verifikasi_properti_5").on('click', function() {
+                                                verifikasiUpdateProperti();
+                                            });
+                                            $("#limit_call_properti_5_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_properti_5").on('click', function() {
+                                            verifikasiSimpanProperti_5(false, id);
+                                        });
+                                        $("#limit_call_properti_5_result").html("1");
+                                    }
+
+                                }
+                            }
+
+                            if (data.cadebt == null) {
+                                $("#verifikasi_debitur").on('click', function() {
+                                    verifikasiSimpanDebitur(false, id);
+                                });
+                                $("#limit_call_debitur_result").html("2");
+                            } else {
+                                if (data.cadebt.limit_call == 1) {
+                                    $("#verifikasi_debitur").on('click', function() {
+                                        verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                    });
+                                    $("#limit_call_debitur_result").html("1");
+                                } else { 
+                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
+                                    $("#verifikasi_debitur").on('click', function() {
+                                        verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                    });
+                                    $("#limit_call_debitur_result").html("0");
+                                }
+                            }
+                            
+                            if (data.pasangan == null) {
+                                $("#verifikasi_pasangan").on('click', function() {
+                                    verifikasiSimpanPasangan(false, id);
+                                });
+                                $("#limit_call_pasangan_result").html("2");
+                            } else {
+                                if (data.pasangan.limit_call == 1) {
+                                    $("#verifikasi_pasangan").on('click', function() {
+                                        verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                    });
+                                    $("#limit_call_pasangan_result").html("1");
+                                } else{
+                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
+                                    $("#verifikasi_pasangan").on('click', function() {
+                                        verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                    });
+                                    $("#limit_call_pasangan_result").html("0");
+                                }
+                            }
+                            
+                            if (data.penjamin.length == 0) {
+
+                                $("#verifikasi_penjamin_1").on('click', function() {
+                                    verifikasiSimpanPenjamin_1(false, id);
+                                });
+                                $("#limit_call_penjamin_1_result").html("2");
+
+                                $("#verifikasi_penjamin_2").on('click', function() {
+                                    verifikasiSimpanPenjamin_2(false, id);
+                                });
+                                $("#limit_call_penjamin_2_result").html("2");
+
+                                $("#verifikasi_penjamin_3").on('click', function() {
+                                    verifikasiSimpanPenjamin_3(false, id);
+                                });
+                                $("#limit_call_penjamin_3_result").html("2");
+
+                                $("#verifikasi_penjamin_4").on('click', function() {
+                                    verifikasiSimpanPenjamin_4(false, id);
+                                });
+                                $("#limit_call_penjamin_4_result").html("2");
+
+                                $("#verifikasi_penjamin_5").on('click', function() {
+                                    verifikasiSimpanPenjamin_5(false, id);
+                                });
+                                $("#limit_call_penjamin_5_result").html("2");
+
+                            } else {
+                                if (data.penjamin[0] != null) {
+                                    if(data.penjamin[0].limit_call == 1) {
+                                        $("#verifikasi_penjamin_1").on('click', function() {
+                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_1_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
+                                        $("#verifikasi_penjamin_1").on('click', function() {
+                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_1_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_penjamin_1").on('click', function() {
+                                        verifikasiSimpanPenjamin_1(false, id);
+                                    });
+                                    $("#limit_call_penjamin_1_result").html("2");
+                                }
+
+                                if (data.penjamin[1] != null) {
+                                    if(data.penjamin[1].limit_call == 1) {
+                                        $("#verifikasi_penjamin_2").on('click', function() {
+                                            verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_2_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
+                                        $("#verifikasi_penjamin_2").on('click', function() {
+                                            verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_2_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_penjamin_2").on('click', function() {
+                                        verifikasiSimpanPenjamin_2(false, id);
+                                    });
+                                    $("#limit_call_penjamin_2_result").html("2");
+                                }
+
+                                if (data.penjamin[2] != null) {
+                                    if(data.penjamin[2].limit_call == 1) {
+                                        $("#verifikasi_penjamin_3").on('click', function() {
+                                            verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_3_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
+                                        $("#verifikasi_penjamin_3").on('click', function() {
+                                            verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_3_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_penjamin_3").on('click', function() {
+                                        verifikasiSimpanPenjamin_3(false, id);
+                                    });
+                                    $("#limit_call_penjamin_3_result").html("2");
+                                }
+
+                                if (data.penjamin[3] != null) {
+                                    if(data.penjamin[3].limit_call == 1) {
+                                        $("#verifikasi_penjamin_4").on('click', function() {
+                                            verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_4_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
+                                        $("#verifikasi_penjamin_4").on('click', function() {
+                                            verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_4_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_penjamin_4").on('click', function() {
+                                        verifikasiSimpanPenjamin_4(false, id);
+                                    });
+                                    $("#limit_call_penjamin_4_result").html("2");
+                                }
+
+                                if (data.penjamin[4] != null) {
+                                    if(data.penjamin[4].limit_call == 1) {
+                                        $("#verifikasi_penjamin_5").on('click', function() {
+                                            verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_5_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
+                                        $("#verifikasi_penjamin_5").on('click', function() {
+                                            verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_5_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_penjamin_5").on('click', function() {
+                                        verifikasiSimpanPenjamin_5(false, id);
+                                    });
+                                    $("#limit_call_penjamin_5_result").html("2");
+                                }
+
+                            }
+        
+                            if (data.npwp.length == 0) {
+                                $("#verifikasi_npwp").on('click', function() {
+                                    verifikasiSimpanNpwp(false, id);
+                                });
+                                $("#limit_call_npwp_result").html("2");
+
+                                $("#verifikasi_npwp_pasangan").on('click', function() {
+                                    verifikasiSimpanNpwpPasangan(false, id);
+                                });
+                                $("#limit_call_npwp_pas_result").html("2");
+    
+                                $("#verifikasi_npwp_pen_1").on('click', function() {
+                                    verifikasiSimpanNpwpPen_1(false, id);
+                                });
+                                $("#limit_call_npwp_pen_1_result").html("2");
+                                
+                                $("#verifikasi_npwp_pen_2").on('click', function() {
+                                    verifikasiSimpanNpwpPen_2(false, id);
+                                });
+                                $("#limit_call_npwp_pen_2_result").html("2");
+    
+                                $("#verifikasi_npwp_pen_3").on('click', function() {
+                                    verifikasiSimpanNpwpPen_3(false, id);
+                                });
+                                $("#limit_call_npwp_pen_3_result").html("2");
+    
+                                $("#verifikasi_npwp_pen_4").on('click', function() {
+                                    verifikasiSimpanNpwpPen_4(false, id);
+                                });
+                                $("#limit_call_npwp_pen_4_result").html("2");
+    
+                                $("#verifikasi_npwp_pen_5").on('click', function() {
+                                    verifikasiSimpanNpwpPen_5(false, id);
+                                });
+                                $("#limit_call_npwp_pen_5_result").html("2");
+                            } else {
+                                if (data.npwp[0] != null) {
+                                    if(data.npwp[0].limit_call == 1) {
+                                        $("#verifikasi_npwp").on('click', function() {
+                                            verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
+                                        });
+                                        $("#limit_call_npwp_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
+                                        $("#verifikasi_npwp").on('click', function() {
+                                            verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
+                                        });
+                                        $("#limit_call_npwp_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_npwp").on('click', function() {
+                                        verifikasiSimpanNpwp(false, id);
+                                    });
+                                    $("#limit_call_npwp_result").html("2");
+                                }
+
+                                if (data.npwp[1] != null) {
+                                    if(data.npwp[1].limit_call == 1) {
+                                        $("#verifikasi_npwp_pasangan").on('click', function() {
+                                            verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
+                                        });
+                                        $("#limit_call_npwp_pas_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
+                                        $("#verifikasi_npwp_pasangan").on('click', function() {
+                                            verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
+                                        });
+                                        $("#limit_call_npwp_pas_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_npwp_pasangan").on('click', function() {
+                                        verifikasiSimpanNpwpPasangan(false, id);
+                                    });
+                                    $("#limit_call_npwp_pas_result").html("2");
+                                }
+
+                                if (data.npwp[2] != null) {
+                                    if(data.npwp[2].limit_call == 1) {
+                                        $("#verifikasi_npwp_pen_1").on('click', function() {
+                                            verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_1_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
+                                        $("#verifikasi_npwp_pen_1").on('click', function() {
+                                            verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_1_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_npwp_pen_1").on('click', function() {
+                                        verifikasiSimpanNpwpPen_1(false, id);
+                                    });
+                                    $("#limit_call_npwp_pen_1_result").html("2");
+                                }
+
+                                if (data.npwp[3] != null) {
+                                    if(data.npwp[3].limit_call == 1) {
+                                        $("#verifikasi_npwp_pen_2").on('click', function() {
+                                            verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_2_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
+                                        $("#verifikasi_npwp_pen_2").on('click', function() {
+                                            verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_2_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_npwp_pen_2").on('click', function() {
+                                        verifikasiSimpanNpwpPen_2(false, id);
+                                    });
+                                    $("#limit_call_npwp_pen_2_result").html("2");
+                                }
+
+                                if (data.npwp[4] != null) {
+                                    if(data.npwp[4].limit_call == 1) {
+                                        $("#verifikasi_npwp_pen_3").on('click', function() {
+                                            verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_3_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
+                                        $("#verifikasi_npwp_pen_3").on('click', function() {
+                                            verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_3_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_npwp_pen_3").on('click', function() {
+                                        verifikasiSimpanNpwpPen_3(false, id);
+                                    });
+                                    $("#limit_call_npwp_pen_3_result").html("2");
+                                }
+
+                                if (data.npwp[5] != null) {
+                                    if(data.npwp[5].limit_call == 1) {
+                                        $("#verifikasi_npwp_pen_4").on('click', function() {
+                                            verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_4_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
+                                        $("#verifikasi_npwp_pen_4").on('click', function() {
+                                            verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_4_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_npwp_pen_4").on('click', function() {
+                                        verifikasiSimpanNpwpPen_4(false, id);
+                                    });
+                                    $("#limit_call_npwp_pen_4_result").html("2");
+                                }
+
+                                if (data.npwp[6] != null) {
+                                    if(data.npwp[6].limit_call == 1) {
+                                        $("#verifikasi_npwp_pen_5").on('click', function() {
+                                            verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_5_result").html("1");
+                                    } else {
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
+                                        $("#verifikasi_npwp_pen_5").on('click', function() {
+                                            verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                        });
+                                        $("#limit_call_npwp_pen_5_result").html("0");
+                                    }
+                                } else {
+                                    $("#verifikasi_npwp_pen_5").on('click', function() {
+                                        verifikasiSimpanNpwpPen_5(false, id);
+                                    });
+                                    $("#limit_call_npwp_pen_5_result").html("2");
+                                }
+                            }
+                            
+                        }      
+                    })
+
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
+
+                })
+
+            $('#lihat_data_credit').hide();
+            $('#lihat_detail').show();
+        }); 
+
+        $('#data_verifikasi_filter').on('click', '.detail', function(e) {
+            e.preventDefault();
+
+            var id = $(this).attr('data');
+            var html_deb = [];
+            var html_pas = [];
+            var html_pen_1 = [];
+            var html_pen_2 = [];
+            var html_pen_3 = [];
+            var html_pen_4 = [];
+            var html_pen_5 = [];
+            var html_npwp = [];
+            var html_npwp_pas = [];
+            var html_npwp_pen_1 = [];
+            var html_npwp_pen_2 = [];
+            var html_npwp_pen_3 = [];
+            var html_npwp_pen_4 = [];
+            var html_npwp_pen_5 = [];
+            var html_properti_1 = [];
+            var html_properti_2 = [];
+            var html_properti_3 = [];
+            var html_properti_4 = [];
+            var html_properti_5 = [];
+            
+            get_data({}, id)
+                .done(function(response) {
+                    var data = response.data;
+                    console.log(data);
+
+                    $('#form_report').hide();
+
+                    var data_debitur = [
+                        '<tr>',
+                            '<td>Foto KTP Debitur</td>',
+                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_ktp + '" </img></a></td>',
+                            '<td id="ktp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Foto Selfie Debitur</td>',
+                            '<td name="selfie_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"><img id="photo_selfie_debitur" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.foto_cadeb + '"</img></a></td>',
+                            '<td id="selfie_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik">' + data.data_debitur.no_ktp + '</td>',
+                            '<td id="nik_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap</td>',
+                            '<td name="name" id="name">' + data.data_debitur.nama_lengkap + '</td>',
+                            '<td id="name_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir</td>',
+                            '<td name="birthplace" id="birthplace">' + data.data_debitur.tempat_lahir + '</td>',
+                            '<td id=birthplace_result></td>',
+                        '</tr>',
+                        '<tr>',
+                             '<td>Tanggal Lahir</td>',
+                            '<td name="birthdate" id="birthdate">' + formatTanggal(data.data_debitur.tgl_lahir) + '</td>',
+                            '<td id="birthdate_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Alamat</td>',
+                            '<td name="address" id="address">' + data.data_debitur.alamat_ktp.alamat_singkat + '</td>',
+                            '<td id="address_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Diverifikasi Oleh</td>',
+                            '<td id="verif_debitur_result"></td>',
+                            '<td id="verif_debitur_update_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_debitur_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_deb.push(data_debitur);
+                    $("#data_debitur").html(html_deb);
+
+                    var data_pasangan = [
+                        '<tr>',
+                            '<td>Foto KTP Pasangan</td>',
+                            '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_ktp + '" </img></a></td>',
+                            '<td id="ktp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Foto Selfie Pasangan</td>',
+                            '<td name="selfie_photo"  id="selfie_photo_pasangan"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '"><img id="photo_selfie_pasangan" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.foto_pasangan + '" </img></a></td>',
+                            '<td id="selfie_photo_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik_pasangan">' + data.data_pasangan.no_ktp + '</td>',
+                            '<td id="nik_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap</td>',
+                            '<td name="name" id="name_pasangan">' + data.data_pasangan.nama_lengkap + '</td>',
+                            '<td id="name_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir</td>',
+                            '<td name="birthplace" id="birthplace_pasangan">' + data.data_pasangan.tempat_lahir + '</td>',
+                            '<td id=birthplace_pasangan_result></td>',
+                        '</tr>',
+                        '<tr>',
+                             '<td>Tanggal Lahir</td>',
+                            '<td name="birthdate" id="birthdate_pasangan">' + data.data_pasangan.tgl_lahir + '</td>',
+                            '<td id="birthdate_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Alamat</td>',
+                            '<td name="address_pasangan" id="address_pasangan">' + data.data_pasangan.alamat_ktp + '</td>',
+                            '<td id="address_pasangan_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Diverifikasi Oleh</td>',
+                            '<td id="verif_pasangan_result"></td>',
+                            '<td id="verif_pasangan_update_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_pasangan_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_pas.push(data_pasangan);
+                    $("#data_pasangan").html(html_pas);
+
+                    if(data.data_penjamin.length == 1){
+                        $('#form_penjamin_2').hide();
+                        $('#form_penjamin_3').hide();
+                        $('#form_penjamin_4').hide();
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_2').hide();
+                        $('#form_npwp_pen_3').hide();
+                        $('#form_npwp_pen_4').hide();
+                        $('#form_npwp_pen_5').hide();
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                                '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                    } else if (data.data_penjamin.length == 2) {
+                        $('#form_penjamin_3').hide();
+                        $('#form_penjamin_4').hide();
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_3').hide();
+                        $('#form_npwp_pen_4').hide();
+                        $('#form_npwp_pen_5').hide();
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_penjamin_2 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_2"  id="selfie_photo_penjamin_2"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_2" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_2">' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_2_result"></td>',
+                                '<td id="verif_penjamin_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_2.push(data_penjamin_2);
+                        $("#data_penjamin_2").html(html_pen_2);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                        var data_npwp_pen_2 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_2" id="no_npwp_pen_2">' + data.data_penjamin[1].no_npwp + '</td>',
+                                '<td id="npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_2" id="nik_pen_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_2" id="name_npwp_pen_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_2" id="birthplace_npwp_pen_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_2" id="birthdate_npwp_pen_2"> ' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_2_result"></td>',
+                                '<td id="verif_npwp_pen_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_2.push(data_npwp_pen_2);
+                        $("#data_npwp_pen_2").html(html_npwp_pen_2);
+
+                    } else if (data.data_penjamin.length == 3) {
+                        $('#form_penjamin_4').hide();
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_4').hide();
+                        $('#form_npwp_pen_5').hide();
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_penjamin_2 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_2"  id="selfie_photo_penjamin_2"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_2" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_2">' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_2_result"></td>',
+                                '<td id="verif_penjamin_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_2.push(data_penjamin_2);
+                        $("#data_penjamin_2").html(html_pen_2);
+
+                        var data_penjamin_3 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_3"  id="selfie_photo_penjamin_3"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_3" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_3">' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_3_result"></td>',
+                                '<td id="verif_penjamin_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_3.push(data_penjamin_3);
+                        $("#data_penjamin_3").html(html_pen_3);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                        var data_npwp_pen_2 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_2" id="no_npwp_pen_2">' + data.data_penjamin[1].no_npwp + '</td>',
+                                '<td id="npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_2" id="nik_pen_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_2" id="name_npwp_pen_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_2" id="birthplace_npwp_pen_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_2" id="birthdate_npwp_pen_2"> ' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_2_result"></td>',
+                                '<td id="verif_npwp_pen_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_2.push(data_npwp_pen_2);
+                        $("#data_npwp_pen_2").html(html_npwp_pen_2);
+
+                        var data_npwp_pen_3 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_3" id="no_npwp_pen_3">' + data.data_penjamin[2].no_npwp + '</td>',
+                                '<td id="npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_3" id="nik_pen_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_3" id="name_npwp_pen_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_3" id="birthplace_npwp_pen_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_3" id="birthdate_npwp_pen_3"> ' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_3_result"></td>',
+                                '<td id="verif_npwp_pen_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_3.push(data_npwp_pen_3);
+                        $("#data_npwp_pen_3").html(html_npwp_pen_3);
+
+                    } else if (data.data_penjamin.length == 4) {
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_5').hide();
+
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_penjamin_2 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_2"  id="selfie_photo_penjamin_2"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_2" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_2">' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_2_result"></td>',
+                                '<td id="verif_penjamin_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_2.push(data_penjamin_2);
+                        $("#data_penjamin_2").html(html_pen_2);
+
+                        var data_penjamin_3 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_3"  id="selfie_photo_penjamin_3"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_3" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_3">' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_3_result"></td>',
+                                '<td id="verif_penjamin_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_3.push(data_penjamin_3);
+                        $("#data_penjamin_3").html(html_pen_3);
+
+                        var data_penjamin_4 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_4"  id="selfie_photo_penjamin_4"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_4" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_4">' + data.data_penjamin[3].no_ktp + '</td>',
+                                '<td id="nik_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_4">' + data.data_penjamin[3].nama_ktp + '</td>',
+                                '<td id="name_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_4">' + data.data_penjamin[3].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_4_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_4">' + data.data_penjamin[3].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_4" id="address_penjamin_4">' + data.data_penjamin[3].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_4_result"></td>',
+                                '<td id="verif_penjamin_4_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_4_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_4.push(data_penjamin_4);
+                        $("#data_penjamin_4").html(html_pen_4);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                        var data_npwp_pen_2 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_2" id="no_npwp_pen_2">' + data.data_penjamin[1].no_npwp + '</td>',
+                                '<td id="npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_2" id="nik_pen_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_2" id="name_npwp_pen_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_2" id="birthplace_npwp_pen_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_2" id="birthdate_npwp_pen_2"> ' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_2_result"></td>',
+                                '<td id="verif_npwp_pen_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_2.push(data_npwp_pen_2);
+                        $("#data_npwp_pen_2").html(html_npwp_pen_2);
+
+                        var data_npwp_pen_3 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_3" id="no_npwp_pen_3">' + data.data_penjamin[2].no_npwp + '</td>',
+                                '<td id="npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_3" id="nik_pen_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_3" id="name_npwp_pen_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_3" id="birthplace_npwp_pen_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_3" id="birthdate_npwp_pen_3"> ' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_3_result"></td>',
+                                '<td id="verif_npwp_pen_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_3.push(data_npwp_pen_3);
+                        $("#data_npwp_pen_3").html(html_npwp_pen_3);
+
+                        var data_npwp_pen_4 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_4" id="no_npwp_pen_4">' + data.data_penjamin[3].no_npwp + '</td>',
+                                '<td id="npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_4" id="nik_pen_4">' + data.data_penjamin[3].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_4" id="name_npwp_pen_4">' + data.data_penjamin[3].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_4" id="birthplace_npwp_pen_4">' + data.data_penjamin[3].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_4_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_4" id="birthdate_npwp_pen_4"> ' + data.data_penjamin[3].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_4" id="income_npwp_pen_4">' + data.data_penjamin[3].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_4_result"></td>',
+                                '<td id="verif_npwp_pen_4_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_4_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_4.push(data_npwp_pen_4);
+                        $("#data_npwp_pen_4").html(html_npwp_pen_4);
+
+                    } else if (data.data_penjamin.length == 5) {
+                        var data_penjamin_1 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_1"  id="selfie_photo_penjamin_1"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_1" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_1">' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_1" id="address_penjamin_1">' + data.data_penjamin[0].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_1_result"></td>',
+                                '<td id="verif_penjamin_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_1.push(data_penjamin_1);
+                        $("#data_penjamin_1").html(html_pen_1);
+
+                        var data_penjamin_2 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_2"  id="selfie_photo_penjamin_2"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_2" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_2">' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_2" id="address_penjamin_2">' + data.data_penjamin[1].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_2_result"></td>',
+                                '<td id="verif_penjamin_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_2.push(data_penjamin_2);
+                        $("#data_penjamin_2").html(html_pen_2);
+
+                        var data_penjamin_3 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_3"  id="selfie_photo_penjamin_3"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_3" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_3">' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_3" id="address_penjamin_3">' + data.data_penjamin[2].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_3_result"></td>',
+                                '<td id="verif_penjamin_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_3.push(data_penjamin_3);
+                        $("#data_penjamin_3").html(html_pen_3);
+
+                        var data_penjamin_4 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_4"  id="selfie_photo_penjamin_4"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_4" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_4">' + data.data_penjamin[3].no_ktp + '</td>',
+                                '<td id="nik_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_4">' + data.data_penjamin[3].nama_ktp + '</td>',
+                                '<td id="name_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_4">' + data.data_penjamin[3].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_4_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_4">' + data.data_penjamin[3].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_4" id="address_penjamin_4">' + data.data_penjamin[3].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_4_result"></td>',
+                                '<td id="verif_penjamin_4_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_4_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_4.push(data_penjamin_4);
+                        $("#data_penjamin_4").html(html_pen_4);
+
+                        var data_penjamin_5 = [
+                            '<tr>',
+                                '<td>Foto KTP Penjamin</td>',
+                                '<td name="ktp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.lamp_ktp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.lamp_ktp + '" </img></a></td>',
+                                '<td id="ktp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Foto Selfie Penjamin</td>',
+                                '<td name="selfie_photo_penjamin_5"  id="selfie_photo_penjamin_5"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.foto_selfie_penjamin + '"><img id="photo_selfie_penjamin_5" style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.foto_selfie_penjamin + '" </img></a></td>',
+                                '<td id="selfie_photo_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik" id="nik_penjamin_5">' + data.data_penjamin[4].no_ktp + '</td>',
+                                '<td id="nik_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap</td>',
+                                '<td name="name" id="name_penjamin_5">' + data.data_penjamin[4].nama_ktp + '</td>',
+                                '<td id="name_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir</td>',
+                                '<td name="birthplace" id="birthplace_penjamin_5">' + data.data_penjamin[4].tempat_lahir + '</td>',
+                                '<td id=birthplace_penjamin_5_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir</td>',
+                                '<td name="birthdate" id="birthdate_penjamin_5">' + data.data_penjamin[4].tgl_lahir + '</td>',
+                                '<td id="birthdate_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Alamat</td>',
+                                '<td name="address_penjamin_5" id="address_penjamin_5">' + data.data_penjamin[4].alamat_ktp + '</td>',
+                                '<td id="address_penjamin_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_penjamin_5_result"></td>',
+                                '<td id="verif_penjamin_5_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_penjamin_5_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_pen_5.push(data_penjamin_5);
+                        $("#data_penjamin_5").html(html_pen_5);
+
+                        var data_npwp_pen_1 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[0].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_1" id="no_npwp_pen_1">' + data.data_penjamin[0].no_npwp + '</td>',
+                                '<td id="npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_1" id="nik_pen_1">' + data.data_penjamin[0].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_1" id="name_npwp_pen_1">' + data.data_penjamin[0].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_1" id="birthplace_npwp_pen_1">' + data.data_penjamin[0].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_1_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_1" id="birthdate_npwp_pen_1"> ' + data.data_penjamin[0].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_1" id="income_npwp_pen_1">' + data.data_penjamin[0].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_1_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_1_result"></td>',
+                                '<td id="verif_npwp_pen_1_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_1_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_1.push(data_npwp_pen_1);
+                        $("#data_npwp_pen_1").html(html_npwp_pen_1);
+
+                        var data_npwp_pen_2 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[1].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_2" id="no_npwp_pen_2">' + data.data_penjamin[1].no_npwp + '</td>',
+                                '<td id="npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_2" id="nik_pen_2">' + data.data_penjamin[1].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_2" id="name_npwp_pen_2">' + data.data_penjamin[1].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_2" id="birthplace_npwp_pen_2">' + data.data_penjamin[1].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_2_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_2" id="birthdate_npwp_pen_2"> ' + data.data_penjamin[1].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_2" id="income_npwp_pen_2">' + data.data_penjamin[1].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_2_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_2_result"></td>',
+                                '<td id="verif_npwp_pen_2_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_2_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_2.push(data_npwp_pen_2);
+                        $("#data_npwp_pen_2").html(html_npwp_pen_2);
+
+                        var data_npwp_pen_3 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[2].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_3" id="no_npwp_pen_3">' + data.data_penjamin[2].no_npwp + '</td>',
+                                '<td id="npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_3" id="nik_pen_3">' + data.data_penjamin[2].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_3" id="name_npwp_pen_3">' + data.data_penjamin[2].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_3" id="birthplace_npwp_pen_3">' + data.data_penjamin[2].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_3_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_3" id="birthdate_npwp_pen_3"> ' + data.data_penjamin[2].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_3" id="income_npwp_pen_3">' + data.data_penjamin[2].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_3_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_3_result"></td>',
+                                '<td id="verif_npwp_pen_3_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_3_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_3.push(data_npwp_pen_3);
+                        $("#data_npwp_pen_3").html(html_npwp_pen_3);
+
+                        var data_npwp_pen_4 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[3].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_4" id="no_npwp_pen_4">' + data.data_penjamin[3].no_npwp + '</td>',
+                                '<td id="npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_4" id="nik_pen_4">' + data.data_penjamin[3].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_4" id="name_npwp_pen_4">' + data.data_penjamin[3].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_4" id="birthplace_npwp_pen_4">' + data.data_penjamin[3].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_4_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_4" id="birthdate_npwp_pen_4"> ' + data.data_penjamin[3].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_4" id="income_npwp_pen_4">' + data.data_penjamin[3].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_4_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_4_result"></td>',
+                                '<td id="verif_npwp_pen_4_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_4_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_4.push(data_npwp_pen_4);
+                        $("#data_npwp_pen_4").html(html_npwp_pen_4);
+
+                        var data_npwp_pen_5 = [
+                            '<tr>',
+                                '<td>Foto NPWP</td>',
+                                '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_penjamin[4].lampiran.lampiran_npwp + '" </img></a></td>',
+                                '<td id="npwp_photo_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>No. NPWP</td>',
+                                '<td name="npwp_pen_5" id="no_npwp_pen_5">' + data.data_penjamin[4].no_npwp + '</td>',
+                                '<td id="npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>NIK</td>',
+                                '<td name="nik_pen_5" id="nik_pen_5">' + data.data_penjamin[4].no_ktp + '</td>',
+                                '<td id="nik_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Match Result</td>',
+                                '<td id="match_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Nama Lengkap berdasarkan NPWP</td>',
+                                '<td name="name_npwp_pen_5" id="name_npwp_pen_5">' + data.data_penjamin[4].nama_ktp + '</td>',
+                                '<td id="name_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tempat Lahir berdasarkan NPWP</td>',
+                                '<td name="birthplace_npwp_pen_5" id="birthplace_npwp_pen_5">' + data.data_penjamin[4].tempat_lahir + '</td>',
+                                '<td id=birthplace_npwp_pen_5_result></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                                '<td name="birthdate_npwp_pen_5" id="birthdate_npwp_pen_5"> ' + data.data_penjamin[4].tgl_lahir + '</td>',
+                                '<td id="birthdate_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Pendapatan Bulanan</td>',
+                                '<td name="income_npwp_pen_5" id="income_npwp_pen_5">' + data.data_penjamin[4].pemasukan_penjamin + '</td>',
+                                '<td id="income_npwp_pen_5_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td>Diverifikasi Oleh</td>',
+                                '<td id="verif_npwp_pen_5_result"></td>',
+                                '<td id="verif_npwp_pen_5_update_result"></td>',
+                            '</tr>',
+                            '<tr>',
+                                '<td colspan="2">Sisa Verifikasi</td>',
+                                '<td id="limit_call_npwp_pen_5_result"></td>',
+                            '</tr>'
+                        ].join('\n');
+                        html_npwp_pen_5.push(data_npwp_pen_5);
+                        $("#data_npwp_pen_5").html(html_npwp_pen_5);
+
+                    } else {
+                        $('#form_penjamin_1').hide();
+                        $('#form_penjamin_2').hide();
+                        $('#form_penjamin_3').hide();
+                        $('#form_penjamin_4').hide();
+                        $('#form_penjamin_5').hide();
+
+                        $('#form_npwp_pen_1').hide();
+                        $('#form_npwp_pen_2').hide();
+                        $('#form_npwp_pen_3').hide();
+                        $('#form_npwp_pen_4').hide();
+                        $('#form_npwp_pen_5').hide();
+                    }
+
+                    var data_npwp = [
+                        '<tr>',
+                            '<td>Foto NPWP</td>',
+                            '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_debitur.lampiran.lamp_npwp + '" </img></a></td>',
+                            '<td id="npwp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>No. NPWP</td>',
+                            '<td name="npwp" id="no_npwp">' + data.data_debitur.no_npwp + '</td>',
+                            '<td id="npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik" id="nik">' + data.data_debitur.no_ktp + '</td>',
+                            '<td id="nik_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Match Result</td>',
+                            '<td id="match_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap berdasarkan NPWP</td>',
+                            '<td name="name_npwp" id="name_npwp">' + data.data_debitur.nama_lengkap + '</td>',
+                            '<td id="name_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir berdasarkan NPWP</td>',
+                            '<td name="birthplace_npwp" id="birthplace_npwp">' + data.data_debitur.tempat_lahir + '</td>',
+                            '<td id=birthplace_npwp_result></td>',
+                        '</tr>',
+                        '<tr>',
+                             '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                            '<td name="birthdate_npwp" id="birthdate_npwp"> ' + formatTanggal(data.data_debitur.tgl_lahir) + '</td>',
+                            '<td id="birthdate_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                             '<td>Pendapatan Bulanan</td>',
+                            '<td name="income_npwp" id="income_npwp">' + data.kapasitas_bulanan.pemasukan_cadebt + '</td>',
+                            '<td id="income_npwp_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Diverifikasi Oleh</td>',
+                            '<td id="verif_npwp_result"></td>',
+                            '<td id="verif_npwp_update_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_npwp_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_npwp.push(data_npwp);
+                    $("#data_npwp").html(html_npwp);
+
+                    var data_npwp_pas = [
+                        '<tr>',
+                            '<td>Foto NPWP</td>',
+                            '<td name="npwp_photo"><a target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '"><img style="width: 30%" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '" </img></a></td>',
+                            '<td id="npwp_photo_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>No. NPWP</td>',
+                            '<td name="npwp_pas" id="no_npwp_pas">' + data.data_pasangan.no_npwp + '</td>',
+                            '<td id="npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>NIK</td>',
+                            '<td name="nik_pas" id="nik_pas">' + data.data_pasangan.no_ktp + '</td>',
+                            '<td id="nik_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Match Result</td>',
+                            '<td id="match_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Nama Lengkap berdasarkan NPWP</td>',
+                            '<td name="name_npwp_pas" id="name_npwp_pas">' + data.data_pasangan.nama_lengkap + '</td>',
+                            '<td id="name_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tempat Lahir berdasarkan NPWP</td>',
+                            '<td name="birthplace_npwp_pas" id="birthplace_npwp_pas">' + data.data_pasangan.tempat_lahir + '</td>',
+                            '<td id=birthplace_npwp_pas_result></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Tanggal Lahir berdasarkan NPWP</td>',
+                            '<td name="birthdate_npwp_pas" id="birthdate_npwp_pas"> ' + data.data_pasangan.tgl_lahir + '</td>',
+                            '<td id="birthdate_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Pendapatan Bulanan</td>',
+                            '<td name="income_npwp_pas" id="income_npwp_pas">' + data.kapasitas_bulanan.pemasukan_pasangan + '</td>',
+                            '<td id="income_npwp_pas_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td>Diverifikasi Oleh</td>',
+                            '<td id="verif_npwp_pas_result"></td>',
+                            '<td id="verif_npwp_pas_update_result"></td>',
+                        '</tr>',
+                        '<tr>',
+                            '<td colspan="2">Sisa Verifikasi</td>',
+                            '<td id="limit_call_npwp_pas_result"></td>',
+                        '</tr>'
+                    ].join('\n');
+                    html_npwp_pas.push(data_npwp_pas);
+                    $("#data_npwp_pasangan").html(html_npwp_pas);
+
+                    if(data.data_agunan.agunan_tanah.length == 1) {
+                        if(data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
+                    } else if(data.data_agunan.agunan_tanah.length == 2) {
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_2_result"></td>',
+                                    '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
+                        
+                    } else if (data.data_agunan.agunan_tanah.length == 3) {
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_2_result"></td>',
+                                    '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_3_result"></td>',
+                                    '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
+                    } else if (data.data_agunan.agunan_tanah.length == 4) {
+                        if(data.pemeriksaan.agunan_tanah.length != 0) {
+                            $('#form_properti_5').hide();
+    
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_2_result"></td>',
+                                    '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_3_result"></td>',
+                                    '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+    
+                            var data_properti_4 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
+                                    '<td id="nop_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_4_result"></td>',
+                                    '<td id="verif_properti_4_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_4_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_4.push(data_properti_4);
+                            $("#data_properti_4").html(html_properti_4);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
+                    } else if (data.data_agunan.agunan_tanah.length == 5) {
+                        if (data.pemeriksaan.agunan_tanah.length != 0) {
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_1" id="nop_1">' + data.data_agunan.agunan_tanah[0].nop + '</td>',
+                                    '<td id="nop_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_1" id="property_name_1">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_1" id="property_building_area_1">' + data.data_agunan.agunan_tanah[0].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_1" id="property_surface_area_1">' + data.data_agunan.agunan_tanah[0].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_1" id="property_estimation_1">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_1_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_1" id="certificate_id_1">' + data.data_agunan.agunan_tanah[0].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_1" id="certificate_name_1">' + data.data_agunan.agunan_tanah[0].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_1" id="certificate_type_1">' + data.data_agunan.agunan_tanah[0].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_1" id="certificate_date_1">' + formatTanggal(data.data_agunan.agunan_tanah[0].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_1_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_1_result"></td>',
+                                    '<td id="verif_properti_1_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_1_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+    
+                            var data_properti_2 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_2" id="nop_2">' + data.data_agunan.agunan_tanah[1].nop + '</td>',
+                                    '<td id="nop_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_2" id="property_name_2">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_2" id="property_building_area_2">' + data.data_agunan.agunan_tanah[1].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_2" id="property_surface_area_2">' + data.data_agunan.agunan_tanah[1].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_2" id="property_estimation_2">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_2_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_2" id="certificate_id_2">' + data.data_agunan.agunan_tanah[1].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_2" id="certificate_name_2">' + data.data_agunan.agunan_tanah[1].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_2" id="certificate_type_2">' + data.data_agunan.agunan_tanah[1].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_2" id="certificate_date_2">' + formatTanggal(data.data_agunan.agunan_tanah[1].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_2_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_2_result"></td>',
+                                    '<td id="verif_properti_2_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_2_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_2.push(data_properti_2);
+                            $("#data_properti_2").html(html_properti_2);
+    
+                            var data_properti_3 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_3" id="nop_3">' + data.data_agunan.agunan_tanah[2].nop + '</td>',
+                                    '<td id="nop_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_3" id="property_name_3">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_3" id="property_building_area_3">' + data.data_agunan.agunan_tanah[2].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_3" id="property_surface_area_3">' + data.data_agunan.agunan_tanah[2].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_3" id="property_estimation_3">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_3_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_3" id="certificate_id_3">' + data.data_agunan.agunan_tanah[2].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_3" id="certificate_name_3">' + data.data_agunan.agunan_tanah[2].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_3" id="certificate_type_3">' + data.data_agunan.agunan_tanah[2].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_3" id="certificate_date_3">' + formatTanggal(data.data_agunan.agunan_tanah[2].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_3_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_3_result"></td>',
+                                    '<td id="verif_properti_3_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_3_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_3.push(data_properti_3);
+                            $("#data_properti_3").html(html_properti_3);
+    
+                            var data_properti_4 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_4" id="nop_4">' + data.data_agunan.agunan_tanah[3].nop + '</td>',
+                                    '<td id="nop_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_4" id="property_name_4">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_4" id="property_building_area_4">' + data.data_agunan.agunan_tanah[3].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_4" id="property_surface_area_4">' + data.data_agunan.agunan_tanah[3].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_4" id="property_estimation_4">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_4_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_4" id="certificate_id_4">' + data.data_agunan.agunan_tanah[3].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_4" id="certificate_name_4">' + data.data_agunan.agunan_tanah[3].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_4" id="certificate_type_4">' + data.data_agunan.agunan_tanah[3].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_4" id="certificate_date_4">' + formatTanggal(data.data_agunan.agunan_tanah[3].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_4_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_4_result"></td>',
+                                    '<td id="verif_properti_4_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_4_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_4.push(data_properti_4);
+                            $("#data_properti_4").html(html_properti_4);
+    
+                            var data_properti_5 = [
+                                '<tr>',
+                                    '<td>NOP</td>',
+                                    '<td name="nop_5" id="nop_5">' + data.data_agunan.agunan_tanah[4].nop + '</td>',
+                                    '<td id="nop_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Properti</td>',
+                                    '<td name="property_name_5" id="property_name_5">' + data.data_debitur.nama_lengkap + '</td>',
+                                    '<td id="property_name_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Bangunan Properti</td>',
+                                    '<td name="property_building_area_5" id="property_building_area_5">' + data.data_agunan.agunan_tanah[4].luas_bangunan + '</td>',
+                                    '<td id="property_building_area_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Luas Tanah Properti</td>',
+                                    '<td name="property_surface_area_5" id="property_surface_area_5">' + data.data_agunan.agunan_tanah[4].luas_tanah + '</td>',
+                                    '<td id="property_surface_area_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Estimasi Properti</td>',
+                                    '<td name="property_estimation_5" id="property_estimation_5">' + data.pemeriksaan.agunan_tanah[0].nilai_taksasi_agunan + '</td>',
+                                    '<td id="property_estimation_5_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>No. Sertifikat</td>',
+                                    '<td name="certificate_id_5" id="certificate_id_5">' + data.data_agunan.agunan_tanah[4].no_sertifikat + '</td>',
+                                    '<td id=certificate_id_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Nama Pemilik Sertifikat</td>',
+                                    '<td name="certificate_name_5" id="certificate_name_5">' + data.data_agunan.agunan_tanah[4].nama_pemilik_sertifikat + '</td>',
+                                    '<td id=certificate_name_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tipe Sertifikat</td>',
+                                    '<td name="certificate_type_5" id="certificate_type_5">' + data.data_agunan.agunan_tanah[4].jenis_sertifikat + '</td>',
+                                    '<td id=certificate_type_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Tanggal Sertifikat</td>',
+                                    '<td name="certificate_date_5" id="certificate_date_5">' + formatTanggal(data.data_agunan.agunan_tanah[4].tgl_sertifikat) + '</td>',
+                                    '<td id=certificate_date_5_result></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td>Diverifikasi Oleh</td>',
+                                    '<td id="verif_properti_5_result"></td>',
+                                    '<td id="verif_properti_5_update_result"></td>',
+                                '</tr>',
+                                '<tr>',
+                                    '<td colspan="2">Sisa Verifikasi</td>',
+                                    '<td id="limit_call_properti_5_result"></td>',
+                                '</tr>'
+                            ].join('\n');
+                            html_properti_5.push(data_properti_5);
+                            $("#data_properti_5").html(html_properti_5);
+                        } else {
+                            $('#form_properti_2').hide();
+                            $('#form_properti_3').hide();
+                            $('#form_properti_4').hide();
+                            $('#form_properti_5').hide();
+                            
+                            var data_properti_1 = [
+                                '<tr>',
+                                    '<td colspan="3" style="text-align: center">Tidak ada pemeriksaan agunan!</td>',
+                                '</tr>',
+                                ].join('\n');
+                            html_properti_1.push(data_properti_1);
+                            $("#data_properti_1").html(html_properti_1);
+                        }
+                    } else {
+                        $('#form_properti_2').hide();
+                        $('#form_properti_3').hide();
+                        $('#form_properti_4').hide();
+                        $('#form_properti_5').hide();
+                        
+                        var data_properti_1 = [
+                            '<tr>',
+                                '<td colspan="3" style="text-align: center">Tidak ada agunan!</td>',
+                            '</tr>',
+                            ].join('\n');
+                        html_properti_1.push(data_properti_1);
+                        $("#data_properti_1").html(html_properti_1);
+                    } 
+
+                    get_detail({}, id)
+                        .done(function(response) {
+                            var data = response.data;
+                            console.log(data);
+
+                            if(data.cadebt != null) {
+                                $("#selfie_photo_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.cadebt.selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.cadebt.selfie_foto}%'>${data.cadebt.selfie_foto}%</div></div>`);
+                                checkResult("nik_result", data.cadebt.nama);
+                                checkResult("name_result", data.cadebt.nama);
+                                checkResult("birthdate_result", data.cadebt.tgl_lahir);
+                                checkResult("birthplace_result", data.cadebt.tempat_lahir);
+                                $("#address_result").html(`${data.cadebt.alamat}`);
+                                $("#verif_debitur_result").html(`${data.cadebt.nama_user}`);
+                                $("#verif_debitur_update_result").html(`${formatUpdated(data.cadebt.updated_at)}`);
+                                if(data.cadebt.limit_call == "1") {
+                                    $("#limit_call_debitur_result").html("1");
+                                } else if (data.cadebt.limit_call == "2") {
+                                    $("#limit_call_debitur_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_debitur_result").html("2");
+                            }
+                            
+                            if (data.pasangan != null) {
+                                $("#selfie_photo_pasangan_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.pasangan.selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.pasangan.selfie_foto}%'>${data.pasangan.selfie_foto}%</div></div>`);
+                                checkResult("nik_pasangan_result", data.pasangan.nama);
+                                checkResult("name_pasangan_result", data.pasangan.nama);
+                                checkResult("birthdate_pasangan_result", data.pasangan.tgl_lahir);
+                                checkResult("birthplace_pasangan_result", data.pasangan.tempat_lahir);
+                                $("#address_pasangan_result").html(`${data.pasangan.alamat}`);
+                                $("#verif_pasangan_result").html(`${data.pasangan.nama_user}`);
+                                $("#verif_pasangan_update_result").html(`${formatUpdated(data.pasangan.updated_at)}`);
+                                if(data.pasangan.limit_call == "1") {
+                                    $("#limit_call_pasangan_result").html("1");
+                                } else if (data.pasangan.limit_call == "2") {
+                                    $("#limit_call_pasangan_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_pasangan_result").html("2");
+                            }
+
+                            if (data.penjamin[0] != null) {
+                                $("#selfie_photo_penjamin_1_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[0].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[0].selfie_foto}%'>${data.penjamin[0].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_1_result", data.penjamin[0].nama);
+                                checkResult("name_penjamin_1_result", data.penjamin[0].nama);
+                                checkResult("birthdate_penjamin_1_result", data.penjamin[0].tgl_lahir);
+                                checkResult("birthplace_penjamin_1_result", data.penjamin[0].tempat_lahir);
+                                $("#address_penjamin_1_result").html(`${data.penjamin[0].alamat}`);
+                                $("#verif_penjamin_1_result").html(`${data.penjamin[0].nama_user}`);
+                                $("#verif_penjamin_1_update_result").html(`${formatUpdated(data.penjamin[0].updated_at)}`);
+                                if(data.penjamin[0].limit_call == "1") {
+                                    $("#limit_call_penjamin_1_result").html("1");
+                                } else if (data.penjamin[0].limit_call == "2") {
+                                    $("#limit_call_penjamin_1_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_1_result").html("2");
+                            }
+
+                            if (data.penjamin[1] != null) {
+                                $("#selfie_photo_penjamin_2_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[1].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[1].selfie_foto}%'>${data.penjamin[1].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_2_result", data.penjamin[1].nama);
+                                checkResult("name_penjamin_2_result", data.penjamin[1].nama);
+                                checkResult("birthdate_penjamin_2_result", data.penjamin[1].tgl_lahir);
+                                checkResult("birthplace_penjamin_2_result", data.penjamin[1].tempat_lahir);
+                                $("#address_penjamin_2_result").html(`${data.penjamin[1].alamat}`);
+                                $("#verif_penjamin_2_result").html(`${data.penjamin[1].nama_user}`);
+                                $("#verif_penjamin_2_update_result").html(`${formatUpdated(data.penjamin[1].updated_at)}`);
+                                if(data.penjamin[1].limit_call == "1") {
+                                    $("#limit_call_penjamin_2_result").html("1");
+                                } else if (data.penjamin[1].limit_call == "2") {
+                                    $("#limit_call_penjamin_2_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_2_result").html("2");
+                            }
+
+                            if (data.penjamin[2] != null) {
+                                $("#selfie_photo_penjamin_3_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[2].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[2].selfie_foto}%'>${data.penjamin[2].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_3_result", data.penjamin[2].nama);
+                                checkResult("name_penjamin_3_result", data.penjamin[2].nama);
+                                checkResult("birthdate_penjamin_3_result", data.penjamin[2].tgl_lahir);
+                                checkResult("birthplace_penjamin_3_result", data.penjamin[2].tempat_lahir);
+                                $("#address_penjamin_3_result").html(`${data.penjamin[2].alamat}`);
+                                $("#verif_penjamin_3_result").html(`${data.penjamin[2].nama_user}`);
+                                $("#verif_penjamin_3_update_result").html(`${formatUpdated(data.penjamin[2].updated_at)}`);
+                                if(data.penjamin[2].limit_call == "1") {
+                                    $("#limit_call_penjamin_3_result").html("1");
+                                } else if (data.penjamin[2].limit_call == "2") {
+                                    $("#limit_call_penjamin_3_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_3_result").html("2");
+                            }
+
+                            if (data.penjamin[3] != null) {
+                                $("#selfie_photo_penjamin_4_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[3].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[3].selfie_foto}%'>${data.penjamin[3].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_4_result", data.penjamin[3].nama);
+                                checkResult("name_penjamin_4_result", data.penjamin[3].nama);
+                                checkResult("birthdate_penjamin_4_result", data.penjamin[3].tgl_lahir);
+                                checkResult("birthplace_penjamin_4_result", data.penjamin[3].tempat_lahir);
+                                $("#address_penjamin_4_result").html(`${data.penjamin[3].alamat}`);
+                                $("#verif_penjamin_4_result").html(`${data.penjamin[3].nama_user}`);
+                                $("#verif_penjamin_4_update_result").html(`${formatUpdated(data.penjamin[3].updated_at)}`);
+                                if(data.penjamin[3].limit_call == "1") {
+                                    $("#limit_call_penjamin_4_result").html("1");
+                                } else if (data.penjamin[3].limit_call == "2") {
+                                    $("#limit_call_penjamin_4_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_4_result").html("2");
+                            }
+
+                            if (data.penjamin[4] != null) {
+                                $("#selfie_photo_penjamin_5_result").html(`<div class='progress'><div class='progress-bar' role='progressbar' aria-valuenow='${data.penjamin[4].selfie_foto}' aria-valuemin='0' aria-valuemax='100' style='width: ${data.penjamin[4].selfie_foto}%'>${data.penjamin[4].selfie_foto}%</div></div>`);
+                                checkResult("nik_penjamin_5_result", data.penjamin[4].nama);
+                                checkResult("name_penjamin_5_result", data.penjamin[4].nama);
+                                checkResult("birthdate_penjamin_5_result", data.penjamin[4].tgl_lahir);
+                                checkResult("birthplace_penjamin_5_result", data.penjamin[4].tempat_lahir);
+                                $("#address_penjamin_5_result").html(`${data.penjamin[4].alamat}`);
+                                $("#verif_penjamin_5_result").html(`${data.penjamin[4].nama_user}`);
+                                $("#verif_penjamin_5_update_result").html(`${formatUpdated(data.penjamin[4].updated_at)}`);
+                                if(data.penjamin[4].limit_call == "1") {
+                                    $("#limit_call_penjamin_5_result").html("1");
+                                } else if (data.penjamin[4].limit_call == "2") {
+                                    $("#limit_call_penjamin_5_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_penjamin_5_result").html("2");
+                            }
+                            
+                            if (data.npwp[0] != null) {
+                                checkResult("npwp_result", data.npwp[0].npwp);
+                                checkResult("nik_npwp_result", data.npwp[0].nik);
+                                checkResult("name_npwp_result", data.npwp[0].nama);
+                                checkResult("birthdate_npwp_result", data.npwp[0].tgl_lahir);
+                                checkResult("birthplace_npwp_result", data.npwp[0].tmp_lahir);
+                                checkIncome("income_npwp_result", data.npwp[0].income);
+                                checkResult("match_result", data.npwp[0].match_result);
+                                $("#verif_npwp_result").html(`${data.npwp[0].nama_user}`);
+                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp[0].updated_at)}`);
+                                if(data.npwp[0].limit_call == "1") {
+                                    $("#limit_call_npwp_result").html("1");
+                                } else if (data.penjamin[0].limit_call == "2") {
+                                    $("#limit_call_npwp_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_result").html("2");
+                            }
+
+                            if (data.npwp[1] != null) {
+                                checkResult("npwp_pas_result", data.npwp[1].npwp);
+                                checkResult("nik_npwp_pas_result", data.npwp[1].nik);
+                                checkResult("name_npwp_pas_result", data.npwp[1].nama);
+                                checkResult("birthdate_npwp_pas_result", data.npwp[1].tgl_lahir);
+                                checkResult("birthplace_npwp_pas_result", data.npwp[1].tmp_lahir);
+                                checkIncome("income_npwp_pas_result", data.npwp[1].income);
+                                checkResult("match_pas_result", data.npwp[1].match_result);
+                                $("#verif_npwp_pas_result").html(`${data.npwp[1].nama_user}`);
+                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp[1].updated_at)}`);
+                                if(data.npwp[1].limit_call == "1") {
+                                    $("#limit_call_npwp_pas_result").html("1");
+                                } else if (data.npwp[1].limit_call == "2") {
+                                    $("#limit_call_npwp_pas_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pas_result").html("2");
+                            }
+
+                            if (data.npwp[2] != null) {
+                                checkResult("npwp_pen_1_result", data.npwp[2].npwp);
+                                checkResult("nik_npwp_pen_1_result", data.npwp[2].nik);
+                                checkResult("name_npwp_pen_1_result", data.npwp[2].nama);
+                                checkResult("birthdate_npwp_pen_1_result", data.npwp[2].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_1_result", data.npwp[2].tmp_lahir);
+                                checkIncome("income_npwp_pen_1_result", data.npwp[2].income);
+                                checkResult("match_pen_1_result", data.npwp[2].match_result);
+                                $("#verif_npwp_pen_1_result").html(`${data.npwp[2].nama_user}`);
+                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp[2].updated_at)}`);
+                                if(data.npwp[2].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_1_result").html("1");
+                                } else if (data.npwp[2].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_1_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_1_result").html("2");
+                            }
+
+                            if (data.npwp[3] != null) {
+                                checkResult("npwp_pen_2_result", data.npwp[3].npwp);
+                                checkResult("nik_npwp_pen_2_result", data.npwp[3].nik);
+                                checkResult("name_npwp_pen_2_result", data.npwp[3].nama);
+                                checkResult("birthdate_npwp_pen_2_result", data.npwp[3].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_2_result", data.npwp[3].tmp_lahir);
+                                checkIncome("income_npwp_pen_2_result", data.npwp[3].income);
+                                checkResult("match_pen_2_result", data.npwp[3].match_result);
+                                $("#verif_npwp_pen_2_result").html(`${data.npwp[3].nama_user}`);
+                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp[3].updated_at)}`);
+                                if(data.npwp[3].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_2_result").html("1");
+                                } else if (data.npwp[3].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_2_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_2_result").html("2");
+                            }
+
+                            if (data.npwp[4] != null) {
+                                checkResult("npwp_pen_3_result", data.npwp[4].npwp);
+                                checkResult("nik_npwp_pen_3_result", data.npwp[4].nik);
+                                checkResult("name_npwp_pen_3_result", data.npwp[4].nama);
+                                checkResult("birthdate_npwp_pen_3_result", data.npwp[4].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_3_result", data.npwp[4].tmp_lahir);
+                                checkIncome("income_npwp_pen_3_result", data.npwp[4].income);
+                                checkResult("match_pen_3_result", data.npwp[4].match_result);
+                                $("#verif_npwp_pen_3_result").html(`${data.npwp[4].nama_user}`);
+                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp[4].updated_at)}`);
+                                if(data.npwp[4].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_3_result").html("1");
+                                } else if (data.npwp[4].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_3_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_3_result").html("2");
+                            }
+
+                            if (data.npwp[5] != null) {
+                                checkResult("npwp_pen_4_result", data.npwp[5].npwp);
+                                checkResult("nik_npwp_pen_4_result", data.npwp[5].nik);
+                                checkResult("name_npwp_pen_4_result", data.npwp[5].nama);
+                                checkResult("birthdate_npwp_pen_4_result", data.npwp[5].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_4_result", data.npwp[5].tmp_lahir);
+                                checkIncome("income_npwp_pen_4_result", data.npwp[5].income);
+                                checkResult("match_pen_4_result", data.npwp[5].match_result);
+                                $("#verif_npwp_pen_4_result").html(`${data.npwp[5].nama_user}`);
+                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp[5].updated_at)}`);
+                                if(data.npwp[5].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_4_result").html("1");
+                                } else if (data.npwp[5].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_4_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_4_result").html("2");
+                            }
+
+                            if (data.npwp[6] != null) {
+                                checkResult("npwp_pen_5_result", data.npwp[6].npwp);
+                                checkResult("nik_npwp_pen_5_result", data.npwp[6].nik);
+                                checkResult("name_npwp_pen_5_result", data.npwp[6].nama);
+                                checkResult("birthdate_npwp_pen_5_result", data.npwp[6].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_5_result", data.npwp[6].tmp_lahir);
+                                checkIncome("income_npwp_pen_5_result", data.npwp[6].income);
+                                checkResult("match_pen_5_result", data.npwp[6].match_result);
+                                $("#verif_npwp_pen_5_result").html(`${data.npwp[6].nama_user}`);
+                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp[6].updated_at)}`);
+                                if(data.npwp[6].limit_call == "1") {
+                                    $("#limit_call_npwp_pen_5_result").html("1");
+                                } else if (data.npwp[6].limit_call == "2") {
+                                    $("#limit_call_npwp_pen_5_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_npwp_pen_5_result").html("2");
+                            }
+                            
+                            if (data.property[0] != null) {
+                                checkResult("property_name_1_result", data.property[0].property_name);
+                                checkResult("property_building_area_1_result", data.property[0].property_building_area);
+                                checkResult("property_surface_area_1_result", data.property[0].property_surface_area);
+                                checkIncome("property_estimation_1_result", data.property[0].property_estimation);
+                                checkResult("certificate_id_1_result", data.property[0].certificate_id);
+                                checkResult("certificate_name_1_result", data.property[0].certificate_name);
+                                checkResult("certificate_type_1_result", data.property[0].certificate_type);
+                                checkResult("certificate_date_1_result", data.property[0].certificate_date);
+                                $("#verif_properti_1_result").html(`${data.property[0].nama_user}`);
+                                $("#verif_properti_1_update_result").html(`${formatUpdated(data.property[0].updated_at)}`);
+                                if(data.property[0].limit_call == "1") {
+                                    $("#limit_call_properti_1_result").html("1");
+                                } else if (data.property[0].limit_call == "2") {
+                                    $("#limit_call_properti_1_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_1_result").html("2");
+                            }
+
+                            if (data.property[1] != null) {
+                                checkResult("property_name_2_result", data.property[1].property_name);
+                                checkResult("property_building_area_2_result", data.property[1].property_building_area);
+                                checkResult("property_surface_area_2_result", data.property[1].property_surface_area);
+                                checkIncome("property_estimation_2_result", data.property[1].property_estimation);
+                                checkResult("certificate_id_2_result", data.property[1].certificate_id);
+                                checkResult("certificate_name_2_result", data.property[1].certificate_name);
+                                checkResult("certificate_type_2_result", data.property[1].certificate_type);
+                                checkResult("certificate_date_2_result", data.property[1].certificate_date);
+                                $("#verif_properti_2_result").html(`${data.property[1].nama_user}`);
+                                $("#verif_properti_2_update_result").html(`${formatUpdated(data.property[1].updated_at)}`);
+                                if(data.property[1].limit_call == "1") {
+                                    $("#limit_call_properti_2_result").html("1");
+                                } else if (data.property[1].limit_call == "2") {
+                                    $("#limit_call_properti_2_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_2_result").html("2");
+                            }
+
+                            if (data.property[2] != null) {
+                                checkResult("property_name_3_result", data.property[2].property_name);
+                                checkResult("property_building_area_3_result", data.property[2].property_building_area);
+                                checkResult("property_surface_area_3_result", data.property[2].property_surface_area);
+                                checkIncome("property_estimation_3_result", data.property[2].property_estimation);
+                                checkResult("certificate_id_3_result", data.property[2].certificate_id);
+                                checkResult("certificate_name_3_result", data.property[2].certificate_name);
+                                checkResult("certificate_type_3_result", data.property[2].certificate_type);
+                                checkResult("certificate_date_3_result", data.property[2].certificate_date);
+                                $("#verif_properti_3_result").html(`${data.property[2].nama_user}`);
+                                $("#verif_properti_3_update_result").html(`${formatUpdated(data.property[2].updated_at)}`);
+                                if(data.property[2].limit_call == "1") {
+                                    $("#limit_call_properti_3_result").html("1");
+                                } else if (data.property[2].limit_call == "2") {
+                                    $("#limit_call_properti_3_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_3_result").html("2");
+                            }
+
+                            if (data.property[3] != null) {
+                                checkResult("property_name_4_result", data.property[3].property_name);
+                                checkResult("property_building_area_4_result", data.property[3].property_building_area);
+                                checkResult("property_surface_area_4_result", data.property[3].property_surface_area);
+                                checkIncome("property_estimation_4_result", data.property[3].property_estimation);
+                                checkResult("certificate_id_4_result", data.property[3].certificate_id);
+                                checkResult("certificate_name_4_result", data.property[3].certificate_name);
+                                checkResult("certificate_type_4_result", data.property[3].certificate_type);
+                                checkResult("certificate_date_4_result", data.property[3].certificate_date);
+                                $("#verif_properti_4_result").html(`${data.property[3].nama_user}`);
+                                $("#verif_properti_4_update_result").html(`${formatUpdated(data.property[3].updated_at)}`);
+                                if(data.property[3].limit_call == "1") {
+                                    $("#limit_call_properti_4_result").html("1");
+                                } else if (data.property[3].limit_call == "2") {
+                                    $("#limit_call_properti_4_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_4_result").html("2");
+                            }
+
+                            if (data.property[4] != null) {
+                                checkResult("property_name_5_result", data.property[4].property_name);
+                                checkResult("property_building_area_5_result", data.property[4].property_building_area);
+                                checkResult("property_surface_area_5_result", data.property[4].property_surface_area);
+                                checkIncome("property_estimation_5_result", data.property[4].property_estimation);
+                                checkResult("certificate_id_5_result", data.property[4].certificate_id);
+                                checkResult("certificate_name_5_result", data.property[4].certificate_name);
+                                checkResult("certificate_type_5_result", data.property[4].certificate_type);
+                                checkResult("certificate_date_5_result", data.property[4].certificate_date);
+                                $("#verif_properti_5_result").html(`${data.property[4].nama_user}`);
+                                $("#verif_properti_5_update_result").html(`${formatUpdated(data.property[4].updated_at)}`);
+                                if(data.property[4].limit_call == "1") {
+                                    $("#limit_call_properti_5_result").html("1");
+                                } else if (data.property[4].limit_call == "2") {
+                                    $("#limit_call_properti_5_result").html("0");
+                                }
+                            } else {
+                                $("#limit_call_properti_5_result").html("2");
+                            }
+                        })
+                        .fail(function(jqXHR) {
+                            bootbox.alert('Tidak dapat menampilkan hasil Verifikasi!!');
+                        })
+                    
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
+
+                })
+            
+            $('#lihat_data_credit').hide();
+            $('#lihat_detail').show();
+        }); 
+
+        $('#data_verifikasi_filter').on('click', '.change', function(e) {
                 e.preventDefault();
                 
                 var id = $(this).attr('data');
