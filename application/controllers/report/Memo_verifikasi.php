@@ -58,7 +58,7 @@ class Memo_verifikasi extends CI_Controller {
         $data['pemasukan_debitur_result'] = $x->pemasukan_debitur_result;
         $data['verif_debitur_result'] = $x->verif_debitur_result;;
         if($x->verif_debitur_update_result != null){
-            $data['verif_debitur_update_result'] = date('d-m-Y',strtotime($x->verif_debitur_update_result));
+            $data['verif_debitur_update_result'] = date('d-m-Y | H:i:s',strtotime($x->verif_debitur_update_result));
         } else {
             $data['verif_debitur_update_result'] = "";
         }
@@ -121,7 +121,7 @@ class Memo_verifikasi extends CI_Controller {
         $data['pemasukan_pasangan_result'] = $y->pemasukan_pasangan_result;
         $data['verif_pasangan_result'] = $y->verif_pasangan_result;
         if($y->verif_pasangan_update_result != null){
-            $data['verif_pasangan_update_result'] = date('d-m-Y',strtotime($y->verif_pasangan_update_result));
+            $data['verif_pasangan_update_result'] = date('d-m-Y | H:i:s',strtotime($y->verif_pasangan_update_result));
         } else {
             $data['verif_pasangan_update_result'] = "";
         }
