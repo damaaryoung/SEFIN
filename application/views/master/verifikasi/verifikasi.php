@@ -4488,7 +4488,7 @@
         } else if (isResult == '2') {
             $(`#${elementId}`).html("<button class='btn btn-danger' style='width: 100%'>Not Verified</button>")
         } else {
-            $(`#${elementId}`).html("<button class='btn' style='width: 100%'>Null</button>")
+            $(`#${elementId}`).html("<button class='btn' style='width: 100%'>Not Available</button>")
         }
     }
 
@@ -4500,7 +4500,7 @@
         } else if (value == "below" || value == "BELOW") {
             $(`#${elementId}`).html("<button class='btn btn-danger' style='width: 100%'>Below</button>")
         } else if (value == null || value == "") {
-            $(`#${elementId}`).html("<button class='btn' style='width: 100%'>Null</button>")
+            $(`#${elementId}`).html("<button class='btn' style='width: 100%'>Not Available</button>")
         }
     }
 

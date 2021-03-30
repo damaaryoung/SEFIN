@@ -26,6 +26,7 @@ class Memo_verifikasi extends CI_Controller {
             e.`tgl_lahir` AS tgl_lahir_debitur_result,
             e.`alamat` AS alamat_debitur_result,
             e.`selfie_foto` AS photo_debitur_result,
+            f.`id` AS id_pemasukan_debitur_result,
             f.`income` AS pemasukan_debitur_result,
             g.`nama` AS verif_debitur_result,
             e.`updated_at` AS verif_debitur_update_result
@@ -55,6 +56,7 @@ class Memo_verifikasi extends CI_Controller {
         $data['tgl_lahir_debitur_result'] = $x->tgl_lahir_debitur_result;
         $data['alamat_debitur_result'] = $x->alamat_debitur_result;
         $data['photo_debitur_result'] = $x->photo_debitur_result;
+        $data['id_pemasukan_debitur_result'] = $x->id_pemasukan_debitur_result;
         $data['pemasukan_debitur_result'] = $x->pemasukan_debitur_result;
         $data['verif_debitur_result'] = $x->verif_debitur_result;;
         if($x->verif_debitur_update_result != null){
@@ -80,6 +82,7 @@ class Memo_verifikasi extends CI_Controller {
             e.`tgl_lahir` AS tgl_lahir_pasangan_result,
             e.`alamat` AS alamat_pasangan_result,
             e.`selfie_foto` AS photo_pasangan_result,
+            f.`id` AS id_pemasukan_pasangan_result,
             f.`income` AS pemasukan_pasangan_result,
             g.`nama` AS verif_pasangan_result,
             e.`updated_at` AS verif_pasangan_update_result
@@ -118,6 +121,7 @@ class Memo_verifikasi extends CI_Controller {
         $data['tgl_lahir_pasangan_result'] = $y->tgl_lahir_pasangan_result;
         $data['alamat_pasangan_result'] = $y->alamat_pasangan_result;
         $data['photo_pasangan_result'] = $y->photo_pasangan_result;
+        $data['id_pemasukan_pasangan_result'] = $y->id_pemasukan_pasangan_result;
         $data['pemasukan_pasangan_result'] = $y->pemasukan_pasangan_result;
         $data['verif_pasangan_result'] = $y->verif_pasangan_result;
         if($y->verif_pasangan_update_result != null){
@@ -139,6 +143,7 @@ class Memo_verifikasi extends CI_Controller {
             c.tempat_lahir AS tempat_lahir_penjamin_result,
             c.tgl_lahir AS tgl_lahir_penjamin_result,
             c.alamat AS alamat_penjamin_result,
+            d.id AS id_pemasukan_penjamin_result,
             d.income AS pemasukan_penjamin_result,
             e.nama AS verif_penjamin_result,
             c.updated_at AS verif_penjamin_update_result

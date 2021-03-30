@@ -65,7 +65,7 @@
                         <th colspan="6" align="left" style="background-color: yellow;font-size: 10px;">DEBITUR</th>
                     </tr>
 					<tr>
-                    <?php if ($pemasukan_debitur_result != null) {?>
+                    <?php if ($id_pemasukan_debitur_result != null) {?>
 						<td rowspan="9">
                             <?php if ($photo_debitur == null) { ?>
                                 <img width= "150" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />
@@ -153,7 +153,7 @@
                                     <td style="width: 120" class="btn_null" ></td>
                                 <?php } ?>
                             </tr>
-                            <?php if ($pemasukan_debitur_result != null) {?>
+                            <?php if ($id_pemasukan_debitur_result != null) {?>
                                 <tr>
                                     <td width="120"> Income</td>
                                     <td width="2">:</td>
@@ -165,7 +165,7 @@
                                     <?php } else if ($pemasukan_debitur_result == "ABOVE" || $pemasukan_debitur_result == "above") { ?>
                                         <td style="width: 120" class="btn_verif" >ABOVE</td>
                                     <?php } else { ?>
-                                        <td style="width: 120" class="btn_notverif">NOT VERIFIED</td>
+                                        <td style="width: 120" class="btn_notverif">NOT AVAILABLE</td>
                                     <?php } ?>
                                 </tr>
                             <?php } ?>
@@ -183,7 +183,7 @@
                             <th colspan="6" align="left" style="background-color: yellow;font-size: 10px;">PASANGAN</th>
                         </tr>
                         <tr>
-                        <?php if ($pemasukan_pasangan_result != null) {?>
+                        <?php if ($id_pemasukan_pasangan_result != null) {?>
                             <td rowspan="9">
                                 <?php if ($photo_pasangan == null) { ?>
                                     <img width= "150" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />
@@ -275,7 +275,7 @@
                                         <td style="width: 120" class="btn_null"></td>
                                     <?php } ?>
                                 </tr>
-                                <?php if ($pemasukan_pasangan_result != null) {?>
+                                <?php if ($id_pemasukan_pasangan_result != null) {?>
                                     <tr>
                                         <td width="120"> Income</td>
                                         <td width="2">:</td>
@@ -287,7 +287,7 @@
                                         <?php } else if ($pemasukan_pasangan_result == "ABOVE" || $pemasukan_pasangan_result == "above") { ?>
                                             <td style="width: 120" class="btn_verif" >ABOVE</td>
                                         <?php } else { ?>
-                                            <td style="width: 120" class="btn_notverif" >NOT VERIFIED</td>
+                                            <td style="width: 120" class="btn_notverif" >NOT AVAILABLE</td>
                                         <?php } ?>
                                     </tr>
                                 <?php } ?>
@@ -396,7 +396,7 @@
                                             <td style="width: 120" class="btn_null"></td>
                                         <?php } ?>
                                     </tr>
-                                    <?php if ($r->pemasukan_penjamin_result != null) { ?>
+                                    <?php if ($r->id_pemasukan_penjamin_result != null) { ?>
                                         <tr>
                                             <td width="120"> Income</td>
                                             <td width="2">:</td>
@@ -408,7 +408,7 @@
                                             <?php } else if ($r->pemasukan_penjamin_result == "ABOVE" || $r->pemasukan_penjamin_result == "above") { ?>
                                                 <td style="width: 120" class="btn_verif" >ABOVE</td>
                                             <?php } else { ?>
-                                                <td style="width: 120" class="btn_notverif" >NOT VERIFIED</td>
+                                                <td style="width: 120" class="btn_notverif" >NOT AVAILABLE</td>
                                             <?php } ?>
                                         </tr>
                                     <?php } ?>
