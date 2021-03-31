@@ -2058,7 +2058,7 @@
                             var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
                             var url = "api/master/verif/storepenjamin/";
 
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody), url, id_trans_so, "POST")
+                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
                                 mappingResponsePenjamin_2(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
@@ -2150,7 +2150,7 @@
                             var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
                             var url = "api/master/verif/storepenjamin/";
 
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody), url, id_trans_so, "POST")
+                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
                                 mappingResponsePenjamin_3(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
@@ -2242,7 +2242,7 @@
                             var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
                             var url = "api/master/verif/storepenjamin/";
 
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody), url, id_trans_so, "POST")
+                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
                                 mappingResponsePenjamin_4(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
@@ -2334,7 +2334,7 @@
                             var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
                             var url = "api/master/verif/storepenjamin/";
 
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody), url, id_trans_so, "POST")
+                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
                                 mappingResponsePenjamin_5(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
