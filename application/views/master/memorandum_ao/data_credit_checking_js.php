@@ -1818,7 +1818,7 @@
         var idkell = 'select_kelurahan_agunan' + nl++;
         var idkodepos = 'select_kelurahan_agunan' + ns++;
 
-        var markup = '<tr><td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><div class="row"><div class="col-md-6"><div class="form-group"><label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label><select name="tipe_lokasi_agunan[]" class="form-control "><option value="">-- Pilih --</option><option value="PERUMAHAN/CLUSTER">PERUMAHAN/CLUSTER</option><option value="JAMINAN PINGGIR JALAN RAYA">JAMINAN PINGGIR JALAN RAYA</option><option value="KAVLING">KAVLING</option><option value="PERKAMPUNGAN AKSES JALAN MOBIL">PERKAMPUNGAN AKSES JALAN MOBIL</option><option value="LAINNYA">LAINNYA</option></select></div><div class="form-group"><label for="exampleInput1">Collateral<span class="required_notification">*</span></label><select name="tipe_lokasi_agunan_collateral[]" class="form-control "><option value="">-- Pilih --</option><option value="RUMAH">RUMAH</option><option value="RUKO">RUKO</option><option value="RUMAH KONTRAKAN">RUMAH KONTRAKAN</option><option value="GEDUNG">GEDUNG</option><option value="TANAH KOSONG">TANAH KOSONG</option></select></div><div class="form-row"><div class="form-group col-md-8"><label >Alamat Sesuai KTP<span class="required_notification">*</span></label><input type="text" name="alamat_agunan[]" class="form-control"  ></div><div class="form-group col-md-2"><label >RT<span class="required_notification">*</span></label><input type="text" class="form-control" name="rt_agunan[]" maxlength="3" onkeypress="return hanyaAngka(event)"></div><div class="form-group col-md-2"><label >RW<span class="required_notification">*</span></label><input type="text" class="form-control" name="rw_agunan[]" maxlength="3" onkeypress="return hanyaAngka(event)"></div></div><div class="form-group"><label>Provinsi<span class="required_notification">*</span></label><select name="id_prov_agunan[]" id="' + iddd + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-row"><div class="form-group col-md-6"><label>Kabupaten/Kota<span class="required_notification">*</span></label><select id="' + idkabb + '" name="id_kab_agunan[]" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-group col-md-6"><label>Kecamatan<span class="required_notification">*</span></label><select name="id_kec_agunan[]" id="' + idkecc + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div></div><div class="form-row"><div class="form-group col-md-6"><label>Kelurahan<span class="required_notification">*</span></label><select name="id_kel_agunan[]" id="' + idkell + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-group col-md-6"><label>Kode POS<span class="required_notification">*</span></label><input type="text" name="kode_pos_agunan[]" id="' + idkodepos + '" class="form-control" maxlength="5" onkeypress="return hanyaAngka(event)"></div></div><div class="form-row"><div class="form-group col-md-6"><label >Luas Tanah<span class="required_notification">*</span></label><input type="text" class="form-control" name="luas_tanah[]" ></div><div class="form-group col-md-6"><label >Luas Bangunan<span class="required_notification">*</span></label><input type="text" class="form-control"  name="luas_bangunan[]" ></div></div></div><div class="col-md-6"><div class="form-group"><label for="exampleInput1" >Nama Pemilik Sertifikat<span class="required_notification">*</span></label><input type="text" name="nama_pemilik_sertifikat[]" class="form-control "></div><div class="form-group"><label for="exampleInput1" >Jenis Sertifikat</label><select name="jenis_sertifikat[]" class="form-control "><option value="">-- Pilih --</option><option value="SHM">SHM</option><option value="SHGB">SHGB</option></select></div><div class="form-group"><label for="exampleInputEmail1" >Nomor Sertifikat<span class="required_notification">*</span></label><input type="text" class="form-control" name="no_sertifikat[]" aria-describedby=""></div><div class="form-group"> <label for="exampleInputEmail1" >Tanggal & Nomor Ukur sertifikat</label><input type="text" class="form-control" name="no_ukur_sertifikat[]"></div><div class="form-row"><div class="form-group col-md-6"><label>Tanggal Berlaku SHGB<span class="required_notification">*</span></label><div class="input-group"><div class="input-group-prepend"><span class="input-group-text"><i class="far fa-calendar-alt"></i></span></div><input type="text" name="tgl_berlaku_shgb[]" class="datepicker-here form-control" data-language="en"  data-date-format="dd-mm-yyyy"/></div></div><div class="form-group col-md-6"><label for="exampleInputEmail1" >Nomor IMB<small><i>(Jika Ada)</i></small></label><input type="text" class="form-control" name="no_imb[]"></div></div><div class="form-row"><div class="form-group col-md-6"><label for="exampleInputEmail1" >NJOP<span class="required_notification">*</span></label><input type="text" class="form-control uang" name="njop[]"></div><div class="form-group col-md-6"><label for="exampleInputEmail1" >NOP<span class="required_notification">*</span></label><input type="text" class="form-control" name="nop[]"></div></div></div></div><div class="form-group"><label>LAMPIRAN<span class="required_notification">*</span></label></div><div class="row"><div class="col-md-6"><div class="form-group"><label >Foto Agunan Tampak Depan<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_depan[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div><div class="form-group"><label >Foto Agunan Tampak Jalan<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_jalan[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div><div class="form-group"><label >Foto Agunan Tampak Ruang Tamu<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_ruangtamu[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div></div><div class="col-md-6"><div class="form-group"><label >Foto Agunan Tampak Dapur<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_dapur[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div> <div class="form-group"><label >Foto Agunan Tampak Kamar Mandi<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_kamarmandi[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div> </div></div> </td></tr>';
+        var markup = '<tr><td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><div class="row"><div class="col-md-6"><div class="form-group"><label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label><select name="tipe_lokasi_agunan[]" class="form-control "><option value="">-- Pilih --</option><option value="Mini Cluster / Perkampungan Pinggir Jalan Raya">Mini Cluster / Perkampungan Pinggir Jalan Raya</option><option value="Perumahan Cluster">Perumahan Cluster</option><option value="Perkampungan Akses Jalan Gang">Perkampungan Akses Jalan Gang</option><option value="Perkampungan Desa Akses Jalan Non Aspal">Perkampungan Desa Akses Jalan Non Aspal</option><option value="Perkampungan Jalan Desa">Perkampungan Jalan Desa</option></select></div><div class="form-group"><label for="exampleInput1">Collateral<span class="required_notification">*</span></label><select name="tipe_lokasi_agunan_collateral[]" class="form-control "><option value="">-- Pilih --</option><option value="RUMAH">RUMAH</option><option value="RUKO">RUKO</option><option value="RUMAH KONTRAKAN">RUMAH KONTRAKAN</option><option value="GEDUNG">GEDUNG</option><option value="TANAH KOSONG">TANAH KOSONG</option></select></div><div class="form-row"><div class="form-group col-md-8"><label >Alamat Sesuai KTP<span class="required_notification">*</span></label><input type="text" name="alamat_agunan[]" class="form-control"  ></div><div class="form-group col-md-2"><label >RT<span class="required_notification">*</span></label><input type="text" class="form-control" name="rt_agunan[]" maxlength="3" onkeypress="return hanyaAngka(event)"></div><div class="form-group col-md-2"><label >RW<span class="required_notification">*</span></label><input type="text" class="form-control" name="rw_agunan[]" maxlength="3" onkeypress="return hanyaAngka(event)"></div></div><div class="form-group"><label>Provinsi<span class="required_notification">*</span></label><select name="id_prov_agunan[]" id="' + iddd + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-row"><div class="form-group col-md-6"><label>Kabupaten/Kota<span class="required_notification">*</span></label><select id="' + idkabb + '" name="id_kab_agunan[]" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-group col-md-6"><label>Kecamatan<span class="required_notification">*</span></label><select name="id_kec_agunan[]" id="' + idkecc + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div></div><div class="form-row"><div class="form-group col-md-6"><label>Kelurahan<span class="required_notification">*</span></label><select name="id_kel_agunan[]" id="' + idkell + '" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger" ><option value="">--Pilih--</option></select></div><div class="form-group col-md-6"><label>Kode POS<span class="required_notification">*</span></label><input type="text" name="kode_pos_agunan[]" id="' + idkodepos + '" class="form-control" maxlength="5" onkeypress="return hanyaAngka(event)"></div></div><div class="form-row"><div class="form-group col-md-6"><label >Luas Tanah<span class="required_notification">*</span></label><input type="text" class="form-control" name="luas_tanah[]" ></div><div class="form-group col-md-6"><label >Luas Bangunan<span class="required_notification">*</span></label><input type="text" class="form-control"  name="luas_bangunan[]" ></div></div></div><div class="col-md-6"><div class="form-group"><label for="exampleInput1" >Nama Pemilik Sertifikat<span class="required_notification">*</span></label><input type="text" name="nama_pemilik_sertifikat[]" class="form-control "></div><div class="form-group"><label for="exampleInput1" >Jenis Sertifikat</label><select name="jenis_sertifikat[]" class="form-control "><option value="">-- Pilih --</option><option value="SHM">SHM</option><option value="SHGB">SHGB</option></select></div><div class="form-group"><label for="exampleInputEmail1" >Nomor Sertifikat<span class="required_notification">*</span></label><input type="text" class="form-control" name="no_sertifikat[]" aria-describedby=""></div><div class="form-group"> <label for="exampleInputEmail1" >Tanggal & Nomor Ukur sertifikat</label><input type="text" class="form-control" name="no_ukur_sertifikat[]"></div><div class="form-row"><div class="form-group col-md-6"><label>Tanggal Berlaku SHGB<span class="required_notification">*</span></label><div class="input-group"><div class="input-group-prepend"><span class="input-group-text"><i class="far fa-calendar-alt"></i></span></div><input type="text" name="tgl_berlaku_shgb[]" class="datepicker-here form-control" data-language="en"  data-date-format="dd-mm-yyyy"/></div></div><div class="form-group col-md-6"><label for="exampleInputEmail1" >Nomor IMB<small><i>(Jika Ada)</i></small></label><input type="text" class="form-control" name="no_imb[]"></div></div><div class="form-row"><div class="form-group col-md-6"><label for="exampleInputEmail1" >NJOP<span class="required_notification">*</span></label><input type="text" class="form-control uang" name="njop[]"></div><div class="form-group col-md-6"><label for="exampleInputEmail1" >NOP<span class="required_notification">*</span></label><input type="text" class="form-control" name="nop[]"></div></div></div></div><div class="form-group"><label>LAMPIRAN<span class="required_notification">*</span></label></div><div class="row"><div class="col-md-6"><div class="form-group"><label >Foto Agunan Tampak Depan<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_depan[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div><div class="form-group"><label >Foto Agunan Tampak Jalan<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_jalan[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div><div class="form-group"><label >Foto Agunan Tampak Ruang Tamu<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_ruangtamu[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div></div><div class="col-md-6"><div class="form-group"><label >Foto Agunan Tampak Dapur<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_dapur[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div> <div class="form-group"><label >Foto Agunan Tampak Kamar Mandi<span class="required_notification">*</span></label><div class="input-group"><div class="custom-file"><input type="file" name="agunan_bag_kamarmandi[]" class="custom-file-input" ><label class="custom-file-label" style="font-size: 11px" >Choose file</label></div></div></div> </div></div> </td></tr>';
         $("#table tbody").append(markup);
 
         $(function() {
@@ -2748,6 +2748,7 @@
             var html18 = [];
             var html19 = [];
             var html20 = [];
+            var html21 = [];
 
             var htmlideb = [];
             var htmlpefindo = [];
@@ -2812,6 +2813,7 @@
                     $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id);
                     $('#form_edit_photo_pasangan input[type=hidden][name=id_pasangan_photo]').val(data.data_pasangan.id);
                     $('#form_edit_ktp_pasangan input[type=hidden][name=id_pasangan_ktp]').val(data.data_pasangan.id);
+                    $('#form_edit_npwp_pasangan input[type=hidden][name=id_pasangan_npwp]').val(data.data_pasangan.id);
                     $('#form_edit_buku_nikah input[type=hidden][name=id_pasangan_buku_nikah]').val(data.data_pasangan.id);
                     $('#form_penjamin input[type=hidden][name=id_trans_so_pen]').val(data.id);
                     $('#form_detail input[type=hidden][name=id_fasilitas_pinjaman]').val(data.id);
@@ -3065,11 +3067,11 @@
                     var select_pendidikan_terakhir = [];
                     var option_pendidikan_terakhir = [
                         '<option value="' + data.data_debitur.pendidikan_terakhir + '">' + data.data_debitur.pendidikan_terakhir + '</option>',
-                        '<option value="0021">Tidak Sekolah/SD</option>',
-                        '<option value="0022">SMP</option>',
-                        '<option value="0023">SMA</option>',
-                        '<option value="0024">D3/S1</option>',
-                        '<option value="0025">S2/S3</option>'
+                        '<option value=">= S2">>= S2</option>',
+                        '<option value="D3">D3</option>',
+                        '<option value="SLTA">SLTA</option>',
+                        '<option value="S1">S1</option>',
+                        '<option value="SLTP/SD/TIDAK SEKOLAH">SLTP/SD/TIDAK SEKOLAH</option>',
                     ].join('\n');
                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -3287,6 +3289,7 @@
                     if (data.data_pasangan.id == null) {
                         $('#form_photo_pasangan').hide();
                         $('#form_ktp_pasangan').hide();
+                        $('#form_npwp_pasangan').hide();
                         $('#form_buku_nikah').hide();
                         $('#form_pasangan_debitur').hide();
                     } else {
@@ -3317,6 +3320,12 @@
                         ].join('\n');
                         html6.push(f);
                         $('#gambar_ktp_pasangan').html(html6);
+
+                        var ff = [
+                            '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '" /> </a>'
+                        ].join('\n');
+                        html20.push(ff);
+                        $('#gambar_npwp_pasangan').html(html20);
 
                         var g = [
                             '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran Buku Nikah"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lamp_buku_nikah + '" /> </a>'
@@ -3451,6 +3460,7 @@
             var html19 = [];
             var html20 = [];
             var html21 = [];
+            var html22 = [];
             
             var htmlideb = [];
             var htmlpefindo = [];
@@ -3561,6 +3571,8 @@
                     $('#form_edit_ktp_pasangan_detail input[type=hidden][name=id_pasangan_ktp]').val(data.data_pasangan.id);
                     $('#form_edit_photo_pasangan input[type=hidden][name=id_pasangan_photo]').val(data.data_pasangan.id);
                     $('#form_edit_photo_pasangan_detail input[type=hidden][name=id_pasangan_photo]').val(data.data_pasangan.id);
+                    $('#form_edit_npwp_pasangan input[type=hidden][name=id_pasangan_npwp]').val(data.data_pasangan.id);
+                    $('#form_edit_npwp_pasangan_detail input[type=hidden][name=id_pasangan_npwp]').val(data.data_pasangan.id);
                     $('#form_edit_buku_nikah input[type=hidden][name=id_pasangan_buku_nikah]').val(data.data_pasangan.id);
                     $('#form_edit_buku_nikah_detail input[type=hidden][name=id_pasangan_buku_nikah]').val(data.data_pasangan.id);
 
@@ -3775,11 +3787,11 @@
                     var select_pendidikan_terakhir = [];
                     var option_pendidikan_terakhir = [
                         '<option value="' + data.data_debitur.pendidikan_terakhir + '">' + data.data_debitur.pendidikan_terakhir + '</option>',
-                        '<option value="0021">Tidak Sekolah/SD</option>',
-                        '<option value="0022">SMP</option>',
-                        '<option value="0023">SMA</option>',
-                        '<option value="0024">D3/S1</option>',
-                        '<option value="0025">S2/S3</option>'
+                        '<option value=">= S2">>= S2</option>',
+                        '<option value="D3">D3</option>',
+                        '<option value="SLTA">SLTA</option>',
+                        '<option value="S1">S1</option>',
+                        '<option value="SLTP/SD/TIDAK SEKOLAH">SLTP/SD/TIDAK SEKOLAH</option>',
                     ].join('\n');
                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -4054,6 +4066,21 @@
                         ].join('\n');
                         html6.push(f);
                         $('#gambar_lamp_ktp_pasangan').html(html6);
+                    }
+
+                    var html22 =[];
+                    if (data.data_pasangan.lampiran.lampiran_npwp == null) {
+                        var ff = [
+                            '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                        ].join('\n');
+                        html22.push(ff);
+                        $('#gambar_lamp_npwp_pasangan').html(html22);
+                    } else {
+                        var ff = [
+                            '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran Buku Nikah"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data.data_pasangan.lampiran.lampiran_npwp + '" /> </a>'
+                        ].join('\n');
+                        html22.push(ff);
+                        $('#gambar_lamp_npwp_pasangan').html(html22);
                     }
 
                     if (data.data_pasangan.lampiran.lamp_buku_nikah == null) {
@@ -4531,11 +4558,11 @@
                     var select_status_penghuni = [];
                     var option_status_penghuni = [
                         '<option value="' + data.pemeriksaan.agunan_tanah[0].status_penghuni + '">' + data.pemeriksaan.agunan_tanah[0].status_penghuni + '</option>',
-                        '<option value="SUAMI/ISTRI">SUAMI/ISTRI</option>',
-                        '<option value="MILIK KELUARGA">MILIK KELUARGA</option>',
-                        '<option value="MILIK ORANG LAIN (BELUM BALIK NAMA)">MILIK ORANG LAIN (BELUM BALIK NAMA)</option>',
-                        '<option value="TAKE OVER A.N SENDIRI">TAKE OVER A.N SENDIRI</option>',
-                        '<option value="TAKE OVER MASIH A.N ORANG LAIN">TAKE OVER MASIH A.N ORANG LAIN</option>'
+                        '<option value="Suami/Istri">Suami/Istri</option>',
+                        '<option value="Orang Tua">Orang Tua</option>',
+                        '<option value="Take Over a/n Sendiri">Take Over a/n Sendiri</option>',
+                        '<option value="Take Over a/n Orang Lain">Take Over a/n Orang Lain</option>',
+                        '<option value="Belum Balik Nama/waris">Belum Balik Nama/waris</option>'
                     ].join('\n');
                     select_status_penghuni.push(option_status_penghuni);
                     $('#detail_ao select[id=status_penghuni_agunan_detail]').html(select_status_penghuni);
@@ -4891,11 +4918,11 @@
                     var select_tipe_lokasi_agunan = [];
                     var option_tipe_lokasi_agunan = [
                         '<option value="' + data.tipe_lokasi + '">' + data.tipe_lokasi + '</option>',
-                        '<option value="PERUMAHAN/CLUSTER">PERUMAHAN/CLUSTER</option>',
-                        '<option value="JAMINAN PINGGIR JALAN RAYA">JAMINAN PINGGIR JALAN RAYA</option>',
-                        '<option value="KAVLING">KAVLING</option>',
-                        '<option value="PERKAMPUNGAN AKSES JALAN MOBIL">PERKAMPUNGAN AKSES JALAN MOBIL</option>',
-                        '<option value="LAINNYA">LAINNYA</option>'
+                        '<option value="Mini Cluster / Perkampungan Pinggir Jalan Raya">Mini Cluster / Perkampungan Pinggir Jalan Raya</option>',
+                        '<option value="Perumahan Cluster">Perumahan Cluster</option>',
+                        '<option value="Perkampungan Akses Jalan Gang">Perkampungan Akses Jalan Gang</option>',
+                        '<option value="Perkampungan Desa Akses Jalan Non Aspal">Perkampungan Desa Akses Jalan Non Aspal</option>',
+                        '<option value="Perkampungan Jalan Desa">Perkampungan Jalan Desa</option>'
                     ].join('\n');
                     select_tipe_lokasi_agunan.push(option_tipe_lokasi_agunan);
                     $('#form_edit_agunan select[name=tipe_lokasi_agunan]').html(select_tipe_lokasi_agunan);
@@ -5376,6 +5403,16 @@
                 return (false);
             }
 
+            if(document.getElementById('pekerjaan_deb').value == "03" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+                bootbox.alert("Pekerjaan Debitur adalah PNS dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
+                return (false);
+            }
+
+            if(document.getElementById('pekerjaan_deb').value == "11" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+                bootbox.alert("Pekerjaan Debitur adalah Pegawai Bank dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
+                return (false);
+            }
+
             if(document.getElementById('pekerjaan_deb').value == "02" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 200000000) {
                 bootbox.alert("Pekerjaan Debitur adalah Wiraswasta dengan Plafon > 200jt maka Wajib Mengisi No. NPWP!!!");
                 return (false);
@@ -5817,7 +5854,6 @@
 
         });
 
-
         $('#form_edit_pbb_deb').on('submit', function(e) {
             var id = $('input[name=id_debitur_pbb]', this).val();
             e.preventDefault();
@@ -5929,6 +5965,41 @@
             var formData = new FormData();
             //Data Debitur
             formData.append('lamp_ktp_pas', $('input[name=lamp_ktp_pas]', this)[0].files[0]);
+
+            update_pasangan(formData, id)
+                .done(function(res) {
+                    var data = res.data;
+                    bootbox.alert('Data berhasil diubah', function() {
+                        load_data_lampiran_pasangan_detail();
+                        $("#batal").click();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    } else {
+                        $.each(data, function(index, item) {
+                            error += '<p>' + item + '</p>' + "\n";
+                        });
+                    }
+                    bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                        $("#batal").click();
+                    })
+                    // bootbox.alert(error);
+                });
+            $(".close_deb").click();
+        });
+
+        $('#form_edit_npwp_pasangan').on('submit', function(e) {
+            var id = $('input[name=id_pasangan_npwp]', this).val();
+            e.preventDefault();
+            var formData = new FormData();
+            //Data Debitur
+            formData.append('lampiran_npwp', $('input[name=lamp_npwp_pas]', this)[0].files[0]);
 
             update_pasangan(formData, id)
                 .done(function(res) {
@@ -6163,7 +6234,6 @@
 
         });
 
-
         $('#form_edit_pbb_deb_detail').on('submit', function(e) {
             var id = $('input[name=id_debitur_pbb]', this).val();
             e.preventDefault();
@@ -6275,6 +6345,41 @@
             var formData = new FormData();
             //Data Debitur
             formData.append('lamp_ktp_pas', $('input[name=lamp_ktp_pas_detail]', this)[0].files[0]);
+
+            update_pasangan(formData, id)
+                .done(function(res) {
+                    var data = res.data;
+                    bootbox.alert('Data berhasil diubah', function() {
+                        load_data_lampiran_pasangan_detail();
+                        $("#batal").click();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    } else {
+                        $.each(data, function(index, item) {
+                            error += '<p>' + item + '</p>' + "\n";
+                        });
+                    }
+                    bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                        $("#batal").click();
+                    })
+                    // bootbox.alert(error);
+                });
+            $(".close_deb").click();
+        });
+
+        $('#form_edit_npwp_pasangan_detail ').on('submit', function(e) {
+            var id = $('input[name=id_pasangan_npwp]', this).val();
+            e.preventDefault();
+            var formData = new FormData();
+            //Data Debitur
+            formData.append('lampiran_npwp', $('input[name=lamp_npwp_pas_detail]', this)[0].files[0]);
 
             update_pasangan(formData, id)
                 .done(function(res) {
@@ -6799,6 +6904,16 @@
 
                 if(document.getElementById('pekerjaan_deb').value == "01" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
                     bootbox.alert("Pekerjaan Debitur adalah Karyawan dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
+                    return (false);
+                }
+
+                if(document.getElementById('pekerjaan_deb').value == "03" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+                    bootbox.alert("Pekerjaan Debitur adalah PNS dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
+                    return (false);
+                }
+
+                if(document.getElementById('pekerjaan_deb').value == "11" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+                    bootbox.alert("Pekerjaan Debitur adalah Pegawai Bank dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
                     return (false);
                 }
 
@@ -8310,6 +8425,7 @@
                 var html1 = [];
                 var html2 = [];
                 var html3 = [];
+                var html4 = [];
 
                 var f1 = [
                     '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" data-lightbox="example-set" data-title="Lampiran Photo Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" /> </a>'
@@ -8322,6 +8438,12 @@
                 ].join('\n');
                 html1.push(f);
                 $('#gambar_ktp_pasangan').html(html1);
+                
+                var ff = [
+                    '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran KTP Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lampiran_npwp + '" /> </a>'
+                ].join('\n');
+                html4.push(ff);
+                $('#gambar_npwp_pasangan').html(html4);
 
                 var g = [
                     '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lamp_buku_nikah + '" data-lightbox="example-set" data-title="Lampiran Buku Nikah"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lamp_buku_nikah + '" /> </a>'
@@ -8340,6 +8462,7 @@
                 var html1 = [];
                 var html2 = [];
                 var html3 = [];
+                var html4 = [];
 
                 var f1 = [
                     '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" data-lightbox="example-set" data-title="Lampiran Photo Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" /> </a>'
@@ -8347,6 +8470,12 @@
                 html3.push(f1);
                 $('#gambar_photo_pasangan_debitur').html(html3);
 
+
+                var ff = [
+                    '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran Photo Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lampiran_npwp + '" /> </a>'
+                ].join('\n');
+                html4.push(ff);
+                $('#gambar_lamp_npwp_pasangan').html(html4);
 
                 var f = [
                     '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lamp_ktp + '" /> </a>'

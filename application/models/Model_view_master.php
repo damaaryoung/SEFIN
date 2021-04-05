@@ -83,16 +83,16 @@ class Model_view_master extends ci_model
         return $result;
     }
 
-    // function jenis_kredit()
-    // {
-    //     $query = "SELECT * from view_creditscoring WHERE nama_parameter='KREDIT CHECKING' AND id_parameter='01'";
-    //     $data=$this->db->query($query)->result();
-    //     return $data;
-    // }
+    function jenis_kredit()
+    {
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='CREDIT CHECKING RESULT' AND id_parameter='020'";
+        $data=$this->db->query($query)->result();
+        return $data;
+    }
 
     function tampil_lokasi_jaminan()
     {
-        $query = "SELECT * from view_creditscoring WHERE nama_parameter='LOKASI JAMINAN' AND id_parameter='016'";
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='LOKASI JAMINAN' AND id_parameter='026'";
         $data=$this->db->query($query)->result();
         return $data;
     }
@@ -113,14 +113,14 @@ class Model_view_master extends ci_model
 
     function pemilik_jaminan()
     {
-        $query = "SELECT * from view_creditscoring WHERE nama_parameter='PEMILIK JAMINAN' AND id_parameter='013'";
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='STATUS KEPEMILIKAN' AND id_parameter='027'";
         $data=$this->db->query($query)->result();
         return $data;
     }
 
     function tampil_data_pendidikan()
     {
-        $query = "SELECT * from view_creditscoring WHERE nama_parameter='PENDIDIKAN' AND id_parameter='02'";
+        $query = "SELECT * from view_creditscoring WHERE nama_parameter='PENDIDIKAN' AND id_parameter='022'";
         $data=$this->db->query($query)->result();
         return $data;
     }
