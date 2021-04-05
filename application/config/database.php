@@ -75,7 +75,10 @@ $query_builder = TRUE;
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5b83d1339be630721da9f8b1b0674cbcaacc85a
  $db['default'] = array(
  	'dsn'	=> '',
  	'hostname' => '103.31.232.148:3307',
@@ -142,6 +145,7 @@ $query_builder = TRUE;
 // 	'save_queries' => TRUE
 // );
 
+<<<<<<< HEAD
 // $db['dpm_online'] = array(
 // 	'dsn'   => '',
 // 	'hostname' => '103.234.254.186:3308',
@@ -164,3 +168,26 @@ $query_builder = TRUE;
 // 	'save_queries' => TRUE
 // );
 	
+=======
+$db['dpm_online'] = array(
+	'dsn'   => '',
+	'hostname' => '103.234.254.186:3308',
+	'username' => 'test', //username database kedua
+	'password' => 'test123!', //password database kedua
+	'database' => 'dpm_online', //nama database kedua
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);*/
+>>>>>>> e5b83d1339be630721da9f8b1b0674cbcaacc85a

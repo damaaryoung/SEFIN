@@ -28,12 +28,6 @@
 			</tr>
 			<?php $no++; endforeach; ?>
 		</tbody>
-		<tfoot>
-			<tr>
-				<th>Nama PIC</th>
-				<th width="10">ACT</th>
-			</tr>
-		</tfoot>
 	</table>
 	<div class="text-center">
 		<ul class="pagination pagination-sm">

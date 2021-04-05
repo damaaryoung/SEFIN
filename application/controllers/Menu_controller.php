@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 class Menu_controller extends MY_Controller
 {
     function __construct()
-    {
+    {   
         parent::__construct();
         $this->load->model('model_menu');
         $this->load->model('model_auth');
@@ -544,6 +544,26 @@ class Menu_controller extends MY_Controller
         $this->load->view('master/target_lending/target_lending_template');
     }
 
+    public function activity_tele_collection()
+    {
+        $this->load->view('master/activity/activity_tele_collection');
+    }
+
+    public function activity_tele_sales()
+    {
+        $this->load->view('master/activity/activity_tele_sales');
+    }
+
+    public function dashboard_tele()
+    {
+        $this->load->view('master/tele_center/dashboard_tele');
+    }
+
+    public function pipeline_lending()
+    {
+        $this->load->view('master/cek_sertifikat/pipeline_lending');
+    }
+
     public function activity_sales_officer()
     {
         $this->load->view('master/activity/sales-officer/index');
@@ -572,6 +592,23 @@ class Menu_controller extends MY_Controller
     public function activity_head_bussiness()
     {
         $this->load->view('master/activity/head-bussines/index');
+    }
+
+    public function verifikasi()
+    {
+        $data['nama_user'] = $this->model_menu->getUser();
+        // $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
+        // $data['data_collateral'] = $this->Model_view_master->data_collateral();
+        $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
+        // $data['data_sumber_penghasilan'] =  $this->Model_view_master->sumber_penghasilan();
+        // $data['data_pemasukan_perbulan'] =  $this->Model_view_master->pemasukan_perbulan();
+        // $data['data_frek_trans_pemasukan'] =  $this->Model_view_master->frek_trans_pemasukan();
+        // $data['data_sumber_data_untuk_setoran'] =  $this->Model_view_master->sumber_data_untuk_setoran();
+        // $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
+        // $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
+        // $data['pendidikan'] = $this->Model_view_master->tampil_data_pendidikan();
+        
+        $this->load->view('master/verifikasi/verifikasi', $data);
     }
     
 

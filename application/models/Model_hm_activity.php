@@ -18,7 +18,7 @@ class Model_hm_activity extends CI_Model{
     ));
 
     $response = curl_exec($curl);
-
+    // print_r( $response);
     curl_close($curl);
     return json_decode($response, true);
   }
@@ -60,6 +60,7 @@ class Model_hm_activity extends CI_Model{
     ));
 
     $response = curl_exec($curl);
+    // print_r($response);
 
     curl_close($curl);
     return json_decode($response, true);

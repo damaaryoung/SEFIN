@@ -61,7 +61,64 @@
 		$(".sales_officer").val($nama_ao);
 		$("#exampleModalLong-so-data").modal("hide");
 	}
-
+	function find_no_kontrak(){
+		$("#exampleModalLong-no_kontrak").modal("show");
+		pagination_no_kontrak(1);
+	}
+	function pagination_no_kontrak($page){
+		data_no_kontrak($page);
+	}
+	function data_no_kontrak(page=''){
+		$.ajax({
+			url : "<?= base_url(); ?>activity/hm/ActivityHMController/data_no_kontrak",
+			type: "POST",
+			data: { page:page },
+			beforeSend: function(){
+				$("#loading_no_kontrak").show();
+				$("#table_no_kontrak").hide();
+			},
+			success:  function (no_kontrakData) {
+				$( ".modal_no_kontrak" ).html( no_kontrakData );
+				$("#loading_no_kontrak").hide();
+				$("#table_no_kontrak").show();
+			},
+		});
+	}
+	function pick_no_kontrak($no_so, $nama_debitur, $alamat){
+		$(".no_kontrak").val($no_so);
+		$(".nama_debitur").val($nama_debitur);
+		$(".alamat_debitur").val($alamat);
+		$("#exampleModalLong-no_kontrak").modal("hide");
+	}
+	function find_nama_mb(){
+		$("#exampleModalLong-nama_mb").modal("show");
+		pagination_nama_mb(1);
+	}
+	function pagination_nama_mb($page){
+		data_nama_mb($page);
+	}
+	
+	function data_nama_mb(page=''){
+		$.ajax({
+			url : "<?= base_url(); ?>activity/hm/ActivityHMController/data_nama_mb",
+			type: "POST",
+			data: { page:page },
+			beforeSend: function(){
+				$("#loading_nama_mb").show();
+				$("#table_nama_mb").hide();
+			},
+			success:  function (nama_mbData) {
+				$( ".modal_nama_mb" ).html( nama_mbData );
+				$("#loading_nama_mb").hide();
+				$("#table_nama_mb").show();
+			},
+		});
+	}
+	function pick_nama_mb($nama_debitur, $alamat){
+		$(".nama_mb").val($nama_debitur);
+		$(".alamat_mb").val($alamat);
+		$("#exampleModalLong-nama_mb").modal("hide");
+	}
 	function findAO(){
 		$("#exampleModalLong-ao-data").modal("show");
 		paginationAO(1);
@@ -89,7 +146,35 @@
 		$("#account_officer").val($nama_ao);
 		$("#exampleModalLong-ao-data").modal("hide");
 	}
-
+	function find_kontrak_visit(){
+		$("#exampleModalLong-kontrak_visit").modal("show");
+		pagination_visit(1);
+	}
+	function pagination_visit($page){
+		data_visit($page);
+	}
+	function data_visit(page=''){
+		$.ajax({
+			url : "<?= base_url(); ?>activity/hm/ActivityHMController/data_visit",
+			type: "POST",
+			data: { page:page },
+			beforeSend: function(){
+				$("#loading-visit").show();
+				$("#table_visit").hide();
+			},
+			success:  function (visitData) {
+				$( ".modal_kontrak_visit" ).html( visitData );
+				$("#loading-visit").hide();
+				$("#table_visit").show();
+			},
+		});
+	}
+	function pick_visit($nama_debitur,$nomor_so,$alamat){
+		$(".nama_debitur").val($nama_debitur);
+		$(".no_kontrak").val($nomor_so);
+		$(".alamat_debitur").val($alamat);
+		$("#exampleModalLong-kontrak_visit").modal("hide");
+	}
 	function findCadeb(){
 		$("#exampleModalLong-ao-data").modal("show");
 		paginationCadeb(1);
@@ -114,12 +199,11 @@
 		});
 	}
 	function pickDeb($nama_debitur,$nomor_so,$alamat){
-		$("#cadeb-picker-data").val($nama_debitur);
+		$(".nama_debitur").val($nama_debitur);
 		$(".no_kontrak").val($nomor_so);
 		$(".alamat_debitur").val($alamat);
 		$("#exampleModalLong-ao-data").modal("hide");
 	}
-
 	function findPICAO(){
 		$("#exampleModalLong-ao-data").modal("show");
 		paginationpic(1);
@@ -215,22 +299,26 @@ function edit($id,$param){
 			success: function(response) {
 					// console.log(response.data);
 					if ($param==="VISIT RO") {
+						$(".find_no_kontrak").hide();
 						$(".no_kontrak").val(response.data.no_kontrak);
-						$(".cadeb").val(response.data.nama_debitur);
+						$(".nama_debitur").val(response.data.nama_debitur);
 						$(".alamat_debitur").val(response.data.alamat_debitur);
 						$(".sales_officer").val(response.data.nama_pic);
 					}else if ($param==="MAINTAIN MB") {
+						$(".find_nama_mb").hide();
 						$(".nama_mb").val(response.data.nama_mb);
 						$(".alamat_mb").val(response.data.alamat_mb);
 						$(".sales_officer").val(response.data.nama_pic);
 					}else if ($param==="SURVEY") {
+						$(".find-cadeb-ao").hide();
 						$(".no_kontrak").val(response.data.no_kontrak);
-						$(".cadeb").val(response.data.nama_debitur);
+						$(".nama_debitur").val(response.data.nama_debitur);
 						$(".alamat_debitur").val(response.data.alamat_debitur);
 						$(".account_officer").val(response.data.nama_pic);
 					}else if ($param==="VISIT CGC") {
+						$(".find_kontrak_visit").hide();
 						$(".no_kontrak").val(response.data.no_kontrak);
-						$(".cadeb").val(response.data.nama_debitur);
+						$(".nama_debitur").val(response.data.nama_debitur);
 						$(".alamat_debitur").val(response.data.alamat_debitur);
 						$(".account_officer").val(response.data.nama_pic);
 					}
@@ -354,7 +442,7 @@ function formValidationSurvey($param,$url){
 				'activity':'SURVEY',
 				'no_kontrak':$(".no_kontrak").val(),
 				'nama_mb':'',
-				'nama_debitur':$(".cadeb").val(),
+				'nama_debitur':$(".nama_debitur").val(),
 				'alamat_mb':'',
 				'alamat_debitur':$(".alamat_debitur").val(),
 				'nama_pic':$(".account_officer").val(),
@@ -428,7 +516,7 @@ function formValidationVisitROSO($param,$url){
 				'activity':'VISIT RO',
 				'no_kontrak':$(".no_kontrak").val(),
 				'nama_mb':'',
-				'nama_debitur':$(".cadeb").val(),
+				'nama_debitur':$(".nama_debitur").val(),
 				'alamat_mb':'',
 				'alamat_debitur':$(".alamat_debitur").val(),
 				'nama_pic':$(".sales_officer").val(),

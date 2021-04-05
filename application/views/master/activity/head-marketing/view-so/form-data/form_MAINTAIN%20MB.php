@@ -5,30 +5,29 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="fas fa-tag"></i>
-            Maintain MB Sales Officer
+            Sales Officer - Maintain MB
           </h3>
         </div>
         <div class="card-body">
           <div class="row">
             <div class="col-md">
               <div class="input-group mb-3">
-                <input type="text" class="form-control nama_mb" id="nama_mb" placeholder="nama mb.." name="nama_mb">
+                <input type="text" class="form-control nama_mb" id="nama_mb" placeholder="Nama MB" name="nama_mb">
                 <div class="input-group-append">
-                  <span class="input-group-text"><i class="fas fa-user"></i></span>
+                  <button type="button" class="btn btn-primary find_nama_mb" onclick="find_nama_mb();"> Cari</button>
                 </div>
               </div>
             </div>
             <div class="col-md">
               <div class="input-group mb-3">
-                <input type="text" class="form-control alamat_mb" placeholder="alamat mb.." name="alamat_mb">
+                <input type="text" class="form-control alamat_mb" placeholder="Alamat MB" name="alamat_mb">
                 <div class="input-group-append">
-                  <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
                 </div>
               </div>
             </div>
             <div class="col-md">
               <div class="input-group mb-3">
-                <input type="text" class="form-control pic sales_officer" placeholder="PIC.." name="pic" id="pic-picker-data">
+                <input type="text" class="form-control sales_officer" placeholder="Pilih PIC" name="pic" id="pic-picker-data">
                 <div class="input-group-append">
                   <button type="button" class="btn btn-primary find-pic-ao" onclick="findPICSO();"><i class="fas fa-search"></i></button>
                 </div>

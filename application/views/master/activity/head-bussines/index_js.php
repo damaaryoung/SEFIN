@@ -38,6 +38,10 @@
 		$("#exampleModalLong-so-data").modal("show");
 		paginationSO(1);
 	}
+	function find_no_kontrak(){
+		$("#exampleModalLong-no_kontrak").modal("show");
+		paginationSO(1);
+	}
 	function paginationSO($page){
 		SOData($page);
 	}

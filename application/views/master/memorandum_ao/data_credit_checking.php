@@ -280,7 +280,7 @@
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label>No NPWP</label>
-                                                <input type="text" class="form-control" name="no_npwp" maxlength="15" onkeypress="return hanyaAngka(event)">
+                                                <input type="text" class="form-control" name="no_npwp" id="no_npwp" maxlength="15" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -793,7 +793,16 @@
                                                     Hubungan Debitur
                                                 </th>
                                                 <th>
+                                                    Pemasukan Bulanan
+                                                </th>
+                                                <th>
+                                                    Lampiran Photo Selfie
+                                                </th>
+                                                <th>
                                                     Lampiran KTP
+                                                </th>
+                                                <th>
+                                                    Lampiran NPWP
                                                 </th>
                                                 <th>
                                                     Lampiran KTP Pasangan
@@ -822,13 +831,37 @@
                         </div>
                         <div class="card-body collapse" id="collapse_5">
                             <div class="row">
+                                <div class="col-md-4" id="photo_debitur">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">Photo Debitur</label>
+                                        <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_photo"><i class="fa fa-pencil-alt"></i></button>
+                                        <div class="form-group form-file-upload form-file-multiple">
+                                            <div class="col-md-6">
+                                                <div class="well" id="gambar_photo">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-4" id="ktp">
                                     <div class="form-group">
-                                        <label class="bmd-label-floating">KTP</label>
+                                        <label class="bmd-label-floating">KTP Debitur</label>
                                         <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_ktp"><i class="fa fa-pencil-alt"></i></button>
                                         <div class="form-group form-file-upload form-file-multiple">
                                             <div class="col-md-6">
                                                 <div class="well" id="gambar_ktp">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" id="npwp">
+                                    <div class="form-group">
+                                        <label class="bmd-label-floating">NPWP</label>
+                                        <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_npwp"><i class="fa fa-pencil-alt"></i></button>
+                                        <div class="form-group form-file-upload form-file-multiple">
+                                            <div class="col-md-6">
+                                                <div class="well" id="gambar_npwp">
                                                 </div>
                                             </div>
                                         </div>
@@ -877,6 +910,18 @@
                                         <div class="form-group form-file-upload form-file-multiple">
                                             <div class="col-md-6">
                                                 <div class="well" id="gambar_imb">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" id="form_photo_pasangan">
+                                    <div class="form-group">
+                                        <label for="exampleInput1" class="bmd-label-floating">Lampiran Photo Pasangan</label>
+                                        <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_photo_pasangan"><i class="fa fa-pencil-alt"></i></button>
+                                        <div class="form-group form-file-upload form-file-multiple">
+                                            <div class="col-md-6">
+                                                <div class="well" id="gambar_photo_pasangan">
                                                 </div>
                                             </div>
                                         </div>
@@ -2614,13 +2659,37 @@
                     </div>
                     <div class="card-body collapse" id="collapse_23">
                         <div class="row">
+                            <div class="col-md-3" id="photo_debitur">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Photo Debitur</label>
+                                    <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_lamp_photo"><i class="fa fa-pencil-alt"></i></button>
+                                    <div class="form-group form-file-upload form-file-multiple">
+                                        <div class="col-md-6">
+                                            <div class="well" id="gambar_photo_debitur">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-3" id="ktp">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">KTP</label>
+                                    <label class="bmd-label-floating">KTP Debitur</label>
                                     <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_lamp_ktp"><i class="fa fa-pencil-alt"></i></button>
                                     <div class="form-group form-file-upload form-file-multiple">
                                         <div class="col-md-6">
                                             <div class="well" id="gambar_lamp_ktp">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3" id="npwp">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">NPWP Debitur</label>
+                                    <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_npwp"><i class="fa fa-pencil-alt"></i></button>
+                                    <div class="form-group form-file-upload form-file-multiple">
+                                        <div class="col-md-6">
+                                            <div class="well" id="gambar_npwp_debitur">
                                             </div>
                                         </div>
                                     </div>
@@ -2669,6 +2738,18 @@
                                     <div class="form-group form-file-upload form-file-multiple">
                                         <div class="col-md-6">
                                             <div class="well" id="gambar_lamp_imb">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3" id="form_photo_pasangan_detail">
+                                <div class="form-group">
+                                    <label for="exampleInput1" class="bmd-label-floating">Lampiran Photo Pasangan</label>
+                                    <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_photo_pasangan"><i class="fa fa-pencil-alt"></i></button>
+                                    <div class="form-group form-file-upload form-file-multiple">
+                                        <div class="col-md-6">
+                                            <div class="well" id="gambar_photo_pasangan_debitur">
                                             </div>
                                         </div>
                                     </div>
@@ -2795,6 +2876,29 @@
     </div>
 </div>
 </div>
+
+<form id="form_edit_photo_deb">
+    <input type="hidden" id="id_debitur_photo" name="id_debitur_photo">
+    <div class="modal fade in" id="modal_edit_photo" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran Photo Debitur</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_photo_deb" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <form id="form_edit_ktp_deb">
     <input type="hidden" id="id_debitur_ktp" name="id_debitur_ktp">
     <div class="modal fade in" id="modal_edit_ktp" data-keyboard="false" data-backdrop="static">
@@ -2805,6 +2909,28 @@
                         <label>Ubah Lampiran KTP Debitur</label>
                         <div class="input-group">
                             <input type="file" name="lamp_ktp_deb" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_npwp">
+    <input type="hidden" id="id_debitur_npwp" name="id_debitur_npwp">
+    <div class="modal fade in" id="modal_edit_npwp" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran NPWP Debitur</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_npwp" class="form-control" style="height: 45px">
                         </div>
                     </div>
                 </div>
@@ -2927,6 +3053,28 @@
     </div>
 </form>
 
+<form id="form_edit_photo_pasangan">
+    <input type="hidden" name="id_pasangan_photo">
+    <div class="modal fade in" id="modal_edit_photo_pasangan" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran Photo Pasangan</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_photo_pas" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <form id="form_edit_ktp_pasangan">
     <input type="hidden" name="id_pasangan_ktp">
     <div class="modal fade in" id="modal_edit_ktp_pasangan" data-keyboard="false" data-backdrop="static">
@@ -2971,6 +3119,27 @@
     </div>
 </form>
 
+<form id="form_edit_photo_deb_detail">
+    <input type="hidden" id="id_debitur_photo_detail" name="id_debitur_photo">
+    <div class="modal fade in" id="modal_edit_lamp_photo" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran Photo Debitur</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_photo_deb_detail" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <form id="form_edit_ktp_deb_detail">
     <input type="hidden" id="id_debitur_ktp_detail" name="id_debitur_ktp">
@@ -2982,6 +3151,28 @@
                         <label>Ubah Lampiran KTP Debitur</label>
                         <div class="input-group">
                             <input type="file" name="lamp_ktp_deb_detail" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_npwp_detail">
+    <input type="hidden" id="id_debitur_npwp_detail" name="id_debitur_npwp">
+    <div class="modal fade in" id="modal_edit_lamp_npwp" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran NPWP Debitur</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_npwp_detail" class="form-control" style="height: 45px">
                         </div>
                     </div>
                 </div>
@@ -3092,6 +3283,28 @@
                         <label>Lampiran Buku Tabungan</label>
                         <div class="input-group">
                             <input type="file" name="lamp_buku_tabungan_deb_detail" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_photo_pasangan_detail">
+    <input type="hidden" name="id_pasangan_photo">
+    <div class="modal fade in" id="modal_edit_lamp_photo_pasangan" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran Photo Pasangan</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_photo_pas_detail" class="form-control" style="height: 45px">
                         </div>
                     </div>
                 </div>
@@ -3584,7 +3797,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tanggal & Nomor Ukur sertifikat</label>
-                                    <input type="text" class="form-control" name="no_ukur_sertifikat">
+                                    <input type="text" class="form-control" id="no_ukur_sertifikat_detail" name="no_ukur_sertifikat_detail">
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
@@ -3695,32 +3908,36 @@
                     </button>
                 </div>
                 <div class="modal-body" style="height:500px; overflow-y:scroll">
+                    <input type="hidden" id="edit_id_penjamin" name="edit_id_penjamin">
+                    <div class="form-group">
+                        <label>Nama Lengkap <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label>
+                        <input type="text" name="nama_pen" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                    </div>
                     <div class="row">
-                        <input type="hidden" id="edit_id_penjamin" name="edit_id_penjamin">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Nama Lengkap <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label>
-                                <input type="text" name="nama_pen" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
-                            </div>
-                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nama Ibu Kandung<span class="required_notification">*</span></label>
                                 <input type="text" name="nama_ibu_kandung_pen" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>No KTP<span class="required_notification">*</span></label>
                                 <input type="text" name="no_ktp_pen" onkeyup="this.value = this.value.toUpperCase()" class="form-control " maxlength="16">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>No NPWP</label>
                                 <input type="text" name="no_npwp_pen" onkeyup="this.value = this.value.toUpperCase()" class="form-control " maxlength="15">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Pemasukan Bulanan</label>
+                                <input type="text" name="pemasukan_pen" onkeypress="return hanyaAngka(event)" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -3876,20 +4093,32 @@
                     <hr>
                     <div class="row">
                         <div class="col-md-6">
+                            <div class="col-md-4" id="photo_pen">
+                                <div class="form-group">
+                                    <label for="exampleInput1" class="bmd-label-floating">Photo Penjamin</label>
+                                    <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_photo_pen"><i class="fa fa-paperclip"></i></button>
+                                </div>
+                            </div>
                             <div class="col-md-4" id="ktp_pen">
                                 <div class="form-group">
                                     <label for="exampleInput1" class="bmd-label-floating">KTP Penjamin</label>
                                     <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_ktp_pen"><i class="fa fa-paperclip"></i></button>
                                 </div>
                             </div>
+                            <div class="col-md-4" id="npwp_pen">
+                                <div class="form-group">
+                                    <label for="exampleInput1" class="bmd-label-floating">NPWP Penjamin</label>
+                                    <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_npwp_pen"><i class="fa fa-paperclip"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="col-md-4" id="kk_pen">
                                 <div class="form-group">
                                     <label for="exampleInput1" class="bmd-label-floating">KK Penjamin</label>
                                     <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_edit_kk_pen"><i class="fa fa-paperclip"></i></button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="col-md-4" id="ktp_pas_pen">
                                 <div class="form-group">
                                     <label for="exampleInput1" class="bmd-label-floating">KTP Pasangan Penjamin</label>
@@ -3923,6 +4152,50 @@
                         <input type="hidden" id="id_ktp_pen" name="id_ktp_pen">
                         <div class="input-group">
                             <input type="file" name="lamp_ktp_pen" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_photo_penjamin">
+    <div class="modal fade in" id="modal_edit_photo_pen" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran Photo Penjamin</label>
+                        <input type="hidden" id="id_photo_pen" name="id_photo_pen">
+                        <div class="input-group">
+                            <input type="file" name="lamp_photo_pen" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_npwp_penjamin">
+    <div class="modal fade in" id="modal_edit_npwp_pen" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran NPWP Penjamin</label>
+                        <input type="hidden" id="id_npwp_pen" name="id_npwp_pen">
+                        <div class="input-group">
+                            <input type="file" name="lamp_npwp_pen" class="form-control" style="height: 45px">
                         </div>
                     </div>
                 </div>
@@ -4305,7 +4578,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tanggal & Nomor Ukur sertifikat</label>
-                                    <input type="text" class="form-control" name="no_ukur_sertifikat">
+                                    <input type="text" class="form-control" id="no_ukur_sertifikat" name="no_ukur_sertifikat">
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
@@ -4509,33 +4782,37 @@
                 </div>
                 <div class="modal-body" style="height:500px; overflow-y:scroll">
                     <div id="form_input_data_penjamin">
+                    <input type="hidden" id="add_id_so_penjamin" name="add_id_so_penjamin">
+                    <input type="hidden" id="add_id_penjamin" name="add_id_penjamin">
+                        <div class="form-group">
+                            <label>Nama Lengkap <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label>
+                            <input type="text" name="add_nama_penjamin" id="add_nama_penjamin" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                        </div>
                         <div class="row">
-                            <input type="hidden" id="add_id_so_penjamin" name="add_id_so_penjamin">
-                            <input type="hidden" id="add_id_penjamin" name="add_id_penjamin">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Nama Lengkap <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label>
-                                    <input type="text" name="add_nama_penjamin" id="add_nama_penjamin" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
-                                </div>
-                            </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Nama Ibu Kandung<span class="required_notification">*</span></label>
                                     <input type="text" name="add_nama_ibu_kandung_penjamin" id="add_nama_ibu_kandung_penjamin" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>No KTP<span class="required_notification">*</span></label>
                                     <input type="text" name="add_no_ktp_penjamin" id="add_no_ktp_penjamin" onkeypress="return hanyaAngka(event)" class="form-control " maxlength="16">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>No NPWP</label>
                                     <input type="text" name="add_no_npwp_penjamin" id="add_no_npwp_penjamin" onkeypress="return hanyaAngka(event)" class="form-control " maxlength="15">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Pemasukan Bulanan</label>
+                                    <input type="text" name="add_pemasukan_penjamin" id="add_pemasukan_penjamin" onkeypress="return hanyaAngka(event)" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -4696,6 +4973,15 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label>Photo Penjamin<span class="required_notification add-lamp-photo-penjamin">*</span></label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="add_lamp_photo_penjamin" class="custom-file-input add_lamp_photo_penjamin">
+                                            <label class="custom-file-label" style="font-size: 11px">Choose file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label>KTP Penjamin<span class="required_notification add-lamp-ktp-penjamin">*</span></label>
                                     <div class="input-group">
                                         <div class="custom-file">
@@ -4705,6 +4991,17 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label>NPWP Penjamin<span class="required_notification add-lamp-npwp-penjamin">*</span></label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" name="add_lamp_npwp_penjamin" class="custom-file-input add_lamp_npwp_penjamin">
+                                            <label class="custom-file-label" style="font-size: 11px">Choose file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label>KK Penjamin<span class="required_notification add-lamp-kk-penjamin">*</span></label>
                                     <div class="input-group">
                                         <div class="custom-file">
@@ -4713,8 +5010,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label>KTP Pasangan Penjamin<span class="required_notification add-lamp-ktp-pas-penjamin"></span></label>
                                     <div class="input-group">

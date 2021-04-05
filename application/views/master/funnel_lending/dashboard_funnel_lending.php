@@ -81,6 +81,7 @@
                     <select name="y" id="y" class="form-control">
                         <?php
                             if($y):
+                                echo "<option value='2020'>2020</option>";
                                 echo "<option value='$y'>$y</option>";
                             endif;
                         ?>
