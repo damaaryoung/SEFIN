@@ -43,7 +43,6 @@ function NPL(){
 // NPL
 // Bucket Zero
 Bucket_0();
-<<<<<<< HEAD
 
 function Bucket_0() {
     var date = $('input[name="date_0_all_console"]').val();
@@ -209,7 +208,6 @@ function Bucket_0() {
                 });
                 chart.render();
             }
-=======
 function Bucket_0(){
   $.ajax({
       type: "POST",
@@ -238,7 +236,6 @@ function Bucket_0(){
             ]
           }
           ]
->>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
         });
         chart.render();
       }
@@ -310,7 +307,6 @@ $(function(){
                 {
                     $('[id="NPL_AREA_'+i+'_CABANG_'+j+'"]').html(loading);
                 }
-<<<<<<< HEAD
             }
         }
     });
@@ -340,7 +336,7 @@ function deliquency_console()
                 data: [{
                     type: "funnel",
                     toolTipContent: "{label} : <strong>{y}</strong><br/>Noa : <strong>{yn}</strong><br/>Baki Debet : <strong>{yb}</strong>",
-=======
+
               
           },
            success: function(result2) {
@@ -360,12 +356,10 @@ function deliquency_console()
                   data: [{
                     type: "pie",
                     toolTipContent: "Percentage : <strong>{y}</strong><br/>BD NPL : <strong>{yn}</strong><br/>NOA NPL : <strong>{yb}</strong>",
->>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
                     indexLabelFontSize: 18,
                     indexLabel: "{label} - {y}",
                     yValueFormatString: "###0.0\"%\"",
                     click: explodePie,
-<<<<<<< HEAD
                     dataPoints: [{
                             y: parseFloat(result.rasio_current),
                             yn: parseFloat(result.noa_current),

@@ -41,10 +41,10 @@
                                     <tr>
                                         <th rowspan ="3" style="vertical-align: middle">Cabang</th>
                                         <th rowspan = "2" colspan = "5" style="text-align:center;vertical-align: middle">Angsuran Hari Ini</th>
-                                        <th colspan = "5" style="text-align:center;vertical-align: middle">HK Hari Ini</th>
-                                        <th colspan = "5" style="text-align:center;vertical-align: middle">HK Bulan Lalu</th>
+                                        <th colspan = "5" style="text-align:center;vertical-align: middle">HK Hari Ini <div id="hari_ke"></div></th>
+                                        <th colspan = "5" style="text-align:center;vertical-align: middle">HK Bulan Lalu<div id="hk_bulan_lalu"></div></th>
                                         <th rowspan ="2" colspan = "5" style="text-align:center;vertical-align: middle">GAP (Hari ini VS Bulan Lalu)</th>
-                                        <th colspan = "5" style="text-align:center;vertical-align: middle">HK Next Bulan Lalu</th>
+                                        <th colspan = "5" style="text-align:center;vertical-align: middle">HK Next Bulan Lalu<div id="hk_next_bulan_lalu"></div></th>
                                         <th rowspan ="2" colspan = "5" style="text-align:center;vertical-align: middle">GAP (Hari ini VS HK Next bulan lalu)</th>
                                     </tr>
                                     <tr>
@@ -58,31 +58,31 @@
                                         <th>DPK (Rp)</th>
                                         <th>DPK+ (Rp)</th>
                                         <th>NPL (Rp)</th>
-                                        <th>CURRENT</th>
-                                        <th>Lancar+</th>
-                                        <th>DPK</th>
-                                        <th>DPK+</th>
-                                        <th>NPL</th>
-                                        <th>CURRENT</th>
-                                        <th>Lancar+</th>
-                                        <th>DPK</th>
-                                        <th>DPK+</th>
-                                        <th>NPL</th>
-                                        <th>CURRENT</th>
-                                        <th>Lancar+</th>
-                                        <th>DPK</th>
-                                        <th>DPK+</th>
-                                        <th>NPL</th>
-                                        <th>CURRENT</th>
-                                        <th>Lancar+</th>
-                                        <th>DPK</th>
-                                        <th>DPK+</th>
-                                        <th>NPL</th>
-                                        <th>CURRENT</th>
-                                        <th>Lancar+</th>
-                                        <th>DPK</th>
-                                        <th>DPK+</th>
-                                        <th>NPL</th>
+                                        <th>CURRENT(%)</th>
+                                        <th>Lancar+(%)</th>
+                                        <th>DPK(%)</th>
+                                        <th>DPK+(%)</th>
+                                        <th>NPL(%)</th>
+                                        <th>CURRENT(%)</th>
+                                        <th>Lancar+(%)</th>
+                                        <th>DPK(%)</th>
+                                        <th>DPK+(%)</th>
+                                        <th>NPL(%)</th>
+                                        <th>CURRENT(%)</th>
+                                        <th>Lancar+(%)</th>
+                                        <th>DPK(%)</th>
+                                        <th>DPK+(%)</th>
+                                        <th>NPL(%)</th>
+                                        <th>CURRENT(%)</th>
+                                        <th>Lancar+(%)</th>
+                                        <th>DPK(%)</th>
+                                        <th>DPK+(%)</th>
+                                        <th>NPL(%)</th>
+                                        <th>CURRENT(%)</th>
+                                        <th>Lancar+(%)</th>
+                                        <th>DPK(%)</th>
+                                        <th>DPK+(%)</th>
+                                        <th>NPL(%)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -141,15 +141,70 @@ $(document).ready(function(){
         return tanggal + " " + bulanIndo[Math.abs(bulan)] + " " + tahun;
     }
 
+    function setColorValue(value){
+        var getColor;
+        if(value.substring(0,1) !="-"){
+            getColor = value.fontcolor("black");
+        }else{
+            getColor = value.fontcolor("red");
+        }
+        return getColor;
+    }
+
     $('#filter_date').change(function(){
         var tgl = $('#filter_date').val();
-        var url = '<?php echo base_url();?>menu_controller/json_data_collection_daily/';
+        var url1 = '<?php echo base_url();?>menu_controller/json_get_hari_kerja/';
+        var url2 = '<?php echo base_url();?>menu_controller/json_data_collection_daily/';
+        var url3 = '<?php echo base_url();?>menu_controller/json_get_hk_bulan_lalu/';
+        var url4 = '<?php echo base_url();?>menu_controller/json_get_next_hk_bulan_lalu/';
         var data = {
             'tgl' : tgl
         }
+
+        $.ajax({
+            url         : url1,
+            type        : "POST",
+            data        : data,
+            dataType    : "JSON",
+            success     : function(result){
+               $('#hari_ke').html("("+result[0].hk+")");
+            },
+             error       : function(xhr, status, error){
+                var errorMessage = xhr.status + ': ' + xhr.statusText
+                alert('Error - ' + errorMessage);
+            }
+        });
+
+         $.ajax({
+            url         : url4,
+            type        : "POST",
+            data        : data,
+            dataType    : "JSON",
+            success     : function(result){
+               $('#hk_next_bulan_lalu').html("("+result[0].hk+")");
+            },
+             error       : function(xhr, status, error){
+                var errorMessage = xhr.status + ': ' + xhr.statusText
+                alert('Error - ' + errorMessage);
+            }
+        });
+
+         $.ajax({
+            url         : url3,
+            type        : "POST",
+            data        : data,
+            dataType    : "JSON",
+            success     : function(result){
+               $('#hk_bulan_lalu').html("("+result[0].hk+")");
+            },
+             error       : function(xhr, status, error){
+                var errorMessage = xhr.status + ': ' + xhr.statusText
+                alert('Error - ' + errorMessage);
+            }
+        });
        
         $.ajax({
-            url         : url,
+            url         : url2,
             type        : "POST",
             data        : data,
             dataType    : "JSON",
@@ -189,31 +244,31 @@ $(document).ready(function(){
                         "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_dpk)) ? 0 : parseInt(result[i].ang_dpk))+boldEnd+"</td>"+
                         "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_dpk_dpk)) ? 0 : parseInt(result[i].ang_dpk_dpk))+boldEnd+"</td>"+
                         "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_npl)) ? 0 : parseInt(result[i].ang_npl))+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_0_hi+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_1_hi+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_2_hi+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_3_hi+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_npl_hi+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_0_hl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_1_hl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_2_hl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_3_hl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_npl_hl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_current_hihl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_lancar_hihl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_dpk_hihl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_dpk_dpk_hihl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_npl_hihl+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_0_hln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_1_hln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_2_hln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_3_hln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].rasio_bucket_npl_hln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_current_hihln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_lancar_hihln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_dpk_hihln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_dpk_dpk_hihln+boldEnd+"</td>"+
-                        "<td>"+boldStart+result[i].gap_npl_hihln+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_0_hi)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_1_hi)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_2_hi)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_3_hi)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_npl_hi)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_0_hl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_1_hl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_2_hl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_3_hl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_npl_hl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_current_hihl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_lancar_hihl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_dpk_hihl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_dpk_dpk_hihl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_npl_hihl)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_0_hln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_1_hln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_2_hln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_3_hln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].rasio_bucket_npl_hln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_current_hihln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_lancar_hihln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_dpk_hihln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_dpk_dpk_hihln)+boldEnd+"</td>"+
+                        "<td>"+boldStart+setColorValue(result[i].gap_npl_hihln)+boldEnd+"</td>"+
                         "</tr>");
                     // tot_ang_current = tot_ang_current + parseInt(result[i].ang_current);
                     // tot_ang_lancar = tot_ang_lancar + parseInt(result[i].ang_lancar);
@@ -242,7 +297,7 @@ $(document).ready(function(){
 function report_data_collection_daily_export() {
     var data_tgl = $('input[name="filter_date"]').val();
 
-    var winURL        = "<?php echo base_url('export/export_report_collection_daily') ?>";
+    var winURL        = "<?php echo base_url('Export/export_report_collection_daily') ?>";
     var winName       = "LAPORAN";
     var windowoption  = 'toolbar=no,location=no,status=yes,menubar=no,scrollbars=yes,height=350px, width=350px';
 

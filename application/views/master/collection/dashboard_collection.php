@@ -64,7 +64,6 @@
       </div>
     </section>
     <section class="content">
-<<<<<<< HEAD
         <div class="container-fluid">
             <div class="callout callout-info">
                 <h5 class="text-center"><strong>Collection</strong></h5>
@@ -103,21 +102,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <h3 class="card-title">Bucket NS 3 Month</h3>
-                                <div class="card-tools">                                 
-                                    <button type="button" class="btn btn-box-tool" data-card-widget="collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="BucketNS_3month" style="height: 300px; width: 100%;"></div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
@@ -152,21 +136,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <h3 class="card-title">Bucket 0 ALL 3 Month</h3>
-                                <div class="card-tools">                                 
-                                    <button type="button" class="btn btn-box-tool" data-card-widget="collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="Bucket0_3month" style="height: 300px; width: 100%;"></div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 
                 <div class="row">
@@ -204,21 +173,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <h3 class="card-title">FID Compre 3 Month</h3>
-                                <div class="card-tools">                                 
-                                    <button type="button" class="btn btn-box-tool" data-card-widget="collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="FID_Compre_3month" style="height: 300px; width: 100%;"></div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
@@ -253,21 +207,6 @@
                             </div>
                         </div>
                     </div> 
-                    <!-- <div class="col-xl-6 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <h3 class="card-title">FID Ever 3 Month</h3>
-                                <div class="card-tools">                                 
-                                    <button type="button" class="btn btn-box-tool" data-card-widget="collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="FID_Ever_3month" style="height: 300px; width: 100%;"></div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
 
                 <div class="row">
@@ -305,21 +244,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <h3 class="card-title">NPL 3 Month</h3>
-                                <div class="card-tools">                                 
-                                    <button type="button" class="btn btn-box-tool" data-card-widget="collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="NPL_3month" style="height: 300px; width: 100%;"></div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
@@ -354,28 +278,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <h3 class="card-title">Current Ratio 3 Month</h3>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-box-tool" data-card-widget="collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="Current_Ratio_3month" style="height: 300px; width: 100%;"></div>
-=======
-    <div class="container-fluid">
-      <div class="callout callout-info">
-        <h5 class="text-center"><strong>Collection</strong></h5>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-header d-flex p-0">
-                <h3 class="card-title p-3">NPL</h3>
-              </div><!-- /.card-header -->
               <div class="card-body">
                 <div id="NPL" style="height: 300px; width: 100%;"></div>
                 <button type="button" class="btn btn-md btn-danger col-12" data-toggle="modal" data-target="#modal-Npl-Area">Tampilkan Area</button>
@@ -449,11 +351,10 @@
                                    }
                                 ?>
                                  </div>
->>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
+
                             </div>
                           </div>
                         </div>
-<<<<<<< HEAD
                     </div> -->
                 </div>
                 <div class="row">
@@ -491,21 +392,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-xl-6 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <h3 class="card-title">Deliquency 3 Month</h3>
-                                <div class="card-tools">                                 
-                                    <button type="button" class="btn btn-box-tool" data-card-widget="collapse">
-                                      <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div id="deliquency_3month" style="height: 300px; width: 100%;"></div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <div class="card-header">
@@ -521,7 +407,6 @@
                                       <div class="dropdown-menu dropdown-menu-right" role="menu">
                                         <div class="dropdown-item">
                                           <input type="date" class="form-control" name="date_roll_console" onchange="roll_console()" value="">
-=======
                       </div>
                     <?php
                       $a++;
@@ -582,7 +467,6 @@
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                           </button>
->>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
                                         </div>
                                         <div class="modal-body">
                                           <div class="row">
@@ -620,7 +504,7 @@
                                         </div>
                                       </div>
                                     </div>
-<<<<<<< HEAD
+
                                     <button type="button" class="btn btn-tool" data-card-widget="remove">
                                       <i class="fas fa-times"></i>
                                     </button>
@@ -646,29 +530,24 @@
                             </div>
                             <div class="card-body">
                                 <div id="Roll_Bucket_3month" style="height: 300px; width: 100%;"></div>
-=======
+
                                   </div>
                               </div>
->>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
                             </div>
                           </div>
                           <?php $b++;} ?>  
-                          </div><!-- /.card-body -->
+                          </div>
                         </div>
-<<<<<<< HEAD
                     </div> -->
                 </div>
-=======
                       </div>
                     </div>
                   </div>
                 
               </div>
->>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
             </div>
           </div>
         </div>
-<<<<<<< HEAD
     </section>
 </div>
 <div id="modal-1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-1" aria-hidden="true">
@@ -1259,10 +1138,7 @@ function bucket_roll_console_export() {
     $('<form/>').css({'position':'relative'}).attr({'id':'frmprint','method':'post', 'action':winURL, 'target':winName})
        .html(input.join(''))
        .appendTo($('body'));
-=======
-      </div>
-    </div>
-    </section>
+    }
     <?php $this->view('master/collection/dashboard_collection_js.php'); ?>
->>>>>>> db2d513c2dc770139edf33799b0d3a20937ec326
+
 

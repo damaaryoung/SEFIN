@@ -717,6 +717,328 @@ class Export extends CI_Controller
     }
   }
 
+  function export_report_data_collection_activity(){
+    $this->load->model('Model_collection');
+    $kode_area = $this->input->post('kode_area');
+    $kode_cabang = $this->input->post('kode_cabang');
+    $kode_kolektor = $this->input->post('kode_kolektor');
+    $pic = $this->input->post('pic');
+    $from = $this->input->post('from');
+    $to = $this->input->post('to');
+
+    if($from == '' || $to == ''){
+      $periode = "";
+    }else{
+      $periode = "Periode: ".$from." - ".$to;
+    }
+
+    $styleColor1 = [
+      'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'color' => [
+            'rgb'=> '66B2FF'
+        ]
+      ]
+    ];
+
+    $styleBorder = [
+      'alignment' => [
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+      ],
+      'borders' => [
+      'allBorders' => [
+          'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+          'color' => ['argb' => '00000000'],
+        ],
+      ],
+    ];
+    $styleArray = [
+           'font'=>[
+                'name'=>'Arial',
+                'bold'=> true,
+                'italic'=> true,
+                'size'  =>17,
+                'color' => [
+                  'rgb' => 'FF3333'
+                ]
+           ]
+        ];
+
+    $styleArray1 = [
+          'font'=>[
+          'name'=>'Arial',
+          'bold'=> true,
+          'italic'=> true,
+          'size'  =>13,
+          'color' => [
+          'rgb' => '000000'
+        ]
+      ]
+    ];
+
+    $styleFontColor1 = [
+            'font'=>[
+            'color' => [
+                  'rgb' => 'EF3E36'
+          ]
+        ]
+    ];
+
+
+    $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()->setCreator('PT. KREDIT MANDIRI INDONESIA')->setLastModifiedBy('PT. KREDIT MANDIRI INDONESIA')->setTitle('Microsoft Office 365 XLSX Test Document')->setSubject('IT MAN')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 365 openxml php')->setCategory('Test result file');
+    $spreadsheet->getActiveSheet(0)->getStyle('A1:A2')->applyFromArray($styleArray);
+    $spreadsheet->getActiveSheet(0)->getStyle('A5:A7')->applyFromArray($styleArray1);
+    $spreadsheet->getActiveSheet(0)->setTitle('Report Collection Activity');
+    $spreadsheet->setActiveSheetIndex(0)
+    ->setCellValue('A1', 'PT. BPR Kredit Mandiri Indonesia Pusat')
+    ->setCellValue('A2', 'Report Data Collection Activity')
+    ->setCellValue('A4', $periode)
+    ->setCellValue('A5','Area :'.$kode_area)
+    ->setCellValue('A6','Cabang :'.$kode_cabang)
+    ->setCellValue('A7','Kolektor :'.$kode_kolektor)
+    ->setCellValue('A9','No')
+    ->setCellValue('B9','Tanggal')
+    ->setCellValue('C9','Area')
+    ->setCellValue('D9','Kode Cabang')
+    ->setCellValue('E9','Nama Cabang')
+    ->setCellValue('F9','Kode Kolektor')
+    ->setCellValue('G9','Nama Kolektor')
+    ->setCellValue('H9','No Rekening')
+    ->setCellValue('I9','Nama Nasabah')
+    ->setCellValue('J9','Alamat')
+    ->setCellValue('K9','OS POKOK')
+    ->setCellValue('L9','DPD')
+    ;
+
+    $get_data_collection_activity = $this->Model_collection->get_total_data_collection_activity($kode_area,$kode_cabang,$kode_kolektor,$pic,$from,$to);
+
+    $i = 10;
+    $a = 1;
+    foreach($get_data_collection_activity->result() as $row){
+      $spreadsheet->setActiveSheetIndex(0)
+      ->setCellValue('A'.$i, $a)
+      ->setCellValue('B'.$i, $row->created_at)
+      ->setCellValue('C'.$i, $row->kode_area)
+      ->setCellValue('D'.$i, $row->kode_kantor)
+      ->setCellValue('E'.$i, $row->nama_area_kerja)  
+      ->setCellValue('F'.$i, $row->kode_group3)
+      ->setCellValue('G'.$i, $row->deskripsi_group3)
+      ->setCellValue('H'.$i, $row->no_rekening)
+      ->setCellValue('I'.$i, $row->NAMA_NASABAH)
+      ->setCellValue('J'.$i, $row->ALAMAT)
+      ->setCellValue('K'.$i, $row->os_pokok)
+      ->setCellValue('L'.$i, $row->dpd);
+      $i++;
+      $a++;
+    }
+    $spreadsheet->getActiveSheet(0)->getStyle('A9'.':L'.intval($i-1))->applyFromArray($styleBorder);
+    $writer = new Xlsx($spreadsheet);
+
+      $filename = 'Export Data Report Collection Activity';
+
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+      header('Cache-Control: max-age=0');
+
+      $writer->save('php://output');
+  }
+
+  function export_report_data_history_collection_activity(){
+    $this->load->model('Model_collection');
+    $kode_area = $this->input->post('kode_area');
+    $kode_cabang = $this->input->post('kode_cabang');
+    $kode_kolektor = $this->input->post('kode_kolektor');
+    $pic = $this->input->post('pic');
+    $from = $this->input->post('from');
+    $to = $this->input->post('to');
+
+    if($from == '' || $to == ''){
+      $periode = "";
+    }else{
+      $periode = "Periode: ".$from." - ".$to;
+    }
+
+    $styleColor1 = [
+      'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'color' => [
+            'rgb'=> '66B2FF'
+        ]
+      ]
+    ];
+
+    $styleBorder = [
+      'alignment' => [
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+      ],
+      'borders' => [
+      'allBorders' => [
+          'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+          'color' => ['argb' => '00000000'],
+        ],
+      ],
+    ];
+    $styleArray = [
+           'font'=>[
+                'name'=>'Arial',
+                'bold'=> true,
+                'italic'=> true,
+                'size'  =>17,
+                'color' => [
+                  'rgb' => 'FF3333'
+                ]
+           ]
+        ];
+
+    $styleArray1 = [
+          'font'=>[
+          'name'=>'Arial',
+          'bold'=> true,
+          'italic'=> true,
+          'size'  =>13,
+          'color' => [
+          'rgb' => '000000'
+        ]
+      ]
+    ];
+
+    $styleFontColor1 = [
+            'font'=>[
+            'color' => [
+                  'rgb' => 'EF3E36'
+          ]
+        ]
+    ];
+
+
+    $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()->setCreator('PT. KREDIT MANDIRI INDONESIA')->setLastModifiedBy('PT. KREDIT MANDIRI INDONESIA')->setTitle('Microsoft Office 365 XLSX Test Document')->setSubject('IT MAN')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 365 openxml php')->setCategory('Test result file');
+    $spreadsheet->getActiveSheet(0)->getStyle('A1:A2')->applyFromArray($styleArray);
+    $spreadsheet->getActiveSheet(0)->getStyle('A5:A7')->applyFromArray($styleArray1);
+    $spreadsheet->getActiveSheet(0)->setTitle('Report Collection Activity');
+    $spreadsheet->setActiveSheetIndex(0)
+    ->setCellValue('A1', 'PT. BPR Kredit Mandiri Indonesia Pusat')
+    ->setCellValue('A2', 'Report Data Collection Activity')
+    ->setCellValue('A4', $periode)
+    ->setCellValue('A5','Area :'.$kode_area)
+    ->setCellValue('A6','Cabang :'.$kode_cabang)
+    ->setCellValue('A7','Kolektor :'.$kode_kolektor)
+    ->setCellValue('A9','No')
+    ->setCellValue('B9','Tanggal')
+    ->setCellValue('C9','Area')
+    ->setCellValue('D9','Kode Cabang')
+    ->setCellValue('E9','Nama Cabang')
+    ->setCellValue('F9','Kode Kolektor')
+    ->setCellValue('G9','Nama Kolektor')
+    ->setCellValue('H9','No Rekening')
+    ->setCellValue('I9','Nama Nasabah')
+    ->setCellValue('J9','Visit')
+    ->setCellValue('K9','Not Visit')
+    ->setCellValue('L9','Interaksi')
+    ->setCellValue('M9','Janji Bayar')
+    ->setCellValue('N9','Tanggal Janji Bayar')
+    ->setCellValue('O9','Karakter Debitur')
+    ->setCellValue('P9','Total Penghasilan')
+    ->setCellValue('Q9','Kondisi Pekerjaan')
+    ->setCellValue('R9','Aset Debitur')
+    ->setCellValue('S9','Case Debitur')
+    ->setCellValue('T9','Next Action')
+    ;
+
+    $get_data_collection_activity = $this->Model_collection->get_total_data_history_collection_activity($kode_area,$kode_cabang,$kode_kolektor,$pic,$from,$to);
+
+    $i = 10;
+    $a = 1;
+    foreach($get_data_collection_activity->result() as $row){
+      $spreadsheet->setActiveSheetIndex(0)
+      ->setCellValue('A'.$i, $a)
+      ->setCellValue('B'.$i, $row->assignment_date)
+      ->setCellValue('C'.$i, $row->kode_area)
+      ->setCellValue('D'.$i, $row->kode_kantor)
+      ->setCellValue('E'.$i, $row->nama_area_kerja)  
+      ->setCellValue('F'.$i, $row->kode_group3)
+      ->setCellValue('G'.$i, $row->deskripsi_group3)
+      ->setCellValue('H'.$i, $row->no_rekening)
+      ->setCellValue('I'.$i, $row->NAMA_NASABAH)
+      ->setCellValue('J'.$i, intval($row->jml_jaminan)+intval($row->jml_tempattinggal))
+      ->setCellValue('K'.$i, $row->not_visit)
+      ->setCellValue('L'.$i, $row->janji_bayar)
+      ->setCellValue('M'.$i, $row->interaksi)
+      ->setCellValue('N'.$i, $row->tgl_janji_byr)
+      ->setCellValue('O'.$i, $row->karakter_debitur)
+      ->setCellValue('P'.$i, $row->total_penghasilan)
+      ->setCellValue('Q'.$i, $row->kondisi_pekerjaan)
+      ->setCellValue('R'.$i, $row->asset_debt)
+      ->setCellValue('S'.$i, $row->case_category)
+      ->setCellValue('T'.$i, $row->next_action);
+      $i++;
+      $a++;
+    }
+    $spreadsheet->getActiveSheet(0)->getStyle('A9'.':T'.intval($i-1))->applyFromArray($styleBorder);
+
+    $spreadsheet->createSheet();
+    $spreadsheet->setActiveSheetIndex(1)->setTitle('Summary');
+    $spreadsheet->setActiveSheetIndex(1)
+    ->setCellValue('A1', 'PT. BPR Kredit Mandiri Indonesia Pusat')
+    ->setCellValue('A2', 'Report Data Collection Activity')
+    ->setCellValue('A4', $periode)
+    ->setCellValue('A5','Area :'.$kode_area)
+    ->setCellValue('A6','Cabang :'.$kode_cabang)
+    ->setCellValue('A7','Kolektor :'.$kode_kolektor)
+    ->setCellValue('A9','No')
+    ->setCellValue('B9','Tanggal')
+    ->setCellValue('C9','Area')
+    ->setCellValue('D9','Kode Cabang')
+    ->setCellValue('E9','Nama Cabang')
+    ->setCellValue('F9','Kode Kolektor')
+    ->setCellValue('G9','Nama Kolektor')
+    ->setCellValue('H9','Assignment')
+    ->setCellValue('I9','Visit')
+    ->setCellValue('J9','Not Visit')
+    ->setCellValue('K9','Interaksi')
+    ->setCellValue('L9','Janji Bayar')
+    ->setCellValue('M9','Visit')
+    ->setCellValue('N9','Interaksi')
+    ->setCellValue('O9','Success Rate')
+    ;
+        
+    $get_data_summary_collection_activity = $this->Model_collection->get_total_data_summary_collection_activity($kode_area,$kode_cabang,$kode_kolektor,$pic,$from,$to);
+
+    $i = 10;
+    $a = 1;
+    foreach($get_data_summary_collection_activity->result() as $row){
+      $spreadsheet->setActiveSheetIndex(1)
+      ->setCellValue('A'.$i, $a)
+      ->setCellValue('B'.$i, $row->assignment_date)
+      ->setCellValue('C'.$i, $row->kode_area)
+      ->setCellValue('D'.$i, $row->kode_kantor)
+      ->setCellValue('E'.$i, $row->nama_area_kerja)  
+      ->setCellValue('F'.$i, $row->kode_group3)
+      ->setCellValue('G'.$i, $row->deskripsi_group3)
+      ->setCellValue('H'.$i, $row->assignment)
+      ->setCellValue('I'.$i, intval($row->jml_jaminan)+intval($row->jml_tempattinggal))
+      ->setCellValue('J'.$i, $row->not_visit)
+      ->setCellValue('K'.$i, $row->interaksi)
+      ->setCellValue('L'.$i, $row->janji_bayar)
+      ->setCellValue('M'.$i, $row->percentage_visit)
+      ->setCellValue('N'.$i, $row->percentage_interaksi)
+      ->setCellValue('O'.$i, $row->success_rate_ptp);
+      $i++;
+      $a++;
+    }
+    $spreadsheet->getActiveSheet(1)->getStyle('A9'.':O'.intval($i-1))->applyFromArray($styleBorder);
+
+    $writer = new Xlsx($spreadsheet);
+
+      $filename = 'Export Report Data History Collection Activity';
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+      header('Cache-Control: max-age=0');
+
+      $writer->save('php://output');
+  }
+
   function export_report_collection_daily(){
     $this->load->helper('General_helper');
     $tgl = $this->input->post('data_tgl');
@@ -726,56 +1048,59 @@ class Export extends CI_Controller
         }else {
             $tgl = "DATE('$tgl')";
         }
-    $this->load->helper("General_helper"); 
     $this->load->model('model_collection');
       $spreadsheet = new Spreadsheet();
-        $spreadsheet->getProperties()->setCreator('Edwin Budiyanto Sunardi')->setLastModifiedBy('Edwin Budiyanto Sunardi')->setTitle('Microsoft Office 365 XLSX Test Document')->setSubject('IT MAN')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 365 openxml php')->setCategory('Test result file');
+        $spreadsheet->getProperties()->setCreator('PT. KREDIT MANDIRI INDONESIA')->setLastModifiedBy('PT. KREDIT MANDIRI INDONESIA')->setTitle('Microsoft Office 365 XLSX Test Document')->setSubject('IT MAN')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 365 openxml php')->setCategory('Test result file');
     $spreadsheet->getActiveSheet(0)->setTitle('List Bucket 0 ALL');
     $header_hk = $this->model_collection->data_collection_daily($tgl)->row();
+    $hk_ke = $this->model_collection->get_hari_kerja($tgl)->row();
+    $hk_lalu_ke = $this->model_collection->get_hk_bulan_lalu($tgl)->row();
+    $hk_next_lalu_ke = $this->model_collection->get_next_hk_bulan_lalu($tgl)->row();
+    // die($hk_ke->hk);
     $spreadsheet->setActiveSheetIndex(0)
     ->setCellValue('A1', 'PT. BPR Kredit Mandiri Indonesia Pusat')
     ->setCellValue('A2', 'Report Data Collection Daily')
     ->setCellValue('A4', 'Tanggal: '.$data_tgl)
     ->setCellValue('A5', 'Cabang')
     ->setCellValue('B5','Angsuran Hari Ini')
-    ->setCellValue('B7', 'CURRENT')
-    ->setCellValue('C7', 'lancar+')
-    ->setCellValue('D7', 'DPK')
-    ->setCellValue('E7', 'DPK+')
-    ->setCellValue('F7', 'NPL')
-    ->setCellValue('G5','HK Hari ini')
+    ->setCellValue('B7', 'CURRENT (Rp)')
+    ->setCellValue('C7', 'lancar+ (Rp)')
+    ->setCellValue('D7', 'DPK (Rp)')
+    ->setCellValue('E7', 'DPK+ (Rp)')
+    ->setCellValue('F7', 'NPL (Rp)')
+    ->setCellValue('G5','HK Hari ini ('.$hk_ke->hk.')')
     ->setCellValue('G6',tgl_indonesia($header_hk->tgl_hi))
-    ->setCellValue('G7', 'CURRENT')
-    ->setCellValue('H7', 'lancar+')
-    ->setCellValue('I7', 'DPK')
-    ->setCellValue('J7', 'DPK+')
-    ->setCellValue('K7', 'NPL')
-    ->setCellValue('L5','HK Bulan Lalu')
+    ->setCellValue('G7', 'CURRENT(%)')
+    ->setCellValue('H7', 'lancar+(%)')
+    ->setCellValue('I7', 'DPK(%)')
+    ->setCellValue('J7', 'DPK+(%)')
+    ->setCellValue('K7', 'NPL(%)')
+    ->setCellValue('L5','HK Bulan Lalu('.$hk_lalu_ke->hk.')')
     ->setCellValue('L6',tgl_indonesia($header_hk->tgl_hl))
-    ->setCellValue('L7', 'CURRENT')
-    ->setCellValue('M7', 'lancar+')
-    ->setCellValue('N7', 'DPK')
-    ->setCellValue('O7', 'DPK+')
-    ->setCellValue('P7', 'NPL')
+    ->setCellValue('L7', 'CURRENT(%)')
+    ->setCellValue('M7', 'lancar+(%)')
+    ->setCellValue('N7', 'DPK(%)')
+    ->setCellValue('O7', 'DPK+(%)')
+    ->setCellValue('P7', 'NPL(%)')
     ->setCellValue('Q5','GAP (Hari ini VS Bulan Lalu)')
-    ->setCellValue('Q7', 'CURRENT')
-    ->setCellValue('R7', 'lancar+')
-    ->setCellValue('S7', 'DPK')
-    ->setCellValue('T7', 'DPK+')
-    ->setCellValue('U7', 'NPL')
-    ->setCellValue('V5','HK Next Bulan Lalu')
+    ->setCellValue('Q7', 'CURRENT(%)')
+    ->setCellValue('R7', 'lancar+(%)')
+    ->setCellValue('S7', 'DPK(%)')
+    ->setCellValue('T7', 'DPK+(%)')
+    ->setCellValue('U7', 'NPL(%)')
+    ->setCellValue('V5','HK Next Bulan Lalu('.$hk_next_lalu_ke->hk.')')
     ->setCellValue('V6',tgl_indonesia($header_hk->tgl_hln))
-    ->setCellValue('V7', 'CURRENT')
-    ->setCellValue('W7', 'lancar+')
-    ->setCellValue('X7', 'DPK')
-    ->setCellValue('Y7', 'DPK+')
-    ->setCellValue('Z7', 'NPL')
+    ->setCellValue('V7', 'CURRENT(%)')
+    ->setCellValue('W7', 'lancar+(%)')
+    ->setCellValue('X7', 'DPK(%)')
+    ->setCellValue('Y7', 'DPK+(%)')
+    ->setCellValue('Z7', 'NPL(%)')
     ->setCellValue('AA5','GAP (Hari ini VS HK Next bulan lalu)')
-    ->setCellValue('AA7', 'CURRENT')
-    ->setCellValue('AB7', 'lancar+')
-    ->setCellValue('AC7', 'DPK')
-    ->setCellValue('AD7', 'DPK+')
-    ->setCellValue('AE7', 'NPL');
+    ->setCellValue('AA7', 'CURRENT(%)')
+    ->setCellValue('AB7', 'lancar+(%)')
+    ->setCellValue('AC7', 'DPK(%)')
+    ->setCellValue('AD7', 'DPK+(%)')
+    ->setCellValue('AE7', 'NPL(%)');
     $spreadsheet->getActiveSheet()->mergeCells('B5:F6');
     $spreadsheet->getActiveSheet()->mergeCells('G5:K5');
     $spreadsheet->getActiveSheet()->mergeCells('G6:K6');
@@ -832,11 +1157,11 @@ class Export extends CI_Controller
     ];
 
     $styleFontColor1 = [
-                 'font'=>[
-                'color' => [
+            'font'=>[
+            'color' => [
                   'rgb' => 'EF3E36'
-                ]
-              ]
+          ]
+        ]
     ];
 
     $spreadsheet->getActiveSheet(0)->getStyle('A1:A3')->applyFromArray($styleArray);
@@ -852,11 +1177,11 @@ class Export extends CI_Controller
     $a = 1;
     foreach($hk->result() as $row){
       $spreadsheet->setActiveSheetIndex(0)->setCellValue("A".$i,$row->nama_area_kerja);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("B".$i,"Rp. ".number_format($row->ang_current,0));
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("C".$i,"Rp. ".number_format($row->ang_lancar,0));
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("D".$i,"Rp. ".number_format($row->ang_dpk,0));
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("E".$i,"Rp. ".number_format($row->ang_dpk_dpk,0));
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("F".$i,"Rp. ".number_format($row->ang_npl,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("B".$i,number_format($row->ang_current,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("C".$i,number_format($row->ang_lancar,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("D".$i,number_format($row->ang_dpk,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("E".$i,number_format($row->ang_dpk_dpk,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("F".$i,number_format($row->ang_npl,0));
       $spreadsheet->setActiveSheetIndex(0)->setCellValue("G".$i,$row->rasio_bucket_0_hi);
       $spreadsheet->setActiveSheetIndex(0)->setCellValue("H".$i,$row->rasio_bucket_1_hi);
       $spreadsheet->setActiveSheetIndex(0)->setCellValue("I".$i,$row->rasio_bucket_2_hi);
@@ -929,27 +1254,75 @@ class Export extends CI_Controller
       }
       $i++;
       $a++;
-      // $tot_ang_current = $tot_ang_current + intval($row->ang_current);
-      // $tot_ang_lancar = $tot_ang_lancar  + intval($row->ang_lancar);
-      // $tot_ang_dpk = $tot_ang_dpk + intval($row->ang_dpk);
-      // $tot_ang_dpk_dpk = $tot_ang_dpk_dpk + intval($row->ang_dpk_dpk);
-      // $tot_ang_npl = $tot_ang_npl +intval($row->ang_npl);
-
     }
     $last = $i-1;
     $last_a = $a-1;
     if($last_a==intval($hk->num_rows())){
         $spreadsheet->getActiveSheet(0)->getStyle("A".$last.":"."AE".$last)->applyFromArray($styleArray1);
     }
-    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("A".$i,"Total (Konsolidasi)");
-    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("B".$i,"Rp. ".number_format($tot_ang_current,0));
-    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("C".$i,"Rp. ".number_format($tot_ang_lancar,0));
-    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("D".$i,"Rp. ".number_format($tot_ang_dpk,0));
-    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("E".$i,"Rp. ".number_format($tot_ang_dpk_dpk,0));
-    // $spreadsheet->setActiveSheetIndex(0)->setCellValue("F".$i,"Rp. ".number_format($tot_ang_npl,0));
+      if(negative_check($row->gap_current_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("Q".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("R".$last,$row->gap_lancar_hihl);
+      if(negative_check($row->gap_lancar_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("R".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("S".$last,$row->gap_dpk_hihl);
+       if(negative_check($row->gap_dpk_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("S".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("T".$last,$row->gap_dpk_dpk_hihl);
+      if(negative_check($row->gap_dpk_dpk_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("T".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("U".$last,$row->gap_npl_hihl);
+      if(negative_check($row->gap_npl_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("U".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("V".$last,$row->rasio_bucket_0_hln);
+      if(negative_check($row->rasio_bucket_0_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("V".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("W".$last,$row->rasio_bucket_1_hln);
+      if(negative_check($row->rasio_bucket_1_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("W".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("X".$last,$row->rasio_bucket_2_hln);
+      if(negative_check($row->rasio_bucket_2_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("Y".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Y".$last,$row->rasio_bucket_3_hln);
+      if(negative_check($row->rasio_bucket_3_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("Y".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Z".$last,$row->rasio_bucket_npl_hln);
+      if(negative_check($row->rasio_bucket_npl_hln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("Z".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AA".$last,$row->gap_current_hihln);
+      if(negative_check($row->gap_current_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AA".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AB".$last,$row->gap_lancar_hihln);
+      if(negative_check($row->gap_lancar_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AB".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AC".$last,$row->gap_dpk_hihln);
+      if(negative_check($row->gap_dpk_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AC".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AD".$last,$row->gap_dpk_dpk_hihln);
+      if(negative_check($row->gap_dpk_dpk_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AD".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AE".$last,$row->gap_npl_hihln);
+      if(negative_check($row->gap_npl_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AE".$last)->applyFromArray($styleFontColor1);
+      }
 
     $spreadsheet->getActiveSheet(0)->getStyle('A5:AE7')->applyFromArray($styleColor1);
     $spreadsheet->getActiveSheet(0)->getStyle('A5:AE'.$i)->applyFromArray($styleBorder);
+    $spreadsheet->getActiveSheet(0)->getStyle('A1:AE'.$last)->getAlignment()->setHorizontal('center');
     $writer = new Xlsx($spreadsheet);
 
       $filename = 'Export Data Report Collection Daily';
@@ -957,7 +1330,7 @@ class Export extends CI_Controller
       header('Content-Type: application/vnd.ms-excel');
       header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
       header('Cache-Control: max-age=0');
-
+        
       $writer->save('php://output');
   }
 }
