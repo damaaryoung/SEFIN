@@ -2,7 +2,7 @@
 defined('BASEPATH') or exmaster('No direct script access allowed');
 use GuzzleHttp\Client;
 
-class Menu_controller extends CI_Controller
+class Menu_controller extends MY_Controller
 {
     function __construct()
     {
@@ -587,6 +587,45 @@ class Menu_controller extends CI_Controller
         $this->load->view('master/collection/report_data_collection_daily');
     }
 
+    function json_get_hari_kerja(){
+        $this->load->model('model_collection');
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $hk = $this->model_collection->get_hari_kerja($tgl)->result();
+        header('Content-Type: application/json');
+        echo json_encode($hk);
+    }
+
+    function json_get_hk_bulan_lalu(){
+        $this->load->model('model_collection');
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $hk = $this->model_collection->get_hk_bulan_lalu($tgl)->result();
+        header('Content-Type: application/json');
+        echo json_encode($hk);
+    }
+
+    function json_get_next_hk_bulan_lalu(){
+        $this->load->model('model_collection');
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $hk = $this->model_collection->get_next_hk_bulan_lalu($tgl)->result();
+        header('Content-Type: application/json');
+        echo json_encode($hk);
+    }
+
     function json_data_collection_daily(){
         $this->load->model('model_collection');
         $tgl = $this->input->post('tgl');
@@ -598,5 +637,188 @@ class Menu_controller extends CI_Controller
         $hk = $this->model_collection->data_collection_daily($tgl)->result();
         header('Content-Type: application/json');
         echo json_encode($hk);
+    }
+
+    function master_all_assignment_kolektor(){
+        $this->head_params(' -  List','','',
+        '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="'.base_url().'assets/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="'.base_url().'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
+        '<script src="'.base_url().'assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="'.base_url().'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="'.base_url().'assets/plugins/select2/js/select2.full.min.js"></script>
+        <script type="text/javascript">
+            $(function () {
+              bsCustomFileInput.init();
+            });
+
+              get_dataTable(0);
+              
+              // get_dataTable(nama_kolektor,nama_kolektor);
+               $("#btn_refresh").click(function(){
+                get_dataTable(1);
+            });
+            function get_dataTable(draw){
+              
+              var kode_kolektor = $("#kode_kolektor option:selected").val();
+              var nasabah_id = $("#nasabah_id option:selected").val();
+              var kode_area = $("#kode_area option:selected").val();
+              var kode_cabang = $("#kode_cabang option:selected").val();
+
+              var table = $("#listData").DataTable({
+                    stateSave: true,
+                    "stateSaveCallback": function (settings, data) {
+                        localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
+                    },
+                    "stateLoadCallback": function (settings) {
+                        return JSON.parse(localStorage.getItem("Datatables_" + window.location.pathname));
+                    },
+                    "dom": \'<"bottom"lpf>rt<"top"ip><"clear">\',
+                    "oLanguage": {
+                        "sProcessing": "<i class=\'fa fa-refresh fa-spin\'><\/i> Loading"
+                    },
+                    "processing": true,
+                    "serverSide": true,
+                    "bDestroy": true,
+                    "autoWidth": false,
+                    // fixedHeader: true,
+                    "pagingType": "full_numbers",
+                    "ajax": {
+                        "url": "'.base_url().'assignment_collection/ajax_list_header_master_all_assignment_kolektor",
+                        "type": "POST",
+                        "data":{
+                            "kode_kolektor": kode_kolektor,
+                            "nasabah_id" : nasabah_id,
+                            "kode_area"    : kode_area,
+                            "kode_cabang"  : kode_cabang,
+                        }
+                    },
+                    responsive:{details:{type:"column",target:"tr"}},
+                    columnDefs:[{className:"control",orderable:1,targets:"_all"}],
+                    order:[3,"asc"],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
+                    "pageLength":100,
+                    dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
+                });
+
+
+
+  
+    if (draw == 1) {
+     table.ajax.reload();
+    }
+  
+}
+        </script>
+        ');
+         $data['params'] = $this->params;
+        $this->load->view('master/collection/collector/master_all_assignment_kolektor_view',$data);
+    }
+
+    function task_assignment_kolektor(){
+        $this->head_params(' -  List','','','<link rel="stylesheet" type="text/css" href="'.base_url().'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+            <link rel="stylesheet" href="'.base_url().'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
+        '<script src="'.base_url().'assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="'.base_url().'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="'.base_url().'assets/plugins/select2/js/select2.full.min.js"></script>
+        <script type="text/javascript">
+            get_dataTable(0);
+          $("#btn_refresh").click(function(){
+            get_dataTable(1);
+          });
+        function get_dataTable(draw){
+          
+            var kode_kolektor = $("#kode_kolektor option:selected").val();
+            //var nasabah_id = $("#nasabah_id option:selected").val();
+            var no_rekening = $("#no_rekening").val();
+            var kode_area = $("#kode_area option:selected").val();
+            var kode_cabang = $("#kode_cabang option:selected").val();
+            var field_order = $("#field_order option:selected").val();
+            var order_by = $("#order_by option:selected").val();
+            var table = $("#listData1").DataTable({
+                    "searching": true,
+                    stateSave: true,
+                    "stateSaveCallback": function (settings, data) {
+                        localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
+                    },
+                    "stateLoadCallback": function (settings) {
+                        return JSON.parse(localStorage.getItem("Datatables_" + window.location.pathname));
+                    },
+                    "dom": \'<"bottom"lpf>rt<"top"ip><"clear">\',
+                    "oLanguage": {
+                        "sProcessing": "<i class=\'fa fa-refresh fa-spin\'><\/i> Loading"
+                    },
+                    "processing": true,
+                    "serverSide": true,
+                    "bDestroy": true,
+                    "autoWidth": false,
+                    "pagingType": "full_numbers",
+                    "ajax": {
+                        "url": "'.base_url().'assignment_collection/ajax_list_task_assignment_kolektor",
+                        "type": "POST",
+                        "data":{
+                            "kode_kolektor": kode_kolektor,
+                            "no_rekening"  : no_rekening,
+                            "kode_area"    : kode_area,
+                            "kode_cabang"  : kode_cabang,
+                            "no_rekening"  : no_rekening,
+                            "field_order"  : field_order,
+                            "order_by"     : order_by
+                        }
+                    },
+                    responsive:{details:{type:"column",target:"tr"}},
+                    columnDefs:[{className:"control",orderable:1,targets:"_all"}],
+                    order:[3,"asc"],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
+                    "pageLength":100,
+                    dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
+                });
+
+
+
+  
+                    if (draw == 1) {
+                     table.clear().draw();
+                     // table.ajax.reload();
+                    }
+                }
+                    function flag_checked(task_code){
+                  var url = "'.base_url().'assignment_collection/change_status_task_assignment";
+                  $.ajax({
+                    url:url,
+                    type:"POST",
+                    data:{
+                      "task_code":task_code
+                    },
+                    dataType:"JSON",
+                    success: function(data){
+                      if(data[0].flag_aktif == 0){
+                        $(\'#stts_\'+data[0].task_code).text(\'Inactive\');
+                      }else{
+                        $(\'#stts_\'+data[0].task_code).text(\'Active\');
+                      }
+                      // alert(data[0].flag_aktif);
+                    }
+                  });
+                }
+  
+
+            
+        </script>
+        ');
+         $data['params'] = $this->params;
+       $this->load->view('master/collection/collector/task_assignment_kolektor_view',$data); 
+    }
+
+    function report_collection_activity(){
+        $this->load->view('master/collection/collector/report/report_collection_activity_view');
+    }
+
+    function report_history_collection_activity(){
+         $this->load->view('master/collection/collector/report/report_history_collection_activity_view');
+    }
+
+    function report_performance_collection_activity(){
+        $this->load->view('master/collection/collector/report/report_performance_collection_activity_view');
     }
 }
