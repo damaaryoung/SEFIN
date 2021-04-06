@@ -1139,6 +1139,7 @@ function bucket_roll_console_export() {
        .html(input.join(''))
        .appendTo($('body'));
     }
+  </script>
     <?php $this->view('master/collection/dashboard_collection_js.php'); ?>
 
 

@@ -173,7 +173,7 @@ class Assignment_collection extends MY_Controller
         $kode_kolektor = $this->input->post('kode_kolektor');
         $nasabah_id = $this->input->post('nasabah_id');
         $kode_area = $this->input->post('kode_area');
-        $kode_cabang = $this->input->post('kode_cabang');
+        $nama_area_kerja = $this->input->post('kode_cabang');
 
 		$arrData = array();
         
@@ -182,9 +182,9 @@ class Assignment_collection extends MY_Controller
         $draw   = $this->input->post('draw');
         $search = $this->input->post('search');
 
-        $get_data_master = $this->Model_collection->get_datatable_master_all_assigment_collector(intval(@$start),intval(@$length),@$search['value'],$kode_kolektor,$nasabah_id,$kode_area,$kode_cabang);
+        $get_data_master = $this->Model_collection->get_datatable_master_all_assigment_collector(intval(@$start),intval(@$length),@$search['value'],$kode_kolektor,$nasabah_id,$kode_area,$nama_area_kerja);
 
-        $get_total_data_master = $this->Model_collection->get_total_datatable_master_all_assigment_collector(@$search['value'],$kode_kolektor,$nasabah_id,$kode_area,$kode_cabang);
+        $get_total_data_master = $this->Model_collection->get_total_datatable_master_all_assigment_collector(@$search['value'],$kode_kolektor,$nasabah_id,$kode_area,$nama_area_kerja);
         if($get_data_master->num_rows() > 0){
         	$i = ($start == 0) ? 1 : $start+1;
         	foreach($get_data_master->result() as $row){
@@ -354,7 +354,7 @@ class Assignment_collection extends MY_Controller
         // $nasabah_id = $this->input->post('nasabah_id');
         $no_rekening = $this->input->post('no_rekening');
         $kode_area = $this->input->post('kode_area');
-        $kode_cabang = $this->input->post('kode_cabang');
+        $nama_area_kerja = $this->input->post('kode_cabang');
         $field_order = $this->input->post('field_order');
         $order_by = $this->input->post('order_by');
         $arrData = array();
@@ -364,8 +364,8 @@ class Assignment_collection extends MY_Controller
         $draw = $this->input->post('draw');
         $search = $this->input->post('search');
 
-        $get_data_task = $this->Model_collection->get_data_task_assignment_kolektor(intval(@$start),intval(@$length),@$search['value'],$kode_kolektor,$no_rekening,$kode_area,$kode_cabang,$field_order,$order_by);
-        $get_total_data_task = $this->Model_collection->get_total_data_task_assignment_kolektor(@$search['value'],$kode_kolektor,$no_rekening,$kode_area,$kode_cabang,$field_order,$order_by);
+        $get_data_task = $this->Model_collection->get_data_task_assignment_kolektor(intval(@$start),intval(@$length),@$search['value'],$kode_kolektor,$no_rekening,$kode_area,$nama_area_kerja,$field_order,$order_by);
+        $get_total_data_task = $this->Model_collection->get_total_data_task_assignment_kolektor(@$search['value'],$kode_kolektor,$no_rekening,$kode_area,$nama_area_kerja,$field_order,$order_by);
 
         if($get_data_task->num_rows() > 0){
             $i = ($start == 0) ? 1 : $start+1;

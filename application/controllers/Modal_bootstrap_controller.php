@@ -2797,9 +2797,6 @@ class Modal_bootstrap_controller extends MY_Controller
         $data['result'] = $this->model_dashboard_collection->get_data_bucket_roll($tgl);
         $data['file_export'] = "Bucket Roll Console ".date('Y-m-d');
         $this->load->view('master/collection/export/export_roll_console', $data);
-
-
-
     }
 
     function modal_list_roll_console_area(){

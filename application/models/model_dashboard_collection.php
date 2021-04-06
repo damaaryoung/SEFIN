@@ -3682,7 +3682,7 @@ public function get_dt_bucket_roll_console_area_list($start,$limit,$search,$tgl,
     function bucket_nol_console_cabang($tgl) {
         $sql = "SELECT
                 kode_area,
-                get_area_kerja(no_rekening) AS nama_area_kerja,
+                dpm_online.get_area_kerja(no_rekening) AS nama_area_kerja,
                 SUM(baki_debet) AS bd_all,
                 SUM(IF(bucket_col = 0, baki_debet, 0)) AS bd_bucket_0,
                 SUM(IF(bucket_col = 0, 1, 0)) AS noa_bucket_0,

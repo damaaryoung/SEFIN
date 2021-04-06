@@ -74,11 +74,6 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 
-
-<<<<<<< HEAD
-
-=======
->>>>>>> e5b83d1339be630721da9f8b1b0674cbcaacc85a
  $db['default'] = array(
  	'dsn'	=> '',
  	'hostname' => '103.31.232.148:3307',
@@ -145,7 +140,7 @@ $query_builder = TRUE;
 // 	'save_queries' => TRUE
 // );
 
-<<<<<<< HEAD
+
 // $db['dpm_online'] = array(
 // 	'dsn'   => '',
 // 	'hostname' => '103.234.254.186:3308',
@@ -167,8 +162,7 @@ $query_builder = TRUE;
 // 	'failover' => array(),
 // 	'save_queries' => TRUE
 // );
-	
-=======
+/*
 $db['dpm_online'] = array(
 	'dsn'   => '',
 	'hostname' => '103.234.254.186:3308',
@@ -190,4 +184,4 @@ $db['dpm_online'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );*/
->>>>>>> e5b83d1339be630721da9f8b1b0674cbcaacc85a
+
