@@ -42,6 +42,7 @@
                 <label for="nomorRekening" class="col-sm-2  offset-sm-1 col-form-label">Nomor rekening</label>
                 <input type="text" name="no_rekening" id="no_rekening" class="form-control col-sm-3"/>
             </div>
+            <hr/>
             <div class="form-group row">
                 <label for="inputArea" class="col-sm-2 col-form-label">Kolom</label>
                 <select class="form-control col-sm-3" name="field_order" id="field_order">
@@ -170,7 +171,7 @@ $('#kode_area').change(function(){
             }
             for(var i=0;i<data2.length;i++){
                     $('#kode_cabang').append($('<option>',{
-                        value: data2[i].kode_kantor,
+                        value: data2[i].nama_area_kerja,
                         text: data2[i].nama_area_kerja
                 }));
             }

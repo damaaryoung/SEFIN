@@ -172,7 +172,7 @@ class Model_collection extends CI_Model{
 		return $query;
 	}
 
-	function get_datatable_master_all_assigment_collector($start,$limit,$search,$kode_kolektor,$nasabah_id,$kode_area,$kode_cabang){
+	function get_datatable_master_all_assigment_collector($start,$limit,$search,$kode_kolektor,$nasabah_id,$kode_area,$nama_area_kerja){
 		$this->load->model('model_menu');
 		$outputs   = $this->model_menu->getUser();
 		$user_id   = $outputs['data']['user_id'];
@@ -209,8 +209,8 @@ class Model_collection extends CI_Model{
         }
 
         if($kode_area != ""){
-        	if($kode_cabang !=""){
-        		$filter3 = " AND b.kode_area = '".$kode_area."' AND b.kode_kantor = '".$kode_cabang."'";
+        	if($nama_area_kerja !=""){
+        		$filter3 = " AND b.kode_area = '".$kode_area."' AND b.nama_area_kerja = '".$nama_area_kerja."'";
         	}else{
         		$filter3 = " AND b.kode_area = '".$kode_area."'";
         	}
@@ -227,7 +227,8 @@ class Model_collection extends CI_Model{
 			FROM master_all_assigment_kolektor a
 			INNER JOIN dpm_online.app_kode_kantor b ON a.kode_kantor = b.kode_kantor
 			INNER JOIN dpm_online.kre_kode_group3 c ON c.kode_group3 = a.kode_kolektor
-			INNER JOIN dpm_online.nasabah d ON a.NASABAH_ID = d.NASABAH_ID WHERE 1=1 ".$filter1."".$filter2."".$filter3;
+			INNER JOIN dpm_online.nasabah d ON a.NASABAH_ID = d.NASABAH_ID 
+			WHERE 1=1 ".$filter1."".$filter2."".$filter3;
 		if(!empty($search)){
             $sql .= "AND (nama_area_kerja LIKE '%".$search."%' OR a.kode_kantor LIKE '%".$search."%' OR a.kode_kolektor LIKE '%".$search."%' OR c.deskripsi_group3 LIKE '%".$search."%')";
         }
@@ -236,7 +237,7 @@ class Model_collection extends CI_Model{
         return $query;
 	}
 
-	function get_total_datatable_master_all_assigment_collector($search,$kode_kolektor,$nasabah_id,$kode_area,$kode_cabang){
+	function get_total_datatable_master_all_assigment_collector($search,$kode_kolektor,$nasabah_id,$kode_area,$nama_area_kerja){
 		$this->load->model('model_menu');
 		$outputs   = $this->model_menu->getUser();
 		$user_id   = $outputs['data']['user_id'];
@@ -275,8 +276,8 @@ class Model_collection extends CI_Model{
         }
 
         if($kode_area != ""){
-        	if($kode_cabang !=""){
-        		$filter3 = " AND b.kode_area = '".$kode_area."' AND b.kode_kantor = '".$kode_cabang."'";
+        	if($nama_area_kerja !=""){
+        		$filter3 = " AND b.kode_area = '".$kode_area."' AND b.nama_area_kerja = '".$nama_area_kerja."'";
         	}else{
         		$filter3 = " AND b.kode_area = '".$kode_area."'";
         	}
@@ -323,7 +324,7 @@ class Model_collection extends CI_Model{
         return $query;
 	}
 
-	function get_data_task_assignment_kolektor($start,$limit,$search,$kode_kolektor,$no_rekening,$kode_area,$kode_cabang,$field_order,$order_by){
+	function get_data_task_assignment_kolektor($start,$limit,$search,$kode_kolektor,$no_rekening,$kode_area,$nama_area_kerja,$field_order,$order_by){
 		$this->load->model('model_menu');
 		$outputs   = $this->model_menu->getUser();
 		$user_id   = $outputs['data']['user_id'];
@@ -366,8 +367,8 @@ class Model_collection extends CI_Model{
         }
 
         if($kode_area != ""){
-        	if($kode_cabang !=""){
-        		$filter3 = " AND f.kode_area = '".$kode_area."' AND c.kode_kantor = '".$kode_cabang."'";
+        	if($nama_area_kerja !=""){
+        		$filter3 = " AND f.kode_area = '".$kode_area."' AND f.nama_area_kerja = '".$nama_area_kerja."'";
         	}else{
         		$filter3 = " AND f.kode_area = '".$kode_area."'";
         	}
@@ -399,12 +400,12 @@ class Model_collection extends CI_Model{
 		}
 
 			$sql.=" GROUP BY a.task_code ".$urutan." LIMIT ?,?";
-		// die($sql);
+		//die($sql);
 		$query = $this->db->query($sql, array($start, $limit));
 		return $query;
 	}
 
-	function get_total_data_task_assignment_kolektor($search,$kode_kolektor,$no_rekening,$kode_area,$kode_cabang,$field_order,$order_by){
+	function get_total_data_task_assignment_kolektor($search,$kode_kolektor,$no_rekening,$kode_area,$nama_area_kerja,$field_order,$order_by){
 		$this->load->model('model_menu');
 		$outputs   = $this->model_menu->getUser();
 		$user_id   = $outputs['data']['user_id'];
@@ -447,8 +448,8 @@ class Model_collection extends CI_Model{
         }
 
         if($kode_area != ""){
-        	if($kode_cabang !=""){
-        		$filter3 = " AND f.kode_area = '".$kode_area."' AND c.kode_kantor = '".$kode_cabang."'";
+        	if($nama_area_kerja !=""){
+        		$filter3 = " AND f.kode_area = '".$kode_area."' AND f.nama_area_kerja = '".$nama_area_kerja."'";
         	}else{
         		$filter3 = " AND f.kode_area = '".$kode_area."'";
         	}
@@ -506,8 +507,8 @@ class Model_collection extends CI_Model{
 	}
 
 	function get_kode_cabang($kode_area){
-		$sql = "SELECT kode_kantor,nama_area_kerja,kode_area FROM dpm_online.app_kode_kantor 
-		WHERE kode_area = '".$kode_area."'";
+		$sql = "SELECT kode_kantor,nama_kantor,nama_area_kerja,kode_area FROM dpm_online.app_kode_kantor 
+		WHERE kode_area = '".$kode_area."' GROUP BY nama_area_kerja";
 		$query = $this->db->query($sql);
 		return $query;
 	}
