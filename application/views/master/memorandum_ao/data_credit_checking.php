@@ -939,6 +939,18 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-4" id="form_npwp_pasangan">
+                                    <div class="form-group">
+                                        <label for="exampleInput1" class="bmd-label-floating">Lampiran KTP Pasangan</label>
+                                        <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_npwp_pasangan"><i class="fa fa-pencil-alt"></i></button>
+                                        <div class="form-group form-file-upload form-file-multiple">
+                                            <div class="col-md-6">
+                                                <div class="well" id="gambar_npwp_pasangan">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-md-4" id="form_buku_nikah">
                                     <div class="form-group">
                                         <label for="exampleInput1" class="bmd-label-floating">Lampiran Buku Nikah</label>
@@ -2767,6 +2779,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-3" id="form_lampiran_npwp_pas_detail">
+                                <div class="form-group">
+                                    <label for="exampleInput1" class="bmd-label-floating">Lampiran NPWP Pasangan</label>
+                                    <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_lamp_npwp_pasangan"><i class="fa fa-pencil-alt"></i></button>
+                                    <div class="form-group form-file-upload form-file-multiple">
+                                        <div class="col-md-6">
+                                            <div class="well" id="gambar_lamp_npwp_pasangan">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-3" id="form_buku_nikah_pas_detail">
                                 <div class="form-group">
                                     <label for="exampleInput1" class="bmd-label-floating">Lampiran Buku Nikah</label>
@@ -3097,6 +3121,28 @@
     </div>
 </form>
 
+<form id="form_edit_npwp_pasangan">
+<input type="hidden" name="id_pasangan_npwp">>
+    <div class="modal fade in" id="modal_edit_npwp_pasangan" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran NPWP Pasangan</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_npwp_pas" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <form id="form_edit_buku_nikah">
     <input type="hidden" name="id_pasangan_buku_nikah">
     <div class="modal fade in" id="modal_edit_buku_nikah" data-keyboard="false" data-backdrop="static">
@@ -3318,7 +3364,7 @@
 </form>
 
 <form id="form_edit_ktp_pasangan_detail">
-    <input type="hidden" name="id_pasangan_ktp">
+    <input type="hidden" name="id_pasangan_npwp">
     <div class="modal fade in" id="modal_edit_lamp_ktp_pasangan" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -3327,6 +3373,28 @@
                         <label>Ubah Lampiran KTP Pasangan</label>
                         <div class="input-group">
                             <input type="file" name="lamp_ktp_pas_detail" class="form-control" style="height: 45px">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="form_edit_npwp_pasangan_detail">
+    <input type="hidden" id="id_debitur_npwp_detail" name="id_debitur_npwp">
+    <div class="modal fade in" id="modal_edit_lamp_npwp_pasangan" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-body text-center'>
+                    <div class="form-group">
+                        <label>Ubah Lampiran NPWP Debitur</label>
+                        <div class="input-group">
+                            <input type="file" name="lamp_npwp_pas_detail" class="form-control" style="height: 45px">
                         </div>
                     </div>
                 </div>

@@ -322,7 +322,7 @@ class Menu_controller extends MY_Controller
     }
     public function ca()
     {
-        // $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
+        $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
         $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['data_collateral'] = $this->Model_view_master->data_collateral();
         $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
@@ -609,6 +609,11 @@ class Menu_controller extends MY_Controller
         // $data['pendidikan'] = $this->Model_view_master->tampil_data_pendidikan();
         
         $this->load->view('master/verifikasi/verifikasi', $data);
+    }
+
+    public function report_verifikasi()
+    {
+        $this->load->view('master/verifikasi/report_verifikasi');
     }
     
 
