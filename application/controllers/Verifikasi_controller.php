@@ -226,6 +226,9 @@ class Verifikasi_controller extends CI_Controller
                     AND YEAR(d.`updated_at`) = $tahun
                 ORDER BY d.`updated_at`";
 
+        
+        $data['bulan'] = $bulan;
+        $data['tahun'] = $tahun;
         $data['result_debitur'] = $this->db->query($query_debitur)->result();
         $data['result_pasangan'] = $this->db->query($query_pasangan)->result();
         $data['result_penjamin'] = $this->db->query($query_penjamin)->result();

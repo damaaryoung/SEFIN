@@ -3153,7 +3153,7 @@
                                     <div class="row">
                                         <div class="form-group">
                                             <label for="exampleInput1" class="bmd-label-floating">Credit Checking<span class="required_notification">*</span></label>
-                                            <select name="cc_result" id="cc_result" class="form-control ">
+                                            <select name="cc_result_detail" id="cc_result_detail" class="form-control ">
                                                 <option value="">--Pilih--</option>
                                                 <option id="cc_result1" value="1">All Pinjam Kol 1</option>
                                                 <option id="cc_result2" value="2">Kol 1 Tanpa Jaminan</option>
@@ -9308,18 +9308,6 @@
                             document.getElementById("cc_result5").selected = "true";
                         }
 
-                        // var select_cc_result = [];
-                        // var option_cc_result = [
-                        //     '<option value="' + data.cc_result + '">' + data.cc_result + '</option>',
-                        //     '<option value="1">All Pinjam Kol 1</option>',
-                        //     '<option value="2">Kol 1 Tanpa Jaminan</option>',
-                        //     '<option value="3">Kol 1 Dengan Jaminan</option>',
-                        //     '<option value="4">Kol 1 All Pinjaman</option>',
-                        //     '<option value="5">No Din</option>'
-                        // ].join('\n');
-                        // select_cc_result.push(option_cc_result);
-                        // $('#form_cc select[name=cc_result]').html(select_cc_result);
-
                         var htmlinformasi_analisa_credit = [];
                         var htmlinformasi_analisa_credit_tot = [];
                         $.each(data.informasi_analisa_cc.table, function(index, item) {
@@ -11873,10 +11861,10 @@
 
             //UPDATE CC RESULT
             $('#form_cc').on('submit', function(e) {
-                if(document.getElementById('cc_result').value == "" ) {
+                if(document.getElementById('cc_result_detail').value == "" ) {
                     bootbox.alert("Jenis Credit Checking Tidak Boleh Kosong!!!");
                 return (false);
-                }   
+                } 
                 update_cc_result = function(opts, idca) {
                     var data = opts;
                     var url = '<?php echo $this->config->item('api_url'); ?>api/master/mca/cc_result/' + idca;
@@ -11907,7 +11895,7 @@
                 e.preventDefault();
                 var formData = new FormData();
 
-                formData.append('cc_result', $('select[name=cc_result]', this).val());
+                formData.append('cc_result', $('select[name=cc_result_detail]', this).val());
 
                 update_cc_result(formData, idca)
                     .done(function(res) {

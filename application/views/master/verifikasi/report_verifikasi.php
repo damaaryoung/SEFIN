@@ -84,18 +84,6 @@
                         ?>
                     </select>
                 </div>
-                <!-- <div class="col-md-3">
-                    <label for="jenis_verifikasi">Jenis Verifikasi :</label>
-                    <div class="form-group">
-                        <select id="jenis_verifikasi" class="form-control" name="jenis_verifikasi">
-                            <option value="" selected="selected">-- Pilih Verifikasi --</option>
-                            <option value="debitur">Debitur</option>
-                            <option value="pasangan">Pasangan</option>
-                            <option value="penjamin">Penjamin</option>
-                            <option value="properti">Properti</option>
-                        </select>
-                    </div>
-                </div> -->
                 <div class="col-md-2">
                     <a style="width: 100%; margin-top: 35px" href="javascript:void(0)" title="Export To Excel" class="btn btn-primary btn-sm mr-3" onclick="export_to_excel()">
                         <i class="fa fa-print"></i> Export to Excel
@@ -110,13 +98,7 @@
     function export_to_excel() {
         var bulan = $("#bulan").val();
         var tahun = $("#tahun").val();
-        // var jenis_verifikasi = $("#jenis_verifikasi").val();
-
-        // if(jenis_verifikasi == "") {
-        //     bootbox.alert("Jenis Verifikasi Tidak Boleh Kosong !!!");
-        // } else {
             window.open('verifikasi_controller/export_verifikasi/'+bulan+'/'+tahun);
-        // }
 
     };
 </script>
