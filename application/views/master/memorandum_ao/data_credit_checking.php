@@ -2674,7 +2674,7 @@
                             <div class="col-md-3" id="photo_debitur">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Photo Debitur</label>
-                                    <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_lamp_photo"><i class="fa fa-pencil-alt"></i></button>
+                                    <button class="btn btn-info btn-sm edit submit buttonPhotoDebitur" data-toggle="modal" data-target="#modal_edit_lamp_photo"><i class="fa fa-pencil-alt"></i></button>
                                     <div class="form-group form-file-upload form-file-multiple">
                                         <div class="col-md-6">
                                             <div class="well" id="gambar_photo_debitur">
@@ -2758,7 +2758,7 @@
                             <div class="col-md-3" id="form_photo_pasangan_detail">
                                 <div class="form-group">
                                     <label for="exampleInput1" class="bmd-label-floating">Lampiran Photo Pasangan</label>
-                                    <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_photo_pasangan"><i class="fa fa-pencil-alt"></i></button>
+                                    <button class="btn btn-info btn-sm edit submit buttonPhotoPasangan" data-toggle="modal" data-target="#modal_edit_photo_pasangan"><i class="fa fa-pencil-alt"></i></button>
                                     <div class="form-group form-file-upload form-file-multiple">
                                         <div class="col-md-6">
                                             <div class="well" id="gambar_photo_pasangan_debitur">

@@ -527,7 +527,7 @@
                                         <td colspan="2">Nama Pemilik Sertifikat</td>
                                         <td width="2">:</td>
                                         <td><?php echo $row->nama_pemilik_sertifikat ?></td>
-                                        <?php if ($row->nama_sertifikat_result != null) { ?>
+                                        <?php if ($row->nama_pemilik_sertifikat_result != null) { ?>
                                             <?php if ($row->nama_pemilik_sertifikat_result == 1) { ?>
                                                 <td style="width: 120" class="btn_verif" >VERIFIED</td>
                                             <?php } else { ?>

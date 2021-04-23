@@ -350,7 +350,7 @@
                         </div>
                     </div>
 
-                    <div class="card mb-3">
+                    <div class="card mb-3" id="form_npwp_debitur">
                         <div class="card-header bg-gradient-danger" id="npwp" data-toggle="collapse" href="#collapse_npwp" role="button" aria-expanded="false">
                             <a class="text-light">
                                 <b>NPWP DEBITUR</b>
@@ -1439,6 +1439,23 @@
     }
 
     function click_edit() {
+        var nama_pic = '<?php echo $nama_user['data']['nama'] ?>';
+        if(nama_pic == "MICHIKO MERCY LOHO") {
+            $('#form_npwp_debitur').show();
+            $('#form_npwp_pasangan').show();
+            $('#form_npwp_pen_1').show();
+            $('#form_npwp_pen_2').show();
+            $('#form_npwp_pen_3').show();
+            $('#form_npwp_pen_4').show();
+            $('#form_npwp_pen_5').show();
+        }
+        $('#form_npwp_debitur').hide();
+        $('#form_npwp_pasangan').hide();
+        $('#form_npwp_pen_1').hide();
+        $('#form_npwp_pen_2').hide();
+        $('#form_npwp_pen_3').hide();
+        $('#form_npwp_pen_4').hide();
+        $('#form_npwp_pen_5').hide();
         $('.verifikasiDebitur').show();
         $('.verifikasiPasangan').show();
         $('.verifikasiPenjamin_1').show();
@@ -1545,7 +1562,7 @@
                 
                 if (isTesting) {
                     
-                    responseBody = responseCompleteID(requestBody);
+                    responseBody = responseNoFaceDetected(requestBody);
                     console.log(responseBody);
                     
                     if (responseBody.data == null) {
@@ -1640,7 +1657,7 @@
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!"); 
                 } else {
                     if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
+                        responseBody = responseUnauthorized(requestBody);
                         console.log(responseBody);
 
                         if (responseBody.data == null) {
@@ -4736,6 +4753,18 @@
         checkVerified("certificate_name_5_result", responseBody.data.certificate_name);
         checkVerified("certificate_type_5_result", responseBody.data.certificate_type);
         checkVerified("certificate_date_5_result", responseBody.data.certificate_date);
+    }
+
+    function responseDataNotFound(requestBody) {
+        return {
+            timestamp: new Date()*1,
+            status: 200,
+            data: null,
+            errors: {
+                identity_photo: "invalid",
+                message: "Data Not Found"
+            }
+        }
     }
 
     function responseNoFaceDetected(requestBody) {

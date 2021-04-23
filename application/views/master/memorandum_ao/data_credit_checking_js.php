@@ -2758,6 +2758,7 @@
                     var data = response.data;
                     console.log(data);
                     // id = data.id;
+
                     var id_debitur = data.data_debitur.id;
                     var id_pasangan = data.data_pasangan.id;
                     var id_credit = data.id;
@@ -3469,6 +3470,15 @@
                 .done(function(response) {
                     var data = response.data;
                     console.log(data);
+
+                    if (data.status_ca == "recommend") {
+                        $('#form_debitur .form-control').prop('disabled', true);
+                        $('.buttonPhotoDebitur').hide();
+                        if(data.data_pasangan != null) {
+                            $('#form_pasangan .form-control').prop('disabled', true);
+                            $('.buttonPhotoPasangan').hide();
+                        }
+                    }
 
                     id = data.id;
                     var id_debitur = data.data_debitur.id;
