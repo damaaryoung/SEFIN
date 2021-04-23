@@ -806,9 +806,17 @@ class Export extends CI_Controller
     ->setCellValue('G9','Nama Kolektor')
     ->setCellValue('H9','No Rekening')
     ->setCellValue('I9','Nama Nasabah')
-    ->setCellValue('J9','Alamat')
-    ->setCellValue('K9','OS POKOK')
-    ->setCellValue('L9','DPD')
+    ->setCellValue('J9','Visit')
+    ->setCellValue('K9','Not Visit')
+    ->setCellValue('L9','Interaksi')
+    ->setCellValue('M9','Janji Bayar')
+    ->setCellValue('N9','Tanggal Janji Bayar')
+    ->setCellValue('O9','Total Penghasilan')
+    ->setCellValue('P9','Kondisi Pekerjaan')
+    ->setCellValue('Q9','Aset Debitur')
+    ->setCellValue('R9','Case Category')
+    ->setCellValue('S9','Next Action')
+    ->setCellValue('T9','Invalid No')
     ;
 
     $get_data_collection_activity = $this->Model_collection->get_total_data_collection_activity($kode_area,$kode_cabang,$kode_kolektor,$pic,$from,$to);
@@ -818,17 +826,25 @@ class Export extends CI_Controller
     foreach($get_data_collection_activity->result() as $row){
       $spreadsheet->setActiveSheetIndex(0)
       ->setCellValue('A'.$i, $a)
-      ->setCellValue('B'.$i, $row->created_at)
+      ->setCellValue('B'.$i, $row->assignment_date)
       ->setCellValue('C'.$i, $row->kode_area)
-      ->setCellValue('D'.$i, $row->kode_kantor)
+      ->setCellValue('D'.$i, $row->kode_cabang)
       ->setCellValue('E'.$i, $row->nama_area_kerja)  
       ->setCellValue('F'.$i, $row->kode_group3)
       ->setCellValue('G'.$i, $row->deskripsi_group3)
       ->setCellValue('H'.$i, $row->no_rekening)
       ->setCellValue('I'.$i, $row->NAMA_NASABAH)
-      ->setCellValue('J'.$i, $row->ALAMAT)
-      ->setCellValue('K'.$i, $row->os_pokok)
-      ->setCellValue('L'.$i, $row->dpd);
+      ->setCellValue('J'.$i, $row->visit)
+      ->setCellValue('K'.$i, $row->not_visit)
+      ->setCellValue('L'.$i, $row->interaksi)
+      ->setCellValue('M'.$i, $row->janji_bayar)
+      ->setCellValue('N'.$i, $row->tgl_janji_byr)
+      ->setCellValue('O'.$i, $row->total_penghasilan)
+      ->setCellValue('P'.$i, $row->kondisi_pekerjaan)
+      ->setCellValue('Q'.$i, $row->asset_debt)
+      ->setCellValue('R'.$i, $row->case_category)
+      ->setCellValue('S'.$i, $row->next_action)
+      ->setCellValue('T'.$i, $row->invalid_no);
       $i++;
       $a++;
     }
@@ -1068,48 +1084,55 @@ class Export extends CI_Controller
     ->setCellValue('D7', 'DPK (Rp)')
     ->setCellValue('E7', 'DPK+ (Rp)')
     ->setCellValue('F7', 'NPL (Rp)')
-    ->setCellValue('G5','HK Hari ini ('.$hk_ke->hk.')')
-    ->setCellValue('G6',tgl_indonesia($header_hk->tgl_hi))
-    ->setCellValue('G7', 'CURRENT(%)')
-    ->setCellValue('H7', 'lancar+(%)')
-    ->setCellValue('I7', 'DPK(%)')
-    ->setCellValue('J7', 'DPK+(%)')
-    ->setCellValue('K7', 'NPL(%)')
-    ->setCellValue('L5','HK Bulan Lalu('.$hk_lalu_ke->hk.')')
-    ->setCellValue('L6',tgl_indonesia($header_hk->tgl_hl))
+    ->setCellValue('G5','Baki Debet Hari Ini')
+    ->setCellValue('G7', 'CURRENT (Rp)')
+    ->setCellValue('H7', 'lancar+ (Rp)')
+    ->setCellValue('I7', 'DPK (Rp)')
+    ->setCellValue('J7', 'DPK+ (Rp)')
+    ->setCellValue('K7', 'NPL (Rp)')
+    ->setCellValue('L5','HK Hari ini ('.$hk_ke->hk.')')
+    ->setCellValue('L6',tgl_indonesia($header_hk->tgl_hi))
     ->setCellValue('L7', 'CURRENT(%)')
     ->setCellValue('M7', 'lancar+(%)')
     ->setCellValue('N7', 'DPK(%)')
     ->setCellValue('O7', 'DPK+(%)')
     ->setCellValue('P7', 'NPL(%)')
-    ->setCellValue('Q5','GAP (Hari ini VS Bulan Lalu)')
+    ->setCellValue('Q5','HK Bulan Lalu('.$hk_lalu_ke->hk.')')
+    ->setCellValue('Q6',tgl_indonesia($header_hk->tgl_hl))
     ->setCellValue('Q7', 'CURRENT(%)')
     ->setCellValue('R7', 'lancar+(%)')
     ->setCellValue('S7', 'DPK(%)')
     ->setCellValue('T7', 'DPK+(%)')
     ->setCellValue('U7', 'NPL(%)')
-    ->setCellValue('V5','HK Next Bulan Lalu('.$hk_next_lalu_ke->hk.')')
-    ->setCellValue('V6',tgl_indonesia($header_hk->tgl_hln))
+    ->setCellValue('V5','GAP (Hari ini VS Bulan Lalu)')
     ->setCellValue('V7', 'CURRENT(%)')
     ->setCellValue('W7', 'lancar+(%)')
     ->setCellValue('X7', 'DPK(%)')
     ->setCellValue('Y7', 'DPK+(%)')
     ->setCellValue('Z7', 'NPL(%)')
-    ->setCellValue('AA5','GAP (Hari ini VS HK Next bulan lalu)')
+    ->setCellValue('AA5','HK Next Bulan Lalu('.$hk_next_lalu_ke->hk.')')
+    ->setCellValue('AA6',tgl_indonesia($header_hk->tgl_hln))
     ->setCellValue('AA7', 'CURRENT(%)')
     ->setCellValue('AB7', 'lancar+(%)')
     ->setCellValue('AC7', 'DPK(%)')
     ->setCellValue('AD7', 'DPK+(%)')
-    ->setCellValue('AE7', 'NPL(%)');
+    ->setCellValue('AE7', 'NPL(%)')
+    ->setCellValue('AF5','GAP (Hari ini VS HK Next bulan lalu)')
+    ->setCellValue('AF7', 'CURRENT(%)')
+    ->setCellValue('AG7', 'lancar+(%)')
+    ->setCellValue('AH7', 'DPK(%)')
+    ->setCellValue('AI7', 'DPK+(%)')
+    ->setCellValue('AJ7', 'NPL(%)');
     $spreadsheet->getActiveSheet()->mergeCells('B5:F6');
-    $spreadsheet->getActiveSheet()->mergeCells('G5:K5');
-    $spreadsheet->getActiveSheet()->mergeCells('G6:K6');
+    $spreadsheet->getActiveSheet()->mergeCells('G5:K6');
     $spreadsheet->getActiveSheet()->mergeCells('L5:P5');
     $spreadsheet->getActiveSheet()->mergeCells('L6:P6');
-    $spreadsheet->getActiveSheet()->mergeCells('Q5:U6');
-    $spreadsheet->getActiveSheet()->mergeCells('V5:Z5');
-    $spreadsheet->getActiveSheet()->mergeCells('V6:Z6');
-    $spreadsheet->getActiveSheet()->mergeCells('AA5:AE6');
+    $spreadsheet->getActiveSheet()->mergeCells('Q5:U5');
+    $spreadsheet->getActiveSheet()->mergeCells('Q6:U6');
+    $spreadsheet->getActiveSheet()->mergeCells('V5:Z6');
+    $spreadsheet->getActiveSheet()->mergeCells('AA5:AE5');
+    $spreadsheet->getActiveSheet()->mergeCells('AA6:AE6');
+    $spreadsheet->getActiveSheet()->mergeCells('AF5:AJ6');
     $spreadsheet->getActiveSheet()->mergeCells('A5:A7');
 
     $styleColor1 = [
@@ -1182,75 +1205,80 @@ class Export extends CI_Controller
       $spreadsheet->setActiveSheetIndex(0)->setCellValue("D".$i,number_format($row->ang_dpk,0));
       $spreadsheet->setActiveSheetIndex(0)->setCellValue("E".$i,number_format($row->ang_dpk_dpk,0));
       $spreadsheet->setActiveSheetIndex(0)->setCellValue("F".$i,number_format($row->ang_npl,0));
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("G".$i,$row->rasio_bucket_0_hi);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("H".$i,$row->rasio_bucket_1_hi);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("I".$i,$row->rasio_bucket_2_hi);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("J".$i,$row->rasio_bucket_3_hi);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("K".$i,$row->rasio_bucket_npl_hi);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("L".$i,$row->rasio_bucket_0_hl);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("M".$i,$row->rasio_bucket_1_hl);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("N".$i,$row->rasio_bucket_2_hl);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("O".$i,$row->rasio_bucket_3_hl);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("P".$i,$row->rasio_bucket_npl_hl);
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Q".$i,$row->gap_current_hihl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("G".$i,number_format($row->ang_bd_current,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("H".$i,number_format($row->ang_bd_lancar,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("I".$i,number_format($row->ang_bd_dpk,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("J".$i,number_format($row->ang_bd_dpk_dpk,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("K".$i,number_format($row->ang_bd_npl,0));
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("L".$i,$row->rasio_bucket_0_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("M".$i,$row->rasio_bucket_1_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("N".$i,$row->rasio_bucket_2_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("O".$i,$row->rasio_bucket_3_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("P".$i,$row->rasio_bucket_npl_hi);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Q".$i,$row->rasio_bucket_0_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("R".$i,$row->rasio_bucket_1_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("S".$i,$row->rasio_bucket_2_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("T".$i,$row->rasio_bucket_3_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("U".$i,$row->rasio_bucket_npl_hl);
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("V".$i,$row->gap_current_hihl);
       if(negative_check($row->gap_current_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("Q".$i)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("R".$i,$row->gap_lancar_hihl);
-      if(negative_check($row->gap_lancar_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("R".$i)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("S".$i,$row->gap_dpk_hihl);
-       if(negative_check($row->gap_dpk_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("S".$i)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("T".$i,$row->gap_dpk_dpk_hihl);
-      if(negative_check($row->gap_dpk_dpk_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("T".$i)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("U".$i,$row->gap_npl_hihl);
-      if(negative_check($row->gap_npl_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("U".$i)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("V".$i,$row->rasio_bucket_0_hln);
-      if(negative_check($row->rasio_bucket_0_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("V".$i)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("W".$i,$row->rasio_bucket_1_hln);
-      if(negative_check($row->rasio_bucket_1_hln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("W".$i,$row->gap_lancar_hihl);
+      if(negative_check($row->gap_lancar_hihl)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("W".$i)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("X".$i,$row->rasio_bucket_2_hln);
-      if(negative_check($row->rasio_bucket_2_hln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("X".$i,$row->gap_dpk_hihl);
+       if(negative_check($row->gap_dpk_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("X".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Y".$i,$row->gap_dpk_dpk_hihl);
+      if(negative_check($row->gap_dpk_dpk_hihl)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("Y".$i)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Y".$i,$row->rasio_bucket_3_hln);
-      if(negative_check($row->rasio_bucket_3_hln)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("Y".$i)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Z".$i,$row->rasio_bucket_npl_hln);
-      if(negative_check($row->rasio_bucket_npl_hln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Z".$i,$row->gap_npl_hihl);
+      if(negative_check($row->gap_npl_hihl)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("Z".$i)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AA".$i,$row->gap_current_hihln);
-      if(negative_check($row->gap_current_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AA".$i,$row->rasio_bucket_0_hln);
+      if(negative_check($row->rasio_bucket_0_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AA".$i)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AB".$i,$row->gap_lancar_hihln);
-      if(negative_check($row->gap_lancar_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AB".$i,$row->rasio_bucket_1_hln);
+      if(negative_check($row->rasio_bucket_1_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AB".$i)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AC".$i,$row->gap_dpk_hihln);
-      if(negative_check($row->gap_dpk_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AC".$i,$row->rasio_bucket_2_hln);
+      if(negative_check($row->rasio_bucket_2_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AC".$i)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AD".$i,$row->gap_dpk_dpk_hihln);
-      if(negative_check($row->gap_dpk_dpk_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AD".$i,$row->rasio_bucket_3_hln);
+      if(negative_check($row->rasio_bucket_3_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AD".$i)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AE".$i,$row->gap_npl_hihln);
-      if(negative_check($row->gap_npl_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AE".$i,$row->rasio_bucket_npl_hln);
+      if(negative_check($row->rasio_bucket_npl_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AE".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AF".$i,$row->gap_current_hihln);
+      if(negative_check($row->gap_current_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AF".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AG".$i,$row->gap_lancar_hihln);
+      if(negative_check($row->gap_lancar_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AG".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AH".$i,$row->gap_dpk_hihln);
+      if(negative_check($row->gap_dpk_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AH".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AI".$i,$row->gap_dpk_dpk_hihln);
+      if(negative_check($row->gap_dpk_dpk_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AI".$i)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AJ".$i,$row->gap_npl_hihln);
+      if(negative_check($row->gap_npl_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AJ".$i)->applyFromArray($styleFontColor1);
       }
       $i++;
       $a++;
@@ -1258,75 +1286,200 @@ class Export extends CI_Controller
     $last = $i-1;
     $last_a = $a-1;
     if($last_a==intval($hk->num_rows())){
-        $spreadsheet->getActiveSheet(0)->getStyle("A".$last.":"."AE".$last)->applyFromArray($styleArray1);
+        $spreadsheet->getActiveSheet(0)->getStyle("A".$last.":"."AJ".$last)->applyFromArray($styleArray1);
     }
       if(negative_check($row->gap_current_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("Q".$last)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("R".$last,$row->gap_lancar_hihl);
-      if(negative_check($row->gap_lancar_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("R".$last)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("S".$last,$row->gap_dpk_hihl);
-       if(negative_check($row->gap_dpk_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("S".$last)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("T".$last,$row->gap_dpk_dpk_hihl);
-      if(negative_check($row->gap_dpk_dpk_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("T".$last)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("U".$last,$row->gap_npl_hihl);
-      if(negative_check($row->gap_npl_hihl)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("U".$last)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("V".$last,$row->rasio_bucket_0_hln);
-      if(negative_check($row->rasio_bucket_0_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("V".$last)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("W".$last,$row->rasio_bucket_1_hln);
-      if(negative_check($row->rasio_bucket_1_hln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("W".$last,$row->gap_lancar_hihl);
+      if(negative_check($row->gap_lancar_hihl)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("W".$last)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("X".$last,$row->rasio_bucket_2_hln);
-      if(negative_check($row->rasio_bucket_2_hln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("X".$last,$row->gap_dpk_hihl);
+       if(negative_check($row->gap_dpk_hihl)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("X".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Y".$last,$row->gap_dpk_dpk_hihl);
+      if(negative_check($row->gap_dpk_dpk_hihl)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("Y".$last)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Y".$last,$row->rasio_bucket_3_hln);
-      if(negative_check($row->rasio_bucket_3_hln)==-1){
-         $spreadsheet->getActiveSheet(0)->getStyle("Y".$last)->applyFromArray($styleFontColor1);
-      }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Z".$last,$row->rasio_bucket_npl_hln);
-      if(negative_check($row->rasio_bucket_npl_hln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("Z".$last,$row->gap_npl_hihl);
+      if(negative_check($row->gap_npl_hihl)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("Z".$last)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AA".$last,$row->gap_current_hihln);
-      if(negative_check($row->gap_current_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AA".$last,$row->rasio_bucket_0_hln);
+      if(negative_check($row->rasio_bucket_0_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AA".$last)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AB".$last,$row->gap_lancar_hihln);
-      if(negative_check($row->gap_lancar_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AB".$last,$row->rasio_bucket_1_hln);
+      if(negative_check($row->rasio_bucket_1_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AB".$last)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AC".$last,$row->gap_dpk_hihln);
-      if(negative_check($row->gap_dpk_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AC".$last,$row->rasio_bucket_2_hln);
+      if(negative_check($row->rasio_bucket_2_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AC".$last)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AD".$last,$row->gap_dpk_dpk_hihln);
-      if(negative_check($row->gap_dpk_dpk_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AD".$last,$row->rasio_bucket_3_hln);
+      if(negative_check($row->rasio_bucket_3_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AD".$last)->applyFromArray($styleFontColor1);
       }
-      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AE".$last,$row->gap_npl_hihln);
-      if(negative_check($row->gap_npl_hihln)==-1){
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AE".$last,$row->rasio_bucket_npl_hln);
+      if(negative_check($row->rasio_bucket_npl_hln)==-1){
          $spreadsheet->getActiveSheet(0)->getStyle("AE".$last)->applyFromArray($styleFontColor1);
       }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AF".$last,$row->gap_current_hihln);
+      if(negative_check($row->gap_current_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AF".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AG".$last,$row->gap_lancar_hihln);
+      if(negative_check($row->gap_lancar_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AG".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AH".$last,$row->gap_dpk_hihln);
+      if(negative_check($row->gap_dpk_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AH".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AI".$last,$row->gap_dpk_dpk_hihln);
+      if(negative_check($row->gap_dpk_dpk_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AI".$last)->applyFromArray($styleFontColor1);
+      }
+      $spreadsheet->setActiveSheetIndex(0)->setCellValue("AJ".$last,$row->gap_npl_hihln);
+      if(negative_check($row->gap_npl_hihln)==-1){
+         $spreadsheet->getActiveSheet(0)->getStyle("AJ".$last)->applyFromArray($styleFontColor1);
+      }
 
-    $spreadsheet->getActiveSheet(0)->getStyle('A5:AE7')->applyFromArray($styleColor1);
-    $spreadsheet->getActiveSheet(0)->getStyle('A5:AE'.$i)->applyFromArray($styleBorder);
-    $spreadsheet->getActiveSheet(0)->getStyle('A1:AE'.$last)->getAlignment()->setHorizontal('center');
+    $spreadsheet->getActiveSheet(0)->getStyle('A5:AJ7')->applyFromArray($styleColor1);
+    $spreadsheet->getActiveSheet(0)->getStyle('A5:AJ'.$i)->applyFromArray($styleBorder);
+    $spreadsheet->getActiveSheet(0)->getStyle('A1:AJ'.$last)->getAlignment()->setHorizontal('center');
     $writer = new Xlsx($spreadsheet);
 
       $filename = 'Export Data Report Collection Daily';
 
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+      header('Cache-Control: max-age=0');
+        
+      $writer->save('php://output');
+  }
+
+  function export_data_tracker_visit_kolektor(){
+    $this->load->model('Model_collection');
+    $kode_area = $this->input->post('kode_area');
+    $nama_area_kerja= $this->input->post('kode_cabang');
+    $kode_kolektor = $this->input->post('kode_kolektor');
+    $from = $this->input->post('from');
+    $to = $this->input->post('to');
+
+    if($from == '' || $to == ''){
+      $periode = "";
+    }else{
+      $periode = "Periode: ".$from." - ".$to;
+    }
+
+    $styleColor1 = [
+      'fill' => [
+        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+          'color' => [
+            'rgb'=> '66B2FF'
+        ]
+      ]
+    ];
+
+    $styleBorder = [
+      'alignment' => [
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+      ],
+      'borders' => [
+      'allBorders' => [
+          'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+          'color' => ['argb' => '00000000'],
+        ],
+      ],
+    ];
+    $styleArray = [
+           'font'=>[
+                'name'=>'Arial',
+                'bold'=> true,
+                'italic'=> true,
+                'size'  =>17,
+                'color' => [
+                  'rgb' => 'FF3333'
+                ]
+           ]
+        ];
+
+    $styleArray1 = [
+          'font'=>[
+          'name'=>'Arial',
+          'bold'=> true,
+          'italic'=> true,
+          'size'  =>13,
+          'color' => [
+          'rgb' => '000000'
+        ]
+      ]
+    ];
+
+    $styleFontColor1 = [
+            'font'=>[
+            'color' => [
+                  'rgb' => 'EF3E36'
+          ]
+        ]
+    ];
+    $spreadsheet = new Spreadsheet();
+    $spreadsheet->getProperties()->setCreator('PT. KREDIT MANDIRI INDONESIA')->setLastModifiedBy('PT. KREDIT MANDIRI INDONESIA')->setTitle('Microsoft Office 365 XLSX Test Document')->setSubject('IT MAN')->setDescription('Test document for Office 2007 XLSX, generated using PHP classes.')->setKeywords('office 365 openxml php')->setCategory('Test result file');
+    $spreadsheet->getActiveSheet(0)->getStyle('A1:A2')->applyFromArray($styleArray);
+    $spreadsheet->getActiveSheet(0)->getStyle('A5:A7')->applyFromArray($styleArray1);
+    $spreadsheet->getActiveSheet(0)->setTitle('Report Tracker Visit Kolektor');
+    $spreadsheet->setActiveSheetIndex(0)
+    ->setCellValue('A1', 'PT. BPR Kredit Mandiri Indonesia Pusat')
+    ->setCellValue('A2', 'Report Tracker Data Visit Kolektor')
+    ->setCellValue('A4', $periode)
+    ->setCellValue('A5','Area :'.$kode_area)
+    ->setCellValue('A6','Cabang :'.$nama_area_kerja)
+    ->setCellValue('A7','Kolektor :'.$kode_kolektor)
+    ->setCellValue('A9','Task Code')
+    ->setCellValue('B9','Nama Kolektor')
+    ->setCellValue('C9','No Rekening')
+    ->setCellValue('D9','Nama Nasabah')
+    ->setCellValue('E9','Total Tunggakan')
+    ->setCellValue('F9','Visit Tempat Tinggal')
+    ->setCellValue('H9','Visit Jaminan')
+    ->setCellValue('F10','Latitude')
+    ->setCellValue('G10','Longitude')
+    ->setCellValue('H10','Latitude')
+    ->setCellValue('I10','Longitude');
+    $spreadsheet->getActiveSheet()->mergeCells('A9:A10');
+    $spreadsheet->getActiveSheet()->mergeCells('B9:B10');
+    $spreadsheet->getActiveSheet()->mergeCells('C9:C10');
+    $spreadsheet->getActiveSheet()->mergeCells('D9:D10');
+    $spreadsheet->getActiveSheet()->mergeCells('E9:E10');
+    $spreadsheet->getActiveSheet()->mergeCells('F9:G9');
+    $spreadsheet->getActiveSheet()->mergeCells('H9:I9');
+    $tracker_data_visit_kolektor = $this->Model_collection->get_total_track_data_visit($kode_area,$nama_area_kerja,$kode_kolektor,$from,$to);
+
+    $i = 11;
+    foreach($tracker_data_visit_kolektor->result() as $row){
+        $spreadsheet->setActiveSheetIndex(0)
+        ->setCellValue('A'.$i, $row->task_code)
+        ->setCellValue('B'.$i, $row->deskripsi_group3)
+        ->setCellValue('C'.$i, $row->no_rekening)
+        ->setCellValue('D'.$i, $row->NAMA_NASABAH)
+        ->setCellValue('E'.$i, $row->total_tunggakan)
+        ->setCellValue('F'.$i, $row->lat_a)
+        ->setCellValue('G'.$i, $row->long_a)
+        ->setCellValue('H'.$i, $row->lat_b)
+        ->setCellValue('I'.$i, $row->long_b);
+        $i++;
+    }
+
+    $spreadsheet->getActiveSheet(0)->getStyle('A9:I10')->applyFromArray($styleColor1);
+    $spreadsheet->getActiveSheet(0)->getStyle('A9:I'.$i)->applyFromArray($styleBorder);
+    $spreadsheet->getActiveSheet(0)->getStyle('A1:I'.$i)->getAlignment()->setHorizontal('center');
+    $writer = new Xlsx($spreadsheet);
+
+      $filename = 'Export Tracker Data Visit Kolektor';
       header('Content-Type: application/vnd.ms-excel');
       header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
       header('Cache-Control: max-age=0');

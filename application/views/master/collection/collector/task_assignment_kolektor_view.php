@@ -86,6 +86,7 @@
             <th>No Rekening</th>
             <th>Nama Nasabah</th>
             <th>FT Hari</th>
+            <th>FT Bulan</th>
             <th>OS Pokok</th>
             <th>Collect Fee</th>
             <th>Total Tagihan</th>
@@ -122,29 +123,29 @@ $('#kode_area').change(function(){
     //         }
     //     }
     // });
-    $.ajax({
-        url:"<?php echo base_url();?>assignment_collection/get_no_rekening",
-        type:"POST",
-        dataType:"JSON",
-        data:{
-            "kode_area" : $('#kode_area option:selected').val(),
-            "kode_cabang" : $('#kode_cabang option:selected').val(),
-            "kode_kolektor" : $('#kode_kolektor option:selected').val(),
-        },
-        success: function(dataNoRekening){
-            $('#no_rekening option').remove();
-            $('#no_rekening').prepend($('<option>',{
-                value: '',
-                text:'PILIH'
-            }));
-            for(var i = 0;i<dataNoRekening.length;i++){
-                $('#no_rekening').append($('<option>',{
-                    value: dataNoRekening[i].NO_REKENING,
-                    text: dataNoRekening[i].NO_REKENING
-                }));
-            }
-        }
-    });
+    // $.ajax({
+    //     url:"<?php echo base_url();?>assignment_collection/get_no_rekening",
+    //     type:"POST",
+    //     dataType:"JSON",
+    //     data:{
+    //         "kode_area" : $('#kode_area option:selected').val(),
+    //         "kode_cabang" : $('#kode_cabang option:selected').val(),
+    //         "kode_kolektor" : $('#kode_kolektor option:selected').val(),
+    //     },
+    //     success: function(dataNoRekening){
+    //         $('#no_rekening option').remove();
+    //         $('#no_rekening').prepend($('<option>',{
+    //             value: '',
+    //             text:'PILIH'
+    //         }));
+    //         for(var i = 0;i<dataNoRekening.length;i++){
+    //             $('#no_rekening').append($('<option>',{
+    //                 value: dataNoRekening[i].NO_REKENING,
+    //                 text: dataNoRekening[i].NO_REKENING
+    //             }));
+    //         }
+    //     }
+    // });
 });
     
 
@@ -179,28 +180,52 @@ $('#kode_area').change(function(){
             $('#kode_kolektor').prepend($('<option>',{
                     value: '',
                     text: 'PILIH'
-            }));
+            }));  
             $.ajax({
-                url:"<?php echo base_url();?>assignment_collection/get_kode_kolektor",
-                type:"POST",
-                dataType:"JSON",
-                data:{
-                    "kode_area": kode_area,
-                    "kode_cabang": kode_cabang
-                },
-                success: function(dataKolektor){
-                    for(var i=0;i<dataKolektor.length;i++){
-                        $('#kode_kolektor').append($('<option>',{
-                            value: dataKolektor[i].deskripsi_group3,
-                            text: dataKolektor[i].deskripsi_group3
-                        }));
+                    url:"<?php echo base_url();?>assignment_collection/get_kode_kolektor",
+                    type:"POST",
+                    dataType:"JSON",
+                    data:{
+                        "kode_area": kode_area,
+                        "nama_area_kerja": kode_cabang
+                    },
+                    success: function(dataKolektor){
+                        $('#kode_kolektor option').remove();
+                        for(var i=0;i<dataKolektor.length;i++){
+                            $('#kode_kolektor').append($('<option>',{
+                                value: dataKolektor[i].deskripsi_group3,
+                                text: dataKolektor[i].deskripsi_group3
+                            }));
+                        }
                     }
-                }
-            });
+                });
         }
+        
     });
   });
 
+$('#kode_cabang').change(function(){
+    var kode_area = $("#kode_area option:selected").val();
+    var kode_cabang = $("#kode_cabang option:selected").val();
+                $.ajax({
+                    url:"<?php echo base_url();?>assignment_collection/get_kode_kolektor",
+                    type:"POST",
+                    dataType:"JSON",
+                    data:{
+                        "kode_area": kode_area,
+                        "nama_area_kerja": kode_cabang
+                    },
+                    success: function(dataKolektor){
+                        $('#kode_kolektor option').remove();
+                        for(var i=0;i<dataKolektor.length;i++){
+                            $('#kode_kolektor').append($('<option>',{
+                                value: dataKolektor[i].deskripsi_group3,
+                                text: dataKolektor[i].deskripsi_group3
+                            }));
+                        }
+                    }
+                });
+            });
 $(document).ready(function(){
         $.ajax({
             url:"<?php echo base_url();?>assignment_collection/get_area_kerja_per_pic",

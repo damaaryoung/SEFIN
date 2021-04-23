@@ -395,6 +395,7 @@ class Assignment_collection extends MY_Controller
                     $row->no_rekening,
                     $row->nama_nasabah,
                     $row->ft_hari,
+                    $row->ft_bulan,
                     "Rp. ".number_format($row->os_pokok,2,".",","),
                     "Rp. ".number_format($row->collect_fee,2,".","."),
                     "Rp. ".number_format($row->total_tagihan,2,".","."),
@@ -433,8 +434,8 @@ class Assignment_collection extends MY_Controller
 
     function get_kode_kolektor(){
         $kode_area = $this->input->post('kode_area');
-        $kode_cabang = $this->input->post('kode_cabang');
-        $get_kode_kolektor = $this->Model_collection->get_kode_kolektor($kode_area,$kode_cabang);
+        $nama_area_kerja = $this->input->post('nama_area_kerja');
+        $get_kode_kolektor = $this->Model_collection->get_kode_kolektor($kode_area,$nama_area_kerja);
         echo json_encode($get_kode_kolektor->result());
     }
 
@@ -473,15 +474,17 @@ class Assignment_collection extends MY_Controller
                     $i,
                     tgl_indonesia($row->assignment_date),
                     $row->kode_area,
-                    $row->kode_kantor,
+                    $row->kode_cabang,
                     $row->nama_area_kerja,
                     $row->kode_group3,
                     $row->deskripsi_group3,
                     $row->no_rekening,
                     $row->NAMA_NASABAH,
-                    $row->ALAMAT,
-                    "Rp ".number_format($row->os_pokok,2,'.',','),
-                    $row->dpd
+                    $row->visit,
+                    $row->not_visit,
+                    $row->interaksi,
+                    $row->janji_bayar,
+                    $row->tgl_janji_byr
                 );
                 $i++;
             }
@@ -653,6 +656,62 @@ class Assignment_collection extends MY_Controller
     function get_area_kerja_per_pic(){
         $area = $this->Model_collection->get_area_kerja_per_pic();
         echo json_encode($area->result());
+    }
+
+    function ajax_list_tracker_data_visit_kolektor(){
+        $arrData = array();
+
+        $start = $this->input->post('start');
+        $length = $this->input->post('length');
+        $draw = $this->input->post('draw');
+        $search = $this->input->post('search');
+
+        $kode_area = $this->input->post('kode_area');
+        $kode_cabang = $this->input->post('kode_cabang');
+        $kode_kolektor = $this->input->post('kode_kolektor');
+
+        $from = $this->input->post('from');
+        $to = $this->input->post('to');
+
+
+        $get_track_visit = $this->Model_collection->get_track_data_visit(intval(@$start),intval(@$length),$kode_area,$kode_cabang,$kode_kolektor,$from,$to);
+        $get_total_track_visit = $this->Model_collection->get_total_track_data_visit($kode_area,$kode_cabang,$kode_kolektor,$from,$to);
+        if($get_track_visit->num_rows() > 0){
+            $i = ($start == 0) ? 1 : $start+1;
+            foreach($get_track_visit->result() as $row){
+                $dis_button_home = $row->lat_a == "" ? "disabled='true'" : "";
+                $dis_button_assurance = $row->lat_b == "" ? "disabled='true'" : "";
+                $arrData['data'][] = array(
+                    $row->task_code,
+                    $row->deskripsi_group3,
+                    $row->no_rekening,
+                    $row->NAMA_NASABAH,
+                    $row->total_tunggakan,
+                    $row->lat_a,
+                    $row->long_a,
+                    $row->lat_b,
+                    $row->long_b,
+                    "<button type='button' class='btn btn-primary mr-1' data-toggle='modal' data-target='#myModal' data-info='".$row->file1_a."' data-lat='".$row->lat_a."' data-lng='".$row->long_a."' ".$dis_button_home."><i class='fas fa-home'></i>
+                    </button><button type='button' class='btn btn-success' data-toggle='modal' data-target='#myModal' data-info='".$row->file1_b."' data-lat='".$row->lat_b."' data-lng='".$row->long_b."' ".$dis_button_assurance.">
+                      <i class='fas fa-warehouse'></i>
+                    </button>"
+                );
+            }
+        }else{
+            $arrData['data'] = array();
+        }
+        $arrData['data'] = $arrData['data'];
+        $arrData['draw'] = $draw;
+        $arrData['recordsTotal'] = $get_total_track_visit->num_rows();
+        $arrData['recordsFiltered'] = $get_total_track_visit->num_rows();
+        header('Content-Type: application/json');
+        echo json_encode($arrData);
+    }
+
+    public function modal_map_tracker_visit_kolektor(){
+        $data['test']='test';
+        $response = $this->load->view('master/collection/collector/modal/modal_data_tracker_visit_kolektor',$data,TRUE);
+        echo $response;
     }
 
 }

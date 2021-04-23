@@ -95,3 +95,6 @@
 <script src="<?= base_url() ?>assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/plugins/jquery-validation/additional-methods.min.js"></script>
 <?php $this->view('master/activity/head-marketing/index_js.php'); ?>
+<script>
+console.log("<?php echo $this->session->userdata('SESSION_TOKEN');?>");
+</script>
