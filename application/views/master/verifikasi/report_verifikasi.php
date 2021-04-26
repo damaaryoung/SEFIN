@@ -19,6 +19,13 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-4">
+                    <label>Jenis Verifikasi :</label>
+                    <select name="jenis_verifikasi" id="jenis_verifikasi" class="form-control">
+                        <option value="hasil_verifikasi">Hasil Verifikasi</option>
+                        <option value="error_verifikasi">Log Error Verifikasi</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
                     <label for="bulan">Pilih Bulan :</label>
                     <select name="bulan" id="bulan" class="form-control">
                         <?php
@@ -73,7 +80,7 @@
                         <option value="12">Desember</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="tahun">Pilih Tahun :</label>
                     <select name="tahun" id="tahun" class="form-control">
                         <?php
@@ -98,7 +105,7 @@
     function export_to_excel() {
         var bulan = $("#bulan").val();
         var tahun = $("#tahun").val();
-            window.open('verifikasi_controller/export_verifikasi/'+bulan+'/'+tahun);
-
+        var jenis_verifikasi = $("#jenis_verifikasi").val();
+        window.open('verifikasi_controller/export_verifikasi/'+bulan+'/'+tahun + '/' + jenis_verifikasi);
     };
 </script>
