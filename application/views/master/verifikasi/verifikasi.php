@@ -1529,6 +1529,11 @@
         $('.prosesVerifikasiNpwpPenjamin_3').hide();
         $('.prosesVerifikasiNpwpPenjamin_4').hide();
         $('.prosesVerifikasiNpwpPenjamin_5').hide();
+        $('.prosesVerifikasiProperti_1').hide();
+        $('.prosesVerifikasiProperti_2').hide();
+        $('.prosesVerifikasiProperti_3').hide();
+        $('.prosesVerifikasiProperti_4').hide();
+        $('.prosesVerifikasiProperti_5').hide();
         $('.running_text').hide();
         $('.warning_nama').hide();
     }
