@@ -1,16 +1,21 @@
+<style>
+#map {
+  height: 100%;
+}
+</style>
 <div class="content-wrapper" id="content">
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Collection Activity</h1>
+                    <h1>Report</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">
                             <a href="#">Collection Activity</a>
                         </li>
-                        <li class="breadcrumb-item active">Report Data Collection Activity</li>
+                        <li class="breadcrumb-item active">Tracker Data Visit Kolektor</li>
                     </ol>
                 </div>
             </div>
@@ -20,7 +25,7 @@
         <div class="container-fluid">
             <div class="callout callout-info">
                 <h5 class="text-center">
-                    <strong>Report Data Collection Activity</strong>
+                    <strong>Report Tracker Data Visit Kolektor</strong>
                 </h5>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12">
@@ -45,39 +50,28 @@
                                     
                                 </select>
                             </div>
-                            <div class="form-group row">
-                                <label for="inputPIC" class="col-sm-1  offset-sm-4 col-form-label">PIC</label>
-                                <select class="form-control col-sm-2" name="get_pic" id="get_pic">
-                                    <option value="all">ALL</option>
-                                    <option value="per_pic">PER PIC</option>
-                                </select>
-                            </div>
                             <div class="form-group">
                                 <button type="button" class="btn btn-success" id="btn_refresh">Filter</button>
-                                <button type="button" class="btn btn-primary" id="btn_export" onclick="report_data_collection_activity()">Export</button>
+                                <button type="button" class="btn btn-primary" id="btn_export" onclick="export_data_tracker_visit_kolektor()">Export</button>
                             </div>
                         <div class="table-responsive" id="table-responsive">
                             <table id="listData" width="100%" class="table table-striped table-bordered display" data-turbolinks="false" style="white-space: nowrap; font-size:10px">
                               <thead>
                                 <tr>
-                                    <th rowspan=2>No.</th>
-                                    <th rowspan=2>Tanggal</th>
-                                    <th rowspan=2>Area</th>
-                                    <th rowspan=2>Kode Cabang</th>
-                                    <th rowspan=2>Nama Cabang</th>
-                                    <th rowspan=2>Kode Kolektor</th>
-                                    <th rowspan=2>Nama Kolektor</th>
-                                    <th colspan=2><center>Assignment</center></th>
-                                    <th rowspan=2>Visit</th>
-                                    <th rowspan=2>Not Visit</th>
-                                    <th colspan=2><center>Hasil Visit</center></th>
-                                    <th rowspan=2>Tanggal Janji Bayar</th>
+                                    <th rowspan = 2>Task Code</th>
+                                    <th rowspan = 2>Nama Kolektor</th>
+                                    <th rowspan = 2>No Rekening</th>
+                                    <th rowspan = 2>Nama Nasabah</th>
+                                    <th rowspan = 2>Total Tunggakan</th>
+                                    <th colspan = 2>Visit tempat tinggal</th>
+                                    <th colspan = 2>Visit Jaminan</th>
+                                    <th rowspan = 2>Action</th>
                                 </tr>
                                 <tr>
-                                    <th>No Rekening</th>
-                                    <th>Nama Nasabah</th>
-                                    <th>Interaksi</th>
-                                    <th>Janji Bayar</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
+                                    <th>Latitude</th>
+                                    <th>Longitude</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -90,6 +84,24 @@
         </div>
     </section>
 </div>
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content modal-1">
+            <div class="modal-header">
+    <h4 class="modal-title title-chart-area">Tracker Visit Kolektor</h4>
+    <button type="button" class="close" id="close-modal-1" aria-label="Close" data-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="location-map" id="location-map">
+                <div style="width: 600px; height: 400px;" id="map_canvas"></div>
+</div>
+        </div>
+    </div>
+</div>
+
 <script>
 $(document).ready(function(){
         $('#kode_area').change(function(){
@@ -108,11 +120,6 @@ $(document).ready(function(){
                     value: '',
                     text: 'PILIH'
             }));
-            if(kode_cabang == 'ALL'){
-                $('#pic option[value=all]').attr('selected','selected');    
-            }else{
-                $('#pic option[value=per_pic]').attr('selected','selected');
-            }
             for(var i=0;i<data2.length;i++){
                     $('#kode_cabang').append($('<option>',{
                         value: data2[i].nama_area_kerja,
@@ -182,8 +189,13 @@ $(document).ready(function(){
                 $('#kode_area option').remove();
                 $('#kode_area').prepend($('<option>',{
                     value: '',
+                    text: 'KONSOLIDASI'
+                }));
+                $('#kode_area').prepend($('<option>',{
+                    value: 'PILIH',
                     text: 'PILIH'
                 }));
+
                 $('#kode_cabang').prepend($('<option>',{
                     value: '',
                     text: 'PILIH'
@@ -240,7 +252,7 @@ function get_dataTable(draw){
                     // fixedHeader: true,
                     "pagingType": "full_numbers",
                     "ajax": {
-                        "url": "<?php echo base_url();?>assignment_collection/ajax_list_collection_activity",
+                        "url": "<?php echo base_url();?>assignment_collection/ajax_list_tracker_data_visit_kolektor",
                         "type": "POST",
                         "data":{
                             "kode_area": kode_area,
@@ -272,15 +284,14 @@ function get_dataTable(draw){
   
 }
 
-function report_data_collection_activity(){
+function export_data_tracker_visit_kolektor(){
     var kode_area = $("#kode_area option:selected").val();
     var kode_cabang = $("#kode_cabang option:selected").val();
     var kode_kolektor = $("#kode_kolektor option:selected").val();
-    var pic = $("#get_pic option:selected").val();
     var from = $('#from').val();
     var to = $('#to').val();
 
-    var winURL ="<?php echo base_url('export/export_report_data_collection_activity');?>";
+    var winURL ="<?php echo base_url('export/export_data_tracker_visit_kolektor');?>";
     var winName = "LAPORAN";
     var windowoption = 'toolbar=no,location=no,status=yes,menubar=no,scrollbars=yes,height=350px, width=350px';
     var input=[];
@@ -292,4 +303,48 @@ function report_data_collection_activity(){
     var myWindowPrint = window.open('', winName,windowoption);
     $('body').find('form#frmprint').attr('target',winName).submit().remove();
 }
+
+
+// Code goes here
+
+$(document).ready(function() {
+  var map = null;
+  var myMarker;
+  var myLatlng;
+
+  function initializeGMap(lat, lng, info) {
+    myLatlng = new google.maps.LatLng(lat, lng);
+
+    var myOptions = {
+      zoom: 12,
+      zoomControl: true,
+      center: myLatlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    const infoWindow = new google.maps.InfoWindow();
+    infoWindow.setContent("<img src='https://tagihbos.com/"+info+"' style='width:100px;height:100px;object-fit: fill'>");
+    myMarker = new google.maps.Marker({
+      position: myLatlng
+    });
+    myMarker.addListener("click",()=>{infoWindow.open(map, myMarker)});
+    myMarker.setMap(map);
+  }
+
+  // Re-init map before show modal
+  $('#myModal').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget);
+    initializeGMap(button.data('lat'), button.data('lng'), button.data('info'));
+    $("#location-map").css("width", "100%");
+    $("#map_canvas").css("width", "100%");
+  });
+
+  // Trigger map resize event after modal shown
+  $('#myModal').on('shown.bs.modal', function() {
+    google.maps.event.trigger(map, "resize");
+    map.setCenter(myLatlng);
+  });
+});
 </script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBeZtiWXzYe5B0lQ-PI0fmXLjguasAmOFY" async defer></script>

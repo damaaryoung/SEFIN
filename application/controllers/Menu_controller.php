@@ -848,10 +848,7 @@ class Menu_controller extends MY_Controller
                       // alert(data[0].flag_aktif);
                     }
                   });
-                }
-  
-
-            
+                }          
         </script>
         ');
          $data['params'] = $this->params;
@@ -868,5 +865,9 @@ class Menu_controller extends MY_Controller
 
     function report_performance_collection_activity(){
         $this->load->view('master/collection/collector/report/report_performance_collection_activity_view');
+    }
+
+    function tracker_data_visit_kolektor(){
+        $this->load->view('master/collection/collector/report/report_tracker_data_visit_kolektor_view');
     }
 }

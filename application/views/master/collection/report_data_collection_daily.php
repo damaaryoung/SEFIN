@@ -41,6 +41,7 @@
                                     <tr>
                                         <th rowspan ="3" style="vertical-align: middle">Cabang</th>
                                         <th rowspan = "2" colspan = "5" style="text-align:center;vertical-align: middle">Angsuran Hari Ini</th>
+                                        <th rowspan = "2" colspan = "5" style="text-align:center;vertical-align: middle">Baki Debet Hari Ini</th>
                                         <th colspan = "5" style="text-align:center;vertical-align: middle">HK Hari Ini <div id="hari_ke"></div></th>
                                         <th colspan = "5" style="text-align:center;vertical-align: middle">HK Bulan Lalu<div id="hk_bulan_lalu"></div></th>
                                         <th rowspan ="2" colspan = "5" style="text-align:center;vertical-align: middle">GAP (Hari ini VS Bulan Lalu)</th>
@@ -53,6 +54,11 @@
                                         <th colspan = "5" style="text-align:center;vertical-align: middle" id="th_hln"></th>
                                     </tr>
                                     <tr>
+                                        <th>CURRENT (Rp)</th>
+                                        <th>Lancar+ (Rp)</th>
+                                        <th>DPK (Rp)</th>
+                                        <th>DPK+ (Rp)</th>
+                                        <th>NPL (Rp)</th>
                                         <th>CURRENT (Rp)</th>
                                         <th>Lancar+ (Rp)</th>
                                         <th>DPK (Rp)</th>
@@ -244,6 +250,14 @@ $(document).ready(function(){
                         "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_dpk)) ? 0 : parseInt(result[i].ang_dpk))+boldEnd+"</td>"+
                         "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_dpk_dpk)) ? 0 : parseInt(result[i].ang_dpk_dpk))+boldEnd+"</td>"+
                         "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_npl)) ? 0 : parseInt(result[i].ang_npl))+boldEnd+"</td>"+
+
+                        "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_bd_current)) ? 0 : parseInt(result[i].ang_bd_current))+boldEnd+"</td>"+
+                        "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_bd_lancar)) ? 0 : parseInt(result[i].ang_bd_lancar))+boldEnd+"</td>"+
+                        "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_bd_dpk)) ? 0 : parseInt(result[i].ang_bd_dpk))+boldEnd+"</td>"+
+                        "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_bd_dpk_dpk)) ? 0 : parseInt(result[i].ang_bd_dpk_dpk))+boldEnd+"</td>"+
+                        "<td>"+boldStart+numberWithCommas(isNaN(parseInt(result[i].ang_bd_npl)) ? 0 : parseInt(result[i].ang_bd_npl))+boldEnd+"</td>"+
+
+
                         "<td>"+boldStart+setColorValue(result[i].rasio_bucket_0_hi)+boldEnd+"</td>"+
                         "<td>"+boldStart+setColorValue(result[i].rasio_bucket_1_hi)+boldEnd+"</td>"+
                         "<td>"+boldStart+setColorValue(result[i].rasio_bucket_2_hi)+boldEnd+"</td>"+
