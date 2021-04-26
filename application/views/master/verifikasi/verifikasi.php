@@ -1605,7 +1605,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -1629,7 +1629,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -1652,7 +1652,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -1677,7 +1677,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -1700,7 +1700,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -1753,7 +1753,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -1773,7 +1773,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -1793,7 +1793,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -1815,7 +1815,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -1835,7 +1835,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -1924,7 +1924,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -1947,7 +1947,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -1970,7 +1970,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -1995,7 +1995,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -2018,7 +2018,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -2072,7 +2072,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2092,7 +2092,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2112,7 +2112,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2134,7 +2134,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -2154,7 +2154,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -2242,7 +2242,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -2265,7 +2265,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -2288,7 +2288,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -2313,7 +2313,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2336,7 +2336,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2391,7 +2391,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -2411,7 +2411,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -2431,7 +2431,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -2453,7 +2453,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -2473,7 +2473,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -2562,7 +2562,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -2585,7 +2585,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -2608,7 +2608,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -2633,7 +2633,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -2656,7 +2656,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -2711,7 +2711,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2731,7 +2731,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2751,7 +2751,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2773,7 +2773,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -2793,7 +2793,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -2882,7 +2882,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -2905,7 +2905,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -2928,7 +2928,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -2953,7 +2953,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -2976,7 +2976,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -3031,7 +3031,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3051,7 +3051,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3071,7 +3071,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3093,7 +3093,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -3113,7 +3113,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -3198,7 +3198,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3221,7 +3221,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3244,7 +3244,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3269,7 +3269,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -3292,7 +3292,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -3347,7 +3347,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3367,7 +3367,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3387,7 +3387,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3409,7 +3409,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -3429,7 +3429,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -3515,7 +3515,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3538,7 +3538,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3561,7 +3561,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3586,7 +3586,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -3609,7 +3609,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -3664,7 +3664,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3684,7 +3684,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3704,7 +3704,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -3726,7 +3726,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -3746,7 +3746,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -3832,7 +3832,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3855,7 +3855,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3878,7 +3878,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -3903,7 +3903,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -3926,7 +3926,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -3981,7 +3981,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -4001,7 +4001,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -4021,7 +4021,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -4043,7 +4043,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -4063,7 +4063,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -4149,7 +4149,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -4172,7 +4172,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -4195,7 +4195,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -4220,7 +4220,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -4243,7 +4243,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -4298,7 +4298,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4318,7 +4318,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4338,7 +4338,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4360,7 +4360,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -4380,7 +4380,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -4471,7 +4471,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4494,7 +4494,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4517,7 +4517,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4542,7 +4542,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -4565,7 +4565,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -4620,7 +4620,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -4640,7 +4640,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -4660,7 +4660,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -4682,7 +4682,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -4702,7 +4702,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -4794,7 +4794,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4817,7 +4817,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4840,7 +4840,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -4865,7 +4865,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -4888,7 +4888,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -4943,7 +4943,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -4963,7 +4963,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -4983,7 +4983,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5005,7 +5005,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -5025,7 +5025,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -5117,7 +5117,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5140,7 +5140,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5163,7 +5163,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5188,7 +5188,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -5211,7 +5211,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -5266,7 +5266,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5286,7 +5286,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5306,7 +5306,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5328,7 +5328,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -5348,7 +5348,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -5440,7 +5440,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5463,7 +5463,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5486,7 +5486,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5511,7 +5511,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -5534,7 +5534,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -5589,7 +5589,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5609,7 +5609,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5629,7 +5629,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5651,7 +5651,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -5671,7 +5671,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -5763,7 +5763,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5786,7 +5786,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5809,7 +5809,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -5834,7 +5834,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -5857,7 +5857,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -5912,7 +5912,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5932,7 +5932,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5952,7 +5952,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -5974,7 +5974,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -5994,7 +5994,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -6076,7 +6076,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -6099,7 +6099,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -6122,7 +6122,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -6147,7 +6147,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -6202,7 +6202,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6222,7 +6222,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6242,7 +6242,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6264,7 +6264,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -6347,7 +6347,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6370,7 +6370,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6393,7 +6393,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6418,7 +6418,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -6473,7 +6473,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -6493,7 +6493,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -6513,7 +6513,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -6535,7 +6535,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -6618,7 +6618,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -6641,7 +6641,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -6664,7 +6664,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -6689,7 +6689,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -6744,7 +6744,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6764,7 +6764,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6784,7 +6784,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6806,7 +6806,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -6889,7 +6889,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6912,7 +6912,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6935,7 +6935,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -6960,7 +6960,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -7015,7 +7015,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -7035,7 +7035,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -7055,7 +7055,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -7077,7 +7077,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -7160,7 +7160,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7183,7 +7183,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7206,7 +7206,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7231,7 +7231,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -7286,7 +7286,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7306,7 +7306,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7326,7 +7326,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7348,7 +7348,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -7429,7 +7429,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7452,7 +7452,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7475,7 +7475,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7500,7 +7500,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -7555,7 +7555,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7575,7 +7575,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7595,7 +7595,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7617,7 +7617,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -7698,7 +7698,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7721,7 +7721,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7744,7 +7744,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7769,7 +7769,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -7824,7 +7824,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7844,7 +7844,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7864,7 +7864,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -7886,7 +7886,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -7967,7 +7967,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -7990,7 +7990,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -8013,7 +8013,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -8038,7 +8038,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -8093,7 +8093,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8113,7 +8113,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8133,7 +8133,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8155,7 +8155,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -8236,7 +8236,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -8259,7 +8259,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -8282,7 +8282,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -8307,7 +8307,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -8362,7 +8362,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8382,7 +8382,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8402,7 +8402,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8424,7 +8424,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -8507,7 +8507,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8530,7 +8530,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8553,7 +8553,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8578,7 +8578,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -8633,7 +8633,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -8653,7 +8653,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -8673,7 +8673,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -8695,7 +8695,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -8780,7 +8780,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8803,7 +8803,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8826,7 +8826,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -8851,7 +8851,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -8906,7 +8906,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -8926,7 +8926,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -8946,7 +8946,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -8968,7 +8968,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -9053,7 +9053,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9076,7 +9076,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9099,7 +9099,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9124,7 +9124,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -9179,7 +9179,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9199,7 +9199,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9219,7 +9219,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9241,7 +9241,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -9326,7 +9326,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9349,7 +9349,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9372,7 +9372,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9397,7 +9397,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -9452,7 +9452,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9472,7 +9472,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9492,7 +9492,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9514,7 +9514,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -9599,7 +9599,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9622,7 +9622,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9645,7 +9645,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -9670,7 +9670,7 @@
                                     }
 
                                     $.ajax({
-                                        url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                        url: '<?php echo config_item',
                                         type: 'POST',
                                         data: requestBodyError,
                                         headers: {
@@ -9725,7 +9725,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9745,7 +9745,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9765,7 +9765,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -9787,7 +9787,7 @@
                                         }
 
                                         $.ajax({
-                                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                            url: '<?php echo config_item',
                                             type: 'POST',
                                             data: requestBodyError,
                                             headers: {
@@ -9876,7 +9876,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -9899,7 +9899,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -9922,7 +9922,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -9946,7 +9946,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10000,7 +10000,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10020,7 +10020,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10040,7 +10040,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10061,7 +10061,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -10146,7 +10146,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10169,7 +10169,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10192,7 +10192,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10216,7 +10216,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10270,7 +10270,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10290,7 +10290,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10310,7 +10310,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10331,7 +10331,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -10416,7 +10416,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10439,7 +10439,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10462,7 +10462,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10486,7 +10486,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10540,7 +10540,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10560,7 +10560,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10580,7 +10580,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10601,7 +10601,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -10686,7 +10686,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10709,7 +10709,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10732,7 +10732,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10756,7 +10756,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10810,7 +10810,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10830,7 +10830,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10850,7 +10850,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -10871,7 +10871,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
@@ -10956,7 +10956,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -10979,7 +10979,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -11002,7 +11002,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -11026,7 +11026,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -11080,7 +11080,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -11100,7 +11100,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -11120,7 +11120,7 @@
                             }
 
                             $.ajax({
-                                url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                url: '<?php echo config_item',
                                 type: 'POST',
                                 data: requestBodyError,
                                 headers: {
@@ -11141,7 +11141,7 @@
                                 }
 
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                                    url: '<?php echo config_item',
                                     type: 'POST',
                                     data: requestBodyError,
                                     headers: {
