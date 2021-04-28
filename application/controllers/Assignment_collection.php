@@ -714,4 +714,17 @@ class Assignment_collection extends MY_Controller
         echo $response;
     }
 
+    function ajax_get_coordinate_route_collector(){
+        $kode_area = $this->input->post('kode_area');
+        $kode_cabang = $this->input->post('kode_cabang');
+        $kode_kolektor = $this->input->post('kode_kolektor');
+        $from = $this->input->post('from');
+        $to = $this->input->post('to');
+
+
+        $get_track_visit = $this->Model_collection->get_route_data_visit($kode_area,$kode_cabang,$kode_kolektor,$from,$to);
+
+        echo json_encode($get_track_visit->result());
+    }
+
 }

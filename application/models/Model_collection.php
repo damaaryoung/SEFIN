@@ -585,7 +585,7 @@ class Model_collection extends CI_Model{
 					}
 				}else{
 					if($kode_kolektor == ''){
-						$sql .= "AND b.kode_kantor = '".$kode_cabang."'";
+						$sql .= "AND c.nama_area_kerja = '".$kode_cabang."'";
 					}else{
 						$sql .= "AND d.deskripsi_group3 = '".$kode_kolektor."'";
 					}
@@ -621,7 +621,6 @@ class Model_collection extends CI_Model{
 		// }
 
 		$sql.= " GROUP BY a.task_code ORDER BY a.task_code DESC LIMIT ?,?";
-		//die($sql);
 		$query = $this->db->query($sql, array($start, $limit));
 		return $query;
 	}
@@ -667,7 +666,7 @@ class Model_collection extends CI_Model{
 					}
 				}else{
 					if($kode_kolektor == ''){
-						$sql .= "AND b.kode_kantor = '".$kode_cabang."'";
+						$sql .= "AND c.nama_area_kerja = '".$kode_cabang."'";
 					}else{
 						$sql .= "AND d.deskripsi_group3 = '".$kode_kolektor."'";
 					}
@@ -1215,6 +1214,41 @@ function get_data_perfomance_collection_activity($start,$limit,$kode_area,$kode_
 	function get_data_nasabah_id($nasabah_id){
 		$sql = "SELECT NAMA_NASABAH, ALAMAT, TELPON, KECAMATAN, DESA, kodepos FROM dpm_online.nasabah WHERE NASABAH_ID = LPAD('".$nasabah_id."',7,0)";
 		//die($sql);
+		$query = $this->db->query($sql);
+		return $query;
+	}
+
+	function get_route_data_visit($kode_area,$nama_area_kerja,$deskripsi_group3,$from,$to){
+		$where1 = $kode_area != "" ? " AND kode_area = '$kode_area' " : "";
+		$where2 = $nama_area_kerja != "" ? " AND nama_area_kerja = '$nama_area_kerja' ":"";
+		$where3 = $deskripsi_group3 != "" ? " AND deskripsi_group3 = '$deskripsi_group3'" : "";
+		$where4 = $from !="" ? " AND assignment_date BETWEEN '$from' AND '$to'" :"";
+		$sql = "SELECT task_code,no_rekening,deskripsi_group3,kode_area,nama_area_kerja,NAMA_NASABAH,total_tunggakan,latitude,longitude,assignment_date
+			FROM
+			(
+			SELECT a.task_code,a.no_rekening,e.deskripsi_group3,f.kode_area,f.nama_area_kerja,c.NAMA_NASABAH,total_tunggakan,
+			d.latitude,d.longitude,  
+			a.assignment_date FROM task_assigment a
+			INNER JOIN dpm_online.master_all_assigment_kolektor b ON a.no_rekening = b.NO_REKENING
+			INNER JOIN dpm_online.nasabah c ON b.NASABAH_ID = c.NASABAH_ID
+			INNER JOIN visit_tempattinggal_task_assigment d ON d.task_code = a.task_code
+			INNER JOIN dpm_online.kre_kode_group3 e ON e.kode_group3 = a.kode_group3
+			INNER JOIN dpm_online.app_kode_kantor f ON f.kode_kantor = b.kode_kantor
+			GROUP BY a.task_code
+			UNION ALL
+			SELECT a.task_code,a.no_rekening,e.deskripsi_group3,f.kode_area,f.nama_area_kerja,c.NAMA_NASABAH,total_tunggakan, 
+			d.latitude,d.longitude,
+			a.assignment_date FROM task_assigment a
+			INNER JOIN dpm_online.master_all_assigment_kolektor b ON a.no_rekening = b.NO_REKENING
+			INNER JOIN dpm_online.nasabah c ON b.NASABAH_ID = c.NASABAH_ID
+			INNER JOIN visit_jaminan_task_assigment d ON d.task_code = a.task_code
+			INNER JOIN dpm_online.kre_kode_group3 e ON e.kode_group3 = a.kode_group3
+			INNER JOIN dpm_online.app_kode_kantor f ON f.kode_kantor = b.kode_kantor
+			GROUP BY a.task_code
+			) results
+			WHERE 1=1 $where1 $where2 $where3 $where4
+			";
+			// die($sql);
 		$query = $this->db->query($sql);
 		return $query;
 	}

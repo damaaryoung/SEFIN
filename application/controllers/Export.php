@@ -804,12 +804,14 @@ class Export extends CI_Controller
     ->setCellValue('E9','Nama Cabang')
     ->setCellValue('F9','Kode Kolektor')
     ->setCellValue('G9','Nama Kolektor')
-    ->setCellValue('H9','No Rekening')
-    ->setCellValue('I9','Nama Nasabah')
+    ->setCellValue('H9','Assignment')
+    ->setCellValue('H10','No Rekening')
+    ->setCellValue('I10','Nama Nasabah')
     ->setCellValue('J9','Visit')
     ->setCellValue('K9','Not Visit')
-    ->setCellValue('L9','Interaksi')
-    ->setCellValue('M9','Janji Bayar')
+    ->setCellValue('L9','Hasil Visit')
+    ->setCellValue('L10','Interaksi')
+    ->setCellValue('M10','Janji Bayar')
     ->setCellValue('N9','Tanggal Janji Bayar')
     ->setCellValue('O9','Total Penghasilan')
     ->setCellValue('P9','Kondisi Pekerjaan')
@@ -818,6 +820,27 @@ class Export extends CI_Controller
     ->setCellValue('S9','Next Action')
     ->setCellValue('T9','Invalid No')
     ;
+
+    $spreadsheet->getActiveSheet()->mergeCells('A9:A10');
+    $spreadsheet->getActiveSheet()->mergeCells('B9:B10');
+    $spreadsheet->getActiveSheet()->mergeCells('C9:C10');
+    $spreadsheet->getActiveSheet()->mergeCells('D9:D10');
+    $spreadsheet->getActiveSheet()->mergeCells('E9:E10');
+    $spreadsheet->getActiveSheet()->mergeCells('F9:F10');
+    $spreadsheet->getActiveSheet()->mergeCells('F9:F10');
+    $spreadsheet->getActiveSheet()->mergeCells('G9:G10');
+    $spreadsheet->getActiveSheet()->mergeCells('H9:I9');
+    $spreadsheet->getActiveSheet()->mergeCells('J9:J10');
+    $spreadsheet->getActiveSheet()->mergeCells('K9:K10');
+    $spreadsheet->getActiveSheet()->mergeCells('L9:M9');
+    $spreadsheet->getActiveSheet()->mergeCells('N9:N10');
+    $spreadsheet->getActiveSheet()->mergeCells('O9:O10');
+    $spreadsheet->getActiveSheet()->mergeCells('P9:P10');
+    $spreadsheet->getActiveSheet()->mergeCells('Q9:Q10');
+    $spreadsheet->getActiveSheet()->mergeCells('R9:R10');
+    $spreadsheet->getActiveSheet()->mergeCells('S9:S10');
+    $spreadsheet->getActiveSheet()->mergeCells('T9:T10');
+
 
     $get_data_collection_activity = $this->Model_collection->get_total_data_collection_activity($kode_area,$kode_cabang,$kode_kolektor,$pic,$from,$to);
 
@@ -848,7 +871,7 @@ class Export extends CI_Controller
       $i++;
       $a++;
     }
-    $spreadsheet->getActiveSheet(0)->getStyle('A9'.':L'.intval($i-1))->applyFromArray($styleBorder);
+    $spreadsheet->getActiveSheet(0)->getStyle('A9'.':T'.intval($i-1))->applyFromArray($styleBorder);
     $writer = new Xlsx($spreadsheet);
 
       $filename = 'Export Data Report Collection Activity';
