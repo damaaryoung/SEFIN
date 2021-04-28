@@ -597,6 +597,12 @@ class Menu_controller extends MY_Controller
     public function verifikasi()
     {
         $data['nama_user'] = $this->model_menu->getUser();
+        // $tb_parameter_access = TB_PARAMETER_ACCESS;
+        $outputs   = $this->model_menu->getUser();
+        $user_id   = $outputs['data']['user_id'];
+        // $divisi_id = $outputs['data']['divisi_id'];
+        // $jabatan   = $outputs['data']['jabatan'];
+        $data['user_id'] = $user_id;
         // $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         // $data['data_collateral'] = $this->Model_view_master->data_collateral();
         $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
