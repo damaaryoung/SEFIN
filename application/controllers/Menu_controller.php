@@ -856,4 +856,8 @@ class Menu_controller extends MY_Controller
     function tracker_data_visit_kolektor(){
         $this->load->view('master/collection/collector/report/report_tracker_data_visit_kolektor_view');
     }
+
+    function waypoint_data_visit_kolektor(){
+        $this->load->view('master/collection/collector/report/report_waypoint_data_visit_kolektor_view');
+    }
 }
