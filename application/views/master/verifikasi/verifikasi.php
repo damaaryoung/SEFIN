@@ -16738,7 +16738,7 @@
 
                         if (data.cadebt == null) {
                             $("#verifikasi_debitur").on('click', function() {
-                                verifikasiSimpanDebitur(true, id);
+                                verifikasiSimpanDebitur(false, id);
                             });
                             $("#limit_call_debitur_result").html("2");
                         } else {
@@ -16763,7 +16763,7 @@
                         
                         if (data.pasangan == null) {
                             $("#verifikasi_pasangan").on('click', function() {
-                                verifikasiSimpanPasangan(true, id);
+                                verifikasiSimpanPasangan(false, id);
                             });
                             $("#limit_call_pasangan_result").html("2");
                         } else {
@@ -16823,7 +16823,7 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("1");
                                 } else {
@@ -23414,7 +23414,7 @@
 
                             if (data.cadebt == null) {
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiSimpanDebitur(true, id);
+                                    verifikasiSimpanDebitur(false, id);
                                 });
                                 $("#limit_call_debitur_result").html("2");
                             } else {
@@ -23439,7 +23439,7 @@
                             
                             if (data.pasangan == null) {
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiSimpanPasangan(true, id);
+                                    verifikasiSimpanPasangan(false, id);
                                 });
                                 $("#limit_call_pasangan_result").html("2");
                             } else {
@@ -23499,7 +23499,7 @@
                                             setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                         }
                                         $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_1_result").html("1");
                                     } else {
