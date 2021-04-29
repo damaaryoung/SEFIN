@@ -1679,7 +1679,7 @@
             })
             .done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik").text() + "01",
+                    "trx_id" : "KMI" + $("#nik").text() + "01",
                     "nik" : $("#nik").text(),
                     "name" : $("#name").text(),
                     "birthdate" : $(formatTanggal("#birthdate")).text(),
@@ -2089,7 +2089,7 @@
             })
             .done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik").text() + "02",
+                    "trx_id" : "KMI" + $("#nik").text() + "02",
                     "nik" : $("#nik").text(),
                     "name" : $("#name").text(),
                     "birthdate" : $(formatTanggal("#birthdate")).text(),
@@ -2498,7 +2498,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_pasangan").text() + "01",
+                    "trx_id" : "KMI" + $("#nik_pasangan").text() + "01",
                     "nik" : $("#nik_pasangan").text(),
                     "name" : $("#name_pasangan").text(),
                     "birthdate" : $("#birthdate_pasangan").text(),
@@ -2903,7 +2903,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_pasangan").text() + "02",
+                    "trx_id" : "KMI" + $("#nik_pasangan").text() + "02",
                     "nik" : $("#nik_pasangan").text(),
                     "name" : $("#name_pasangan").text(),
                     "birthdate" : $("#birthdate_pasangan").text(),
@@ -3299,7 +3299,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_1").text() + "01",
+                    "trx_id" : "KMI" + $("#nik_penjamin_1").text() + "01",
                     "nik" : $("#nik_penjamin_1").text(),
                     "name" : $("#name_penjamin_1").text(),
                     "birthdate" : $("#birthdate_penjamin_1").text(),
@@ -3677,7 +3677,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_2").text() + "01",
+                    "trx_id" : "KMI" + $("#nik_penjamin_2").text() + "01",
                     "nik" : $("#nik_penjamin_2").text(),
                     "name" : $("#name_penjamin_2").text(),
                     "birthdate" : $("#birthdate_penjamin_2").text(),
@@ -4041,7 +4041,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_3").text() + "01",
+                    "trx_id" : "KMI" + $("#nik_penjamin_3").text() + "01",
                     "nik" : $("#nik_penjamin_3").text(),
                     "name" : $("#name_penjamin_3").text(),
                     "birthdate" : $("#birthdate_penjamin_3").text(),
@@ -4392,7 +4392,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_4").text() + "01",
+                    "trx_id" : "KMI" + $("#nik_penjamin_4").text() + "01",
                     "nik" : $("#nik_penjamin_4").text(),
                     "name" : $("#name_penjamin_4").text(),
                     "birthdate" : $("#birthdate_penjamin_4").text(),
@@ -4724,7 +4724,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_5").text() + "01",
+                    "trx_id" : "KMI" + $("#nik_penjamin_5").text() + "01",
                     "nik" : $("#nik_penjamin_5").text(),
                     "name" : $("#name_penjamin_5").text(),
                     "birthdate" : $("#birthdate_penjamin_5").text(),
@@ -5114,7 +5114,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_1").text() + "02",
+                    "trx_id" : "KMI" + $("#nik_penjamin_1").text() + "02",
                     "nik" : $("#nik_penjamin_1").text(),
                     "name" : $("#name_penjamin_1").text(),
                     "birthdate" : $("#birthdate_penjamin_1").text(),
@@ -5497,7 +5497,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_2").text() + "02",
+                    "trx_id" : "KMI" + $("#nik_penjamin_2").text() + "02",
                     "nik" : $("#nik_penjamin_2").text(),
                     "name" : $("#name_penjamin_2").text(),
                     "birthdate" : $("#birthdate_penjamin_2").text(),
@@ -5867,7 +5867,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_3").text() + "02",
+                    "trx_id" : "KMI" + $("#nik_penjamin_3").text() + "02",
                     "nik" : $("#nik_penjamin_3").text(),
                     "name" : $("#name_penjamin_3").text(),
                     "birthdate" : $("#birthdate_penjamin_3").text(),
@@ -6224,7 +6224,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_4").text() + "02",
+                    "trx_id" : "KMI" + $("#nik_penjamin_4").text() + "02",
                     "nik" : $("#nik_penjamin_4").text(),
                     "name" : $("#name_penjamin_4").text(),
                     "birthdate" : $("#birthdate_penjamin_4").text(),
@@ -6561,7 +6561,7 @@
                 }
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nik_penjamin_5").text() + "02",
+                    "trx_id" : "KMI" + $("#nik_penjamin_5").text() + "02",
                     "nik" : $("#nik_penjamin_5").text(),
                     "name" : $("#name_penjamin_5").text(),
                     "birthdate" : $("#birthdate_penjamin_5").text(),
@@ -6935,7 +6935,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp").text() + "01",
+                    "trx_id" : "KMI" + $("#no_npwp").text() + "01",
                     "npwp" : $("#no_npwp").text(),
                     "nik" : $("#nik").text(),
                     "income" : Number($("#income_npwp").text()),
@@ -7262,7 +7262,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp").text() + "02",
+                    "trx_id" : "KMI" + $("#no_npwp").text() + "02",
                     "nik" : $("#nik").text(),
                     "npwp" : $("#no_npwp").text(),
                     "name" : $("#name_npwp").text(),
@@ -7590,7 +7590,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pas").text() + "01",
+                    "trx_id" : "KMI" + $("#no_npwp_pas").text() + "01",
                     "npwp" : $("#no_npwp_pas").text(),
                     "nik" : $("#nik_pas").text(),
                     "income" : Number($("#income_npwp_pas").text()),
@@ -7912,7 +7912,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pas").text() + "02",
+                    "trx_id" : "KMI" + $("#no_npwp_pas").text() + "02",
                     "nik" : $("#nik_pas").text(),
                     "npwp" : $("#no_npwp_pas").text(),
                     "name" : $("#name_npwp_pas").text(),
@@ -8227,7 +8227,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_1").text() + "01",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_1").text() + "01",
                     "npwp" : $("#no_npwp_pen_1").text(),
                     "nik" : $("#nik_pen_1").text(),
                     "income" : Number($("#income_npwp_pen_1").text()),
@@ -8526,7 +8526,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_2").text() + "01",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_2").text() + "01",
                     "npwp" : $("#no_npwp_pen_2").text(),
                     "nik" : $("#nik_pen_2").text(),
                     "income" : Number($("#income_npwp_pen_2").text()),
@@ -8816,7 +8816,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_3").text() + "01",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_3").text() + "01",
                     "npwp" : $("#no_npwp_pen_3").text(),
                     "nik" : $("#nik_pen_3").text(),
                     "income" : Number($("#income_npwp_pen_3").text()),
@@ -9099,7 +9099,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_4").text() + "01",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_4").text() + "01",
                     "npwp" : $("#no_npwp_pen_4").text(),
                     "nik" : $("#nik_pen_4").text(),
                     "income" : Number($("#income_npwp_pen_4").text()),
@@ -9369,7 +9369,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_5").text() + "01",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_5").text() + "01",
                     "npwp" : $("#no_npwp_pen_5").text(),
                     "nik" : $("#nik_pen_5").text(),
                     "income" : Number($("#income_npwp_pen_5").text()),
@@ -9678,7 +9678,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_1").text() + "02",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_1").text() + "02",
                     "nik" : $("#nik_pen_1").text(),
                     "npwp" : $("#no_npwp_pen_1").text(),
                     "name" : $("#name_npwp_pen_1").text(),
@@ -9981,7 +9981,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_2").text() + "02",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_2").text() + "02",
                     "nik" : $("#nik_pen_2").text(),
                     "npwp" : $("#no_npwp_pen_2").text(),
                     "name" : $("#name_npwp_pen_2").text(),
@@ -10275,7 +10275,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_3").text() + "02",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_3").text() + "02",
                     "nik" : $("#nik_pen_3").text(),
                     "npwp" : $("#no_npwp_pen_3").text(),
                     "name" : $("#name_npwp_pen_3").text(),
@@ -10562,7 +10562,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_4").text() + "02",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_4").text() + "02",
                     "nik" : $("#nik_pen_4").text(),
                     "npwp" : $("#no_npwp_pen_4").text(),
                     "name" : $("#name_npwp_pen_4").text(),
@@ -10836,7 +10836,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#no_npwp_pen_5").text() + "02",
+                    "trx_id" : "KMI" + $("#no_npwp_pen_5").text() + "02",
                     "nik" : $("#nik_pen_5").text(),
                     "npwp" : $("#no_npwp_pen_5").text(),
                     "name" : $("#name_npwp_pen_5").text(),
@@ -11142,7 +11142,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nop_1").text() + "01",
+                    "trx_id" : "KMI" + $("#nop_1").text() + "01",
                     "nop" : $(removePoint("#nop_1")).text(),
                     "property_name" : $("#property_name_1").text(),
                     // "property_building_area" : $("#property_building_area_1").text(),
@@ -11435,7 +11435,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nop_2").text() + "01",
+                    "trx_id" : "KMI" + $("#nop_2").text() + "01",
                     "nop" : $(removePoint("#nop_2")).text(),
                     "property_name" : $("#property_name_2").text(),
                     // "property_building_area" : $("#property_building_area_2").text(),
@@ -11720,7 +11720,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nop_3").text() + "01",
+                    "trx_id" : "KMI" + $("#nop_3").text() + "01",
                     "nop" : $(removePoint("#nop_3")).text(),
                     "property_name" : $("#property_name_3").text(),
                     // "property_building_area" : $("#property_building_area_3").text(),
@@ -12001,7 +12001,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nop_4").text() + "01",
+                    "trx_id" : "KMI" + $("#nop_4").text() + "01",
                     "nop" : $(removePoint("#nop_4")).text(),
                     "property_name" : $("#property_name_4").text(),
                     // "property_building_area" : $("#property_building_area_4").text(),
@@ -12272,7 +12272,7 @@
             type: 'GET',
             }).done(function( data, textStatus, jqXHR ) {
                 var requestBody = {
-                    "trx_id" : "VeriJelasBPRKMI" + $("#nop_5").text() + "01",
+                    "trx_id" : "KMI" + $("#nop_5").text() + "01",
                     "nop" : $(removePoint("#nop_5")).text(),
                     "property_name" : $("#property_name_5").text(),
                     // "property_building_area" : $("#property_building_area_5").text(),
