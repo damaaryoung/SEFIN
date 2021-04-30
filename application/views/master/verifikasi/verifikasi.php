@@ -1576,8 +1576,8 @@
         if(user_id == 1107) {
             document.getElementById("verifikasi_npwp").disabled = true;
             setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pas").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pas").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
         }
 
         get_data({}, id_trans_so)
@@ -1986,8 +1986,8 @@
         if(user_id == 1107) {
             document.getElementById("verifikasi_npwp").disabled = true;
             setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pas").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pas").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
         }
 
         get_data({}, id_trans_so)
@@ -2801,8 +2801,8 @@
 
         var user_id = '<?php echo $user_id ?>';
         if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pas").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pas").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
         }
 
         get_data({}, id_trans_so)
@@ -6869,8 +6869,8 @@
 
         var user_id = '<?php echo $user_id ?>';
         if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pas").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pas").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
         }
 
         get_data({}, id_trans_so)
@@ -7196,8 +7196,8 @@
 
         var user_id = '<?php echo $user_id ?>';
         if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pas").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pas").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
         }
 
         get_data({}, id_trans_so)
@@ -17007,8 +17007,8 @@
                                 if(data.npwp[1].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
                                     if (user_id == data.npwp[1].user_id) {
-                                        document.getElementById("verifikasi_npwp_pas").disabled = true;
-                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pas").disabled = false;},300000);
+                                        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pasangan").on('click', function() {
                                         verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
@@ -23683,8 +23683,8 @@
                                     if(data.npwp[1].limit_call == 1) {
                                         var user_id = '<?php echo $user_id ?>';
                                         if (user_id == data.npwp[1].user_id) {
-                                            document.getElementById("verifikasi_npwp_pas").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pas").disabled = false;},300000);
+                                            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
                                             verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
