@@ -16,28 +16,19 @@
  		?>
  		<?php foreach ($data as $key): ?>
  			<tr>
- 				<td><i class="fas fa-calendar-alt"></i> <?= date('d F Y', strtotime(substr($key['tgl_assign'], 0,9))); ?> | <i class="fas fa-clock"></i> <?= substr($key['tgl_assign'],11);?></td>
- 					<td><i class="fas fa-user"></i> <?= $key['nama_mb']; ?></td>
- 					<td><i class="fas fa-map-marked-alt"></i> <?= $key['alamat_mb']; ?></td>
- 					<td><i class="fas fa-user-secret"></i> <?= $key['nama_pic']; ?></td>
- 					<td>
- 						<div class="btn-group">
- 							<button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>','MAINTAIN MB');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_mb']; ?>"><i class="fas fa-wrench"></i></button>
- 							<button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>','so');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_mb']; ?>"><i class="fas fa-trash"></i></button>
- 						</div>
- 					</td>
+ 				<td> <?= date('d F Y', strtotime(substr($key['tgl_assign'], 0,9))); ?> |  <?= substr($key['tgl_assign'],11);?></td>
+				<td> <?= $key['nama_mb']; ?></td>
+				<td> <?= $key['alamat_mb']; ?></td>
+				<td> <?= $key['nama_pic']; ?></td>
+				<td>
+					<div class="btn-group">
+						<button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>','MAINTAIN MB');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_mb']; ?>"><i class="fas fa-wrench"></i></button>
+						<button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>','so');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_mb']; ?>"><i class="fas fa-trash"></i></button>
+					</div>
+				</td>
  				</tr>
  				<?php $no++; endforeach; ?>
  			</tbody>
- 			<tfoot>
- 				<tr>
- 					<th>Tanggal</th>
- 					<th>Nama MB</th>
- 					<th>Alamat MB</th>
- 					<th>PIC</th>
- 					<th width="10">ACT</th>
- 				</tr>
- 			</tfoot>
  		</table>
  		<div class="text-center">
  			<ul class="pagination">

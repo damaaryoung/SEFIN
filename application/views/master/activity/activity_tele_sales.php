@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Activity Tele Sales</h1>
+                    <h1>Tele Sales - Activity</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -59,7 +59,60 @@
                 </div>
             </div>
         </div>  
-    </section> 
+    </section>
+    
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Tele Sales - Repeat Order</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="box-body table-responsive no-padding">
+                            <button class="btn btn-primary tambah" id="click_tambah_ro" style="margin-bottom: 9px;"><i class="fa fa-user-plus">Tambah</i></button>
+                            <table id="table_ro" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                <thead style="font-size: 14px" class="bg-danger">
+                                    <tr>
+                                        <th width="5px">
+                                            No
+                                        </th>
+                                        <th>
+                                            Kantor Cabang
+                                        </th>
+                                        <th>
+                                            Nama Konsumen
+                                        </th>
+                                        <th>
+                                            Produk Penawaran
+                                        </th>
+                                        <th>
+                                            Plafon Baru
+                                        </th>
+                                        <th>
+                                            Tenor
+                                        </th>
+                                        <th>
+                                            Aksi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data_ro" style="font-size: 13px">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+    </section>
 </div>
 
 <div id="tambah_activity" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
@@ -122,11 +175,11 @@
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label>No. Telepon 1<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" name="no_telp_1" id="no_telp_1" onkeypress=" return keyCode(event)">
+                                            <input type="text" class="form-control" name="no_telp_1" id="no_telp_1" maxlength="13" onkeypress=" return keyCode(event)">
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label>No. Telepon 2<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" name="no_telp_2" id="no_telp_2" onkeypress=" return keyCode(event)">
+                                            <input type="text" class="form-control" name="no_telp_2" id="no_telp_2" maxlength="13" onkeypress=" return keyCode(event)">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -606,6 +659,123 @@
     </form>  
 </div>
 
+<div id="tambah_ro" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h3 style="margin-top: 20px">Tele Sales - RO</h3>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right" style="background-color: #f4f6f9">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Tele Sales - RO</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <form id="form_ro">
+        <div class="col-md-12">
+            <div class="box box-primary" style="background-color: #ffffff1f">
+                <div class="box-header with-border"></div>
+                <div class="box-body">
+                    <div class="card mb-3">
+                        <div class="card-header bg-gradient-danger" data-toggle="collapse" href="#collapse_1" role="button" aria-expanded="false" aria-controls="collapse_1">
+                            <a class="text-light">
+                                <b>TELE SALES - REPEAT ORDER</b>
+                            </a>
+                        </div>
+                        <div class="card-body collapse" id="collapse_1">
+                            <div class="row">
+                                <div class="form-group text-primary" style="margin-left: 10px">
+                                    <i class="far fa-clock"></i> <?php echo date(' d-m-Y') ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>No. Kontrak<span class="required_notification">*</span></label>
+                                        <div class="input-group">
+                                            <input type="text" id="no_kontrak_ro" name="no_kontrak_ro" class="form-control">
+                                                <span class="input-group-append">
+                                                <button type="button" class="btn btn-info button_no-kontrak" data-toggle="modal" data-target="#modal-no_kontrak_ro">Pilih No Kontrak</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nama Konsumen<span class="required_notification">*</span></label>
+                                        <input type="text" class="form-control" name="nama_konsumen" id="nama_konsumen">
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>No. Telepon 1<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" name="no_telp_1_ro" id="no_telp_1_ro" maxlength="13"onkeypress=" return keyCode(event)">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>No. Telepon 2</label>
+                                            <input type="text" class="form-control" name="no_telp_2_ro" id="no_telp_2_ro" maxlength="13" onkeypress=" return keyCode(event)">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Produk Penawaran<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" name="produk_penawaran" id="produk_penawaran">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Pilih Cabang<span class="required_notification">*</span></label>
+                                            <?php
+                                                $kode_cabang = $this->db->get('mk_cabang')->result(); 
+                                            ?>
+                                            <select id="kode_cabang" class="form-control" name="kode_cabang">
+                                                <option value="">-- Pilih Cabang --</option>
+                                                <?php foreach($kode_cabang as $r): ?>
+                                                    <option value="<?php echo $r->id; ?>"><?php echo $r->nama; ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Plafon Baru<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" name="plafon_baru" id="plafon_baru">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Angsuran Baru<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" id="angsuran_baru" name="angsuran_baru";>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label>Tenor Baru<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" name="tenor_baru" id="tenor_baru" maxlength="3" onkeypress=" return keyCode(event)">
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Baki Debet<span class="required_notification">*</span></label>
+                                            <input type="text" class="form-control" name="baki_debet_ro" id="baki_debet_ro">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label style="font-style: bold; color: #383a3a;">Note Tele Sales</label>
+                        <textarea name="notes_tele_sales_ro" id="notes_tele_sales_ro" style="width: 100%" rows="5"></textarea>
+                    </div>
+
+                    <button type="submit" id="submit_ro" class="btn btn-success submit_ro"><i class="fa fa-save"></i> Submit</button>
+
+                    <button type="button" class="btn btn-danger btn-sm back_ro" id="click_back_ro"><i class="fa fa-caret-left"> Kembali</i></button>
+
+                </div>
+            </div>
+        </div>
+    </form>  
+</div>
+
 <div class="modal fade" id="modal-no_kontrak" tabindex="-1" role="dialog" aria-labelledby="modal-no_kontrakLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -639,6 +809,51 @@
                                             </tr>
                                         </thead>
                                         <tbody id="data_no_kontrak" style="font-size: 13px">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-no_kontrak_ro" tabindex="-1" role="dialog" aria-labelledby="modal-no_kontrakLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-no_kontrakLabel">Pilih No. Kontrak</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="box-body table-responsive no-padding">
+                                    <table id="table_no_kontrak_ro" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                        <thead style="font-size: 14px" class="bg-danger">
+                                            <tr>
+                                                <th width="5px">
+                                                    No
+                                                </th>
+                                                <th>
+                                                    No. Rekening
+                                                </th>
+                                                <th>
+                                                    Nama Konsumen
+                                                </th>
+                                                <th width="10px">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="data_no_kontrak_ro" style="font-size: 13px">
                                         </tbody>
                                     </table>
                                 </div>
@@ -849,6 +1064,39 @@
 		limitCharacter(event);
     });
 
+    var plafon_baru = document.getElementById('plafon_baru');
+	plafon_baru.addEventListener('keyup', function(e)
+	{
+		plafon_baru.value = formatRupiah(this.value);
+	});
+	
+	plafon_baru.addEventListener('keydown', function(event)
+	{
+		limitCharacter(event);
+    });
+
+    var angsuran_baru = document.getElementById('angsuran_baru');
+	angsuran_baru.addEventListener('keyup', function(e)
+	{
+		angsuran_baru.value = formatRupiah(this.value);
+	});
+	
+	angsuran_baru.addEventListener('keydown', function(event)
+	{
+		limitCharacter(event);
+    });
+
+    var baki_debet_ro = document.getElementById('baki_debet_ro');
+	baki_debet_ro.addEventListener('keyup', function(e)
+	{
+		baki_debet_ro.value = formatRupiah(this.value);
+	});
+	
+	baki_debet_ro.addEventListener('keydown', function(event)
+	{
+		limitCharacter(event);
+    });
+
 	function formatRupiah(bilangan, prefix)
 	{
 		var number_string = bilangan.replace(/[^,\d]/g, '').toString(),
@@ -907,12 +1155,19 @@
         $('#detail_activity').show();
     }
 
+    function click_detail_ro() {
+        $('#form_ro .form-control').prop('disabled', true);
+        $('.submit_ro').hide();
+        $('.button_no-kontrak').hide();
+    }
+
     $(function(){
 
         hide_all = function(){
             $('#lihat_activity').hide();
             $('#tambah_activity').hide();
             $('#detail_activity').hide();
+            $('#tambah_ro').hide();
         }
 
         hide_all();
@@ -926,8 +1181,18 @@
 
         $('#click_back').click(function(){
             hide_all();
-            $('#detail_activity').hide();
             $('#lihat_activity').show();
+        });
+
+        $('#click_back_ro').click(function(){
+            hide_all();
+            $('#lihat_activity').show();
+        });
+
+        $('#click_tambah_ro').click(function(){
+            hide_all();
+            $('.back_ro').hide();
+            $('#tambah_ro').show();
         });
 
         tambah_activity = function(opts){
@@ -944,7 +1209,23 @@
                     'Authorization': 'Bearer '+localStorage.getItem('token')
                 }
             });
-        }   
+        } 
+        
+        tambah_ro = function(opts){
+            var url = '<?php echo $this->config->item('api_url') ?>api/master/telesales/assign/create';
+            var data = opts;
+
+            return $.ajax({
+                url : url,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: data,
+                headers : {
+                    'Authorization': 'Bearer '+localStorage.getItem('token')
+                }
+            });
+        }
 
         $('#form_detail').on('submit',function(e){
 
@@ -1114,6 +1395,85 @@
             });
         });
 
+        $('#form_ro').on('submit',function(e){
+            if (document.getElementById('no_kontrak_ro').value == "") {
+                bootbox.alert("No Kontrak Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('nama_konsumen').value == "") {
+                bootbox.alert("Nama Debitur Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('no_telp_1_ro').value == "") {
+                bootbox.alert("No. Telepon 1 Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('plafon_baru').value == "") {
+                bootbox.alert("Plafon Baru Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('angsuran_baru').value == "") {
+                bootbox.alert("Angsuran Baru Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('tenor_baru').value == "") {
+                bootbox.alert("Tenor Baru Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('baki_debet_ro').value == "") {
+                bootbox.alert("Baki Debet Baru Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('produk_penawaran').value == "") {
+                bootbox.alert("Produk Penawaran Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('notes_tele_sales_ro').value == "") {
+                bootbox.alert("Note Tele Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('kode_cabang').value == "") {
+                bootbox.alert("Cabang Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            e.preventDefault();
+            var formData = new FormData();
+            formData.append('no_rekening',$('input[name=no_kontrak_ro]',this).val());
+            formData.append('nama_debitur',$('input[name=nama_konsumen]',this).val());
+            formData.append('no_hp',$('input[name=no_telp_1_ro]',this).val());
+            formData.append('no_hp2',$('input[name=no_telp_2_ro]',this).val());
+            formData.append('kode_cabang', $('select[name=kode_cabang]',this).val());
+            formData.append('new_plafond',removePoint($('input[name=plafon_baru]',this).val()));
+            formData.append('new_angsuran',removePoint($('input[name=angsuran_baru]',this).val()));
+            formData.append('new_tenor',$('input[name=tenor_baru]',this).val());
+            formData.append('baki_debet', removePoint($('input[name=baki_debet_ro]',this).val()));
+            formData.append('produk', $('input[name=produk_penawaran]',this).val());
+            formData.append('notes', $('textarea[name=notes_tele_sales_ro]',this).val());
+            
+            tambah_ro(formData)
+            .done(function(res){
+                var data = res;
+                console.log(data);
+                bootbox.alert('Data berhasil ditambah',function(){
+                    $('#form_ro')[0].reset();
+                });
+                
+            })
+            .fail(function(jqXHR){
+                var data = jqXHR.responseJSON;
+                var error = "";
+
+                if(typeof data == 'string') {
+                    error = '<p>'+ data +'</p>';
+                } else {
+                    $.each(data, function(index, item){
+                        error += '<p>'+ item +'</p>'+"\n";
+                    });
+                }
+                bootbox.alert(error);
+            });
+        });
+
         get_activity = function(opts, id){
             var url = '<?php echo config_item('api_url') ?>api/master/telesales/index/all';
 
@@ -1131,6 +1491,48 @@
                 data: data,
                 headers: {
                     'Authorization': 'Bearer '+localStorage.getItem('token')
+                }
+            });
+        }
+
+        get_ro = function(opts, id){
+            var url = '<?php echo config_item('api_url') ?>api/master/telesales/assign/index';
+
+            if(id != undefined){
+                url+=id;
+            }
+
+            if(opts != undefined){
+                var data = opts;
+            }
+
+            return $.ajax({
+                type : 'GET',
+                url: url,
+                data: data,
+                headers: {
+                    'Authorization': 'Bearer '+localStorage.getItem('token')
+                }
+            });
+        }
+
+        get_ro_detail = function(opts, id){
+            var url = '<?php echo config_item('api_url') ?>api/master/telesales/detail/show/';
+
+            if (id != undefined) {
+                url += id;
+            }
+
+            if (opts != undefined) {
+                var data = opts;
+            }
+
+            return $.ajax({
+                type : 'GET',
+                url: url,
+                data: data,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
                 }
             });
         }
@@ -1199,58 +1601,112 @@
         }
 
         load_data_activity = function(pagin){
+            var html  = [];
+            var html2 = [];
+
             get_activity()
-            .done(function(response){
-                var data = response.data;
-                var html = [];
-                var no   = 0;
-                
-                if(data.length === 0 ){
-                    var tr =[
-                    '<tr valign="midle">',
-                    '<td colspan="9" style="text-align: center">Tidak ada data</td>',
-                    '</tr>'
-                    ].join('\n');
-                    $('#data_activity').html(tr);
+                .done(function(response){
+                    var data = response.data;
+                    console.log(data);
+                    var no    = 0;
+                    
+                    if(data.length === 0 ){
+                        var tr =[
+                        '<tr valign="middle">',
+                        '<td colspan="9" style="text-align: center">Tidak ada data</td>',
+                        '</tr>'
+                        ].join('\n');
+                        $('#data_activity').html(tr);
 
-                    return;
-                }
+                        return;
+                    }
 
-                $.each(data,function(index,item){
-                    no++;
-                    var tr = [
-                    '<tr>',
-                        '<td style="text-align: center">'+ no +'</td>',
-                        '<td>'+ formatTanggalTelepon(item.tgl_telp) +'</td>',
-                        '<td>'+ item.no_kontrak +'</td>',
-                        '<td>'+ item.nama_debitur +'</td>',
-                        '<td>'+ nullChecker(item.result_contacted) +'</td>',
-                        '<td>'+ nullChecker(item.result_uncontacted) +'</td>',
-                        '<td>'+ nullChecker(item.result_unconnected) +'</td>',
-                        '<td style="text-align: center">',
-                            '<form method="post" target="_blank" action="<?php echo base_url() . 'index.php/report/Memo_telesales' ?>"><button type="button"class="btn btn-warning btn-sm detail" onclick="click_detail()" data="' + item.id + '"><i style="color: #fff" class="fas fa-eye"></i></button>',
-                            '<input type="hidden" name ="id" value="' + item.id + '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
-                        '</td>',
-                    '</tr>'
-                    ].join('\n');
-                    html.push(tr);
+                    $.each(data,function(index,item){
+                        no++;
+                        var tr = [
+                        '<tr>',
+                            '<td style="text-align: center">'+ no +'</td>',
+                            '<td>'+ formatTanggalTelepon(item.tgl_telp) +'</td>',
+                            '<td>'+ item.no_kontrak +'</td>',
+                            '<td>'+ item.nama_debitur +'</td>',
+                            '<td>'+ nullChecker(item.result_contacted) +'</td>',
+                            '<td>'+ nullChecker(item.result_uncontacted) +'</td>',
+                            '<td>'+ nullChecker(item.result_unconnected) +'</td>',
+                            '<td style="text-align: center">',
+                                '<form method="post" target="_blank" action="<?php echo base_url() . 'index.php/report/Memo_telesales' ?>"><button type="button"class="btn btn-warning btn-sm detail" onclick="click_detail()" data="' + item.id + '"><i style="color: #fff" class="fas fa-eye"></i></button>',
+                                '<input type="hidden" name ="id" value="' + item.id + '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
+                            '</td>',
+                        '</tr>'
+                        ].join('\n');
+                        html.push(tr);
+                    });
+
+                    $('#data_activity').html(html);
+                    $('#table_activity').DataTable({
+                        "paging": true,
+                        "retrieve": true,
+                        "lengthChange": true,
+                        "searching": true,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false,
+                    });
+                })
+
+                .fail(function(response){
+                    $('#data_activity').html('<tr><td colspan="9" style="text-align: center">Tidak ada data</td></tr>');
                 });
 
-                $('#data_activity').html(html);
-                $('#table_activity').DataTable({
-                    "paging": true,
-                    "retrieve": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                });
-            })
+            get_ro()
+                .done(function(response){
+                    var data = response.data;
+                    console.log(data);
+                    var no    = 0;
+                    
+                    if(data.length === 0 ){
+                        var tr =[
+                        '<tr valign="middle">',
+                            '<td colspan="6" style="text-align: center">Tidak ada data</td>',
+                        '</tr>'
+                        ].join('\n');
+                        $('#data_ro').html(tr);
 
-            .fail(function(response){
-                $('#data_activity').html('<tr><td colspan="9" style="text-align: center">Tidak ada data</td></tr>');
-            });
+                        return;
+                    }
+
+                    $.each(data,function(index,item){
+                        no++;
+                        var tr = [
+                        '<tr>',
+                            '<td style="text-align: center">'+ no +'</td>',
+                            '<td>'+ item.nama_cabang +'</td>',
+                            '<td>'+ item.nama_debitur +'</td>',
+                            '<td>'+ item.produk +'</td>',
+                            '<td>'+ item.new_plafond +'</td>',
+                            '<td>'+ item.new_tenor +'</td>',
+                            '<td style="text-align: center">',
+                                '<button type="button"class="btn btn-warning btn-sm detail" onclick="click_detail_ro()" data="' + item.id + '"><i style="color: #fff" class="fas fa-eye"></i></button>',
+                            '</td>',
+                        '</tr>'
+                        ].join('\n');
+                        html2.push(tr);
+                    });
+
+                    $('#data_ro').html(html2);
+                    $('#table_ro').DataTable({
+                        "paging": true,
+                        "retrieve": true,
+                        "lengthChange": true,
+                        "searching": true,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false,
+                    });
+                })
+
+                .fail(function(response){
+                    $('#data_ro').html('<tr><td colspan="6" style="text-align: center">Tidak ada data</td></tr>');
+                });
         }
 
         $('#data_activity').show();
@@ -1265,7 +1721,7 @@
                 
                 if(data.length === 0 ){
                     var tr =[
-                    '<tr valign="midle">',
+                    '<tr valign="middle">',
                     '<td colspan="4" style="text-align: center">Tidak ada data</td>',
                     '</tr>'
                     ].join('\n');
@@ -1344,6 +1800,83 @@
             $('#tambah_activity').show();
         });
 
+        load_data_no_kontrak_ro = function(pagin){
+            get_no_kontrak()
+            .done(function(response){
+                var data = response.data;
+                var html = [];
+                var no   = 0;
+                
+                if(data.length === 0 ){
+                    var tr =[
+                    '<tr valign="midle">',
+                    '<td colspan="4" style="text-align: center">Tidak ada data</td>',
+                    '</tr>'
+                    ].join('\n');
+                    $('#data_no_kontrak_ro').html(tr);
+
+                    return;
+                }
+
+                $.each(data,function(index,item){
+                    no++;
+                    var tr = [
+                    '<tr>',
+                        '<td style="text-align: center">'+ no +'</td>',
+                        '<td>'+ item.no_kontrak +'</td>',
+                        '<td>'+ item.nama_debitur +'</td>',
+                        '<td style="text-align: center">',
+                            '<button type="button" class="btn btn-info btn-sm edit" data-target="#update" data="' + item.nasabah_id + '"><i class="fas fa-plus-circle"></i></button>',
+                        '</td>',
+                    '</tr>'
+                    ].join('\n');
+                    html.push(tr);
+                });
+
+                $('#data_no_kontrak_ro').html(html);
+                $('#table_no_kontrak_ro').DataTable({
+                    "paging": true,
+                    "retrieve": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                });
+            })
+
+            .fail(function(response){
+                $('#data_no_kontrak_ro').html('<tr><td colspan="4" style="text-align: center">Tidak ada data</td></tr>');
+            });
+        }
+
+        $('#data_no_kontrak_ro').show();
+        load_data_no_kontrak_ro();
+
+        $('#data_no_kontrak_ro').on('click', '.edit', function(e) {
+            e.preventDefault();
+            var nasabah_id = $(this).attr('data');
+            var html = [];
+
+            get_data_nasabah({}, nasabah_id)
+                .done(function(response) {
+                    var data = response.data[0];
+                    console.log(data);
+
+                    $('#form_ro input[name=no_kontrak_ro]').val(data.no_kontrak);
+                    $('#form_ro input[name=nama_konsumen]').val(data.nama_debitur);
+                    $('#form_ro input[name=no_telp_1]').val(data.no_telp);
+
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
+
+                });
+
+            $("#modal-no_kontrak_ro").modal('hide');
+            $('#tambah_ro').show();
+        });
+
         $('#data_activity').on('click', '.detail', function(e) {
             e.preventDefault();
             var id = $(this).attr('data');
@@ -1400,6 +1933,37 @@
             
             $('#lihat_activity').hide();
             $('#detail_activity').show();
+        });
+
+        $('#data_ro').on('click', '.detail', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data');
+            var html = [];
+
+            get_ro_detail({}, id)
+                .done(function(response) {
+                    var data = response.data;
+                    console.log(data);                    
+
+                    $('#form_ro input[name=no_kontrak_ro]').val(data.no_rekening);
+                    $('#form_ro input[name=nama_konsumen]').val(data.nama_debitur);
+                    $('#form_ro input[name=no_telp_1_ro]').val(data.no_hp);
+                    $('#form_ro input[name=no_telp_2_ro]').val(data.no_hp2);
+                    $('#form_ro select[name=kode_cabang]').val(data.kode_cabang);
+                    $('#form_ro input[name=plafon_baru]').val(formatNumber(data.new_plafond));
+                    $('#form_ro input[name=angsuran_baru]').val(formatNumber(data.new_angsuran));
+                    $('#form_ro input[name=tenor_baru]').val(data.new_tenor);
+                    $('#form_ro input[name=baki_debet_ro]').val(formatNumber(data.baki_debet));
+                    $('#form_ro input[name=produk_penawaran]').val(data.produk);
+                    $('#form_ro textarea[name=notes_tele_sales_ro]').val(data.notes);
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
+
+                });
+            
+            $('#lihat_activity').hide();
+            $('#tambah_ro').show();
         });
 
         nullChecker = function(paramsToCheck) {

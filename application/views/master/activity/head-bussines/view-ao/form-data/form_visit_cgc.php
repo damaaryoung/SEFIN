@@ -5,7 +5,7 @@
         <div class="card-header">
           <h3 class="card-title">
             <i class="fas fa-tag"></i>
-            Visit CGC Account Officer
+            Visit CGC - Account Officer
           </h3>
         </div>
         <div class="card-body">

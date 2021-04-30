@@ -59,6 +59,7 @@
 						<select class="custom-select data-selected-view-ao" onchange="filter('ao');">
 							<option value="SURVEY">Survey</option>
 							<option value="VISIT%20CGC">Visit CGC</option>
+							<option value="TELESALES">Telesales</option>
 						</select>
 					</div>
 				</div>
@@ -95,6 +96,3 @@
 <script src="<?= base_url() ?>assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/plugins/jquery-validation/additional-methods.min.js"></script>
 <?php $this->view('master/activity/head-marketing/index_js.php'); ?>
-<script>
-console.log("<?php echo $this->session->userdata('SESSION_TOKEN');?>");
-</script>

@@ -50,8 +50,10 @@ class ActivityHBController extends CI_Controller
   function form_create_ao(){
     if ($this->input->post('formpick')=="SURVEY") {
       $view="form_survey";
-    }else{
+    }else if($this->input->post('formpick')=="VISIT%20CGC"){
       $view="form_visit_cgc";
+    }else {
+      $view="form_telesales";
     }
     $this->load->view('master/activity/head-bussines/view-ao/form-data/'.$view);
   }
@@ -75,8 +77,10 @@ class ActivityHBController extends CI_Controller
   function form_update_ao(){
     if ($this->input->post('form')=="SURVEY") {
       $view="form_survey";
-    }else{
+    }else if($this->input->post('formpick')=="VISIT%20CGC"){
       $view="form_visit_cgc";
+    }else {
+      $view="form_telesales";
     }
     $this->load->view('master/activity/head-bussines/view-ao/form-data/'.$view);
   }

@@ -31,16 +31,6 @@
 			</tr>
 			<?php $no++; endforeach; ?>
 		</tbody>
-		<tfoot>
-			<tr>
-				<th>Tanggal Asign</th>
-				<th>NO. Kontrak</th>
-				<th>Nama Debitur</th>
-				<th>Alamat Debitur</th>
-				<th>PIC</th>
-				<th width="10">ACT</th>
-			</tr>
-		</tfoot>
 	</table>
 	<div class="text-center">
 		<ul class="pagination">

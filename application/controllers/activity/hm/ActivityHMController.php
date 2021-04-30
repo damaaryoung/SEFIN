@@ -13,6 +13,9 @@ class ActivityHMController extends CI_Controller
   function TemplateAO(){
     $this->load->view('master/activity/head-marketing/view-ao/index');
   }
+  function TemplateTeleSales(){
+    $this->load->view('master/activity/head-marketing/view-tele-sales/index');
+  }
   function dataTableAO(){
       if (isset($_POST['filter'])) {
         $filter=$_POST['filter'];
@@ -47,11 +50,16 @@ class ActivityHMController extends CI_Controller
       $data['data']=$data['data']['data'];
       $this->load->view('master/activity/head-marketing/view-so/datatable/'.$view,$data);
   }
+  function dataTableTeleSales(){
+    $this->load->view('master/activity/head-bussines/view-tele-sales/datatable/index');
+  } 
   function form_create_ao(){
     if ($this->input->post('formpick')=="SURVEY") {
       $view="form_survey";
-    }else{
+    }else if($this->input->post('formpick')=="VISIT%20CGC"){
       $view="form_visit_cgc";
+    }else {
+      $view="form_telesales";
     }
     $this->load->view('master/activity/head-marketing/view-ao/form-data/'.$view);
   }
@@ -75,8 +83,10 @@ class ActivityHMController extends CI_Controller
   function form_update_ao(){
     if ($this->input->post('form')=="SURVEY") {
       $view="form_survey";
-    }else{
+    }else if($this->input->post('formpick')=="VISIT%20CGC"){
       $view="form_visit_cgc";
+    }else {
+      $view="form_telesales";
     }
     $this->load->view('master/activity/head-marketing/view-ao/form-data/'.$view);
   }

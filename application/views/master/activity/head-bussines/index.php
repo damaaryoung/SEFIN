@@ -33,7 +33,7 @@
 		<div class="container-fluid">
 			<div class="row mb-2">
 				<div class="col-sm-6">
-					<h1><img src="<?= base_url(); ?>assets/dist/img/monitor.svg" width="10%"> Activity Head Marketing</h1>
+					<h1><img src="<?= base_url(); ?>assets/dist/img/monitor.svg" width="10%"> Activity Head Bussiness</h1>
 				</div>
 				<div class="col-sm-6">
 					<div class="float-sm-right">
@@ -54,12 +54,12 @@
 				<div class="form-group">
 					<div class="input-group">
 						<div class="input-group-prepend">
-							<button type="button" class="input-group-text btn-primary btn-ao"><i class="fas fa-plus"></i></button>
-							<span class="input-group-text"><i class="fas fa-database"></i></span>
+							<button type="button" class="input-group-text btn-primary btn-ao"><i class="fas fa-plus" style="margin-right: 5px"></i> Tambah Assignment</button>
 						</div>
 						<select class="custom-select data-selected-view-ao" onchange="filter('ao');">
 							<option value="SURVEY">Survey</option>
 							<option value="VISIT%20CGC">Visit CGC</option>
+							<option value="TELESALES">Telesales</option>
 						</select>
 					</div>
 				</div>
@@ -68,8 +68,7 @@
 				<div class="form-group">
 					<div class="input-group">
 						<div class="input-group-prepend">
-							<button type="button" class="input-group-text btn-primary btn-so"><i class="fas fa-plus"></i></button>
-							<span class="input-group-text"><i class="fas fa-database"></i></span>
+							<button type="button" class="input-group-text btn-primary btn-so"><i class="fas fa-plus" style="margin-right: 5px"></i> Tambah Assignment</button>
 						</div>
 						<select class="custom-select data-selected-view-so" onchange="filter('so');">
 							<option value="VISIT%20RO">Visit RO</option>
@@ -96,4 +95,4 @@
 <!-- modal ended -->
 <script src="<?= base_url() ?>assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?= base_url() ?>assets/plugins/jquery-validation/additional-methods.min.js"></script>
-<?php $this->view('master/activity/head-marketing/index_js.php'); ?>
+<?php $this->view('master/activity/head-bussines/index_js.php'); ?>

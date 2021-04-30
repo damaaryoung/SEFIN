@@ -18,6 +18,7 @@ class Model_hb_activity extends CI_Model{
     ));
 
     $response = curl_exec($curl);
+    // print_r($response);
 
     curl_close($curl);
     return json_decode($response, true);

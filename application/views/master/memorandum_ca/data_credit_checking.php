@@ -11523,6 +11523,8 @@
                 // $.each($('input[name="urutan_mutasi[]"]'), function(i, e){
                 //     formData.append('nama_bank_mutasi[]', e.value);
                 // });
+                formData.append('cc_result', $('select[name=cc_result]', this).val());
+                
                 $.each($('input[name="nama_bank_mutasi[]"]'), function(i, e) {
                     formData.append('nama_bank_mutasi[]', e.value);
                 });
@@ -11593,6 +11595,7 @@
                 //==============================================================================================
 
                 //INFORMASI DAN ANALISA
+                
 
                 $.each($('input[name="nama_bank_acc[]"]'), function(i, e) {
                     formData.append('nama_bank_acc[]', e.value);

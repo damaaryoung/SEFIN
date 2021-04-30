@@ -4,6 +4,8 @@
       <th>Tanggal</th>
       <th>No. Kontrak</th>
       <th>Nama Debitur</th>
+      <th>Plafon</th>
+      <th>Tenor</th>
       <th>PIC</th>
       <th width="10">ACT</th>
     </tr>
@@ -19,11 +21,13 @@
         <td> <?= date('d F Y', strtotime(substr($key['tgl_assign'], 0,9))); ?> | <?= substr($key['tgl_assign'],11);?></td>
         <td> <?= $key['no_kontrak']; ?></td>
         <td> <?= $key['nama_debitur']; ?></td>
+        <td> <?= $key['new_plafond']; ?></td>
+        <td> <?= $key['new_tenor']; ?></td>
         <td> <?= $key['nama_pic']; ?></td>
         <td>
           <div class="btn-group">
-            <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>','SURVEY');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_mb']; ?>"><i class="fas fa-wrench"></i></button>
-            <button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>','ao');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_mb']; ?>"><i class="fas fa-trash"></i></button>
+            <button type="button" class="btn btn-warning btn-sm" onclick="edit('<?= $key['id']; ?>','TELESALES');" data-toggle="tooltip" data-placement="left" title="Edit Data <?= $key['nama_debitur']; ?>"><i class="fas fa-wrench"></i></button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="destroy('<?= $key['id']; ?>','ao');" data-toggle="tooltip" data-placement="left" title="Hapus Data <?= $key['nama_debitur']; ?>"><i class="fas fa-trash"></i></button>
           </div>
         </td>
       </tr>

@@ -12,7 +12,7 @@
 			var template="TemplateAO";
 			var idShow="ao";
 			var idHide="so";
-		}
+		} 
 		$.post( "<?= base_url() ?>activity/hm/ActivityHMController/"+template, function( responseTemplate ) {
 			$( ".rendered-template" ).html( responseTemplate );
 			$("#"+idShow+"-data-filtered-selected").css("display", "block");
@@ -22,7 +22,14 @@
 				$("#exampleModalLong-ao-form").modal("show");
 				$.post( "<?= base_url(); ?>activity/hm/ActivityHMController/form_create_ao", {formpick:$(".data-selected-view-ao").val()}, function( formTemplate ) {
 					$( ".modal-ao-form-data" ).html( formTemplate );
-					($(".data-selected-view-ao").val()==="SURVEY") ? formValidationSurvey('create','<?php echo config_item("api_url") ?>api/master/hmhb/create') : formValidationVisitRO('create','<?php echo config_item("api_url") ?>api/master/hmhb/create'); 
+					if ($(".data-selected-view-ao").val()==="SURVEY") {
+					 formValidationSurvey('create','<?php echo config_item("api_url") ?>api/master/hmhb/create'); 
+					} else if ($(".data-selected-view-ao").val()==="VISIT%20CGC") {
+						formValidationVisitRO('create','<?php echo config_item("api_url") ?>api/master/hmhb/create');
+					} else {
+						formValidationTelesales('create','<?php echo config_item("api_url") ?>api/master/hmhb/create');
+					}
+						
 				});
 			})
 			$(".btn-so").click(function(){
@@ -278,6 +285,10 @@ function edit($id,$param){
 		var modalID="exampleModalLong-ao-form";
 		var formRendered="modal-ao-form-data";
 		var keyurl="form_update_ao";
+	}else if ($param==="TELESALES") {
+		var modalID="exampleModalLong-ao-form";
+		var formRendered="modal-ao-form-data";
+		var keyurl="form_update_ao";
 	}
 	$("#"+modalID).modal("show");
 	var url="<?= base_url(); ?>activity/hm/ActivityHMController/"+keyurl;
@@ -291,6 +302,8 @@ function edit($id,$param){
 			formValidationSurvey('update','<?php echo config_item("api_url") ?>api/master/hmhb/update/'+$id);
 		}else if ($param==="VISIT CGC") {
 			formValidationVisitRO('update','<?php echo config_item("api_url") ?>api/master/hmhb/update/'+$id);
+		}else if ($param==="TELESALES") {
+			formValidationTelesales('update','<?php echo config_item("api_url") ?>api/master/hmhb/update/'+$id);
 		}
 		$.ajax({
 			url: "<?php echo config_item("api_url") ?>api/master/hmhb/index/detail/"+$id,
@@ -320,6 +333,15 @@ function edit($id,$param){
 						$(".no_kontrak").val(response.data.no_kontrak);
 						$(".nama_debitur").val(response.data.nama_debitur);
 						$(".alamat_debitur").val(response.data.alamat_debitur);
+						$(".account_officer").val(response.data.nama_pic);
+					}else if ($param==="TELESALES") {
+						$(".no_kontrak").val(response.data.no_kontrak);
+						$(".cadeb").val(response.data.nama_debitur);
+						$(".produk").val(response.data.produk);
+						$(".baki_debet").val(response.data.baki_debet);
+						$(".new_plafond").val(response.data.new_plafond);
+						$(".new_tenor").val(response.data.new_tenor);
+						$(".new_angsuran").val(response.data.new_angsuran);
 						$(".account_officer").val(response.data.nama_pic);
 					}
 				}
@@ -493,6 +515,99 @@ function formValidationSurvey($param,$url){
 			no_kontrak: "Please accept our no kontrak !!",
 			nama_debitur: "Please accept our nama debitur !!",
 			alamat_debitur: "Please accept our alamat debitur !!",
+			account_officer: "Please accept our account officer !!",
+		},
+		errorElement: 'span',
+		errorPlacement: function (error, element) {
+			error.addClass('invalid-feedback');
+			element.closest('.form-group').append(error);
+		},
+		highlight: function (element, errorClass, validClass) {
+			$(element).addClass('is-invalid');
+		},
+		unhighlight: function (element, errorClass, validClass) {
+			$(element).removeClass('is-invalid');
+		}
+	});
+}
+function formValidationTelesales($param,$url){
+	$.validator.setDefaults({
+		submitHandler: function () {
+			var dataPost={
+				'pic':'AO',
+				'activity':'TELESALES',
+				'no_kontrak':$(".no_kontrak").val(),
+				'nama_debitur':$(".cadeb").val(),
+				'produk':$(".produk").val(),
+				'baki_debet':$(".baki_debet").val(),
+				'new_plafond':$(".new_plafond").val(),
+				'new_tenor':$(".new_tenor").val(),
+				'new_angsuran':$(".new_angsuran").val(),
+				'nama_pic':$(".account_officer").val(),
+			};
+			$.ajax({
+				url: $url,
+				type: 'POST',
+				headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')},
+				data: dataPost,
+				success: function(response) {
+					// console.log(response);
+					if (response.status='success') {
+						Swal.fire(
+							'success',
+							'Data berhasil ditambahkan',
+							'success'
+							)
+						$("#exampleModalLong-ao-form").modal("hide");
+						filter('ao');
+					}else{
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Something went wrong!',
+							footer: '<a href>Why do I have this issue?</a>'
+						})
+					}
+				}
+			});
+
+		}
+	});
+	$('#form-submit-data-telesales').validate({
+		rules: {
+			no_kontrak: {
+				required: true
+			},
+			nama_debitur: {
+				required: true
+			},
+			produk: {
+				required: true
+			},
+			baki_debet: {
+				required: true
+			},
+			new_plafond: {
+				required: true
+			},
+			new_tenor: {
+				required: true
+			},
+			new_angsuran: {
+				required: true
+			},
+			account_officer: {
+				required: true
+			},
+		},
+		messages: {
+			no_kontrak: "Please accept our no kontrak !!",
+			nama_debitur: "Please accept our nama debitur !!",
+			produk: "Please accept our produk !!",
+			baki_debet: "Please accept our baki debet !!",
+			new_plafond: "Please accept our plafon baru !!",
+			new_tenor: "Please accept our tenor baru !!",
+			new_angsuran: "Please accept our angsuran baru !!",
 			account_officer: "Please accept our account officer !!",
 		},
 		errorElement: 'span',
