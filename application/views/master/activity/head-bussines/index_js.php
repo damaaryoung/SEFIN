@@ -67,6 +67,60 @@
 			},
 		});
 	}
+	function search_so(page='',nama=''){
+		var nama = $("#nama_so").val();
+		$.ajax({
+			url : "<?= base_url(); ?>activity/hb/ActivityHBController/data_so",
+			type: "POST",
+			data: { page:page,
+				nama:nama },
+			beforeSend: function(){
+				$("#loading-pic").show();
+				$("#table-pic").hide();
+			},
+			success:  function (picData) {
+				$( ".modal-so-pic-data" ).html( picData );
+				$("#loading-pic").hide();
+				$("#table-pic").show();
+			},
+		});
+	}
+	function search_ao(page='',nama=''){
+		var nama = $("#nama_ao").val();
+		$.ajax({
+			url : "<?= base_url(); ?>activity/hb/ActivityHBController/data_ao",
+			type: "POST",
+			data: { page:page,
+				nama:nama },
+			beforeSend: function(){
+				$("#loading-pic").show();
+				$("#table-pic").hide();
+			},
+			success:  function (picData) {
+				$( ".modal-ao-pic-data" ).html( picData );
+				$("#loading-pic").hide();
+				$("#table-pic").show();
+			},
+		});
+	}
+	function search_pic(page='',nama=''){
+		var nama = $("#nama_pic").val();
+		$.ajax({
+			url : "<?= base_url(); ?>activity/hb/ActivityHBController/data_pic",
+			type: "POST",
+			data: { page:page,
+				nama:nama },
+			beforeSend: function(){
+				$("#loading-pic").show();
+				$("#table-pic").hide();
+			},
+			success:  function (picData) {
+				$( ".modal-ao-pic-data" ).html( picData );
+				$("#loading-pic").hide();
+				$("#table-pic").show();
+			},
+		});
+	}
 	function pickSO($nama_ao){
 		$(".sales_officer").val($nama_ao);
 		$("#exampleModalLong-so-data").modal("hide");

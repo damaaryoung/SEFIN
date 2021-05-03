@@ -12,6 +12,18 @@
 		</tr>
 	</thead>
 	<tbody style="font-size: 13px !important;">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="form-group">
+					<input type="text" name="nama_pic" id="nama_pic" class="form-control" placeholder="Search" required>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary" onclick="search_pic();" ></i>Search</button>
+				</div>
+			</div>
+		</div>
 		<?php
 		$limit = 10;
 		$limit_start = ($page - 1) * $limit;

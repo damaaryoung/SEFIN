@@ -96,7 +96,12 @@ class ActivityHMController extends CI_Controller
       }else {
         $page="1";
       }
-      $data=$this->Model_hm_activity->tampil_data_pic($page);
+      if (isset($_POST['nama'])) {
+        $nama=$_POST['nama'];
+      }else {
+        $nama="";
+      }
+      $data=$this->Model_hm_activity->tampil_data_pic($page, $nama);
       $data['pagination']=$data['data']['last_page'];
       $data['page']=$data['data']['current_page'];
       $data['data']=$data['data']['data'];
@@ -120,19 +125,29 @@ class ActivityHMController extends CI_Controller
       }else {
         $page="1";
       }
-      $data=$this->Model_hm_activity->tampil_data_ao($page);
+      if (isset($_POST['nama'])) {
+        $nama=$_POST['nama'];
+      }else {
+        $nama="";
+      }
+      $data=$this->Model_hm_activity->tampil_data_ao($page, $nama);
       $data['pagination']=$data['data']['last_page'];
       $data['page']=$data['data']['current_page'];
       $data['data']=$data['data']['data'];
       $this->load->view('master/activity/head-marketing/view-ao/datatable/data_ao',$data);
   }
   function data_so(){
-    if (isset($_POST['page'])) {
+      if (isset($_POST['page'])) {
         $page=$_POST['page'];
       }else {
         $page="1";
       }
-      $data=$this->Model_hm_activity->tampil_data_so($page);
+      if (isset($_POST['nama'])) {
+        $nama=$_POST['nama'];
+      }else {
+        $nama="";
+      }
+      $data=$this->Model_hm_activity->tampil_data_so($page, $nama);
       $data['pagination']=$data['data']['last_page'];
       $data['page']=$data['data']['current_page'];
       $data['data']=$data['data']['data'];

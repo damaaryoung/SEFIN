@@ -11,6 +11,18 @@
 		</tr>
 	</thead>
 	<tbody style="font-size: 13px !important;">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="form-group">
+					<input type="text" name="nama_so" id="nama_so" class="form-control" placeholder="Search" required>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary" onclick="search_so();" ></i>Search</button>
+				</div>
+			</div>
+		</div>
 		<?php
 		$limit = 10;
 		$limit_start = ($page - 1) * $limit;
@@ -27,12 +39,6 @@
 			</tr>
 			<?php $no++; endforeach; ?>
 		</tbody>
-		<tfoot>
-			<tr>
-				<th>Nama</th>
-				<th width="10">ACT</th>
-			</tr>
-		</tfoot>
 	</table>
 	<div class="text-center">
 		<ul class="pagination pagination-sm">
