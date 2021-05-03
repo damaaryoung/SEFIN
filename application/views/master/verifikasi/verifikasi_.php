@@ -1456,6 +1456,24 @@
     }
 
     function click_edit() {
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            $('#form_npwp_debitur').show();
+            $('#form_npwp_pasangan').show();
+            $('#form_npwp_pen_1').show();
+            $('#form_npwp_pen_2').show();
+            $('#form_npwp_pen_3').show();
+            $('#form_npwp_pen_4').show();
+            $('#form_npwp_pen_5').show();
+        } else {
+            $('#form_npwp_debitur').hide();
+            $('#form_npwp_pasangan').hide();
+            $('#form_npwp_pen_1').hide();
+            $('#form_npwp_pen_2').hide();
+            $('#form_npwp_pen_3').hide();
+            $('#form_npwp_pen_4').hide();
+            $('#form_npwp_pen_5').hide();
+        }
         $('.prosesVerifikasiDebitur').hide();
         $('.prosesVerifikasiPasangan').hide();
         $('.prosesVerifikasiPenjamin_1').hide();
@@ -1553,10 +1571,14 @@
 
         document.getElementById("verifikasi_pasangan").disabled = true;
         setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            document.getElementById("verifikasi_npwp").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        }
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -1565,17 +1587,21 @@
                 if(data.data_penjamin.length == 1) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -1583,12 +1609,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -1598,14 +1626,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -1617,16 +1647,18 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -1949,10 +1981,14 @@
 
         document.getElementById("verifikasi_pasangan").disabled = true;
         setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            document.getElementById("verifikasi_npwp").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        }
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -1961,17 +1997,21 @@
                 if(data.data_penjamin.length == 1) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -1979,12 +2019,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -1994,14 +2036,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2013,16 +2057,18 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -2348,8 +2394,11 @@
     function verifikasiSimpanPasangan(isTesting, id_trans_so) {
         $('.verifikasiPasangan').hide();
 
-        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        }
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -2358,19 +2407,21 @@
                 if(data.data_penjamin.length == 1) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                     
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2378,13 +2429,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                     
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2394,15 +2446,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2414,17 +2467,18 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                     
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
                 
@@ -2745,8 +2799,11 @@
     function verifikasiUpdatePasangan(isTesting, limitCallPasangan, id_trans_so) {
         $('.verifikasiPasangan').hide();
 
-        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        }
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -2755,17 +2812,21 @@
                 if(data.data_penjamin.length == 1) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2773,12 +2834,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2788,14 +2851,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2807,16 +2872,18 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -3148,26 +3215,32 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if(data.data_penjamin.length == 1) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
@@ -3175,14 +3248,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
@@ -3192,16 +3267,18 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -3529,32 +3606,38 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 2) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
@@ -3562,16 +3645,18 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -3898,38 +3983,44 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -4256,27 +4347,31 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -4597,16 +4692,20 @@
     function verifikasiSimpanPenjamin_5(isTesting, id_trans_so) {
         $('.verifikasiPenjamin_5').hide();
 
-        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+        }
+                
 
         var id_pen = $('#id_penjamin_5').val();
         var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_5");
@@ -4931,26 +5030,32 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if(data.data_penjamin.length == 1) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
@@ -4958,14 +5063,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
@@ -4975,16 +5082,18 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -5317,32 +5426,38 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 2) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
@@ -5350,16 +5465,18 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -5692,38 +5809,44 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -6056,27 +6179,31 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -6404,16 +6531,18 @@
         $('.verifikasiPenjamin_5').hide();
 
         var user_id = '<?php echo $user_id ?>';
-        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+        if(user_id == 1107) {
+            document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+            document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+        }
 
         var id_pen = $('#id_penjamin_5').val();
         var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_1");
@@ -6738,48 +6867,61 @@
     function verifikasiSimpanNpwp(isTesting, id_trans_so) {
         $('.verifikasiNpwp').hide();
 
-        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        }
 
         get_data({}, id_trans_so)
             .done(function(response) {
                 var data = response.data;
 
                 if(data.data_penjamin.length == 1) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -7052,48 +7194,61 @@
     function verifikasiUpdateNpwp(isTesting, limitCallNpwp, id_trans_so, id_verif) {
         $('.verifikasiNpwp').hide();
 
-        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+        }
 
         get_data({}, id_trans_so)
             .done(function(response) {
                 var data = response.data;
 
                 if(data.data_penjamin.length == 1) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -7377,40 +7532,50 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if(data.data_penjamin.length == 1) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -7690,40 +7855,50 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if(data.data_penjamin.length == 1) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 2) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -8007,29 +8182,37 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 2) {
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -8309,20 +8492,26 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -8602,13 +8791,17 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -8888,8 +9081,10 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -9439,29 +9634,37 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 2) {
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -9745,20 +9948,26 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 3) {
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -10042,13 +10251,17 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 4) {
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    }
                 } else if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
@@ -10332,8 +10545,10 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 5) {
-                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    if(user_id == 1107) {
+                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                    }
                 } 
             })
 
