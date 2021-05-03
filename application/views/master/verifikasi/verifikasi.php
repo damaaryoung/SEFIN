@@ -984,12 +984,7 @@
                         <div class="col-md-6">
                             <label>Tanggal Lahir<span class="required_notification">*</span></label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="far fa-calendar-alt"></i>
-                                    </span>
-                                </div>
-                                <input type="text" name="tgl_lahir_pen" id="tgl_lahir_pen" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
+                                <input type="date" id="tgl_lahir_pen" name="tgl_lahir_pen" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -27225,7 +27220,7 @@
                     $('#form_edit_penjamin input[name=no_ktp_pen]').val(data.no_ktp);
                     $('#form_edit_penjamin input[name=no_npwp_pen]').val(data.no_npwp);
                     $('#form_edit_penjamin input[name=tempat_lahir_pen]').val(data.tempat_lahir);
-                    $('#form_edit_penjamin input[name=tgl_lahir_pen]').val(data.tgl_lahir);
+                    $('#form_edit_penjamin input[name=tgl_lahir_pen]').val(formatTanggal(data.tgl_lahir));
                     $('#form_edit_penjamin textarea[name=alamat_pen]').val(data.alamat_ktp);
                     $('#form_edit_penjamin input[name=pemasukan_pen]').val(data.lampiran.pemasukan_penjamin);
 
@@ -27372,7 +27367,7 @@
             formData.append('no_ktp_pen', $('input[name=no_ktp_pen]', this).val());
             formData.append('no_npwp_pen', $('input[name=no_npwp_pen]', this).val());
             formData.append('tempat_lahir_pen', $('input[name=tempat_lahir_pen]', this).val());
-            formData.append('tgl_lahir_pen', $('input[name=tgl_lahir_pen]', this).val());
+            formData.append('tgl_lahir_pen', formatTanggal($('input[name=tgl_lahir_pen]', this).val()));
             formData.append('pemasukan_penjamin', $('input[name=pemasukan_pen]', this).val());
             formData.append('alamat_ktp_pen', $('textarea[name=alamat_pen]', this).val());
 
