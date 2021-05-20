@@ -717,7 +717,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Nama Lengkap <small><i>(Sesuai KTP Tanpa Gelar)</i></small><span class="required_notification">*</span></label>
-                                            <input type="text" name="nama_deb" id="nama_deb" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                                            <input type="text" name="nama_deb" id="nama_deb" class="form-control ">
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-6">
@@ -790,7 +790,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Nama Lengkap <small><i>(Sesuai KTP Tanpa Gelar)</i></small><span class="required_notification">*</span></label>
-                                            <input type="text" name="nama_pas" id="nama_pas" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                                            <input type="text" name="nama_pas" id="nama_pas"  class="form-control ">
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-6">
@@ -970,7 +970,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nama Lengkap <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label>
-                                <input type="text" name="nama_pen" id="nama_pen" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                                <input type="text" name="nama_pen" id="nama_pen" class="form-control ">
                             </div>
                         </div>
                     </div>
@@ -2052,7 +2052,7 @@
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!"); 
                 } else {
                     if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
+                        responseBody = responseDataNotFound(requestBody);
                         console.log(responseBody);
 
                         if(responseBody.status == 401) {
@@ -2169,7 +2169,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storecadeb/";
+                                        var url = "api/master/verif/updateVerif/";
                                         httpRequestBuilder(requestMapperForUpdateCadebDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseDebiturDataNotFound();
@@ -2302,7 +2302,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/storecadeb/";
+                                            var url = "api/master/verif/updateVerif/";
                                             httpRequestBuilder(requestMapperForUpdateCadebDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponseDebiturDataNotFound();
@@ -2962,7 +2962,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storepasangan/";
+                                        var url = "api/master/verif/updateVerif/";
         
                                         httpRequestBuilder(requestMapperForUpdatePasanganDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -3096,9 +3096,9 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/storepasangan/";
+                                            var url = "api/master/verif/updateVerif/";
         
-                                            httpRequestBuilder(requestMapperForStorePasanganDataNotFound(), url, id_trans_so, "POST")
+                                            httpRequestBuilder(requestMapperForUpdatePasanganDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponsePasanganDataNotFound();
                                                 bootbox.alert(responseBody.errors.message);
