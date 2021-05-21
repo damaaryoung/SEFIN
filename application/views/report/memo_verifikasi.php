@@ -309,7 +309,7 @@
                             </tr>
                             <tr>
                             <?php if ($r->pemasukan_penjamin_result != null) { ?>
-                                <td rowspan="9">
+                                <td rowspan="10">
                                     <?php if ($r->photo_penjamin == null) { ?>
                                         <img width= "150" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />
                                     <?php } else { ?>
@@ -317,7 +317,7 @@
                                     <?php } ?> 
                                 </td>
                             <?php } else { ?>
-                                <td rowspan="8">
+                                <td rowspan="9">
                                     <?php if ($r->photo_penjamin == null) { ?>
                                         <img width= "150" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />
                                     <?php } else { ?>
