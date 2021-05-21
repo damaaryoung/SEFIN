@@ -37,7 +37,7 @@ class Memo_verifikasi extends CI_Controller {
         LEFT JOIN verif_cadebt AS e ON a.`id` = e.`id_trans_so`
         LEFT JOIN verif_npwp AS f ON a.`id` = f.`id_trans_so`
         LEFT JOIN dpm_online.user AS g on e.`user_id` = g.`user_id`
-        WHERE a.`id` = $id AND f.`id_pasangan` IS NULL AND f.`id_penjamin` IS NULL";
+        WHERE a.`id` = $id OR (a.`id` = $id AND f.`id_pasangan` IS NULL AND f.`id_penjamin` IS NULL)";
 
 		$result = $this->db->query($query_debitur);
 
