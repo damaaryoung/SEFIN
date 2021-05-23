@@ -1072,7 +1072,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Nama Pemilik Sertifikat<span class="required_notification">*</span></label>
-                                    <input type="text" name="nama_pemilik_sertifikat" class="form-control " onkeyup="this.value = this.value.toUpperCase()">
+                                    <input type="text" name="nama_pemilik_sertifikat" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label>Jenis Sertifikat</label>
@@ -2169,7 +2169,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateVerif/";
+                                        var url = "api/master/verif/updateVerifCadebt/";
                                         httpRequestBuilder(requestMapperForUpdateCadebDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseDebiturDataNotFound();
@@ -2179,7 +2179,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateVerif/";
+                                var url = "api/master/verif/updateVerifCadebt/";
         
                                 httpRequestBuilder(requestMapperForUpdateCadeb(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -2302,7 +2302,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateVerif/";
+                                            var url = "api/master/verif/updateVerifCadebt/";
                                             httpRequestBuilder(requestMapperForUpdateCadebDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponseDebiturDataNotFound();
@@ -2312,7 +2312,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateVerif/";
+                                    var url = "api/master/verif/updateVerifCadebt/";
         
                                     httpRequestBuilder(requestMapperForUpdateCadeb(responseBody), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -2845,7 +2845,7 @@
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!"); 
                 } else {
                     if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
+                        responseBody = responseCompletePasangan(requestBody);
                         console.log(responseBody);
 
                         if(responseBody.status == 401) {
@@ -2962,7 +2962,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateVerif/";
+                                        var url = "api/master/verif/updateVerifPasangan/";
         
                                         httpRequestBuilder(requestMapperForUpdatePasanganDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -2973,7 +2973,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateVerif/";
+                                var url = "api/master/verif/updateVerifPasangan/";
         
                                 httpRequestBuilder(requestMapperForUpdatePasangan(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -7044,7 +7044,7 @@
         }
     }
 
-    function verifikasiUpdateNpwp(isTesting, limitCallNpwp, id_trans_so, id_verif) {
+    function verifikasiUpdateNpwp(isTesting, limitCallNpwp, id_trans_so) {
         $('.verifikasiNpwp').hide();
 
         document.getElementById("verifikasi_npwp_pasangan").disabled = true;
@@ -7213,7 +7213,7 @@
                                     .done(function(res) {
                                         var url = "api/master/verif/updateNpwp/";
         
-                                        httpRequestBuilderNpwp(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_verif, "POST")
+                                        httpRequestBuilderNpwp(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpDataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -7224,7 +7224,7 @@
                             } else {
                                 var url = "api/master/verif/updateNpwp/";
         
-                                httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_verif, "POST")
+                                httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
                                     mappingResponseNpwp(responseBody);
                                     bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -7327,7 +7327,7 @@
                                         .done(function(res) {
                                             var url = "api/master/verif/updateNpwp/";
         
-                                            httpRequestBuilderNpwp(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_verif, "POST")
+                                            httpRequestBuilderNpwp(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponseNpwpDataNotFound();
                                                 bootbox.alert(responseBody.errors.message);
@@ -7338,7 +7338,7 @@
                                 } else {
                                     var url = "api/master/verif/updateNpwp/";
         
-                                    httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_verif, "POST")
+                                    httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                     .done( (response) => {
                                         mappingResponseNpwp(responseBody);
                                         bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -7526,9 +7526,9 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppasangan/";
                                     
-                                    httpRequestBuilder(requestMapperForStoreNpwpPasanganDataNotFound(id_pas), url, id_trans_so, "POST")
+                                    httpRequestBuilder(requestMapperForStoreNpwpPasanganDataNotFound(), url, id_trans_so, "POST")
                                     .done( (response) => {
                                         mappingResponseNpwpPasanganDataNotFound();
                                         bootbox.alert(responseBody.errors.message);
@@ -7537,9 +7537,9 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppasangan/";
         
-                            httpRequestBuilder(requestMapperForStoreNpwpPasangan(responseBody, id_pas), url, id_trans_so, "POST")
+                            httpRequestBuilder(requestMapperForStoreNpwpPasangan(responseBody), url, id_trans_so, "POST")
                             .done( (response) => {
                                 mappingResponseNpwpPasangan(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
@@ -7640,9 +7640,9 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppasangan/";
                                     
-                                        httpRequestBuilder(requestMapperForStoreNpwpPasanganDataNotFound(id_pas), url, id_trans_so, "POST")
+                                        httpRequestBuilder(requestMapperForStoreNpwpPasanganDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPasanganDataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -7651,9 +7651,9 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppasangan/";
         
-                                httpRequestBuilder(requestMapperForStoreNpwpPasangan(responseBody, id_pas), url, id_trans_so, "POST")
+                                httpRequestBuilder(requestMapperForStoreNpwpPasangan(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
                                     mappingResponseNpwpPasangan(responseBody);
                                     bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
@@ -7841,9 +7841,9 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppasangan/";
         
-                                        httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_pasangan, "POST")
+                                        httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPasanganDataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -7852,9 +7852,9 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppasangan/";
         
-                                httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
+                                httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
                                     mappingResponseNpwpPasangan(responseBody);
                                     bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
@@ -7955,9 +7955,9 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppasangan/";
         
-                                            httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_pasangan, "POST")
+                                            httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponseNpwpPasanganDataNotFound();
                                                 bootbox.alert(responseBody.errors.message);
@@ -7966,9 +7966,9 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppasangan/";
         
-                                    httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
+                                    httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                     .done( (response) => {
                                         mappingResponseNpwpPasangan(responseBody);
                                         bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -8145,7 +8145,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -8156,7 +8156,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -8259,7 +8259,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -8270,7 +8270,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -8438,7 +8438,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -8449,7 +8449,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -8552,7 +8552,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -8563,7 +8563,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -8724,7 +8724,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -8735,7 +8735,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -8838,7 +8838,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                       var url = "api/master/verif/storenpwp/";
+                                       var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -8849,7 +8849,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -9005,7 +9005,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -9016,7 +9016,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -9119,7 +9119,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -9130,7 +9130,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -9275,7 +9275,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -9286,7 +9286,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -9389,7 +9389,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -9400,7 +9400,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -9579,7 +9579,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -9590,7 +9590,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -9693,7 +9693,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -9704,7 +9704,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -9876,7 +9876,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -9887,7 +9887,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -9990,7 +9990,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -10001,7 +10001,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -10166,7 +10166,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -10177,7 +10177,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -10280,7 +10280,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -10291,7 +10291,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -10451,7 +10451,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -10462,7 +10462,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -10565,7 +10565,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -10576,7 +10576,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -10725,7 +10725,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -10736,7 +10736,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -10839,7 +10839,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -10850,7 +10850,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -12819,6 +12819,26 @@
         }
     }
 
+    function responseCompletePasangan (requestBody) {
+        return {
+            timestamp: new Date()*1,
+            status: 200,
+            errors: {
+                identity_photo: "invalid"
+            },
+            data: {
+                name: true,
+                birthdate: true,
+                birthplace: true,
+                address: "PASANGAN",
+                selfie_photo: 88.0
+            },
+            trx_id: "VeriJelas2204200002",
+            ref_id: "aW50ZxJuYWw=-120389080017203"
+
+        }
+    }
+
     function responseNpwp(requestBody) {
         return {
             timestamp: 1579516628,
@@ -12833,7 +12853,7 @@
                 birthdate: true,
                 birthplace: true
             },
-            trx_id: "verijelas2204200006",
+            trx_id: "VeriJelas2204200006",
             ref_id: "aW50ZxJuYWw=-120389080017203"
             } 
     }
@@ -12975,9 +12995,8 @@
         }
     }
     
-    function requestMapperForStoreNpwpPasangan(responseBody, id_pas) {
+    function requestMapperForStoreNpwpPasangan(responseBody) {
         return {
-            id_pasangan: id_pas,
             npwp: responseBody.data.npwp  ? 1 : 2,
             nik: responseBody.data.nik  ? 1 : 2,
             match_result: responseBody.data.match_result  ? 1 : 2,
@@ -12991,9 +13010,8 @@
         }
     }
 
-    function requestMapperForStoreNpwpPasanganDataNotFound(id_pas) {
+    function requestMapperForStoreNpwpPasanganDataNotFound() {
         return {
-            id_pasangan: id_pas,
             npwp: 2,
             nik: 2,
             match_result: 2,
@@ -13530,15 +13548,12 @@
             })
         }
 
-        httpRequestBuilderNpwp = function(data, url, id, id_verif, httpMethod) {
+        httpRequestBuilderNpwp = function(data, url, id, httpMethod) {
             var baseUrl = '<?php echo config_item('api_url') ?>';
             baseUrl += url;
 
             if (id != undefined) {
                 baseUrl += ("trans/" + id);
-                if (id_verif != undefined) {
-                    baseUrl += ("/id/" + id_verif);
-                }
             }
 
             return $.ajax({
@@ -13551,15 +13566,12 @@
             })
         }
 
-        httpRequestBuilderNpwpPasangan = function(data, url, id, id_pasangan, httpMethod) {
+        httpRequestBuilderNpwpPasangan = function(data, url, id, httpMethod) {
             var baseUrl = '<?php echo config_item('api_url') ?>';
             baseUrl += url;
 
             if (id != undefined) {
                 baseUrl += ("trans/" + id);
-                if (id_pasangan != undefined) {
-                    baseUrl += ("/idpasangan/" + id_pasangan);
-                }
             }
 
             return $.ajax({
@@ -16518,7 +16530,7 @@
 
                         if (data.cadebt == null) {
                             $("#verifikasi_debitur").on('click', function() {
-                                verifikasiSimpanDebitur(false, id);
+                                verifikasiSimpanDebitur(true, id);
                             });
                             $("#limit_call_debitur_result").html("2");
                         } else {
@@ -16529,13 +16541,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_debitur").disabled = false;},300000);
                                 }
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                    verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
                                 });
                                 $("#limit_call_debitur_result").html("1");
                             } else { 
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                    verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
                                 });
                                 $("#limit_call_debitur_result").html("0");
                             }
@@ -16543,7 +16555,7 @@
                         
                         if (data.pasangan == null) {
                             $("#verifikasi_pasangan").on('click', function() {
-                                verifikasiSimpanPasangan(false, id);
+                                verifikasiSimpanPasangan(true, id);
                             });
                             $("#limit_call_pasangan_result").html("2");
                         } else {
@@ -16554,13 +16566,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
                                 }
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                    verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
                                 });
                                 $("#limit_call_pasangan_result").html("1");
                             } else{
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                    verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
                                 });
                                 $("#limit_call_pasangan_result").html("0");
                             }
@@ -16569,7 +16581,7 @@
                         if (data.penjamin.length == 0) {
 
                             $("#verifikasi_penjamin_1").on('click', function() {
-                                verifikasiSimpanPenjamin_1(false, id);
+                                verifikasiSimpanPenjamin_1(true, id);
                             });
                             $("#limit_call_penjamin_1_result").html("2");
 
@@ -16603,19 +16615,19 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("0");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_1").on('click', function() {
-                                    verifikasiSimpanPenjamin_1(false, id);
+                                    verifikasiSimpanPenjamin_1(true, id);
                                 });
                                 $("#limit_call_penjamin_1_result").html("2");
                             }
@@ -16722,19 +16734,61 @@
 
                         }
     
-                        if (data.npwp.length == 0) {
+                        if (data.npwp == null) {
                             $("#verifikasi_npwp").on('click', function() {
-                                verifikasiSimpanNpwp(false, id);
+                                verifikasiSimpanNpwp(true, id);
                             });
                             $("#limit_call_npwp_result").html("2");
 
+                        } else {
+                            if(data.npwp.limit_call == 1) {
+                                var user_id = '<?php echo $user_id ?>';
+                                if (user_id == data.npwp.user_id ) {
+                                    document.getElementById("verifikasi_npwp").disabled = true;
+                                    setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
+                                }
+                                $("#verifikasi_npwp").on('click', function() {
+                                    verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
+                                });
+                                $("#limit_call_npwp_result").html("1");
+                            } else {
+                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
+                                $("#verifikasi_npwp").on('click', function() {
+                                    verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
+                                });
+                                $("#limit_call_npwp_result").html("0");
+                            }
+                        }
+
+                        if (data.npwp_pasangan == null) {
                             $("#verifikasi_npwp_pasangan").on('click', function() {
-                                verifikasiSimpanNpwpPasangan(false, id);
+                                verifikasiSimpanNpwpPasangan(true, id);
                             });
                             $("#limit_call_npwp_pas_result").html("2");
 
+                        } else {
+                            if(data.npwp_pasangan.limit_call == 1) {
+                                var user_id = '<?php echo $user_id ?>';
+                                if (user_id == data.npwp_pasangan.user_id ) {
+                                    document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+                                    setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+                                }
+                                $("#verifikasi_npwp_pasangan").on('click', function() {
+                                    verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
+                                });
+                                $("#limit_call_npwp_pas_result").html("1");
+                            } else {
+                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
+                                $("#verifikasi_npwp_pasangan").on('click', function() {
+                                    verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
+                                });
+                                $("#limit_call_npwp_pas_result").html("0");
+                            }
+                        }
+
+                        if (data.npwp_penjamin.length == 0) {
                             $("#verifikasi_npwp_pen_1").on('click', function() {
-                                verifikasiSimpanNpwpPen_1(false, id);
+                                verifikasiSimpanNpwpPen_1(true, id);
                             });
                             $("#limit_call_npwp_pen_1_result").html("2");
                             
@@ -16758,96 +16812,46 @@
                             });
                             $("#limit_call_npwp_pen_5_result").html("2");
                         } else {
-                            if (data.npwp[0] != null) {
-                                if(data.npwp[0].limit_call == 1) {
+                            if (data.npwp_penjamin[0] != null) {
+                                if(data.npwp_penjamin[0].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[0].user_id ) {
-                                        document.getElementById("verifikasi_npwp").disabled = true;
-                                        setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-                                    }
-                                    $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
-                                    });
-                                    $("#limit_call_npwp_result").html("1");
-                                } else {
-                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
-                                    $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
-                                    });
-                                    $("#limit_call_npwp_result").html("0");
-                                }
-                            } else {
-                                $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiSimpanNpwp(false, id);
-                                });
-                                $("#limit_call_npwp_result").html("2");
-                            }
-
-                            if (data.npwp[1] != null) {
-                                if(data.npwp[1].limit_call == 1) {
-                                    var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[1].user_id) {
-                                        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-                                    }
-                                    $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
-                                    });
-                                    $("#limit_call_npwp_pas_result").html("1");
-                                } else {
-                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
-                                    $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
-                                    });
-                                    $("#limit_call_npwp_pas_result").html("0");
-                                }
-                            } else {
-                                $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiSimpanNpwpPasangan(false, id);
-                                });
-                                $("#limit_call_npwp_pas_result").html("2");
-                            }
-
-                            if (data.npwp[2] != null) {
-                                if(data.npwp[2].limit_call == 1) {
-                                    var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[2].user_id) {
+                                    if (user_id == data.npwp_penjamin[0].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_1").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("0");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
-                                    verifikasiSimpanNpwpPen_1(false, id);
+                                    verifikasiSimpanNpwpPen_1(true, id);
                                 });
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
 
-                            if (data.npwp[3] != null) {
-                                if(data.npwp[3].limit_call == 1) {
+                            if (data.npwp_penjamin[1] != null) {
+                                if(data.npwp_penjamin[1].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[3].user_id) {
+                                    if (user_id == data.npwp_penjamin[1].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_2").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                     } 
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("0");
                                 }
@@ -16858,21 +16862,21 @@
                                 $("#limit_call_npwp_pen_2_result").html("2");
                             }
 
-                            if (data.npwp[4] != null) {
-                                if(data.npwp[4].limit_call == 1) {
+                            if (data.npwp_penjamin[2] != null) {
+                                if(data.npwp_penjamin[2].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[4].user_id) {
+                                    if (user_id == data.npwp_penjamin[2].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_3").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("0");
                                 }
@@ -16883,21 +16887,21 @@
                                 $("#limit_call_npwp_pen_3_result").html("2");
                             }
 
-                            if (data.npwp[5] != null) {
-                                if(data.npwp[5].limit_call == 1) {
+                            if (data.npwp_penjamin[3] != null) {
+                                if(data.npwp_penjamin[3].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[5].user_id) {
+                                    if (user_id == data.npwp_penjamin[3].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_4").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("0");
                                 }
@@ -16908,21 +16912,21 @@
                                 $("#limit_call_npwp_pen_4_result").html("2");
                             }
 
-                            if (data.npwp[6] != null) {
-                                if(data.npwp[6].limit_call == 1) {
+                            if (data.npwp_penjamin[4] != null) {
+                                if(data.npwp_penjamin[4].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[6].user_id) {
+                                    if (user_id == data.npwp_penjamin[4].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_5").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("0");
                                 }

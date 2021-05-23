@@ -37,7 +37,7 @@ class Memo_verifikasi extends CI_Controller {
         LEFT JOIN verif_cadebt AS e ON a.`id` = e.`id_trans_so`
         LEFT JOIN verif_npwp AS f ON a.`id` = f.`id_trans_so`
         LEFT JOIN dpm_online.user AS g on e.`user_id` = g.`user_id`
-        WHERE a.`id` = $id OR (a.`id` = $id AND f.`id_pasangan` IS NULL AND f.`id_penjamin` IS NULL)";
+        WHERE a.`id` = $id";
 
 		$result = $this->db->query($query_debitur);
 
@@ -91,7 +91,7 @@ class Memo_verifikasi extends CI_Controller {
         LEFT JOIN trans_ao AS c ON a.`id` = c.`id_trans_so`
         LEFT JOIN kapasitas_bulanan AS d ON c.`id_kapasitas_bulanan` = d.`id`
         LEFT JOIN verif_pasangan AS e ON a.`id` = e.`id_trans_so`
-        LEFT JOIN verif_npwp AS f ON a.`id_pasangan` = f.`id_pasangan`
+        LEFT JOIN verif_npwp_pasangan AS f ON a.`id` = f.`id_trans_so`
         LEFT JOIN dpm_online.user AS g ON e.`user_id` = g.`user_id`
         WHERE a.`id` = $id ";
 
@@ -150,7 +150,7 @@ class Memo_verifikasi extends CI_Controller {
         FROM trans_so AS a 
         LEFT JOIN penjamin_calon_debitur AS b ON a.id = b.id_trans_so
         LEFT JOIN verif_penjamin AS c ON b.id = c.id_penjamin
-        LEFT JOIN verif_npwp AS d ON c.id_penjamin = d.id_penjamin 
+        LEFT JOIN verif_npwp_penjamin AS d ON c.id_penjamin = d.id_penjamin 
         LEFT JOIN dpm_online.user AS e ON c.user_id = e.user_id
         WHERE a.id = $id";
 
