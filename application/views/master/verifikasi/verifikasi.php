@@ -16530,7 +16530,7 @@
 
                         if (data.cadebt == null) {
                             $("#verifikasi_debitur").on('click', function() {
-                                verifikasiSimpanDebitur(true, id);
+                                verifikasiSimpanDebitur(false, id);
                             });
                             $("#limit_call_debitur_result").html("2");
                         } else {
@@ -16541,13 +16541,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_debitur").disabled = false;},300000);
                                 }
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
+                                    verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
                                 });
                                 $("#limit_call_debitur_result").html("1");
                             } else { 
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
+                                    verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
                                 });
                                 $("#limit_call_debitur_result").html("0");
                             }
@@ -16555,7 +16555,7 @@
                         
                         if (data.pasangan == null) {
                             $("#verifikasi_pasangan").on('click', function() {
-                                verifikasiSimpanPasangan(true, id);
+                                verifikasiSimpanPasangan(false, id);
                             });
                             $("#limit_call_pasangan_result").html("2");
                         } else {
@@ -16566,13 +16566,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
                                 }
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
+                                    verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
                                 });
                                 $("#limit_call_pasangan_result").html("1");
                             } else{
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
+                                    verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
                                 });
                                 $("#limit_call_pasangan_result").html("0");
                             }
@@ -16581,7 +16581,7 @@
                         if (data.penjamin.length == 0) {
 
                             $("#verifikasi_penjamin_1").on('click', function() {
-                                verifikasiSimpanPenjamin_1(true, id);
+                                verifikasiSimpanPenjamin_1(false, id);
                             });
                             $("#limit_call_penjamin_1_result").html("2");
 
@@ -16615,19 +16615,19 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("0");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_1").on('click', function() {
-                                    verifikasiSimpanPenjamin_1(true, id);
+                                    verifikasiSimpanPenjamin_1(false, id);
                                 });
                                 $("#limit_call_penjamin_1_result").html("2");
                             }
@@ -16736,7 +16736,7 @@
     
                         if (data.npwp == null) {
                             $("#verifikasi_npwp").on('click', function() {
-                                verifikasiSimpanNpwp(true, id);
+                                verifikasiSimpanNpwp(false, id);
                             });
                             $("#limit_call_npwp_result").html("2");
 
@@ -16748,13 +16748,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
                                 }
                                 $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
+                                    verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
                                 });
                                 $("#limit_call_npwp_result").html("1");
                             } else {
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
                                 $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
+                                    verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
                                 });
                                 $("#limit_call_npwp_result").html("0");
                             }
@@ -16762,7 +16762,7 @@
 
                         if (data.npwp_pasangan == null) {
                             $("#verifikasi_npwp_pasangan").on('click', function() {
-                                verifikasiSimpanNpwpPasangan(true, id);
+                                verifikasiSimpanNpwpPasangan(false, id);
                             });
                             $("#limit_call_npwp_pas_result").html("2");
 
@@ -16774,13 +16774,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
                                 }
                                 $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
+                                    verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
                                 });
                                 $("#limit_call_npwp_pas_result").html("1");
                             } else {
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
                                 $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
+                                    verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
                                 });
                                 $("#limit_call_npwp_pas_result").html("0");
                             }
@@ -16788,7 +16788,7 @@
 
                         if (data.npwp_penjamin.length == 0) {
                             $("#verifikasi_npwp_pen_1").on('click', function() {
-                                verifikasiSimpanNpwpPen_1(true, id);
+                                verifikasiSimpanNpwpPen_1(false, id);
                             });
                             $("#limit_call_npwp_pen_1_result").html("2");
                             
@@ -16820,19 +16820,19 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("0");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
-                                    verifikasiSimpanNpwpPen_1(true, id);
+                                    verifikasiSimpanNpwpPen_1(false, id);
                                 });
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
@@ -19755,7 +19755,7 @@
                     } 
 
                     get_detail({}, id)
-                        .done(function(response) {
+                    .done(function(response) {
                             var data = response.data;
                             console.log(data);
 
@@ -19885,133 +19885,133 @@
                                 $("#limit_call_penjamin_5_result").html("2");
                             }
                             
-                            if (data.npwp[0] != null) {
-                                checkResult("npwp_result", data.npwp[0].npwp);
-                                checkResult("nik_npwp_result", data.npwp[0].nik);
-                                checkResult("name_npwp_result", data.npwp[0].nama);
-                                checkResult("birthdate_npwp_result", data.npwp[0].tgl_lahir);
-                                checkResult("birthplace_npwp_result", data.npwp[0].tmp_lahir);
-                                checkIncome("income_npwp_result", data.npwp[0].income);
-                                checkResult("match_result", data.npwp[0].match_result);
-                                $("#verif_npwp_result").html(`${data.npwp[0].nama_user}`);
-                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp[0].updated_at)}`);
-                                if(data.npwp[0].limit_call == "1") {
+                            if (data.npwp != null) {
+                                checkResult("npwp_result", data.npwp.npwp);
+                                checkResult("nik_npwp_result", data.npwp.nik);
+                                checkResult("name_npwp_result", data.npwp.nama);
+                                checkResult("birthdate_npwp_result", data.npwp.tgl_lahir);
+                                checkResult("birthplace_npwp_result", data.npwp.tmp_lahir);
+                                checkIncome("income_npwp_result", data.npwp.income);
+                                checkResult("match_result", data.npwp.match_result);
+                                $("#verif_npwp_result").html(`${data.npwp.nama_user}`);
+                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp.updated_at)}`);
+                                if(data.npwp.limit_call == "1") {
                                     $("#limit_call_npwp_result").html("1");
-                                } else if (data.penjamin[0].limit_call == "2") {
+                                } else if (data.penjamin.limit_call == "2") {
                                     $("#limit_call_npwp_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_result").html("2");
                             }
 
-                            if (data.npwp[1] != null) {
-                                checkResult("npwp_pas_result", data.npwp[1].npwp);
-                                checkResult("nik_npwp_pas_result", data.npwp[1].nik);
-                                checkResult("name_npwp_pas_result", data.npwp[1].nama);
-                                checkResult("birthdate_npwp_pas_result", data.npwp[1].tgl_lahir);
-                                checkResult("birthplace_npwp_pas_result", data.npwp[1].tmp_lahir);
-                                checkIncome("income_npwp_pas_result", data.npwp[1].income);
-                                checkResult("match_pas_result", data.npwp[1].match_result);
-                                $("#verif_npwp_pas_result").html(`${data.npwp[1].nama_user}`);
-                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp[1].updated_at)}`);
-                                if(data.npwp[1].limit_call == "1") {
+                            if (data.npwp_pasangan != null) {
+                                checkResult("npwp_pas_result", data.npwp_pasangan.npwp);
+                                checkResult("nik_npwp_pas_result", data.npwp_pasangan.nik);
+                                checkResult("name_npwp_pas_result", data.npwp_pasangan.nama);
+                                checkResult("birthdate_npwp_pas_result", data.npwp_pasangan.tgl_lahir);
+                                checkResult("birthplace_npwp_pas_result", data.npwp_pasangan.tmp_lahir);
+                                checkIncome("income_npwp_pas_result", data.npwp_pasangan.income);
+                                checkResult("match_pas_result", data.npwp_pasangan.match_result);
+                                $("#verif_npwp_pas_result").html(`${data.npwp_pasangan.nama_user}`);
+                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp_pasangan.updated_at)}`);
+                                if(data.npwp_pasangan.limit_call == "1") {
                                     $("#limit_call_npwp_pas_result").html("1");
-                                } else if (data.npwp[1].limit_call == "2") {
+                                } else if (data.npwp_pasangan.limit_call == "2") {
                                     $("#limit_call_npwp_pas_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pas_result").html("2");
                             }
 
-                            if (data.npwp[2] != null) {
-                                checkResult("npwp_pen_1_result", data.npwp[2].npwp);
-                                checkResult("nik_npwp_pen_1_result", data.npwp[2].nik);
-                                checkResult("name_npwp_pen_1_result", data.npwp[2].nama);
-                                checkResult("birthdate_npwp_pen_1_result", data.npwp[2].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_1_result", data.npwp[2].tmp_lahir);
-                                checkIncome("income_npwp_pen_1_result", data.npwp[2].income);
-                                checkResult("match_pen_1_result", data.npwp[2].match_result);
-                                $("#verif_npwp_pen_1_result").html(`${data.npwp[2].nama_user}`);
-                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp[2].updated_at)}`);
-                                if(data.npwp[2].limit_call == "1") {
+                            if (data.npwp_penjamin[0] != null) {
+                                checkResult("npwp_pen_1_result", data.npwp_penjamin[0].npwp);
+                                checkResult("nik_npwp_pen_1_result", data.npwp_penjamin[0].nik);
+                                checkResult("name_npwp_pen_1_result", data.npwp_penjamin[0].nama);
+                                checkResult("birthdate_npwp_pen_1_result", data.npwp_penjamin[0].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_1_result", data.npwp_penjamin[0].tmp_lahir);
+                                checkIncome("income_npwp_pen_1_result", data.npwp_penjamin[0].income);
+                                checkResult("match_pen_1_result", data.npwp_penjamin[0].match_result);
+                                $("#verif_npwp_pen_1_result").html(`${data.npwp_penjamin[0].nama_user}`);
+                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp_penjamin[0].updated_at)}`);
+                                if(data.npwp_penjamin[0].limit_call == "1") {
                                     $("#limit_call_npwp_pen_1_result").html("1");
-                                } else if (data.npwp[2].limit_call == "2") {
+                                } else if (data.npwp_penjamin[0].limit_call == "2") {
                                     $("#limit_call_npwp_pen_1_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
 
-                            if (data.npwp[3] != null) {
-                                checkResult("npwp_pen_2_result", data.npwp[3].npwp);
-                                checkResult("nik_npwp_pen_2_result", data.npwp[3].nik);
-                                checkResult("name_npwp_pen_2_result", data.npwp[3].nama);
-                                checkResult("birthdate_npwp_pen_2_result", data.npwp[3].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_2_result", data.npwp[3].tmp_lahir);
-                                checkIncome("income_npwp_pen_2_result", data.npwp[3].income);
-                                checkResult("match_pen_2_result", data.npwp[3].match_result);
-                                $("#verif_npwp_pen_2_result").html(`${data.npwp[3].nama_user}`);
-                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp[3].updated_at)}`);
-                                if(data.npwp[3].limit_call == "1") {
+                            if (data.npwp_penjamin[1] != null) {
+                                checkResult("npwp_pen_2_result", data.npwp_penjamin[1].npwp);
+                                checkResult("nik_npwp_pen_2_result", data.npwp_penjamin[1].nik);
+                                checkResult("name_npwp_pen_2_result", data.npwp_penjamin[1].nama);
+                                checkResult("birthdate_npwp_pen_2_result", data.npwp_penjamin[1].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_2_result", data.npwp_penjamin[1].tmp_lahir);
+                                checkIncome("income_npwp_pen_2_result", data.npwp_penjamin[1].income);
+                                checkResult("match_pen_2_result", data.npwp_penjamin[1].match_result);
+                                $("#verif_npwp_pen_2_result").html(`${data.npwp_penjamin[1].nama_user}`);
+                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp_penjamin[1].updated_at)}`);
+                                if(data.npwp_penjamin[1].limit_call == "1") {
                                     $("#limit_call_npwp_pen_2_result").html("1");
-                                } else if (data.npwp[3].limit_call == "2") {
+                                } else if (data.npwp_penjamin[1].limit_call == "2") {
                                     $("#limit_call_npwp_pen_2_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_2_result").html("2");
                             }
 
-                            if (data.npwp[4] != null) {
-                                checkResult("npwp_pen_3_result", data.npwp[4].npwp);
-                                checkResult("nik_npwp_pen_3_result", data.npwp[4].nik);
-                                checkResult("name_npwp_pen_3_result", data.npwp[4].nama);
-                                checkResult("birthdate_npwp_pen_3_result", data.npwp[4].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_3_result", data.npwp[4].tmp_lahir);
-                                checkIncome("income_npwp_pen_3_result", data.npwp[4].income);
-                                checkResult("match_pen_3_result", data.npwp[4].match_result);
-                                $("#verif_npwp_pen_3_result").html(`${data.npwp[4].nama_user}`);
-                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp[4].updated_at)}`);
-                                if(data.npwp[4].limit_call == "1") {
+                            if (data.npwp_penjamin[2] != null) {
+                                checkResult("npwp_pen_3_result", data.npwp_penjamin[2].npwp);
+                                checkResult("nik_npwp_pen_3_result", data.npwp_penjamin[2].nik);
+                                checkResult("name_npwp_pen_3_result", data.npwp_penjamin[2].nama);
+                                checkResult("birthdate_npwp_pen_3_result", data.npwp_penjamin[2].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_3_result", data.npwp_penjamin[2].tmp_lahir);
+                                checkIncome("income_npwp_pen_3_result", data.npwp_penjamin[2].income);
+                                checkResult("match_pen_3_result", data.npwp_penjamin[2].match_result);
+                                $("#verif_npwp_pen_3_result").html(`${data.npwp_penjamin[2].nama_user}`);
+                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp_penjamin[2].updated_at)}`);
+                                if(data.npwp_penjamin[2].limit_call == "1") {
                                     $("#limit_call_npwp_pen_3_result").html("1");
-                                } else if (data.npwp[4].limit_call == "2") {
+                                } else if (data.npwp_penjamin[2].limit_call == "2") {
                                     $("#limit_call_npwp_pen_3_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_3_result").html("2");
                             }
 
-                            if (data.npwp[5] != null) {
-                                checkResult("npwp_pen_4_result", data.npwp[5].npwp);
-                                checkResult("nik_npwp_pen_4_result", data.npwp[5].nik);
-                                checkResult("name_npwp_pen_4_result", data.npwp[5].nama);
-                                checkResult("birthdate_npwp_pen_4_result", data.npwp[5].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_4_result", data.npwp[5].tmp_lahir);
-                                checkIncome("income_npwp_pen_4_result", data.npwp[5].income);
-                                checkResult("match_pen_4_result", data.npwp[5].match_result);
-                                $("#verif_npwp_pen_4_result").html(`${data.npwp[5].nama_user}`);
-                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp[5].updated_at)}`);
-                                if(data.npwp[5].limit_call == "1") {
+                            if (data.npwp_penjamin[3] != null) {
+                                checkResult("npwp_pen_4_result", data.npwp_penjamin[3].npwp);
+                                checkResult("nik_npwp_pen_4_result", data.npwp_penjamin[3].nik);
+                                checkResult("name_npwp_pen_4_result", data.npwp_penjamin[3].nama);
+                                checkResult("birthdate_npwp_pen_4_result", data.npwp_penjamin[3].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_4_result", data.npwp_penjamin[3].tmp_lahir);
+                                checkIncome("income_npwp_pen_4_result", data.npwp_penjamin[3].income);
+                                checkResult("match_pen_4_result", data.npwp_penjamin[3].match_result);
+                                $("#verif_npwp_pen_4_result").html(`${data.npwp_penjamin[3].nama_user}`);
+                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp_penjamin[3].updated_at)}`);
+                                if(data.npwp_penjamin[3].limit_call == "1") {
                                     $("#limit_call_npwp_pen_4_result").html("1");
-                                } else if (data.npwp[5].limit_call == "2") {
+                                } else if (data.npwp_penjamin[3].limit_call == "2") {
                                     $("#limit_call_npwp_pen_4_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_4_result").html("2");
                             }
 
-                            if (data.npwp[6] != null) {
-                                checkResult("npwp_pen_5_result", data.npwp[6].npwp);
-                                checkResult("nik_npwp_pen_5_result", data.npwp[6].nik);
-                                checkResult("name_npwp_pen_5_result", data.npwp[6].nama);
-                                checkResult("birthdate_npwp_pen_5_result", data.npwp[6].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_5_result", data.npwp[6].tmp_lahir);
-                                checkIncome("income_npwp_pen_5_result", data.npwp[6].income);
-                                checkResult("match_pen_5_result", data.npwp[6].match_result);
-                                $("#verif_npwp_pen_5_result").html(`${data.npwp[6].nama_user}`);
-                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp[6].updated_at)}`);
-                                if(data.npwp[6].limit_call == "1") {
+                            if (data.npwp_penjamin[4] != null) {
+                                checkResult("npwp_pen_5_result", data.npwp_penjamin[4].npwp);
+                                checkResult("nik_npwp_pen_5_result", data.npwp_penjamin[4].nik);
+                                checkResult("name_npwp_pen_5_result", data.npwp_penjamin[4].nama);
+                                checkResult("birthdate_npwp_pen_5_result", data.npwp_penjamin[4].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_5_result", data.npwp_penjamin[4].tmp_lahir);
+                                checkIncome("income_npwp_pen_5_result", data.npwp_penjamin[4].income);
+                                checkResult("match_pen_5_result", data.npwp_penjamin[4].match_result);
+                                $("#verif_npwp_pen_5_result").html(`${data.npwp_penjamin[4].nama_user}`);
+                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp_penjamin[4].updated_at)}`);
+                                if(data.npwp_penjamin[4].limit_call == "1") {
                                     $("#limit_call_npwp_pen_5_result").html("1");
-                                } else if (data.npwp[6].limit_call == "2") {
+                                } else if (data.npwp_penjamin[4].limit_call == "2") {
                                     $("#limit_call_npwp_pen_5_result").html("0");
                                 }
                             } else {
@@ -20122,11 +20122,11 @@
                             bootbox.alert('Tidak dapat menampilkan hasil Verifikasi!!');
                         })
                     
-                })
-                .fail(function(jqXHR) {
-                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
+                    })
+                    .fail(function(jqXHR) {
+                        bootbox.alert('Data tidak ditemukan, coba refresh kembali!!');
 
-                })
+                    })
             
             $('#lihat_data_credit').hide();
             $('#lihat_detail').show();
@@ -22927,11 +22927,11 @@
                         $('.verifikasiProperti_1').hide();
                     }
                         
-                get_detail({}, id)
+                    get_detail({}, id)
                     .done(function(response) {
                         var data = response.data;
                         console.log(data);
-
+                        
                         if (jabatan == 'ADMIN LEGAL') {
                             if (data.property.length == 0) {
 
@@ -23402,17 +23402,59 @@
 
                             }
         
-                            if (data.npwp.length == 0) {
+                            if (data.npwp == null) {
                                 $("#verifikasi_npwp").on('click', function() {
                                     verifikasiSimpanNpwp(false, id);
                                 });
                                 $("#limit_call_npwp_result").html("2");
 
+                            } else {
+                                if(data.npwp.limit_call == 1) {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.npwp.user_id ) {
+                                        document.getElementById("verifikasi_npwp").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_npwp").on('click', function() {
+                                        verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_result").html("1");
+                                } else {
+                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
+                                    $("#verifikasi_npwp").on('click', function() {
+                                        verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_result").html("0");
+                                }
+                            }
+
+                            if (data.npwp_pasangan == null) {
                                 $("#verifikasi_npwp_pasangan").on('click', function() {
                                     verifikasiSimpanNpwpPasangan(false, id);
                                 });
                                 $("#limit_call_npwp_pas_result").html("2");
 
+                            } else {
+                                if(data.npwp_pasangan.limit_call == 1) {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.npwp_pasangan.user_id ) {
+                                        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_npwp_pasangan").on('click', function() {
+                                        verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_pas_result").html("1");
+                                } else {
+                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
+                                    $("#verifikasi_npwp_pasangan").on('click', function() {
+                                        verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_pas_result").html("0");
+                                }
+                            }
+
+                            if (data.npwp_penjamin.length == 0) {
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
                                     verifikasiSimpanNpwpPen_1(false, id);
                                 });
@@ -23438,71 +23480,21 @@
                                 });
                                 $("#limit_call_npwp_pen_5_result").html("2");
                             } else {
-                                if (data.npwp[0] != null) {
-                                    if(data.npwp[0].limit_call == 1) {
+                                if (data.npwp_penjamin[0] != null) {
+                                    if(data.npwp_penjamin[0].limit_call == 1) {
                                         var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[0].user_id ) {
-                                            document.getElementById("verifikasi_npwp").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
-                                        });
-                                        $("#limit_call_npwp_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
-                                        $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
-                                        });
-                                        $("#limit_call_npwp_result").html("0");
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiSimpanNpwp(false, id);
-                                    });
-                                    $("#limit_call_npwp_result").html("2");
-                                }
-
-                                if (data.npwp[1] != null) {
-                                    if(data.npwp[1].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[1].user_id) {
-                                            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
-                                        });
-                                        $("#limit_call_npwp_pas_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
-                                        $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
-                                        });
-                                        $("#limit_call_npwp_pas_result").html("0");
-                                    }
-                                } else {
-                                    $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiSimpanNpwpPasangan(false, id);
-                                    });
-                                    $("#limit_call_npwp_pas_result").html("2");
-                                }
-
-                                if (data.npwp[2] != null) {
-                                    if(data.npwp[2].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[2].user_id) {
+                                        if (user_id == data.npwp_penjamin[0].user_id) {
                                             document.getElementById("verifikasi_npwp_pen_1").disabled = true;
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                            verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_1_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                            verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_1_result").html("0");
                                     }
@@ -23513,21 +23505,21 @@
                                     $("#limit_call_npwp_pen_1_result").html("2");
                                 }
 
-                                if (data.npwp[3] != null) {
-                                    if(data.npwp[3].limit_call == 1) {
+                                if (data.npwp_penjamin[1] != null) {
+                                    if(data.npwp_penjamin[1].limit_call == 1) {
                                         var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[3].user_id) {
+                                        if (user_id == data.npwp_penjamin[1].user_id) {
                                             document.getElementById("verifikasi_npwp_pen_2").disabled = true;
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                         } 
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                            verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_2_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                            verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_2_result").html("0");
                                     }
@@ -23538,21 +23530,21 @@
                                     $("#limit_call_npwp_pen_2_result").html("2");
                                 }
 
-                                if (data.npwp[4] != null) {
-                                    if(data.npwp[4].limit_call == 1) {
+                                if (data.npwp_penjamin[2] != null) {
+                                    if(data.npwp_penjamin[2].limit_call == 1) {
                                         var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[4].user_id) {
+                                        if (user_id == data.npwp_penjamin[2].user_id) {
                                             document.getElementById("verifikasi_npwp_pen_3").disabled = true;
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                            verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_3_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                            verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_3_result").html("0");
                                     }
@@ -23563,21 +23555,21 @@
                                     $("#limit_call_npwp_pen_3_result").html("2");
                                 }
 
-                                if (data.npwp[5] != null) {
-                                    if(data.npwp[5].limit_call == 1) {
+                                if (data.npwp_penjamin[3] != null) {
+                                    if(data.npwp_penjamin[3].limit_call == 1) {
                                         var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[5].user_id) {
+                                        if (user_id == data.npwp_penjamin[3].user_id) {
                                             document.getElementById("verifikasi_npwp_pen_4").disabled = true;
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                            verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_4_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                            verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_4_result").html("0");
                                     }
@@ -23588,21 +23580,21 @@
                                     $("#limit_call_npwp_pen_4_result").html("2");
                                 }
 
-                                if (data.npwp[6] != null) {
-                                    if(data.npwp[6].limit_call == 1) {
+                                if (data.npwp_penjamin[4] != null) {
+                                    if(data.npwp_penjamin[4].limit_call == 1) {
                                         var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[6].user_id) {
+                                        if (user_id == data.npwp_penjamin[4].user_id) {
                                             document.getElementById("verifikasi_npwp_pen_5").disabled = true;
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                            verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_5_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                            verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
                                         });
                                         $("#limit_call_npwp_pen_5_result").html("0");
                                     }
@@ -23614,7 +23606,7 @@
                                 }
                             }
                             
-                        }    
+                        }      
                     })
 
                 })
@@ -26561,133 +26553,133 @@
                                 $("#limit_call_penjamin_5_result").html("2");
                             }
                             
-                            if (data.npwp[0] != null) {
-                                checkResult("npwp_result", data.npwp[0].npwp);
-                                checkResult("nik_npwp_result", data.npwp[0].nik);
-                                checkResult("name_npwp_result", data.npwp[0].nama);
-                                checkResult("birthdate_npwp_result", data.npwp[0].tgl_lahir);
-                                checkResult("birthplace_npwp_result", data.npwp[0].tmp_lahir);
-                                checkIncome("income_npwp_result", data.npwp[0].income);
-                                checkResult("match_result", data.npwp[0].match_result);
-                                $("#verif_npwp_result").html(`${data.npwp[0].nama_user}`);
-                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp[0].updated_at)}`);
-                                if(data.npwp[0].limit_call == "1") {
+                            if (data.npwp != null) {
+                                checkResult("npwp_result", data.npwp.npwp);
+                                checkResult("nik_npwp_result", data.npwp.nik);
+                                checkResult("name_npwp_result", data.npwp.nama);
+                                checkResult("birthdate_npwp_result", data.npwp.tgl_lahir);
+                                checkResult("birthplace_npwp_result", data.npwp.tmp_lahir);
+                                checkIncome("income_npwp_result", data.npwp.income);
+                                checkResult("match_result", data.npwp.match_result);
+                                $("#verif_npwp_result").html(`${data.npwp.nama_user}`);
+                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp.updated_at)}`);
+                                if(data.npwp.limit_call == "1") {
                                     $("#limit_call_npwp_result").html("1");
-                                } else if (data.penjamin[0].limit_call == "2") {
+                                } else if (data.penjamin.limit_call == "2") {
                                     $("#limit_call_npwp_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_result").html("2");
                             }
 
-                            if (data.npwp[1] != null) {
-                                checkResult("npwp_pas_result", data.npwp[1].npwp);
-                                checkResult("nik_npwp_pas_result", data.npwp[1].nik);
-                                checkResult("name_npwp_pas_result", data.npwp[1].nama);
-                                checkResult("birthdate_npwp_pas_result", data.npwp[1].tgl_lahir);
-                                checkResult("birthplace_npwp_pas_result", data.npwp[1].tmp_lahir);
-                                checkIncome("income_npwp_pas_result", data.npwp[1].income);
-                                checkResult("match_pas_result", data.npwp[1].match_result);
-                                $("#verif_npwp_pas_result").html(`${data.npwp[1].nama_user}`);
-                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp[1].updated_at)}`);
-                                if(data.npwp[1].limit_call == "1") {
+                            if (data.npwp_pasangan != null) {
+                                checkResult("npwp_pas_result", data.npwp_pasangan.npwp);
+                                checkResult("nik_npwp_pas_result", data.npwp_pasangan.nik);
+                                checkResult("name_npwp_pas_result", data.npwp_pasangan.nama);
+                                checkResult("birthdate_npwp_pas_result", data.npwp_pasangan.tgl_lahir);
+                                checkResult("birthplace_npwp_pas_result", data.npwp_pasangan.tmp_lahir);
+                                checkIncome("income_npwp_pas_result", data.npwp_pasangan.income);
+                                checkResult("match_pas_result", data.npwp_pasangan.match_result);
+                                $("#verif_npwp_pas_result").html(`${data.npwp_pasangan.nama_user}`);
+                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp_pasangan.updated_at)}`);
+                                if(data.npwp_pasangan.limit_call == "1") {
                                     $("#limit_call_npwp_pas_result").html("1");
-                                } else if (data.npwp[1].limit_call == "2") {
+                                } else if (data.npwp_pasangan.limit_call == "2") {
                                     $("#limit_call_npwp_pas_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pas_result").html("2");
                             }
 
-                            if (data.npwp[2] != null) {
-                                checkResult("npwp_pen_1_result", data.npwp[2].npwp);
-                                checkResult("nik_npwp_pen_1_result", data.npwp[2].nik);
-                                checkResult("name_npwp_pen_1_result", data.npwp[2].nama);
-                                checkResult("birthdate_npwp_pen_1_result", data.npwp[2].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_1_result", data.npwp[2].tmp_lahir);
-                                checkIncome("income_npwp_pen_1_result", data.npwp[2].income);
-                                checkResult("match_pen_1_result", data.npwp[2].match_result);
-                                $("#verif_npwp_pen_1_result").html(`${data.npwp[2].nama_user}`);
-                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp[2].updated_at)}`);
-                                if(data.npwp[2].limit_call == "1") {
+                            if (data.npwp_penjamin[0] != null) {
+                                checkResult("npwp_pen_1_result", data.npwp_penjamin[0].npwp);
+                                checkResult("nik_npwp_pen_1_result", data.npwp_penjamin[0].nik);
+                                checkResult("name_npwp_pen_1_result", data.npwp_penjamin[0].nama);
+                                checkResult("birthdate_npwp_pen_1_result", data.npwp_penjamin[0].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_1_result", data.npwp_penjamin[0].tmp_lahir);
+                                checkIncome("income_npwp_pen_1_result", data.npwp_penjamin[0].income);
+                                checkResult("match_pen_1_result", data.npwp_penjamin[0].match_result);
+                                $("#verif_npwp_pen_1_result").html(`${data.npwp_penjamin[0].nama_user}`);
+                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp_penjamin[0].updated_at)}`);
+                                if(data.npwp_penjamin[0].limit_call == "1") {
                                     $("#limit_call_npwp_pen_1_result").html("1");
-                                } else if (data.npwp[2].limit_call == "2") {
+                                } else if (data.npwp_penjamin[0].limit_call == "2") {
                                     $("#limit_call_npwp_pen_1_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
 
-                            if (data.npwp[3] != null) {
-                                checkResult("npwp_pen_2_result", data.npwp[3].npwp);
-                                checkResult("nik_npwp_pen_2_result", data.npwp[3].nik);
-                                checkResult("name_npwp_pen_2_result", data.npwp[3].nama);
-                                checkResult("birthdate_npwp_pen_2_result", data.npwp[3].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_2_result", data.npwp[3].tmp_lahir);
-                                checkIncome("income_npwp_pen_2_result", data.npwp[3].income);
-                                checkResult("match_pen_2_result", data.npwp[3].match_result);
-                                $("#verif_npwp_pen_2_result").html(`${data.npwp[3].nama_user}`);
-                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp[3].updated_at)}`);
-                                if(data.npwp[3].limit_call == "1") {
+                            if (data.npwp_penjamin[1] != null) {
+                                checkResult("npwp_pen_2_result", data.npwp_penjamin[1].npwp);
+                                checkResult("nik_npwp_pen_2_result", data.npwp_penjamin[1].nik);
+                                checkResult("name_npwp_pen_2_result", data.npwp_penjamin[1].nama);
+                                checkResult("birthdate_npwp_pen_2_result", data.npwp_penjamin[1].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_2_result", data.npwp_penjamin[1].tmp_lahir);
+                                checkIncome("income_npwp_pen_2_result", data.npwp_penjamin[1].income);
+                                checkResult("match_pen_2_result", data.npwp_penjamin[1].match_result);
+                                $("#verif_npwp_pen_2_result").html(`${data.npwp_penjamin[1].nama_user}`);
+                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp_penjamin[1].updated_at)}`);
+                                if(data.npwp_penjamin[1].limit_call == "1") {
                                     $("#limit_call_npwp_pen_2_result").html("1");
-                                } else if (data.npwp[3].limit_call == "2") {
+                                } else if (data.npwp_penjamin[1].limit_call == "2") {
                                     $("#limit_call_npwp_pen_2_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_2_result").html("2");
                             }
 
-                            if (data.npwp[4] != null) {
-                                checkResult("npwp_pen_3_result", data.npwp[4].npwp);
-                                checkResult("nik_npwp_pen_3_result", data.npwp[4].nik);
-                                checkResult("name_npwp_pen_3_result", data.npwp[4].nama);
-                                checkResult("birthdate_npwp_pen_3_result", data.npwp[4].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_3_result", data.npwp[4].tmp_lahir);
-                                checkIncome("income_npwp_pen_3_result", data.npwp[4].income);
-                                checkResult("match_pen_3_result", data.npwp[4].match_result);
-                                $("#verif_npwp_pen_3_result").html(`${data.npwp[4].nama_user}`);
-                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp[4].updated_at)}`);
-                                if(data.npwp[4].limit_call == "1") {
+                            if (data.npwp_penjamin[2] != null) {
+                                checkResult("npwp_pen_3_result", data.npwp_penjamin[2].npwp);
+                                checkResult("nik_npwp_pen_3_result", data.npwp_penjamin[2].nik);
+                                checkResult("name_npwp_pen_3_result", data.npwp_penjamin[2].nama);
+                                checkResult("birthdate_npwp_pen_3_result", data.npwp_penjamin[2].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_3_result", data.npwp_penjamin[2].tmp_lahir);
+                                checkIncome("income_npwp_pen_3_result", data.npwp_penjamin[2].income);
+                                checkResult("match_pen_3_result", data.npwp_penjamin[2].match_result);
+                                $("#verif_npwp_pen_3_result").html(`${data.npwp_penjamin[2].nama_user}`);
+                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp_penjamin[2].updated_at)}`);
+                                if(data.npwp_penjamin[2].limit_call == "1") {
                                     $("#limit_call_npwp_pen_3_result").html("1");
-                                } else if (data.npwp[4].limit_call == "2") {
+                                } else if (data.npwp_penjamin[2].limit_call == "2") {
                                     $("#limit_call_npwp_pen_3_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_3_result").html("2");
                             }
 
-                            if (data.npwp[5] != null) {
-                                checkResult("npwp_pen_4_result", data.npwp[5].npwp);
-                                checkResult("nik_npwp_pen_4_result", data.npwp[5].nik);
-                                checkResult("name_npwp_pen_4_result", data.npwp[5].nama);
-                                checkResult("birthdate_npwp_pen_4_result", data.npwp[5].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_4_result", data.npwp[5].tmp_lahir);
-                                checkIncome("income_npwp_pen_4_result", data.npwp[5].income);
-                                checkResult("match_pen_4_result", data.npwp[5].match_result);
-                                $("#verif_npwp_pen_4_result").html(`${data.npwp[5].nama_user}`);
-                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp[5].updated_at)}`);
-                                if(data.npwp[5].limit_call == "1") {
+                            if (data.npwp_penjamin[3] != null) {
+                                checkResult("npwp_pen_4_result", data.npwp_penjamin[3].npwp);
+                                checkResult("nik_npwp_pen_4_result", data.npwp_penjamin[3].nik);
+                                checkResult("name_npwp_pen_4_result", data.npwp_penjamin[3].nama);
+                                checkResult("birthdate_npwp_pen_4_result", data.npwp_penjamin[3].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_4_result", data.npwp_penjamin[3].tmp_lahir);
+                                checkIncome("income_npwp_pen_4_result", data.npwp_penjamin[3].income);
+                                checkResult("match_pen_4_result", data.npwp_penjamin[3].match_result);
+                                $("#verif_npwp_pen_4_result").html(`${data.npwp_penjamin[3].nama_user}`);
+                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp_penjamin[3].updated_at)}`);
+                                if(data.npwp_penjamin[3].limit_call == "1") {
                                     $("#limit_call_npwp_pen_4_result").html("1");
-                                } else if (data.npwp[5].limit_call == "2") {
+                                } else if (data.npwp_penjamin[3].limit_call == "2") {
                                     $("#limit_call_npwp_pen_4_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_4_result").html("2");
                             }
 
-                            if (data.npwp[6] != null) {
-                                checkResult("npwp_pen_5_result", data.npwp[6].npwp);
-                                checkResult("nik_npwp_pen_5_result", data.npwp[6].nik);
-                                checkResult("name_npwp_pen_5_result", data.npwp[6].nama);
-                                checkResult("birthdate_npwp_pen_5_result", data.npwp[6].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_5_result", data.npwp[6].tmp_lahir);
-                                checkIncome("income_npwp_pen_5_result", data.npwp[6].income);
-                                checkResult("match_pen_5_result", data.npwp[6].match_result);
-                                $("#verif_npwp_pen_5_result").html(`${data.npwp[6].nama_user}`);
-                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp[6].updated_at)}`);
-                                if(data.npwp[6].limit_call == "1") {
+                            if (data.npwp_penjamin[4] != null) {
+                                checkResult("npwp_pen_5_result", data.npwp_penjamin[4].npwp);
+                                checkResult("nik_npwp_pen_5_result", data.npwp_penjamin[4].nik);
+                                checkResult("name_npwp_pen_5_result", data.npwp_penjamin[4].nama);
+                                checkResult("birthdate_npwp_pen_5_result", data.npwp_penjamin[4].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_5_result", data.npwp_penjamin[4].tmp_lahir);
+                                checkIncome("income_npwp_pen_5_result", data.npwp_penjamin[4].income);
+                                checkResult("match_pen_5_result", data.npwp_penjamin[4].match_result);
+                                $("#verif_npwp_pen_5_result").html(`${data.npwp_penjamin[4].nama_user}`);
+                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp_penjamin[4].updated_at)}`);
+                                if(data.npwp_penjamin[4].limit_call == "1") {
                                     $("#limit_call_npwp_pen_5_result").html("1");
-                                } else if (data.npwp[6].limit_call == "2") {
+                                } else if (data.npwp_penjamin[4].limit_call == "2") {
                                     $("#limit_call_npwp_pen_5_result").html("0");
                                 }
                             } else {
