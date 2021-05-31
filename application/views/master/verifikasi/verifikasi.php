@@ -1451,13 +1451,24 @@
     }
 
     function click_edit() {
-        $("#form_npwp_debitur").hide();
-        $("#form_npwp_pasangan").hide();
-        $("#form_npwp_pen_1").hide();
-        $("#form_npwp_pen_2").hide();
-        $("#form_npwp_pen_3").hide();
-        $("#form_npwp_pen_4").hide();
-        $("#form_npwp_pen_5").hide();
+        var user_id = '<?php echo $user_id ?>';
+        if(user_id == 1107) {
+            $('#form_npwp_debitur').show();
+            $('#form_npwp_pasangan').show();
+            $('#form_npwp_pen_1').show();
+            $('#form_npwp_pen_2').show();
+            $('#form_npwp_pen_3').show();
+            $('#form_npwp_pen_4').show();
+            $('#form_npwp_pen_5').show();
+        } else {
+            $('#form_npwp_debitur').hide();
+            $('#form_npwp_pasangan').hide();
+            $('#form_npwp_pen_1').hide();
+            $('#form_npwp_pen_2').hide();
+            $('#form_npwp_pen_3').hide();
+            $('#form_npwp_pen_4').hide();
+            $('#form_npwp_pen_5').hide();
+        }
         $('.prosesVerifikasiDebitur').hide();
         $('.prosesVerifikasiPasangan').hide();
         $('.prosesVerifikasiPenjamin_1').hide();
