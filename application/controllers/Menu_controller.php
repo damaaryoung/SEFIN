@@ -860,4 +860,13 @@ class Menu_controller extends MY_Controller
     function waypoint_data_visit_kolektor(){
         $this->load->view('master/collection/collector/report/report_waypoint_data_visit_kolektor_view');
     }
+
+    public function activity_ca()
+    {   
+        $data['nama_user'] = $this->model_menu->getUser();
+        $outputs   = $this->model_menu->getUser();
+        $user_id   = $outputs['data']['user_id'];
+        $data['user_id'] = $user_id;
+        $this->load->view('master/activity/activity_ca', $data);
+    }
 }

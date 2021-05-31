@@ -1648,7 +1648,7 @@
                         '<td title="Detail" class="details-control" data="' + item.trans_so + '"></td>',
                         '<td>' + item.status_kredit + '</td>',
                         '<td>' + item.created_at + '</td>',
-                        '<td>' + item.tanggal_selesai[0].created_at + '</td>',
+                        '<td></td>',
                         '<td>' + item.nomor_so + '</td>',
                         '<td>' + item.nama_so + '</td>',
                         '<td>' + item.request_by + '</td>',

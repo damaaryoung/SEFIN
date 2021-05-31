@@ -10,6 +10,33 @@
     text-align: left;
     padding: 8px;
     }
+
+    td.details-control {
+        background: url('./assets/dist/img/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('./assets/dist/img/details_close.png') no-repeat center center;
+    }
+
+    .card-primary.card-outline-tabs>.card-header a.active {
+        border-top: 3px solid #d93444;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 0.5rem 0.9rem;
+    }
+
+    .image-upload>input {
+        display: none;
+    }
+
+    .image-upload img {
+        width: 40px;
+        cursor: pointer;
+    }
 </style>
 
 <div id="lihat_data_credit" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
@@ -17,12 +44,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Data Verifikasi</h1>
+                    <h1>Activity Credit Analyst</h1>
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Verifikasi</li>
+                        <li class="breadcrumb-item active">Activity Credit Analyst</li>
                     </ol>
                 </div>
             </div>
@@ -31,6 +58,13 @@
     <section>
         <div class="row">
             <div class="col-md-5">
+                <div class="form-group">
+                    <select id="select_activity" class="form-control" name="select_activity">
+                        <option value="" selected="selected" disabled>- Pilih Activity -</option>
+                        <option value="verifikasi_dokumen">Verifikasi Dokumen <i>(Verijelas)</i></option>
+                        <option value="verifikasi_telepon">Verifikasi Telepon</option>
+                    </select>
+                </div>
             </div>
             <div class="col-md-7">
                 <div class="row">
@@ -40,7 +74,8 @@
                                 $kode_area = $this->db->get('mk_area')->result();
                             ?>
                             <select id="kode_area" class="form-control" name="kode_area">
-                                <option value="" selected="selected">- Pilih Area -</option>
+                                <option value="" selected="selected" disabled>- Pilih Area -</option>
+                                <option value="konsolidasi">KONSOLIDASI</option>
                                 <?php foreach($kode_area as $r): ?>
                                     <option value="<?php echo $r->id; ?>"><?php echo $r->nama; ?></option>
                                 <?php endforeach; ?>
@@ -53,7 +88,8 @@
                                 $kode_kantor = $this->db->get('mk_cabang')->result();
                             ?>
                             <select id="kode_kantor" class="form-control" name="kode_kantor">
-                                <option value="" selected="selected">- Pilih Cabang -</option>
+                                <option value="" selected="selected" disabled>- Pilih Cabang -</option>
+                                <option value="konsolidasi">Konsolidasi</option>
                                 <?php foreach($kode_kantor as $r): ?>
                                     <option value="<?php echo $r->id; ?>"><?php echo $r->nama; ?></option>
                                 <?php endforeach; ?>
@@ -96,6 +132,33 @@
                                 <tbody id="data_verifikasi" style="font-size: 13px">
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="box-body table-responsive no-padding" id="table_data_telepon">
+                            <table id="table_telepon" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                <thead style="font-size: 15px" class="bg-danger">
+                                    <tr>
+                                        <th>
+                                            No
+                                        </th>
+                                        <th>
+                                            Tanggal Transaksi
+                                        </th>
+                                        <th>
+                                            No. SO
+                                        </th>
+                                        <th>
+                                            Nama Debitur
+                                        </th>
+                                        <th>
+                                            Aksi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data_telepon" style="font-size: 13px">
+                                </tbody>
+                            </table>
+                            <div id="paginationBar">
+                            </div>
                         </div>
                         <div class="box-body table-responsive no-padding" id="table_filter">
                             <table id="table_verifikasi_filter" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
@@ -717,7 +780,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Nama Lengkap <small><i>(Sesuai KTP Tanpa Gelar)</i></small><span class="required_notification">*</span></label>
-                                            <input type="text" name="nama_deb" id="nama_deb" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                                            <input type="text" name="nama_deb" id="nama_deb" class="form-control ">
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-6">
@@ -790,7 +853,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Nama Lengkap <small><i>(Sesuai KTP Tanpa Gelar)</i></small><span class="required_notification">*</span></label>
-                                            <input type="text" name="nama_pas" id="nama_pas" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                                            <input type="text" name="nama_pas" id="nama_pas" class="form-control ">
                                         </div>
                                         <div class="row">
                                             <div class="form-group col-md-6">
@@ -948,6 +1011,784 @@
     </div>
 </div>
 
+<div class="modal fade in" id="modal_data_telepon" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="form_data_telepon">
+                <div class="modal-header">
+                    <h5 class="modal-title">Verifikasi Telepon</h5>
+                    <button type="button" title="Tutup" class="close" data-dismiss="modal" style="color: #ff0c17" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id_trans_so_telepon" id="id_trans_so_telepon">
+                    <div class="card card-primary card-outline card-outline-tabs" style="border-top: 3px solid #dc3545;">
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a style="width: 100px;" class="nav-link active" id="custom-tabs-three-data-debitur-tab" data-toggle="pill" href="#custom-tabs-three-data-debitur" role="tab" aria-controls="custom-tabs-three-data-debitur" aria-selected="true">Data Debitur</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a style="width: 100px" class="nav-link" id="custom-tabs-three-data-pasangan-tab" data-toggle="pill" href="#custom-tabs-three-data-pasangan" role="tab" aria-controls="custom-tabs-three-data-pasangan" aria-selected="false">Data Pasangan</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a style="width: 120px" class="nav-link" id="custom-tabs-three-data-orang-tua-tab" data-toggle="pill" href="#custom-tabs-three-data-orang-tua" role="tab" aria-controls="custom-tabs-three-data-orang-tua" aria-selected="false">Identitas Orang Tua</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a style="width: 120px" class="nav-link" id="custom-tabs-three-pernikahan-tab" data-toggle="pill" href="#custom-tabs-three-pernikahan" role="tab" aria-controls="custom-tabs-three-pernikahan" aria-selected="false">Status Pernikahan</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a style="width: 105px" class="nav-link" id="custom-tabs-three-pekerjaan-tab" data-toggle="pill" href="#custom-tabs-three-pekerjaan" role="tab" aria-controls="custom-tabs-three-pekerjaan" aria-selected="false">Pekerjaan / Usaha</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a style="width: 111px; height: 68px; line-height: 45px;" class="nav-link" id="custom-tabs-three-pengajuan-tab" data-toggle="pill" href="#custom-tabs-three-pengajuan" role="tab" aria-controls="custom-tabs-three-pengajuan" aria-selected="false">Pengajuan</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a style="width: 110px; height: 68px; line-height: 45px;" class="nav-link" id="custom-tabs-three-jaminan-tab" data-toggle="pill" href="#custom-tabs-three-jaminan" role="tab" aria-controls="custom-tabs-three-jaminan" aria-selected="false">Jaminan</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-three-tabContent">
+                                <div class="tab-pane fade show active" id="custom-tabs-three-data-debitur" role="tabpanel" aria-labelledby="custom-tabs-three-data-debitur-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Lengkap Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_deb" name="nama_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_deb" name="nama_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_deb" name="nama_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tempat, Tanggal Lahir Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_ttl_deb" name="ttl_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_ttl_deb" name="ttl_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_ttl_deb" name="ttl_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Alamat Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_alamat_deb" name="alamat_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_alamat_deb" name="alamat_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_alamat_deb" name="alamat_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">No. Telepon Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_telp_deb" name="telp_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_telp_deb" name="telp_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_telp_deb" name="telp_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Email Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_email_deb" name="email_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_email_deb" name="email_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_email_deb" name="email_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Salah Satu Saudara Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_saudara_deb" name="saudara_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_saudara_deb" name="saudara_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_saudara_deb" name="saudara_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-three-data-pasangan" role="tabpanel" aria-labelledby="custom-tabs-three-data-pasangan-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Lengkap Pasangan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_pas" name="nama_pas"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_pas" name="nama_pas" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_pas" name="nama_pas"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tempat, Tanggal Lahir Pasangan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_ttl_pas" name="ttl_pas"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_ttl_pas" name="ttl_pas" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_ttl_pas" name="ttl_pas"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Alamat Pasangan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_alamat_pas" name="alamat_pas"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_alamat_pas" name="alamat_pas" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_alamat_pas" name="alamat_pas"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">No. Telepon Pasangan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_telp_pas" name="telp_pas"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_telp_pas" name="telp_pas" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_telp_pas" name="telp_pas"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Salah Satu Saudara Pasangan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_saudara_pas" name="saudara_pas"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_saudara_pas" name="saudara_pas" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_saudara_pas" name="saudara_pas"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-three-data-orang-tua" role="tabpanel" aria-labelledby="custom-tabs-three-data-orang-tua-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Lengkap Ibu Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_ibu_deb" name="nama_ibu_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_ibu_deb" name="nama_ibu_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_ibu_deb" name="nama_ibu_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tempat, Tanggal Lahir Ibu Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_ttl_ibu_deb" name="ttl_ibu_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_ttl_ibu_deb" name="ttl_ibu_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_ttl_ibu_deb" name="ttl_ibu_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Lengkap Ayah Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_ayah_deb" name="nama_ayah_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_ayah_deb" name="nama_ayah_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_ayah_deb" name="nama_ayah_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tempat, Tanggal Lahir Ayah Debitur</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_ttl_ayah_deb" name="ttl_ayah_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_ttl_ayah_deb" name="ttl_ayah_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_ttl_ayah_deb" name="ttl_ayah_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Lengkap Ibu Pasangan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_ibu_pas" name="nama_ibu_pas"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_ibu_pas" name="nama_ibu_pas" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_ibu_pas" name="nama_ibu_pas"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Lengkap Ayah Pasangan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_ayah_pas" name="nama_ayah_pas"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_ayah_pas" name="nama_ayah_pas" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_ayah_pas" name="nama_ayah_pas"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-three-pernikahan" role="tabpanel" aria-labelledby="custom-tabs-three-pernikahan-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Status Pernikahan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_status_deb" name="status_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_status_deb" name="status_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_status_deb" name="status_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Lokasi KUA</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_lokasi_kua" name="lokasi_kua"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_lokasi_kua" name="lokasi_kua" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_lokasi_kua" name="lokasi_kua"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Lokasi Nikah</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_lokasi_nikah" name="lokasi_nikah"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_lokasi_nikah" name="lokasi_nikah" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_lokasi_nikah" name="lokasi_nikah"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tanggal Pernikahan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_tgl_nikah" name="tgl_nikah"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_tgl_nikah" name="tgl_nikah" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_tgl_nikah" name="tgl_nikah"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tanggal Cerai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_tgl_cerai" name="tgl_cerai"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_tgl_cerai" name="tgl_cerai" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_tgl_cerai" name="tgl_cerai"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-three-pekerjaan" role="tabpanel" aria-labelledby="custom-tabs-three-pekerjaan-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Pekerjaan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_pekerjaan_deb" name="pekerjaan_deb"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_pekerjaan_deb" name="pekerjaan_deb" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_pekerjaan_deb" name="pekerjaan_deb"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Kantor/Usaha</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_kantor_usaha" name="nama_kantor_usaha"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_kantor_usaha" name="nama_kantor_usaha" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_kantor_usaha" name="nama_kantor_usaha"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Alamat Kantor/Usaha</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_alamat_kantor_usaha" name="alamat_kantor_usaha"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_alamat_kantor_usaha" name="alamat_kantor_usaha" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_alamat_kantor_usaha" name="alamat_kantor_usaha"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">No. Telepon Kantor/Usaha</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_telp_kantor_usaha" name="telp_kantor_usaha"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_telp_kantor_usaha" name="telp_kantor_usaha" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_telp_kantor_usaha" name="telp_kantor_usaha"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Jabatan/Posisi</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_jabatan" name="jabatan"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_jabatan" name="jabatan" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_jabatan" name="jabatan"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tanggal Mulai Kerja/Usaha</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_tgl_mulai_kerja" name="tgl_mulai_kerja"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_tgl_mulai_kerja" name="tgl_mulai_kerja" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_tgl_mulai_kerja" name="tgl_mulai_kerja"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Lama Bekerja/Usaha</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_lama_kerja" name="lama_kerja"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_lama_kerja" name="lama_kerja" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_lama_kerja" name="lama_kerja"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Gaji/Pemasukan Perbulan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_gaji_kerja" name="gaji_kerja"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_gaji_kerja" name="gaji_kerja" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_gaji_kerja" name="gaji_kerja"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Gaji Cash/Transfer</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_bentuk_gaji" name="bentuk_gaji"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_bentuk_gaji" name="bentuk_gaji" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_bentuk_gaji" name="bentuk_gaji"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Rekening Gaji</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_rekening_gaji" name="rekening_gaji"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_rekening_gaji" name="rekening_gaji" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_rekening_gaji" name="rekening_gaji"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-three-pengajuan" role="tabpanel" aria-labelledby="custom-tabs-three-pengajuan-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Plafon Pengajuan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_plafon" name="plafon"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_plafon" name="plafon" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_plafon" name="plafon"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tenor Pengajuan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_tenor" name="tenor"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_tenor" name="tenor" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_tenor" name="tenor"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Tujuan Pinjaman</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_tujuan_pinjaman" name="tujuan_pinjaman"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_tujuan_pinjaman" name="tujuan_pinjaman" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_tujuan_pinjaman" name="tujuan_pinjaman"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Yang Menggunakan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_yang_menggunakan" name="yang_menggunakan"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_yang_menggunakan" name="yang_menggunakan" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_yang_menggunakan" name="yang_menggunakan"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-three-jaminan" role="tabpanel" aria-labelledby="custom-tabs-three-jaminan-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Alamat Jaminan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_alamat_jaminan" name="alamat_jaminan"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_alamat_jaminan" name="alamat_jaminan" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_alamat_jaminan" name="alamat_jaminan"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Luas Tanah</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_luas_tanah" name="luas_tanah"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_luas_tanah" name="luas_tanah" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_luas_tanah" name="luas_tanah"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Luas Bangunan</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_luas_bangunan" name="luas_bangunan"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_luas_bangunan" name="luas_bangunan" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_luas_bangunan" name="luas_bangunan"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Pemilik</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_pemilik" name="nama_pemilik"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_pemilik" name="nama_pemilik" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_pemilik" name="nama_pemilik"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Nama Penghuni</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_nama_penghuni" name="nama_penghuni"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_nama_penghuni" name="nama_penghuni" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_nama_penghuni" name="nama_penghuni"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Warna Cat Rumah</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_warna_rumah" name="warna_rumah"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_warna_rumah" name="warna_rumah" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_warna_rumah" name="warna_rumah"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Lama Tinggal</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_lama_tinggal" name="lama_tinggal"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_lama_tinggal" name="lama_tinggal" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_lama_tinggal" name="lama_tinggal"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <small style="font-weight: 700;">Terakhir Renovasi</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="sesuai" id="sesuai_terakhir_renovasi" name="terakhir_renovasi"> <small>Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <input type="radio" value="tidak" id="tidak_terakhir_renovasi" name="terakhir_renovasi" checked="checked"> <small>Tidak Sesuai</small>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="radio" value="janggal" id="janggal_terakhir_renovasi" name="terakhir_renovasi"> <small>Ada Kejanggalan</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Keterangan:</label>
+                        <textarea style="resize: none" name="keterangan" id="keterangan" class="form-control " rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-sm submit simpan_telepon" id="button_simpan_telepon">Simpan</button>
+                        <a href="javascript:void(0)" data-dismiss="modal" class="btn btn-danger btn-sm close_deb">Batal</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <form id="form_edit_penjamin">
     <div class="modal fade in" id="modal_penjamin" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-lg">
@@ -970,7 +1811,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nama Lengkap <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label>
-                                <input type="text" name="nama_pen" id="nama_pen" onkeyup="this.value = this.value.toUpperCase()" class="form-control ">
+                                <input type="text" name="nama_pen" id="nama_pen"  class="form-control ">
                             </div>
                         </div>
                     </div>
@@ -984,12 +1825,7 @@
                         <div class="col-md-6">
                             <label>Tanggal Lahir<span class="required_notification">*</span></label>
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="far fa-calendar-alt"></i>
-                                    </span>
-                                </div>
-                                <input type="text" name="tgl_lahir_pen" id="tgl_lahir_pen" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
+                                <input type="date" id="tgl_lahir_pen" name="tgl_lahir_pen" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -1077,7 +1913,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Nama Pemilik Sertifikat<span class="required_notification">*</span></label>
-                                    <input type="text" name="nama_pemilik_sertifikat" class="form-control " onkeyup="this.value = this.value.toUpperCase()">
+                                    <input type="text" name="nama_pemilik_sertifikat" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label>Jenis Sertifikat</label>
@@ -1307,7 +2143,11 @@
 
 <script>
 
-    tampil_data_verifikasi();
+    // tampil_data_verifikasi();
+
+    $("#table_not_filter").hide();
+    $("#table_filter").hide();
+    $("#table_data_telepon").hide();
 
     var areaSelect = document.getElementById("kode_area");
     areaSelect.addEventListener("change", function(e) {
@@ -1343,26 +2183,40 @@
 
     function filter_data_verifikasi() {
 
-        $("#table_not_filter").hide();
-        $("#table_filter").show();
-
         var requestBody = {
-            cabang : $("#kode_kantor option:selected").val(),
-            area    : $("#kode_area option:selected").val(),
+            select_activity : $("#select_activity option:selected").val(),
+            kode_kantor : $("#kode_kantor option:selected").val(),
+            kode_area   : $("#kode_area option:selected").val(),
             draw: 1
         }
 
-
         if (requestBody.kode_area == "" && requestBody.kode_kantor == "") {
             bootbox.alert("Salah satu dari Area atau Cabang tidak boleh kosong!");
-        } else {
+        } else if (requestBody.select_activity == "") {
+            bootbox.alert("Pilih salah satu Activity!");
+        } else if (requestBody.select_activity == "verifikasi_dokumen") {
+            if (requestBody.kode_area == "konsolidasi" || requestBody.kode_kantor == "konsolidasi") {
+                tampil_data_verifikasi();
+            } else {
                 // call AJAX data verifikasi yang sudah di filter berdasarkan area dan kantor
-                hit_filter_data_pagination(requestBody)
-                
+                hit_filter_data_pagination(requestBody);
+                    
+            }
+        } else if (requestBody.select_activity == "verifikasi_telepon") {
+            if (requestBody.kode_area == "konsolidasi" || requestBody.kode_kantor == "konsolidasi") {
+                tampil_data_telepon();
+            } else {
+                // call AJAX data telepon yang sudah di filter berdasarkan area dan kantor       
+                hit_filter_data_telepon(requestBody);
+            }
         }
     }
 
     function hit_filter_data_pagination(requestBody) {
+        $("#table_not_filter").hide();
+        $("#table_filter").show();
+        $("#table_data_telepon").hide();
+
         $.ajax({
             url: "<?php echo site_url('Ao_controller/get_data_verifikasi_filter') ?>",
             type: 'POST',
@@ -1424,9 +2278,77 @@
         });
     }
 
+    function hit_filter_data_telepon(requestBody) {
+        $("#table_not_filter").hide();
+        $("#table_filter").hide();
+        $("#table_data_telepon").show();
+
+        $.ajax({
+            url: "<?php echo site_url('Ao_controller/get_data_telepon_filter') ?>",
+            type: 'POST',
+            data: requestBody,
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            },
+        })
+        .done(function(res) {
+            res = JSON.parse(res);
+            var html = [];
+            if(res.data.length == 0){
+                var tr =[
+                '<tr align="middle">',
+                    '<td colspan="5" style="text-align: center">Tidak ada data</td>',
+                '</tr>'
+                ].join('\n');
+                $('#data_telepon').html(tr);
+                return;
+            } else {
+                $.each(res.data, function(index,item){
+                    var tr = [
+                    '<tr>',
+                        '<td style="text-align: center">'+ item.no +'</td>',
+                        '<td>'+ formatUpdated(item.tgl_transaksi) +'</td>',
+                        '<td>'+ item.nomor_so+'</td>',
+                        '<td>'+ item.nama_debitur +'</td>',
+                        '<td style="text-align: center">' + item.action + '</td>',
+                    '</tr>'
+                    ].join('\n');
+                    html.push(tr);
+                });
+
+                $('#data_telepon').html(html);
+
+                $("#paginationBar").html(`
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination" id="paginationList">
+                        </ul>
+                    </nav>
+                `);
+
+                for (var i=1; i<=res.last_page; i++) {
+                    if (i == requestBody.draw) {
+                        $("#paginationList").append(`<li class="page-item active"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
+                    } else {
+                        $("#paginationList").append(`<li class="page-item"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
+                    }
+                    
+                    document.getElementById(`${i}id`).addEventListener("click", (e) => {
+                        requestBody.draw = e.target.getAttribute("data-value");
+                        hit_filter_data_telepon(requestBody);
+                        $("#paginationList").empty();
+                    })
+                }
+
+            }
+
+        });
+    }
+
     function tampil_data_verifikasi() {
         $("#table_not_filter").show();
         $("#table_filter").hide();
+        $("#table_data_telepon").hide();
+
         $('#table_verifikasi').DataTable({
 
             "processing": true,
@@ -1455,25 +2377,47 @@
         })
     }
 
+    function tampil_data_telepon() {
+        $("#table_not_filter").hide();
+        $("#table_filter").hide();
+        $("#table_data_telepon").show();
+        
+        $('#table_telepon').DataTable({
+
+            "processing": true,
+            "serverSide": true,
+            'destroy': true,
+            "order": [],
+
+            "paging": true,
+            "retrieve": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+            "autoWidth": false,
+
+            "ajax": {
+                "url": "<?php echo site_url('Ao_controller/get_data_telepon') ?>",
+                "type": "POST"
+            },
+
+            "columnDefs": [{
+                "targets": [0],
+                "orderable": false,
+            }, ],
+
+        })
+    }
+
     function click_edit() {
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            $('#form_npwp_debitur').show();
-            $('#form_npwp_pasangan').show();
-            $('#form_npwp_pen_1').show();
-            $('#form_npwp_pen_2').show();
-            $('#form_npwp_pen_3').show();
-            $('#form_npwp_pen_4').show();
-            $('#form_npwp_pen_5').show();
-        } else {
-            $('#form_npwp_debitur').hide();
-            $('#form_npwp_pasangan').hide();
-            $('#form_npwp_pen_1').hide();
-            $('#form_npwp_pen_2').hide();
-            $('#form_npwp_pen_3').hide();
-            $('#form_npwp_pen_4').hide();
-            $('#form_npwp_pen_5').hide();
-        }
+        $('#form_npwp_debitur').hide();
+        $('#form_npwp_pasangan').hide();
+        $('#form_npwp_pen_1').hide();
+        $('#form_npwp_pen_2').hide();
+        $('#form_npwp_pen_3').hide();
+        $('#form_npwp_pen_4').hide();
+        $('#form_npwp_pen_5').hide();
         $('.prosesVerifikasiDebitur').hide();
         $('.prosesVerifikasiPasangan').hide();
         $('.prosesVerifikasiPenjamin_1').hide();
@@ -1571,14 +2515,10 @@
 
         document.getElementById("verifikasi_pasangan").disabled = true;
         setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
-
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-        }
+        document.getElementById("verifikasi_npwp").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -1587,21 +2527,17 @@
                 if(data.data_penjamin.length == 1) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -1609,14 +2545,12 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -1626,16 +2560,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -1647,18 +2579,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -1703,7 +2633,7 @@
                         }
 
                         $.ajax({
-                            url: '<?php echo config_item('api_url_2') ?>api/master/verif/error_log',
+                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
                             type: 'POST',
                             data: requestBodyError,
                             headers: {
@@ -1981,14 +2911,10 @@
 
         document.getElementById("verifikasi_pasangan").disabled = true;
         setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
-
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-        }
+        document.getElementById("verifikasi_npwp").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -1997,21 +2923,17 @@
                 if(data.data_penjamin.length == 1) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2019,14 +2941,12 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2036,16 +2956,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2057,18 +2975,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -2103,7 +3019,7 @@
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!"); 
                 } else {
                     if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
+                        responseBody = responseDataNotFound(requestBody);
                         console.log(responseBody);
 
                         if(responseBody.status == 401) {
@@ -2220,7 +3136,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storecadeb/";
+                                        var url = "api/master/verif/updateVerifCadebt/";
                                         httpRequestBuilder(requestMapperForUpdateCadebDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseDebiturDataNotFound();
@@ -2230,7 +3146,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateVerif/";
+                                var url = "api/master/verif/updateVerifCadebt/";
         
                                 httpRequestBuilder(requestMapperForUpdateCadeb(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -2353,7 +3269,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/storecadeb/";
+                                            var url = "api/master/verif/updateVerifCadebt/";
                                             httpRequestBuilder(requestMapperForUpdateCadebDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponseDebiturDataNotFound();
@@ -2363,7 +3279,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateVerif/";
+                                    var url = "api/master/verif/updateVerifCadebt/";
         
                                     httpRequestBuilder(requestMapperForUpdateCadeb(responseBody), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -2394,11 +3310,8 @@
     function verifikasiSimpanPasangan(isTesting, id_trans_so) {
         $('.verifikasiPasangan').hide();
 
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-        }
+        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -2407,21 +3320,19 @@
                 if(data.data_penjamin.length == 1) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                     
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2429,14 +3340,13 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                     
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2446,16 +3356,15 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2467,18 +3376,17 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                     
                 } 
             })
                 
@@ -2799,11 +3707,8 @@
     function verifikasiUpdatePasangan(isTesting, limitCallPasangan, id_trans_so) {
         $('.verifikasiPasangan').hide();
 
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-        }
+        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -2812,21 +3717,17 @@
                 if(data.data_penjamin.length == 1) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2834,14 +3735,12 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2851,16 +3750,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_1").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
@@ -2872,18 +3769,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -2917,7 +3812,7 @@
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!"); 
                 } else {
                     if (isTesting) {
-                        responseBody = responseCompleteID(requestBody);
+                        responseBody = responseCompletePasangan(requestBody);
                         console.log(responseBody);
 
                         if(responseBody.status == 401) {
@@ -3034,7 +3929,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storepasangan/";
+                                        var url = "api/master/verif/updateVerifPasangan/";
         
                                         httpRequestBuilder(requestMapperForUpdatePasanganDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -3045,7 +3940,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateVerif/";
+                                var url = "api/master/verif/updateVerifPasangan/";
         
                                 httpRequestBuilder(requestMapperForUpdatePasangan(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -3168,9 +4063,9 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/storepasangan/";
+                                            var url = "api/master/verif/updateVerifPasangan/";
         
-                                            httpRequestBuilder(requestMapperForStorePasanganDataNotFound(), url, id_trans_so, "POST")
+                                            httpRequestBuilder(requestMapperForUpdatePasanganDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponsePasanganDataNotFound();
                                                 bootbox.alert(responseBody.errors.message);
@@ -3179,7 +4074,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateVerif/";
+                                    var url = "api/master/verif/updateVerifPasangan/";
         
                                     httpRequestBuilder(requestMapperForUpdatePasangan(responseBody), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -3215,32 +4110,26 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if(data.data_penjamin.length == 1) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
@@ -3248,16 +4137,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
@@ -3267,18 +4154,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -3606,38 +4491,32 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 2) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
@@ -3645,18 +4524,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -3983,44 +4860,38 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -4347,31 +5218,27 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -4692,20 +5559,16 @@
     function verifikasiSimpanPenjamin_5(isTesting, id_trans_so) {
         $('.verifikasiPenjamin_5').hide();
 
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-        }
-                
+        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
 
         var id_pen = $('#id_penjamin_5').val();
         var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_5");
@@ -5030,32 +5893,26 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if(data.data_penjamin.length == 1) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
@@ -5063,16 +5920,14 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_2").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
@@ -5082,18 +5937,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -5426,38 +6279,32 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 2) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_3").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
@@ -5465,18 +6312,16 @@
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -5809,44 +6654,38 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_4").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -6179,31 +7018,27 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
                     document.getElementById("verifikasi_penjamin_5").disabled = true;
                     setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -6531,18 +7366,16 @@
         $('.verifikasiPenjamin_5').hide();
 
         var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-            document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-        }
+        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
 
         var id_pen = $('#id_penjamin_5').val();
         var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_1");
@@ -6867,61 +7700,48 @@
     function verifikasiSimpanNpwp(isTesting, id_trans_so) {
         $('.verifikasiNpwp').hide();
 
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-        }
+        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
 
         get_data({}, id_trans_so)
             .done(function(response) {
                 var data = response.data;
 
                 if(data.data_penjamin.length == 1) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -7191,64 +8011,51 @@
         }
     }
 
-    function verifikasiUpdateNpwp(isTesting, limitCallNpwp, id_trans_so, id_verif) {
+    function verifikasiUpdateNpwp(isTesting, limitCallNpwp, id_trans_so) {
         $('.verifikasiNpwp').hide();
 
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-            setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-        }
+        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
 
         get_data({}, id_trans_so)
             .done(function(response) {
                 var data = response.data;
 
                 if(data.data_penjamin.length == 1) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -7373,7 +8180,7 @@
                                     .done(function(res) {
                                         var url = "api/master/verif/updateNpwp/";
         
-                                        httpRequestBuilderNpwp(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_verif, "POST")
+                                        httpRequestBuilderNpwp(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpDataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -7384,7 +8191,7 @@
                             } else {
                                 var url = "api/master/verif/updateNpwp/";
         
-                                httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_verif, "POST")
+                                httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
                                     mappingResponseNpwp(responseBody);
                                     bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -7487,7 +8294,7 @@
                                         .done(function(res) {
                                             var url = "api/master/verif/updateNpwp/";
         
-                                            httpRequestBuilderNpwp(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_verif, "POST")
+                                            httpRequestBuilderNpwp(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponseNpwpDataNotFound();
                                                 bootbox.alert(responseBody.errors.message);
@@ -7498,7 +8305,7 @@
                                 } else {
                                     var url = "api/master/verif/updateNpwp/";
         
-                                    httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_verif, "POST")
+                                    httpRequestBuilderNpwp(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                     .done( (response) => {
                                         mappingResponseNpwp(responseBody);
                                         bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -7532,50 +8339,40 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if(data.data_penjamin.length == 1) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -7696,9 +8493,9 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppasangan/";
                                     
-                                    httpRequestBuilder(requestMapperForStoreNpwpPasanganDataNotFound(id_pas), url, id_trans_so, "POST")
+                                    httpRequestBuilder(requestMapperForStoreNpwpPasanganDataNotFound(), url, id_trans_so, "POST")
                                     .done( (response) => {
                                         mappingResponseNpwpPasanganDataNotFound();
                                         bootbox.alert(responseBody.errors.message);
@@ -7707,9 +8504,9 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppasangan/";
         
-                            httpRequestBuilder(requestMapperForStoreNpwpPasangan(responseBody, id_pas), url, id_trans_so, "POST")
+                            httpRequestBuilder(requestMapperForStoreNpwpPasangan(responseBody), url, id_trans_so, "POST")
                             .done( (response) => {
                                 mappingResponseNpwpPasangan(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
@@ -7810,9 +8607,9 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppasangan/";
                                     
-                                        httpRequestBuilder(requestMapperForStoreNpwpPasanganDataNotFound(id_pas), url, id_trans_so, "POST")
+                                        httpRequestBuilder(requestMapperForStoreNpwpPasanganDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPasanganDataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -7821,9 +8618,9 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppasangan/";
         
-                                httpRequestBuilder(requestMapperForStoreNpwpPasangan(responseBody, id_pas), url, id_trans_so, "POST")
+                                httpRequestBuilder(requestMapperForStoreNpwpPasangan(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
                                     mappingResponseNpwpPasangan(responseBody);
                                     bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
@@ -7855,50 +8652,40 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if(data.data_penjamin.length == 1) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 2) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -8021,9 +8808,9 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppasangan/";
         
-                                        httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_pasangan, "POST")
+                                        httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPasanganDataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -8032,9 +8819,9 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppasangan/";
         
-                                httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
+                                httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                 .done( (response) => {
                                     mappingResponseNpwpPasangan(responseBody);
                                     bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
@@ -8135,9 +8922,9 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppasangan/";
         
-                                            httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_pasangan, "POST")
+                                            httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponseNpwpPasanganDataNotFound();
                                                 bootbox.alert(responseBody.errors.message);
@@ -8146,9 +8933,9 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppasangan/";
         
-                                    httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_pasangan, "POST")
+                                    httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
                                     .done( (response) => {
                                         mappingResponseNpwpPasangan(responseBody);
                                         bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -8182,37 +8969,29 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 2) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -8333,7 +9112,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -8344,7 +9123,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -8447,7 +9226,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -8458,7 +9237,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -8492,26 +9271,20 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -8632,7 +9405,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -8643,7 +9416,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -8746,7 +9519,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -8757,7 +9530,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -8791,17 +9564,13 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -8922,7 +9691,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -8933,7 +9702,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -9036,7 +9805,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                       var url = "api/master/verif/storenpwp/";
+                                       var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -9047,7 +9816,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -9081,10 +9850,8 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -9205,7 +9972,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -9216,7 +9983,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -9319,7 +10086,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -9330,7 +10097,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -9475,7 +10242,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwp/";
+                                    var url = "api/master/verif/storenpwppenjamin/";
         
                                     httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
@@ -9486,7 +10253,7 @@
                                 })
                             }
                         } else {
-                            var url = "api/master/verif/storenpwp/";
+                            var url = "api/master/verif/storenpwppenjamin/";
         
                             httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                             .done( (response) => {
@@ -9589,7 +10356,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/storenpwp/";
+                                        var url = "api/master/verif/storenpwppenjamin/";
         
                                         httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
                                         .done( (response) => {
@@ -9600,7 +10367,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/storenpwp/";
+                                var url = "api/master/verif/storenpwppenjamin/";
         
                                 httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
                                 .done( (response) => {
@@ -9634,37 +10401,29 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 2) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -9787,7 +10546,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -9798,7 +10557,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -9901,7 +10660,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -9912,7 +10671,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -9948,26 +10707,20 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 3) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -10090,7 +10843,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -10101,7 +10854,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -10204,7 +10957,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -10215,7 +10968,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -10251,17 +11004,13 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 4) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                 } else if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -10384,7 +11133,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -10395,7 +11144,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -10498,7 +11247,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -10509,7 +11258,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -10545,10 +11294,8 @@
                 var user_id = '<?php echo $user_id ?>';
 
                 if (data.data_penjamin.length == 5) {
-                    if(user_id == 1107) {
-                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                    }
+                    document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                    setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                 } 
             })
 
@@ -10671,7 +11418,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -10682,7 +11429,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -10785,7 +11532,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -10796,7 +11543,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -10945,7 +11692,7 @@
                                         },
                                     })
                                     .done(function(res) {
-                                        var url = "api/master/verif/updateNpwp/";
+                                        var url = "api/master/verif/updateNpwppenjamin/";
         
                                         httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
@@ -10956,7 +11703,7 @@
                                     })
                                 }
                             } else {
-                                var url = "api/master/verif/updateNpwp/";
+                                var url = "api/master/verif/updateNpwppenjamin/";
         
                                 httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                 .done( (response) => {
@@ -11059,7 +11806,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateNpwp/";
+                                            var url = "api/master/verif/updateNpwppenjamin/";
         
                                             httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
                                             .done( (response) => {
@@ -11070,7 +11817,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateNpwp/";
+                                    var url = "api/master/verif/updateNpwppenjamin/";
         
                                     httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
                                     .done( (response) => {
@@ -13195,9 +13942,8 @@
         }
     }
     
-    function requestMapperForStoreNpwpPasangan(responseBody, id_pas) {
+    function requestMapperForStoreNpwpPasangan(responseBody) {
         return {
-            id_pasangan: id_pas,
             npwp: responseBody.data.npwp  ? 1 : 2,
             nik: responseBody.data.nik  ? 1 : 2,
             match_result: responseBody.data.match_result  ? 1 : 2,
@@ -13211,9 +13957,8 @@
         }
     }
 
-    function requestMapperForStoreNpwpPasanganDataNotFound(id_pas) {
+    function requestMapperForStoreNpwpPasanganDataNotFound() {
         return {
-            id_pasangan: id_pas,
             npwp: 2,
             nik: 2,
             match_result: 2,
@@ -13405,6 +14150,48 @@
         }
     }
 
+	function formatRupiah(bilangan, prefix)
+	{
+		var number_string = bilangan.toString(),
+			split	= number_string.split(','),
+			sisa 	= split[0].length % 3,
+			rupiah 	= split[0].substr(0, sisa),
+			ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+			
+		if (ribuan) {
+			separator = sisa ? '.' : '';
+			rupiah += separator + ribuan.join('.');
+		}
+		
+		rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+		return prefix == undefined ? rupiah : (rupiah ? rupiah : '');
+	}
+
+    function formatValue (variable) 
+    {
+        var newValue;
+        if (variable == "nama_deb") {
+            newValue = 1;
+        } else if (variable == "ttl_deb") {
+            newValue = 2;
+        }
+
+        return newValue;
+    }
+
+    function formatHasil (variable) 
+    {
+        var hasil;
+        if (variable == "sesuai") {
+            hasil = 1;
+        } else if (variable == "tidak") {
+            hasil = 2;
+        } else if (variable == "janggal") {
+            hasil = 3;
+        } 
+
+        return hasil;
+    }
 
     $(function(){
         
@@ -13474,6 +14261,19 @@
 
         get_data_agunan = function(opts, id) {
             var url = '<?php echo config_item('api_url') ?>api/agunan/tanah/' + id;
+            var data = opts;
+            return $.ajax({
+                // type : 'GET',
+                url: url,
+                data: data,
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        }
+
+        get_hasil_telepon = function(opts, id) {
+            var url = '<?php echo config_item('api_url') ?>api/master/verifTelp/' + id;
             var data = opts;
             return $.ajax({
                 // type : 'GET',
@@ -13589,6 +14389,32 @@
             });
         }
 
+        verif_telepon = function(opts, id) {
+            var data = opts;
+            var url = '<?php echo $this->config->item('api_url'); ?>api/master/verifTelp/' + id;
+            return $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                beforeSend: function() {
+                    let html =
+                        "<div width='100%' class='text-center'>" +
+                        "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                        "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>" +
+                        "</div>";
+
+                    $('#load_data').html(html);
+                    $('#modal_load_data').modal('show');
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        }
+
         load_data_penjamin = function() {
             var id = $('#form_penjamin input[type=hidden][name=id_trans_so_pen]').val();
             get_data({}, id)
@@ -13609,7 +14435,7 @@
                             '<td>' + item.no_npwp + '</td>',
                             '<td style="width:135px">' + item.tempat_lahir + '</td>',
                             '<td style="width:137px">' + item.tgl_lahir + '</td>',
-                            '<td style="width:285px">' + item.alamat_ktp + '</td>',
+                            '<td style="width:2100px">' + item.alamat_ktp + '</td>',
                             '<td style="width:135px">' + item.pemasukan_penjamin + '</td>',
                             '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" /> </a> </td>',
                             '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Debitur"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
@@ -13750,15 +14576,12 @@
             })
         }
 
-        httpRequestBuilderNpwp = function(data, url, id, id_verif, httpMethod) {
+        httpRequestBuilderNpwp = function(data, url, id, httpMethod) {
             var baseUrl = '<?php echo config_item('api_url') ?>';
             baseUrl += url;
 
             if (id != undefined) {
                 baseUrl += ("trans/" + id);
-                if (id_verif != undefined) {
-                    baseUrl += ("/id/" + id_verif);
-                }
             }
 
             return $.ajax({
@@ -13771,15 +14594,12 @@
             })
         }
 
-        httpRequestBuilderNpwpPasangan = function(data, url, id, id_pasangan, httpMethod) {
+        httpRequestBuilderNpwpPasangan = function(data, url, id, httpMethod) {
             var baseUrl = '<?php echo config_item('api_url') ?>';
             baseUrl += url;
 
             if (id != undefined) {
                 baseUrl += ("trans/" + id);
-                if (id_pasangan != undefined) {
-                    baseUrl += ("/idpasangan/" + id_pasangan);
-                }
             }
 
             return $.ajax({
@@ -16942,17 +17762,59 @@
 
                         }
     
-                        if (data.npwp.length == 0) {
+                        if (data.npwp == null) {
                             $("#verifikasi_npwp").on('click', function() {
                                 verifikasiSimpanNpwp(false, id);
                             });
                             $("#limit_call_npwp_result").html("2");
 
+                        } else {
+                            if(data.npwp.limit_call == 1) {
+                                var user_id = '<?php echo $user_id ?>';
+                                if (user_id == data.npwp.user_id ) {
+                                    document.getElementById("verifikasi_npwp").disabled = true;
+                                    setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
+                                }
+                                $("#verifikasi_npwp").on('click', function() {
+                                    verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
+                                });
+                                $("#limit_call_npwp_result").html("1");
+                            } else {
+                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
+                                $("#verifikasi_npwp").on('click', function() {
+                                    verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
+                                });
+                                $("#limit_call_npwp_result").html("0");
+                            }
+                        }
+
+                        if (data.npwp_pasangan == null) {
                             $("#verifikasi_npwp_pasangan").on('click', function() {
                                 verifikasiSimpanNpwpPasangan(false, id);
                             });
                             $("#limit_call_npwp_pas_result").html("2");
 
+                        } else {
+                            if(data.npwp_pasangan.limit_call == 1) {
+                                var user_id = '<?php echo $user_id ?>';
+                                if (user_id == data.npwp_pasangan.user_id ) {
+                                    document.getElementById("verifikasi_npwp_pasangan").disabled = true;
+                                    setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
+                                }
+                                $("#verifikasi_npwp_pasangan").on('click', function() {
+                                    verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
+                                });
+                                $("#limit_call_npwp_pas_result").html("1");
+                            } else {
+                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
+                                $("#verifikasi_npwp_pasangan").on('click', function() {
+                                    verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
+                                });
+                                $("#limit_call_npwp_pas_result").html("0");
+                            }
+                        }
+
+                        if (data.npwp_penjamin.length == 0) {
                             $("#verifikasi_npwp_pen_1").on('click', function() {
                                 verifikasiSimpanNpwpPen_1(false, id);
                             });
@@ -16978,71 +17840,21 @@
                             });
                             $("#limit_call_npwp_pen_5_result").html("2");
                         } else {
-                            if (data.npwp[0] != null) {
-                                if(data.npwp[0].limit_call == 1) {
+                            if (data.npwp_penjamin[0] != null) {
+                                if(data.npwp_penjamin[0].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[0].user_id ) {
-                                        document.getElementById("verifikasi_npwp").disabled = true;
-                                        setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
-                                    }
-                                    $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
-                                    });
-                                    $("#limit_call_npwp_result").html("1");
-                                } else {
-                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
-                                    $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
-                                    });
-                                    $("#limit_call_npwp_result").html("0");
-                                }
-                            } else {
-                                $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiSimpanNpwp(false, id);
-                                });
-                                $("#limit_call_npwp_result").html("2");
-                            }
-
-                            if (data.npwp[1] != null) {
-                                if(data.npwp[1].limit_call == 1) {
-                                    var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[1].user_id) {
-                                        document.getElementById("verifikasi_npwp_pasangan").disabled = true;
-                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
-                                    }
-                                    $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
-                                    });
-                                    $("#limit_call_npwp_pas_result").html("1");
-                                } else {
-                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
-                                    $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
-                                    });
-                                    $("#limit_call_npwp_pas_result").html("0");
-                                }
-                            } else {
-                                $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiSimpanNpwpPasangan(false, id);
-                                });
-                                $("#limit_call_npwp_pas_result").html("2");
-                            }
-
-                            if (data.npwp[2] != null) {
-                                if(data.npwp[2].limit_call == 1) {
-                                    var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[2].user_id) {
+                                    if (user_id == data.npwp_penjamin[0].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_1").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("0");
                                 }
@@ -17053,21 +17865,21 @@
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
 
-                            if (data.npwp[3] != null) {
-                                if(data.npwp[3].limit_call == 1) {
+                            if (data.npwp_penjamin[1] != null) {
+                                if(data.npwp_penjamin[1].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[3].user_id) {
+                                    if (user_id == data.npwp_penjamin[1].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_2").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                     } 
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
+                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("0");
                                 }
@@ -17078,21 +17890,21 @@
                                 $("#limit_call_npwp_pen_2_result").html("2");
                             }
 
-                            if (data.npwp[4] != null) {
-                                if(data.npwp[4].limit_call == 1) {
+                            if (data.npwp_penjamin[2] != null) {
+                                if(data.npwp_penjamin[2].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[4].user_id) {
+                                    if (user_id == data.npwp_penjamin[2].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_3").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
+                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("0");
                                 }
@@ -17103,21 +17915,21 @@
                                 $("#limit_call_npwp_pen_3_result").html("2");
                             }
 
-                            if (data.npwp[5] != null) {
-                                if(data.npwp[5].limit_call == 1) {
+                            if (data.npwp_penjamin[3] != null) {
+                                if(data.npwp_penjamin[3].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[5].user_id) {
+                                    if (user_id == data.npwp_penjamin[3].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_4").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
+                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("0");
                                 }
@@ -17128,21 +17940,21 @@
                                 $("#limit_call_npwp_pen_4_result").html("2");
                             }
 
-                            if (data.npwp[6] != null) {
-                                if(data.npwp[6].limit_call == 1) {
+                            if (data.npwp_penjamin[4] != null) {
+                                if(data.npwp_penjamin[4].limit_call == 1) {
                                     var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.npwp[6].user_id) {
+                                    if (user_id == data.npwp_penjamin[4].user_id) {
                                         document.getElementById("verifikasi_npwp_pen_5").disabled = true;
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
+                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("0");
                                 }
@@ -20101,133 +20913,133 @@
                                 $("#limit_call_penjamin_5_result").html("2");
                             }
                             
-                            if (data.npwp[0] != null) {
-                                checkResult("npwp_result", data.npwp[0].npwp);
-                                checkResult("nik_npwp_result", data.npwp[0].nik);
-                                checkResult("name_npwp_result", data.npwp[0].nama);
-                                checkResult("birthdate_npwp_result", data.npwp[0].tgl_lahir);
-                                checkResult("birthplace_npwp_result", data.npwp[0].tmp_lahir);
-                                checkIncome("income_npwp_result", data.npwp[0].income);
-                                checkResult("match_result", data.npwp[0].match_result);
-                                $("#verif_npwp_result").html(`${data.npwp[0].nama_user}`);
-                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp[0].updated_at)}`);
-                                if(data.npwp[0].limit_call == "1") {
+                            if (data.npwp != null) {
+                                checkResult("npwp_result", data.npwp.npwp);
+                                checkResult("nik_npwp_result", data.npwp.nik);
+                                checkResult("name_npwp_result", data.npwp.nama);
+                                checkResult("birthdate_npwp_result", data.npwp.tgl_lahir);
+                                checkResult("birthplace_npwp_result", data.npwp.tmp_lahir);
+                                checkIncome("income_npwp_result", data.npwp.income);
+                                checkResult("match_result", data.npwp.match_result);
+                                $("#verif_npwp_result").html(`${data.npwp.nama_user}`);
+                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp.updated_at)}`);
+                                if(data.npwp.limit_call == "1") {
                                     $("#limit_call_npwp_result").html("1");
-                                } else if (data.penjamin[0].limit_call == "2") {
+                                } else if (data.penjamin.limit_call == "2") {
                                     $("#limit_call_npwp_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_result").html("2");
                             }
 
-                            if (data.npwp[1] != null) {
-                                checkResult("npwp_pas_result", data.npwp[1].npwp);
-                                checkResult("nik_npwp_pas_result", data.npwp[1].nik);
-                                checkResult("name_npwp_pas_result", data.npwp[1].nama);
-                                checkResult("birthdate_npwp_pas_result", data.npwp[1].tgl_lahir);
-                                checkResult("birthplace_npwp_pas_result", data.npwp[1].tmp_lahir);
-                                checkIncome("income_npwp_pas_result", data.npwp[1].income);
-                                checkResult("match_pas_result", data.npwp[1].match_result);
-                                $("#verif_npwp_pas_result").html(`${data.npwp[1].nama_user}`);
-                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp[1].updated_at)}`);
-                                if(data.npwp[1].limit_call == "1") {
+                            if (data.npwp_pasangan != null) {
+                                checkResult("npwp_pas_result", data.npwp_pasangan.npwp);
+                                checkResult("nik_npwp_pas_result", data.npwp_pasangan.nik);
+                                checkResult("name_npwp_pas_result", data.npwp_pasangan.nama);
+                                checkResult("birthdate_npwp_pas_result", data.npwp_pasangan.tgl_lahir);
+                                checkResult("birthplace_npwp_pas_result", data.npwp_pasangan.tmp_lahir);
+                                checkIncome("income_npwp_pas_result", data.npwp_pasangan.income);
+                                checkResult("match_pas_result", data.npwp_pasangan.match_result);
+                                $("#verif_npwp_pas_result").html(`${data.npwp_pasangan.nama_user}`);
+                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp_pasangan.updated_at)}`);
+                                if(data.npwp_pasangan.limit_call == "1") {
                                     $("#limit_call_npwp_pas_result").html("1");
-                                } else if (data.npwp[1].limit_call == "2") {
+                                } else if (data.npwp_pasangan.limit_call == "2") {
                                     $("#limit_call_npwp_pas_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pas_result").html("2");
                             }
 
-                            if (data.npwp[2] != null) {
-                                checkResult("npwp_pen_1_result", data.npwp[2].npwp);
-                                checkResult("nik_npwp_pen_1_result", data.npwp[2].nik);
-                                checkResult("name_npwp_pen_1_result", data.npwp[2].nama);
-                                checkResult("birthdate_npwp_pen_1_result", data.npwp[2].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_1_result", data.npwp[2].tmp_lahir);
-                                checkIncome("income_npwp_pen_1_result", data.npwp[2].income);
-                                checkResult("match_pen_1_result", data.npwp[2].match_result);
-                                $("#verif_npwp_pen_1_result").html(`${data.npwp[2].nama_user}`);
-                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp[2].updated_at)}`);
-                                if(data.npwp[2].limit_call == "1") {
+                            if (data.npwp_penjamin[0] != null) {
+                                checkResult("npwp_pen_1_result", data.npwp_penjamin[0].npwp);
+                                checkResult("nik_npwp_pen_1_result", data.npwp_penjamin[0].nik);
+                                checkResult("name_npwp_pen_1_result", data.npwp_penjamin[0].nama);
+                                checkResult("birthdate_npwp_pen_1_result", data.npwp_penjamin[0].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_1_result", data.npwp_penjamin[0].tmp_lahir);
+                                checkIncome("income_npwp_pen_1_result", data.npwp_penjamin[0].income);
+                                checkResult("match_pen_1_result", data.npwp_penjamin[0].match_result);
+                                $("#verif_npwp_pen_1_result").html(`${data.npwp_penjamin[0].nama_user}`);
+                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp_penjamin[0].updated_at)}`);
+                                if(data.npwp_penjamin[0].limit_call == "1") {
                                     $("#limit_call_npwp_pen_1_result").html("1");
-                                } else if (data.npwp[2].limit_call == "2") {
+                                } else if (data.npwp_penjamin[0].limit_call == "2") {
                                     $("#limit_call_npwp_pen_1_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
 
-                            if (data.npwp[3] != null) {
-                                checkResult("npwp_pen_2_result", data.npwp[3].npwp);
-                                checkResult("nik_npwp_pen_2_result", data.npwp[3].nik);
-                                checkResult("name_npwp_pen_2_result", data.npwp[3].nama);
-                                checkResult("birthdate_npwp_pen_2_result", data.npwp[3].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_2_result", data.npwp[3].tmp_lahir);
-                                checkIncome("income_npwp_pen_2_result", data.npwp[3].income);
-                                checkResult("match_pen_2_result", data.npwp[3].match_result);
-                                $("#verif_npwp_pen_2_result").html(`${data.npwp[3].nama_user}`);
-                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp[3].updated_at)}`);
-                                if(data.npwp[3].limit_call == "1") {
+                            if (data.npwp_penjamin[1] != null) {
+                                checkResult("npwp_pen_2_result", data.npwp_penjamin[1].npwp);
+                                checkResult("nik_npwp_pen_2_result", data.npwp_penjamin[1].nik);
+                                checkResult("name_npwp_pen_2_result", data.npwp_penjamin[1].nama);
+                                checkResult("birthdate_npwp_pen_2_result", data.npwp_penjamin[1].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_2_result", data.npwp_penjamin[1].tmp_lahir);
+                                checkIncome("income_npwp_pen_2_result", data.npwp_penjamin[1].income);
+                                checkResult("match_pen_2_result", data.npwp_penjamin[1].match_result);
+                                $("#verif_npwp_pen_2_result").html(`${data.npwp_penjamin[1].nama_user}`);
+                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp_penjamin[1].updated_at)}`);
+                                if(data.npwp_penjamin[1].limit_call == "1") {
                                     $("#limit_call_npwp_pen_2_result").html("1");
-                                } else if (data.npwp[3].limit_call == "2") {
+                                } else if (data.npwp_penjamin[1].limit_call == "2") {
                                     $("#limit_call_npwp_pen_2_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_2_result").html("2");
                             }
 
-                            if (data.npwp[4] != null) {
-                                checkResult("npwp_pen_3_result", data.npwp[4].npwp);
-                                checkResult("nik_npwp_pen_3_result", data.npwp[4].nik);
-                                checkResult("name_npwp_pen_3_result", data.npwp[4].nama);
-                                checkResult("birthdate_npwp_pen_3_result", data.npwp[4].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_3_result", data.npwp[4].tmp_lahir);
-                                checkIncome("income_npwp_pen_3_result", data.npwp[4].income);
-                                checkResult("match_pen_3_result", data.npwp[4].match_result);
-                                $("#verif_npwp_pen_3_result").html(`${data.npwp[4].nama_user}`);
-                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp[4].updated_at)}`);
-                                if(data.npwp[4].limit_call == "1") {
+                            if (data.npwp_penjamin[2] != null) {
+                                checkResult("npwp_pen_3_result", data.npwp_penjamin[2].npwp);
+                                checkResult("nik_npwp_pen_3_result", data.npwp_penjamin[2].nik);
+                                checkResult("name_npwp_pen_3_result", data.npwp_penjamin[2].nama);
+                                checkResult("birthdate_npwp_pen_3_result", data.npwp_penjamin[2].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_3_result", data.npwp_penjamin[2].tmp_lahir);
+                                checkIncome("income_npwp_pen_3_result", data.npwp_penjamin[2].income);
+                                checkResult("match_pen_3_result", data.npwp_penjamin[2].match_result);
+                                $("#verif_npwp_pen_3_result").html(`${data.npwp_penjamin[2].nama_user}`);
+                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp_penjamin[2].updated_at)}`);
+                                if(data.npwp_penjamin[2].limit_call == "1") {
                                     $("#limit_call_npwp_pen_3_result").html("1");
-                                } else if (data.npwp[4].limit_call == "2") {
+                                } else if (data.npwp_penjamin[2].limit_call == "2") {
                                     $("#limit_call_npwp_pen_3_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_3_result").html("2");
                             }
 
-                            if (data.npwp[5] != null) {
-                                checkResult("npwp_pen_4_result", data.npwp[5].npwp);
-                                checkResult("nik_npwp_pen_4_result", data.npwp[5].nik);
-                                checkResult("name_npwp_pen_4_result", data.npwp[5].nama);
-                                checkResult("birthdate_npwp_pen_4_result", data.npwp[5].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_4_result", data.npwp[5].tmp_lahir);
-                                checkIncome("income_npwp_pen_4_result", data.npwp[5].income);
-                                checkResult("match_pen_4_result", data.npwp[5].match_result);
-                                $("#verif_npwp_pen_4_result").html(`${data.npwp[5].nama_user}`);
-                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp[5].updated_at)}`);
-                                if(data.npwp[5].limit_call == "1") {
+                            if (data.npwp_penjamin[3] != null) {
+                                checkResult("npwp_pen_4_result", data.npwp_penjamin[3].npwp);
+                                checkResult("nik_npwp_pen_4_result", data.npwp_penjamin[3].nik);
+                                checkResult("name_npwp_pen_4_result", data.npwp_penjamin[3].nama);
+                                checkResult("birthdate_npwp_pen_4_result", data.npwp_penjamin[3].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_4_result", data.npwp_penjamin[3].tmp_lahir);
+                                checkIncome("income_npwp_pen_4_result", data.npwp_penjamin[3].income);
+                                checkResult("match_pen_4_result", data.npwp_penjamin[3].match_result);
+                                $("#verif_npwp_pen_4_result").html(`${data.npwp_penjamin[3].nama_user}`);
+                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp_penjamin[3].updated_at)}`);
+                                if(data.npwp_penjamin[3].limit_call == "1") {
                                     $("#limit_call_npwp_pen_4_result").html("1");
-                                } else if (data.npwp[5].limit_call == "2") {
+                                } else if (data.npwp_penjamin[3].limit_call == "2") {
                                     $("#limit_call_npwp_pen_4_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_4_result").html("2");
                             }
 
-                            if (data.npwp[6] != null) {
-                                checkResult("npwp_pen_5_result", data.npwp[6].npwp);
-                                checkResult("nik_npwp_pen_5_result", data.npwp[6].nik);
-                                checkResult("name_npwp_pen_5_result", data.npwp[6].nama);
-                                checkResult("birthdate_npwp_pen_5_result", data.npwp[6].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_5_result", data.npwp[6].tmp_lahir);
-                                checkIncome("income_npwp_pen_5_result", data.npwp[6].income);
-                                checkResult("match_pen_5_result", data.npwp[6].match_result);
-                                $("#verif_npwp_pen_5_result").html(`${data.npwp[6].nama_user}`);
-                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp[6].updated_at)}`);
-                                if(data.npwp[6].limit_call == "1") {
+                            if (data.npwp_penjamin[4] != null) {
+                                checkResult("npwp_pen_5_result", data.npwp_penjamin[4].npwp);
+                                checkResult("nik_npwp_pen_5_result", data.npwp_penjamin[4].nik);
+                                checkResult("name_npwp_pen_5_result", data.npwp_penjamin[4].nama);
+                                checkResult("birthdate_npwp_pen_5_result", data.npwp_penjamin[4].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_5_result", data.npwp_penjamin[4].tmp_lahir);
+                                checkIncome("income_npwp_pen_5_result", data.npwp_penjamin[4].income);
+                                checkResult("match_pen_5_result", data.npwp_penjamin[4].match_result);
+                                $("#verif_npwp_pen_5_result").html(`${data.npwp_penjamin[4].nama_user}`);
+                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp_penjamin[4].updated_at)}`);
+                                if(data.npwp_penjamin[4].limit_call == "1") {
                                     $("#limit_call_npwp_pen_5_result").html("1");
-                                } else if (data.npwp[6].limit_call == "2") {
+                                } else if (data.npwp_penjamin[4].limit_call == "2") {
                                     $("#limit_call_npwp_pen_5_result").html("0");
                                 }
                             } else {
@@ -20443,7 +21255,7 @@
                             '<td>' + item.no_npwp + '</td>',
                             '<td style="width:135px">' + item.tempat_lahir + '</td>',
                             '<td style="width:137px">' + item.tgl_lahir + '</td>',
-                            '<td style="width:285px">' + item.alamat_ktp + '</td>',
+                            '<td style="width:2100px">' + item.alamat_ktp + '</td>',
                             '<td style="width:135px">' + item.pemasukan_penjamin + '</td>',
                             '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" data-lightbox="example-set" data-title="Lampiran Photo Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" /> </a> </td>',
                             '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
@@ -23143,145 +23955,12 @@
                         $('.verifikasiProperti_1').hide();
                     }
                         
-                get_detail({}, id)
-                    .done(function(response) {
-                        var data = response.data;
-                        console.log(data);
-
-                        if (jabatan == 'ADMIN LEGAL') {
-                            if (data.property.length == 0) {
-
-                                $("#verifikasi_properti_1").on('click', function() {
-                                    verifikasiSimpanProperti_1(false, id);
-                                });
-                                $("#limit_call_properti_1_result").html("1");
-
-                                $("#verifikasi_properti_2").on('click', function() {
-                                    verifikasiSimpanProperti_2(false, id);
-                                });
-                                $("#limit_call_properti_2_result").html("1");
-
-                                $("#verifikasi_properti_3").on('click', function() {
-                                    verifikasiSimpanProperti_3(false, id);
-                                });
-                                $("#limit_call_properti_3_result").html("1");
-
-                                $("#verifikasi_properti_4").on('click', function() {
-                                    verifikasiSimpanProperti_4(false, id);
-                                });
-                                $("#limit_call_properti_4_result").html("1");
-
-                                $("#verifikasi_properti_5").on('click', function() {
-                                    verifikasiSimpanProperti_5(false, id);
-                                });
-                                $("#limit_call_properti_5_result").html("1");
-
-                            } else {
-                                if (data.property[0] != null) {
-                                    if(data.property[0].property_name == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.property[0].user_id) {
-                                            document.getElementById("verifikasi_properti_1").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_properti_1").disabled = false;},300000);
-                                        }
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 1!!");
-                                        $("#verifikasi_properti_1").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
-                                        $("#limit_call_properti_1_result").html("0");
-                                    }
-                                } else {
-                                    $("#verifikasi_properti_1").on('click', function() {
-                                        verifikasiSimpanProperti_1(false, id);
-                                    });
-                                    $("#limit_call_properti_1_result").html("1");
-                                }
-
-                                if(data.property[1] != null) {
-                                    if(data.property[1].property_name == 1) { 
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.property[1].user_id) {
-                                            document.getElementById("verifikasi_properti_2").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_properti_2").disabled = false;},300000);
-                                        } 
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 2!!");
-                                        $("#verifikasi_properti_2").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
-                                        $("#limit_call_properti_2_result").html("0");
-                                    }
-                                } else {
-                                    $("#verifikasi_properti_2").on('click', function() {
-                                        verifikasiSimpanProperti_2(false, id);
-                                    });
-                                    $("#limit_call_properti_2_result").html("1");
-                                }
-
-                                if(data.property[2] != null) {
-                                    if(data.property[2].property_name == 1) {
-                                        var user_id = '<?php echo $user_id?>';
-                                        if (user_id == data.property[2].user_id) {
-                                            document.getElementById("verifikasi_properti_3").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_properti_3").disabled = false;},300000);
-                                        }
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 3!!");
-                                        $("#verifikasi_properti_3").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
-                                        $("#limit_call_properti_3_result").html("0");
-                                    }
-                                } else {
-                                    $("#verifikasi_properti_3").on('click', function() {
-                                        verifikasiSimpanProperti_3(false, id);
-                                    });
-                                    $("#limit_call_properti_3_result").html("1");
-                                }
-
-                                if(data.property[3] != null) {
-                                    if(data.property[3].property_name == 1) {
-                                        var user_id = '<?php echo $user_id?>';
-                                        if (user_id == data.property[3].user_id) {
-                                            document.getElementById("verifikasi_properti_4").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_properti_4").disabled = false;},300000);
-                                        }
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 4!!");
-                                        $("#verifikasi_properti_4").on('click', function() {
-                                            verifikasiUpdateProperti();
-                                        });
-                                        $("#limit_call_properti_4_result").html("0");
-                                    }
-                                } else {
-                                    $("#verifikasi_properti_4").on('click', function() {
-                                        verifikasiSimpanProperti_4(false, id);
-                                    });
-                                    $("#limit_call_properti_4_result").html("1");
-                                }
-
-                                if(data.property[4] != null) {
-                                    if(data.property[4].property_name == 1) {
-                                        if(data.property[4].property_name == 1) {
-                                            var user_id = '<?php echo $user_id?>';
-                                            if (user_id == data.property[4].user_id) {
-                                                document.getElementById("verifikasi_properti_5").disabled = true;
-                                                setTimeout(function(){document.getElementById("verifikasi_properti_5").disabled = false;},300000);
-                                            }
-                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!");
-                                            $("#verifikasi_properti_5").on('click', function() {
-                                                verifikasiUpdateProperti();
-                                            });
-                                            $("#limit_call_properti_5_result").html("0");
-                                        }
-                                    }
-                                } else {
-                                    $("#verifikasi_properti_5").on('click', function() {
-                                        verifikasiSimpanProperti_5(false, id);
-                                    });
-                                    $("#limit_call_properti_5_result").html("1");
-                                }
-
-                            }
-                        } else {
-                            if(jabatan == 'IT STAFF' || jabatan == 'SUPERVISOR IT' || jabatan == 'HEAD IT') {
+                    get_detail({}, id)
+                        .done(function(response) {
+                            var data = response.data;
+                            console.log(data);
+                            
+                            if (jabatan == 'ADMIN LEGAL') {
                                 if (data.property.length == 0) {
 
                                     $("#verifikasi_properti_1").on('click', function() {
@@ -23392,16 +24071,18 @@
 
                                     if(data.property[4] != null) {
                                         if(data.property[4].property_name == 1) {
-                                            var user_id = '<?php echo $user_id?>';
-                                            if (user_id == data.property[4].user_id) {
-                                                document.getElementById("verifikasi_properti_5").disabled = true;
-                                                setTimeout(function(){document.getElementById("verifikasi_properti_5").disabled = false;},300000);
+                                            if(data.property[4].property_name == 1) {
+                                                var user_id = '<?php echo $user_id?>';
+                                                if (user_id == data.property[4].user_id) {
+                                                    document.getElementById("verifikasi_properti_5").disabled = true;
+                                                    setTimeout(function(){document.getElementById("verifikasi_properti_5").disabled = false;},300000);
+                                                }
+                                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!");
+                                                $("#verifikasi_properti_5").on('click', function() {
+                                                    verifikasiUpdateProperti();
+                                                });
+                                                $("#limit_call_properti_5_result").html("0");
                                             }
-                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!");
-                                            $("#verifikasi_properti_5").on('click', function() {
-                                                verifikasiUpdateProperti();
-                                            });
-                                            $("#limit_call_properti_5_result").html("0");
                                         }
                                     } else {
                                         $("#verifikasi_properti_5").on('click', function() {
@@ -23409,429 +24090,552 @@
                                         });
                                         $("#limit_call_properti_5_result").html("1");
                                     }
+
                                 }
-                            }
-
-                            if (data.cadebt == null) {
-                                $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiSimpanDebitur(false, id);
-                                });
-                                $("#limit_call_debitur_result").html("2");
                             } else {
-                                if (data.cadebt.limit_call == 1) {
-                                    var user_id = '<?php echo $user_id ?>';
-                                    if(user_id == data.cadebt.user_id) {
-                                        document.getElementById("verifikasi_debitur").disabled = true;
-                                        setTimeout(function(){document.getElementById("verifikasi_debitur").disabled = false;},300000);
-                                    }
-                                    $("#verifikasi_debitur").on('click', function() {
-                                        verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
-                                    });
-                                    $("#limit_call_debitur_result").html("1");
-                                } else { 
-                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
-                                    $("#verifikasi_debitur").on('click', function() {
-                                        verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
-                                    });
-                                    $("#limit_call_debitur_result").html("0");
-                                }
-                            }
-                            
-                            if (data.pasangan == null) {
-                                $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiSimpanPasangan(false, id);
-                                });
-                                $("#limit_call_pasangan_result").html("2");
-                            } else {
-                                if (data.pasangan.limit_call == 1) {
-                                    var user_id = '<?php echo $user_id ?>';
-                                    if (user_id == data.pasangan.user_id) {
-                                        document.getElementById("verifikasi_pasangan").disabled = true;
-                                        setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
-                                    }
-                                    $("#verifikasi_pasangan").on('click', function() {
-                                        verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
-                                    });
-                                    $("#limit_call_pasangan_result").html("1");
-                                } else{
-                                    bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
-                                    $("#verifikasi_pasangan").on('click', function() {
-                                        verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
-                                    });
-                                    $("#limit_call_pasangan_result").html("0");
-                                }
-                            }
-                            
-                            if (data.penjamin.length == 0) {
+                                if(jabatan == 'IT STAFF' || jabatan == 'SUPERVISOR IT' || jabatan == 'HEAD IT') {
+                                    if (data.property.length == 0) {
 
-                                $("#verifikasi_penjamin_1").on('click', function() {
-                                    verifikasiSimpanPenjamin_1(false, id);
-                                });
-                                $("#limit_call_penjamin_1_result").html("2");
-
-                                $("#verifikasi_penjamin_2").on('click', function() {
-                                    verifikasiSimpanPenjamin_2(false, id);
-                                });
-                                $("#limit_call_penjamin_2_result").html("2");
-
-                                $("#verifikasi_penjamin_3").on('click', function() {
-                                    verifikasiSimpanPenjamin_3(false, id);
-                                });
-                                $("#limit_call_penjamin_3_result").html("2");
-
-                                $("#verifikasi_penjamin_4").on('click', function() {
-                                    verifikasiSimpanPenjamin_4(false, id);
-                                });
-                                $("#limit_call_penjamin_4_result").html("2");
-
-                                $("#verifikasi_penjamin_5").on('click', function() {
-                                    verifikasiSimpanPenjamin_5(false, id);
-                                });
-                                $("#limit_call_penjamin_5_result").html("2");
-
-                            } else {
-                                if (data.penjamin[0] != null) {
-                                    if(data.penjamin[0].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.penjamin[0].user_id) {
-                                            
-                                            document.getElementById("verifikasi_penjamin_1").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                        $("#verifikasi_properti_1").on('click', function() {
+                                            verifikasiSimpanProperti_1(false, id);
                                         });
-                                        $("#limit_call_penjamin_1_result").html("1");
+                                        $("#limit_call_properti_1_result").html("1");
+
+                                        $("#verifikasi_properti_2").on('click', function() {
+                                            verifikasiSimpanProperti_2(false, id);
+                                        });
+                                        $("#limit_call_properti_2_result").html("1");
+
+                                        $("#verifikasi_properti_3").on('click', function() {
+                                            verifikasiSimpanProperti_3(false, id);
+                                        });
+                                        $("#limit_call_properti_3_result").html("1");
+
+                                        $("#verifikasi_properti_4").on('click', function() {
+                                            verifikasiSimpanProperti_4(false, id);
+                                        });
+                                        $("#limit_call_properti_4_result").html("1");
+
+                                        $("#verifikasi_properti_5").on('click', function() {
+                                            verifikasiSimpanProperti_5(false, id);
+                                        });
+                                        $("#limit_call_properti_5_result").html("1");
+
                                     } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
-                                        $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_1_result").html("0");
+                                        if (data.property[0] != null) {
+                                            if(data.property[0].property_name == 1) {
+                                                var user_id = '<?php echo $user_id ?>';
+                                                if (user_id == data.property[0].user_id) {
+                                                    document.getElementById("verifikasi_properti_1").disabled = true;
+                                                    setTimeout(function(){document.getElementById("verifikasi_properti_1").disabled = false;},300000);
+                                                }
+                                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 1!!");
+                                                $("#verifikasi_properti_1").on('click', function() {
+                                                    verifikasiUpdateProperti();
+                                                });
+                                                $("#limit_call_properti_1_result").html("0");
+                                            }
+                                        } else {
+                                            $("#verifikasi_properti_1").on('click', function() {
+                                                verifikasiSimpanProperti_1(false, id);
+                                            });
+                                            $("#limit_call_properti_1_result").html("1");
+                                        }
+
+                                        if(data.property[1] != null) {
+                                            if(data.property[1].property_name == 1) { 
+                                                var user_id = '<?php echo $user_id ?>';
+                                                if (user_id == data.property[1].user_id) {
+                                                    document.getElementById("verifikasi_properti_2").disabled = true;
+                                                    setTimeout(function(){document.getElementById("verifikasi_properti_2").disabled = false;},300000);
+                                                } 
+                                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 2!!");
+                                                $("#verifikasi_properti_2").on('click', function() {
+                                                    verifikasiUpdateProperti();
+                                                });
+                                                $("#limit_call_properti_2_result").html("0");
+                                            }
+                                        } else {
+                                            $("#verifikasi_properti_2").on('click', function() {
+                                                verifikasiSimpanProperti_2(false, id);
+                                            });
+                                            $("#limit_call_properti_2_result").html("1");
+                                        }
+
+                                        if(data.property[2] != null) {
+                                            if(data.property[2].property_name == 1) {
+                                                var user_id = '<?php echo $user_id?>';
+                                                if (user_id == data.property[2].user_id) {
+                                                    document.getElementById("verifikasi_properti_3").disabled = true;
+                                                    setTimeout(function(){document.getElementById("verifikasi_properti_3").disabled = false;},300000);
+                                                }
+                                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 3!!");
+                                                $("#verifikasi_properti_3").on('click', function() {
+                                                    verifikasiUpdateProperti();
+                                                });
+                                                $("#limit_call_properti_3_result").html("0");
+                                            }
+                                        } else {
+                                            $("#verifikasi_properti_3").on('click', function() {
+                                                verifikasiSimpanProperti_3(false, id);
+                                            });
+                                            $("#limit_call_properti_3_result").html("1");
+                                        }
+
+                                        if(data.property[3] != null) {
+                                            if(data.property[3].property_name == 1) {
+                                                var user_id = '<?php echo $user_id?>';
+                                                if (user_id == data.property[3].user_id) {
+                                                    document.getElementById("verifikasi_properti_4").disabled = true;
+                                                    setTimeout(function(){document.getElementById("verifikasi_properti_4").disabled = false;},300000);
+                                                }
+                                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 4!!");
+                                                $("#verifikasi_properti_4").on('click', function() {
+                                                    verifikasiUpdateProperti();
+                                                });
+                                                $("#limit_call_properti_4_result").html("0");
+                                            }
+                                        } else {
+                                            $("#verifikasi_properti_4").on('click', function() {
+                                                verifikasiSimpanProperti_4(false, id);
+                                            });
+                                            $("#limit_call_properti_4_result").html("1");
+                                        }
+
+                                        if(data.property[4] != null) {
+                                            if(data.property[4].property_name == 1) {
+                                                var user_id = '<?php echo $user_id?>';
+                                                if (user_id == data.property[4].user_id) {
+                                                    document.getElementById("verifikasi_properti_5").disabled = true;
+                                                    setTimeout(function(){document.getElementById("verifikasi_properti_5").disabled = false;},300000);
+                                                }
+                                                bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Properti 5!!");
+                                                $("#verifikasi_properti_5").on('click', function() {
+                                                    verifikasiUpdateProperti();
+                                                });
+                                                $("#limit_call_properti_5_result").html("0");
+                                            }
+                                        } else {
+                                            $("#verifikasi_properti_5").on('click', function() {
+                                                verifikasiSimpanProperti_5(false, id);
+                                            });
+                                            $("#limit_call_properti_5_result").html("1");
+                                        }
                                     }
+                                }
+
+                                if (data.cadebt == null) {
+                                    $("#verifikasi_debitur").on('click', function() {
+                                        verifikasiSimpanDebitur(false, id);
+                                    });
+                                    $("#limit_call_debitur_result").html("2");
                                 } else {
+                                    if (data.cadebt.limit_call == 1) {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if(user_id == data.cadebt.user_id) {
+                                            document.getElementById("verifikasi_debitur").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_debitur").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_debitur").on('click', function() {
+                                            verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                        });
+                                        $("#limit_call_debitur_result").html("1");
+                                    } else { 
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
+                                        $("#verifikasi_debitur").on('click', function() {
+                                            verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                        });
+                                        $("#limit_call_debitur_result").html("0");
+                                    }
+                                }
+                                
+                                if (data.pasangan == null) {
+                                    $("#verifikasi_pasangan").on('click', function() {
+                                        verifikasiSimpanPasangan(false, id);
+                                    });
+                                    $("#limit_call_pasangan_result").html("2");
+                                } else {
+                                    if (data.pasangan.limit_call == 1) {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.pasangan.user_id) {
+                                            document.getElementById("verifikasi_pasangan").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_pasangan").on('click', function() {
+                                            verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                        });
+                                        $("#limit_call_pasangan_result").html("1");
+                                    } else{
+                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
+                                        $("#verifikasi_pasangan").on('click', function() {
+                                            verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                        });
+                                        $("#limit_call_pasangan_result").html("0");
+                                    }
+                                }
+                                
+                                if (data.penjamin.length == 0) {
+
                                     $("#verifikasi_penjamin_1").on('click', function() {
                                         verifikasiSimpanPenjamin_1(false, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("2");
-                                }
 
-                                if (data.penjamin[1] != null) {
-                                    if(data.penjamin[1].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.penjamin[1].user_id) {
-                                            document.getElementById("verifikasi_penjamin_2").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_penjamin_2").on('click', function() {
-                                            verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_2_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
-                                        $("#verifikasi_penjamin_2").on('click', function() {
-                                            verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_2_result").html("0");
-                                    }
-                                } else {
                                     $("#verifikasi_penjamin_2").on('click', function() {
                                         verifikasiSimpanPenjamin_2(false, id);
                                     });
                                     $("#limit_call_penjamin_2_result").html("2");
-                                }
 
-                                if (data.penjamin[2] != null) {
-                                    if(data.penjamin[2].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.penjamin[2].user_id) {
-                                            document.getElementById("verifikasi_penjamin_3").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_penjamin_3").on('click', function() {
-                                            verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_3_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
-                                        $("#verifikasi_penjamin_3").on('click', function() {
-                                            verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_3_result").html("0");
-                                    }
-                                } else {
                                     $("#verifikasi_penjamin_3").on('click', function() {
                                         verifikasiSimpanPenjamin_3(false, id);
                                     });
                                     $("#limit_call_penjamin_3_result").html("2");
-                                }
 
-                                if (data.penjamin[3] != null) {
-                                    if(data.penjamin[3].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.penjamin[3].user_id) {
-                                            document.getElementById("verifikasi_penjamin_4").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_penjamin_4").on('click', function() {
-                                            verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_4_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
-                                        $("#verifikasi_penjamin_4").on('click', function() {
-                                            verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_4_result").html("0");
-                                    }
-                                } else {
                                     $("#verifikasi_penjamin_4").on('click', function() {
                                         verifikasiSimpanPenjamin_4(false, id);
                                     });
                                     $("#limit_call_penjamin_4_result").html("2");
-                                }
 
-                                if (data.penjamin[4] != null) {
-                                    if(data.penjamin[4].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.penjamin[4].user_id) {
-                                            document.getElementById("verifikasi_penjamin_5").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_penjamin_5").on('click', function() {
-                                            verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_5_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
-                                        $("#verifikasi_penjamin_5").on('click', function() {
-                                            verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
-                                        });
-                                        $("#limit_call_penjamin_5_result").html("0");
-                                    }
-                                } else {
                                     $("#verifikasi_penjamin_5").on('click', function() {
                                         verifikasiSimpanPenjamin_5(false, id);
                                     });
                                     $("#limit_call_penjamin_5_result").html("2");
+
+                                } else {
+                                    if (data.penjamin[0] != null) {
+                                        if(data.penjamin[0].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.penjamin[0].user_id) {
+                                                
+                                                document.getElementById("verifikasi_penjamin_1").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_penjamin_1").on('click', function() {
+                                                verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_1_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
+                                            $("#verifikasi_penjamin_1").on('click', function() {
+                                                verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_1_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_penjamin_1").on('click', function() {
+                                            verifikasiSimpanPenjamin_1(false, id);
+                                        });
+                                        $("#limit_call_penjamin_1_result").html("2");
+                                    }
+
+                                    if (data.penjamin[1] != null) {
+                                        if(data.penjamin[1].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.penjamin[1].user_id) {
+                                                document.getElementById("verifikasi_penjamin_2").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_penjamin_2").on('click', function() {
+                                                verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_2_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
+                                            $("#verifikasi_penjamin_2").on('click', function() {
+                                                verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_2_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_penjamin_2").on('click', function() {
+                                            verifikasiSimpanPenjamin_2(false, id);
+                                        });
+                                        $("#limit_call_penjamin_2_result").html("2");
+                                    }
+
+                                    if (data.penjamin[2] != null) {
+                                        if(data.penjamin[2].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.penjamin[2].user_id) {
+                                                document.getElementById("verifikasi_penjamin_3").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_penjamin_3").on('click', function() {
+                                                verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_3_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
+                                            $("#verifikasi_penjamin_3").on('click', function() {
+                                                verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_3_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_penjamin_3").on('click', function() {
+                                            verifikasiSimpanPenjamin_3(false, id);
+                                        });
+                                        $("#limit_call_penjamin_3_result").html("2");
+                                    }
+
+                                    if (data.penjamin[3] != null) {
+                                        if(data.penjamin[3].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.penjamin[3].user_id) {
+                                                document.getElementById("verifikasi_penjamin_4").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_penjamin_4").on('click', function() {
+                                                verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_4_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
+                                            $("#verifikasi_penjamin_4").on('click', function() {
+                                                verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_4_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_penjamin_4").on('click', function() {
+                                            verifikasiSimpanPenjamin_4(false, id);
+                                        });
+                                        $("#limit_call_penjamin_4_result").html("2");
+                                    }
+
+                                    if (data.penjamin[4] != null) {
+                                        if(data.penjamin[4].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.penjamin[4].user_id) {
+                                                document.getElementById("verifikasi_penjamin_5").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_penjamin_5").on('click', function() {
+                                                verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_5_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
+                                            $("#verifikasi_penjamin_5").on('click', function() {
+                                                verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
+                                            });
+                                            $("#limit_call_penjamin_5_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_penjamin_5").on('click', function() {
+                                            verifikasiSimpanPenjamin_5(false, id);
+                                        });
+                                        $("#limit_call_penjamin_5_result").html("2");
+                                    }
+
                                 }
+            
+                                if (data.npwp == null) {
+                                    $("#verifikasi_npwp").on('click', function() {
+                                        verifikasiSimpanNpwp(false, id);
+                                    });
+                                    $("#limit_call_npwp_result").html("2");
 
-                            }
-        
-                            if (data.npwp.length == 0) {
-                                $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiSimpanNpwp(false, id);
-                                });
-                                $("#limit_call_npwp_result").html("2");
-
-                                $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiSimpanNpwpPasangan(false, id);
-                                });
-                                $("#limit_call_npwp_pas_result").html("2");
-
-                                $("#verifikasi_npwp_pen_1").on('click', function() {
-                                    verifikasiSimpanNpwpPen_1(false, id);
-                                });
-                                $("#limit_call_npwp_pen_1_result").html("2");
-                                
-                                $("#verifikasi_npwp_pen_2").on('click', function() {
-                                    verifikasiSimpanNpwpPen_2(false, id);
-                                });
-                                $("#limit_call_npwp_pen_2_result").html("2");
-
-                                $("#verifikasi_npwp_pen_3").on('click', function() {
-                                    verifikasiSimpanNpwpPen_3(false, id);
-                                });
-                                $("#limit_call_npwp_pen_3_result").html("2");
-
-                                $("#verifikasi_npwp_pen_4").on('click', function() {
-                                    verifikasiSimpanNpwpPen_4(false, id);
-                                });
-                                $("#limit_call_npwp_pen_4_result").html("2");
-
-                                $("#verifikasi_npwp_pen_5").on('click', function() {
-                                    verifikasiSimpanNpwpPen_5(false, id);
-                                });
-                                $("#limit_call_npwp_pen_5_result").html("2");
-                            } else {
-                                if (data.npwp[0] != null) {
-                                    if(data.npwp[0].limit_call == 1) {
+                                } else {
+                                    if(data.npwp.limit_call == 1) {
                                         var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[0].user_id ) {
+                                        if (user_id == data.npwp.user_id ) {
                                             document.getElementById("verifikasi_npwp").disabled = true;
                                             setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
+                                            verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
                                         });
                                         $("#limit_call_npwp_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
                                         $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(false, data.npwp[0].limit_call, id, data.npwp[0].id);
+                                            verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
                                         });
                                         $("#limit_call_npwp_result").html("0");
                                     }
-                                } else {
-                                    $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiSimpanNpwp(false, id);
-                                    });
-                                    $("#limit_call_npwp_result").html("2");
                                 }
 
-                                if (data.npwp[1] != null) {
-                                    if(data.npwp[1].limit_call == 1) {
+                                if (data.npwp_pasangan == null) {
+                                    $("#verifikasi_npwp_pasangan").on('click', function() {
+                                        verifikasiSimpanNpwpPasangan(false, id);
+                                    });
+                                    $("#limit_call_npwp_pas_result").html("2");
+
+                                } else {
+                                    if(data.npwp_pasangan.limit_call == 1) {
                                         var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[1].user_id) {
+                                        if (user_id == data.npwp_pasangan.user_id ) {
                                             document.getElementById("verifikasi_npwp_pasangan").disabled = true;
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
+                                            verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
                                         });
                                         $("#limit_call_npwp_pas_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(false, data.npwp[1].limit_call, id, data.npwp[1].id_pasangan);
+                                            verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
                                         });
                                         $("#limit_call_npwp_pas_result").html("0");
                                     }
-                                } else {
-                                    $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiSimpanNpwpPasangan(false, id);
-                                    });
-                                    $("#limit_call_npwp_pas_result").html("2");
                                 }
 
-                                if (data.npwp[2] != null) {
-                                    if(data.npwp[2].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[2].user_id) {
-                                            document.getElementById("verifikasi_npwp_pen_1").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_1_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
-                                        $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(false, data.npwp[2].limit_call, id, data.npwp[2].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_1_result").html("0");
-                                    }
-                                } else {
+                                if (data.npwp_penjamin.length == 0) {
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
                                         verifikasiSimpanNpwpPen_1(false, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("2");
-                                }
-
-                                if (data.npwp[3] != null) {
-                                    if(data.npwp[3].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[3].user_id) {
-                                            document.getElementById("verifikasi_npwp_pen_2").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
-                                        } 
-                                        $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_2_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
-                                        $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(false, data.npwp[3].limit_call, id, data.npwp[3].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_2_result").html("0");
-                                    }
-                                } else {
+                                    
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
                                         verifikasiSimpanNpwpPen_2(false, id);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("2");
-                                }
 
-                                if (data.npwp[4] != null) {
-                                    if(data.npwp[4].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[4].user_id) {
-                                            document.getElementById("verifikasi_npwp_pen_3").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_3_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
-                                        $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(false, data.npwp[4].limit_call, id, data.npwp[4].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_3_result").html("0");
-                                    }
-                                } else {
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
                                         verifikasiSimpanNpwpPen_3(false, id);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("2");
-                                }
 
-                                if (data.npwp[5] != null) {
-                                    if(data.npwp[5].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[5].user_id) {
-                                            document.getElementById("verifikasi_npwp_pen_4").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_4_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
-                                        $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(false, data.npwp[5].limit_call, id, data.npwp[5].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_4_result").html("0");
-                                    }
-                                } else {
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
                                         verifikasiSimpanNpwpPen_4(false, id);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("2");
-                                }
 
-                                if (data.npwp[6] != null) {
-                                    if(data.npwp[6].limit_call == 1) {
-                                        var user_id = '<?php echo $user_id ?>';
-                                        if (user_id == data.npwp[6].user_id) {
-                                            document.getElementById("verifikasi_npwp_pen_5").disabled = true;
-                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
-                                        }
-                                        $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_5_result").html("1");
-                                    } else {
-                                        bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
-                                        $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(false, data.npwp[6].limit_call, id, data.npwp[6].id_penjamin);
-                                        });
-                                        $("#limit_call_npwp_pen_5_result").html("0");
-                                    }
-                                } else {
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
                                         verifikasiSimpanNpwpPen_5(false, id);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("2");
+                                } else {
+                                    if (data.npwp_penjamin[0] != null) {
+                                        if(data.npwp_penjamin[0].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.npwp_penjamin[0].user_id) {
+                                                document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_npwp_pen_1").on('click', function() {
+                                                verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_1_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
+                                            $("#verifikasi_npwp_pen_1").on('click', function() {
+                                                verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_1_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_npwp_pen_1").on('click', function() {
+                                            verifikasiSimpanNpwpPen_1(false, id);
+                                        });
+                                        $("#limit_call_npwp_pen_1_result").html("2");
+                                    }
+
+                                    if (data.npwp_penjamin[1] != null) {
+                                        if(data.npwp_penjamin[1].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.npwp_penjamin[1].user_id) {
+                                                document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                                            } 
+                                            $("#verifikasi_npwp_pen_2").on('click', function() {
+                                                verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_2_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
+                                            $("#verifikasi_npwp_pen_2").on('click', function() {
+                                                verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_2_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_npwp_pen_2").on('click', function() {
+                                            verifikasiSimpanNpwpPen_2(false, id);
+                                        });
+                                        $("#limit_call_npwp_pen_2_result").html("2");
+                                    }
+
+                                    if (data.npwp_penjamin[2] != null) {
+                                        if(data.npwp_penjamin[2].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.npwp_penjamin[2].user_id) {
+                                                document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_npwp_pen_3").on('click', function() {
+                                                verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_3_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
+                                            $("#verifikasi_npwp_pen_3").on('click', function() {
+                                                verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_3_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_npwp_pen_3").on('click', function() {
+                                            verifikasiSimpanNpwpPen_3(false, id);
+                                        });
+                                        $("#limit_call_npwp_pen_3_result").html("2");
+                                    }
+
+                                    if (data.npwp_penjamin[3] != null) {
+                                        if(data.npwp_penjamin[3].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.npwp_penjamin[3].user_id) {
+                                                document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_npwp_pen_4").on('click', function() {
+                                                verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_4_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
+                                            $("#verifikasi_npwp_pen_4").on('click', function() {
+                                                verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_4_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_npwp_pen_4").on('click', function() {
+                                            verifikasiSimpanNpwpPen_4(false, id);
+                                        });
+                                        $("#limit_call_npwp_pen_4_result").html("2");
+                                    }
+
+                                    if (data.npwp_penjamin[4] != null) {
+                                        if(data.npwp_penjamin[4].limit_call == 1) {
+                                            var user_id = '<?php echo $user_id ?>';
+                                            if (user_id == data.npwp_penjamin[4].user_id) {
+                                                document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                                                setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                                            }
+                                            $("#verifikasi_npwp_pen_5").on('click', function() {
+                                                verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_5_result").html("1");
+                                        } else {
+                                            bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
+                                            $("#verifikasi_npwp_pen_5").on('click', function() {
+                                                verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
+                                            });
+                                            $("#limit_call_npwp_pen_5_result").html("0");
+                                        }
+                                    } else {
+                                        $("#verifikasi_npwp_pen_5").on('click', function() {
+                                            verifikasiSimpanNpwpPen_5(false, id);
+                                        });
+                                        $("#limit_call_npwp_pen_5_result").html("2");
+                                    }
                                 }
-                            }
-                            
-                        }    
-                    })
+                                
+                            }      
+                        })
 
                 })
                 .fail(function(jqXHR) {
@@ -26777,133 +27581,133 @@
                                 $("#limit_call_penjamin_5_result").html("2");
                             }
                             
-                            if (data.npwp[0] != null) {
-                                checkResult("npwp_result", data.npwp[0].npwp);
-                                checkResult("nik_npwp_result", data.npwp[0].nik);
-                                checkResult("name_npwp_result", data.npwp[0].nama);
-                                checkResult("birthdate_npwp_result", data.npwp[0].tgl_lahir);
-                                checkResult("birthplace_npwp_result", data.npwp[0].tmp_lahir);
-                                checkIncome("income_npwp_result", data.npwp[0].income);
-                                checkResult("match_result", data.npwp[0].match_result);
-                                $("#verif_npwp_result").html(`${data.npwp[0].nama_user}`);
-                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp[0].updated_at)}`);
-                                if(data.npwp[0].limit_call == "1") {
+                            if (data.npwp != null) {
+                                checkResult("npwp_result", data.npwp.npwp);
+                                checkResult("nik_npwp_result", data.npwp.nik);
+                                checkResult("name_npwp_result", data.npwp.nama);
+                                checkResult("birthdate_npwp_result", data.npwp.tgl_lahir);
+                                checkResult("birthplace_npwp_result", data.npwp.tmp_lahir);
+                                checkIncome("income_npwp_result", data.npwp.income);
+                                checkResult("match_result", data.npwp.match_result);
+                                $("#verif_npwp_result").html(`${data.npwp.nama_user}`);
+                                $("#verif_npwp_update_result").html(`${formatUpdated(data.npwp.updated_at)}`);
+                                if(data.npwp.limit_call == "1") {
                                     $("#limit_call_npwp_result").html("1");
-                                } else if (data.penjamin[0].limit_call == "2") {
+                                } else if (data.penjamin.limit_call == "2") {
                                     $("#limit_call_npwp_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_result").html("2");
                             }
 
-                            if (data.npwp[1] != null) {
-                                checkResult("npwp_pas_result", data.npwp[1].npwp);
-                                checkResult("nik_npwp_pas_result", data.npwp[1].nik);
-                                checkResult("name_npwp_pas_result", data.npwp[1].nama);
-                                checkResult("birthdate_npwp_pas_result", data.npwp[1].tgl_lahir);
-                                checkResult("birthplace_npwp_pas_result", data.npwp[1].tmp_lahir);
-                                checkIncome("income_npwp_pas_result", data.npwp[1].income);
-                                checkResult("match_pas_result", data.npwp[1].match_result);
-                                $("#verif_npwp_pas_result").html(`${data.npwp[1].nama_user}`);
-                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp[1].updated_at)}`);
-                                if(data.npwp[1].limit_call == "1") {
+                            if (data.npwp_pasangan != null) {
+                                checkResult("npwp_pas_result", data.npwp_pasangan.npwp);
+                                checkResult("nik_npwp_pas_result", data.npwp_pasangan.nik);
+                                checkResult("name_npwp_pas_result", data.npwp_pasangan.nama);
+                                checkResult("birthdate_npwp_pas_result", data.npwp_pasangan.tgl_lahir);
+                                checkResult("birthplace_npwp_pas_result", data.npwp_pasangan.tmp_lahir);
+                                checkIncome("income_npwp_pas_result", data.npwp_pasangan.income);
+                                checkResult("match_pas_result", data.npwp_pasangan.match_result);
+                                $("#verif_npwp_pas_result").html(`${data.npwp_pasangan.nama_user}`);
+                                $("#verif_npwp_pas_update_result").html(`${formatUpdated(data.npwp_pasangan.updated_at)}`);
+                                if(data.npwp_pasangan.limit_call == "1") {
                                     $("#limit_call_npwp_pas_result").html("1");
-                                } else if (data.npwp[1].limit_call == "2") {
+                                } else if (data.npwp_pasangan.limit_call == "2") {
                                     $("#limit_call_npwp_pas_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pas_result").html("2");
                             }
 
-                            if (data.npwp[2] != null) {
-                                checkResult("npwp_pen_1_result", data.npwp[2].npwp);
-                                checkResult("nik_npwp_pen_1_result", data.npwp[2].nik);
-                                checkResult("name_npwp_pen_1_result", data.npwp[2].nama);
-                                checkResult("birthdate_npwp_pen_1_result", data.npwp[2].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_1_result", data.npwp[2].tmp_lahir);
-                                checkIncome("income_npwp_pen_1_result", data.npwp[2].income);
-                                checkResult("match_pen_1_result", data.npwp[2].match_result);
-                                $("#verif_npwp_pen_1_result").html(`${data.npwp[2].nama_user}`);
-                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp[2].updated_at)}`);
-                                if(data.npwp[2].limit_call == "1") {
+                            if (data.npwp_penjamin[0] != null) {
+                                checkResult("npwp_pen_1_result", data.npwp_penjamin[0].npwp);
+                                checkResult("nik_npwp_pen_1_result", data.npwp_penjamin[0].nik);
+                                checkResult("name_npwp_pen_1_result", data.npwp_penjamin[0].nama);
+                                checkResult("birthdate_npwp_pen_1_result", data.npwp_penjamin[0].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_1_result", data.npwp_penjamin[0].tmp_lahir);
+                                checkIncome("income_npwp_pen_1_result", data.npwp_penjamin[0].income);
+                                checkResult("match_pen_1_result", data.npwp_penjamin[0].match_result);
+                                $("#verif_npwp_pen_1_result").html(`${data.npwp_penjamin[0].nama_user}`);
+                                $("#verif_npwp_pen_1_update_result").html(`${formatUpdated(data.npwp_penjamin[0].updated_at)}`);
+                                if(data.npwp_penjamin[0].limit_call == "1") {
                                     $("#limit_call_npwp_pen_1_result").html("1");
-                                } else if (data.npwp[2].limit_call == "2") {
+                                } else if (data.npwp_penjamin[0].limit_call == "2") {
                                     $("#limit_call_npwp_pen_1_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
 
-                            if (data.npwp[3] != null) {
-                                checkResult("npwp_pen_2_result", data.npwp[3].npwp);
-                                checkResult("nik_npwp_pen_2_result", data.npwp[3].nik);
-                                checkResult("name_npwp_pen_2_result", data.npwp[3].nama);
-                                checkResult("birthdate_npwp_pen_2_result", data.npwp[3].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_2_result", data.npwp[3].tmp_lahir);
-                                checkIncome("income_npwp_pen_2_result", data.npwp[3].income);
-                                checkResult("match_pen_2_result", data.npwp[3].match_result);
-                                $("#verif_npwp_pen_2_result").html(`${data.npwp[3].nama_user}`);
-                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp[3].updated_at)}`);
-                                if(data.npwp[3].limit_call == "1") {
+                            if (data.npwp_penjamin[1] != null) {
+                                checkResult("npwp_pen_2_result", data.npwp_penjamin[1].npwp);
+                                checkResult("nik_npwp_pen_2_result", data.npwp_penjamin[1].nik);
+                                checkResult("name_npwp_pen_2_result", data.npwp_penjamin[1].nama);
+                                checkResult("birthdate_npwp_pen_2_result", data.npwp_penjamin[1].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_2_result", data.npwp_penjamin[1].tmp_lahir);
+                                checkIncome("income_npwp_pen_2_result", data.npwp_penjamin[1].income);
+                                checkResult("match_pen_2_result", data.npwp_penjamin[1].match_result);
+                                $("#verif_npwp_pen_2_result").html(`${data.npwp_penjamin[1].nama_user}`);
+                                $("#verif_npwp_pen_2_update_result").html(`${formatUpdated(data.npwp_penjamin[1].updated_at)}`);
+                                if(data.npwp_penjamin[1].limit_call == "1") {
                                     $("#limit_call_npwp_pen_2_result").html("1");
-                                } else if (data.npwp[3].limit_call == "2") {
+                                } else if (data.npwp_penjamin[1].limit_call == "2") {
                                     $("#limit_call_npwp_pen_2_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_2_result").html("2");
                             }
 
-                            if (data.npwp[4] != null) {
-                                checkResult("npwp_pen_3_result", data.npwp[4].npwp);
-                                checkResult("nik_npwp_pen_3_result", data.npwp[4].nik);
-                                checkResult("name_npwp_pen_3_result", data.npwp[4].nama);
-                                checkResult("birthdate_npwp_pen_3_result", data.npwp[4].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_3_result", data.npwp[4].tmp_lahir);
-                                checkIncome("income_npwp_pen_3_result", data.npwp[4].income);
-                                checkResult("match_pen_3_result", data.npwp[4].match_result);
-                                $("#verif_npwp_pen_3_result").html(`${data.npwp[4].nama_user}`);
-                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp[4].updated_at)}`);
-                                if(data.npwp[4].limit_call == "1") {
+                            if (data.npwp_penjamin[2] != null) {
+                                checkResult("npwp_pen_3_result", data.npwp_penjamin[2].npwp);
+                                checkResult("nik_npwp_pen_3_result", data.npwp_penjamin[2].nik);
+                                checkResult("name_npwp_pen_3_result", data.npwp_penjamin[2].nama);
+                                checkResult("birthdate_npwp_pen_3_result", data.npwp_penjamin[2].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_3_result", data.npwp_penjamin[2].tmp_lahir);
+                                checkIncome("income_npwp_pen_3_result", data.npwp_penjamin[2].income);
+                                checkResult("match_pen_3_result", data.npwp_penjamin[2].match_result);
+                                $("#verif_npwp_pen_3_result").html(`${data.npwp_penjamin[2].nama_user}`);
+                                $("#verif_npwp_pen_3_update_result").html(`${formatUpdated(data.npwp_penjamin[2].updated_at)}`);
+                                if(data.npwp_penjamin[2].limit_call == "1") {
                                     $("#limit_call_npwp_pen_3_result").html("1");
-                                } else if (data.npwp[4].limit_call == "2") {
+                                } else if (data.npwp_penjamin[2].limit_call == "2") {
                                     $("#limit_call_npwp_pen_3_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_3_result").html("2");
                             }
 
-                            if (data.npwp[5] != null) {
-                                checkResult("npwp_pen_4_result", data.npwp[5].npwp);
-                                checkResult("nik_npwp_pen_4_result", data.npwp[5].nik);
-                                checkResult("name_npwp_pen_4_result", data.npwp[5].nama);
-                                checkResult("birthdate_npwp_pen_4_result", data.npwp[5].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_4_result", data.npwp[5].tmp_lahir);
-                                checkIncome("income_npwp_pen_4_result", data.npwp[5].income);
-                                checkResult("match_pen_4_result", data.npwp[5].match_result);
-                                $("#verif_npwp_pen_4_result").html(`${data.npwp[5].nama_user}`);
-                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp[5].updated_at)}`);
-                                if(data.npwp[5].limit_call == "1") {
+                            if (data.npwp_penjamin[3] != null) {
+                                checkResult("npwp_pen_4_result", data.npwp_penjamin[3].npwp);
+                                checkResult("nik_npwp_pen_4_result", data.npwp_penjamin[3].nik);
+                                checkResult("name_npwp_pen_4_result", data.npwp_penjamin[3].nama);
+                                checkResult("birthdate_npwp_pen_4_result", data.npwp_penjamin[3].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_4_result", data.npwp_penjamin[3].tmp_lahir);
+                                checkIncome("income_npwp_pen_4_result", data.npwp_penjamin[3].income);
+                                checkResult("match_pen_4_result", data.npwp_penjamin[3].match_result);
+                                $("#verif_npwp_pen_4_result").html(`${data.npwp_penjamin[3].nama_user}`);
+                                $("#verif_npwp_pen_4_update_result").html(`${formatUpdated(data.npwp_penjamin[3].updated_at)}`);
+                                if(data.npwp_penjamin[3].limit_call == "1") {
                                     $("#limit_call_npwp_pen_4_result").html("1");
-                                } else if (data.npwp[5].limit_call == "2") {
+                                } else if (data.npwp_penjamin[3].limit_call == "2") {
                                     $("#limit_call_npwp_pen_4_result").html("0");
                                 }
                             } else {
                                 $("#limit_call_npwp_pen_4_result").html("2");
                             }
 
-                            if (data.npwp[6] != null) {
-                                checkResult("npwp_pen_5_result", data.npwp[6].npwp);
-                                checkResult("nik_npwp_pen_5_result", data.npwp[6].nik);
-                                checkResult("name_npwp_pen_5_result", data.npwp[6].nama);
-                                checkResult("birthdate_npwp_pen_5_result", data.npwp[6].tgl_lahir);
-                                checkResult("birthplace_npwp_pen_5_result", data.npwp[6].tmp_lahir);
-                                checkIncome("income_npwp_pen_5_result", data.npwp[6].income);
-                                checkResult("match_pen_5_result", data.npwp[6].match_result);
-                                $("#verif_npwp_pen_5_result").html(`${data.npwp[6].nama_user}`);
-                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp[6].updated_at)}`);
-                                if(data.npwp[6].limit_call == "1") {
+                            if (data.npwp_penjamin[4] != null) {
+                                checkResult("npwp_pen_5_result", data.npwp_penjamin[4].npwp);
+                                checkResult("nik_npwp_pen_5_result", data.npwp_penjamin[4].nik);
+                                checkResult("name_npwp_pen_5_result", data.npwp_penjamin[4].nama);
+                                checkResult("birthdate_npwp_pen_5_result", data.npwp_penjamin[4].tgl_lahir);
+                                checkResult("birthplace_npwp_pen_5_result", data.npwp_penjamin[4].tmp_lahir);
+                                checkIncome("income_npwp_pen_5_result", data.npwp_penjamin[4].income);
+                                checkResult("match_pen_5_result", data.npwp_penjamin[4].match_result);
+                                $("#verif_npwp_pen_5_result").html(`${data.npwp_penjamin[4].nama_user}`);
+                                $("#verif_npwp_pen_5_update_result").html(`${formatUpdated(data.npwp_penjamin[4].updated_at)}`);
+                                if(data.npwp_penjamin[4].limit_call == "1") {
                                     $("#limit_call_npwp_pen_5_result").html("1");
-                                } else if (data.npwp[6].limit_call == "2") {
+                                } else if (data.npwp_penjamin[4].limit_call == "2") {
                                     $("#limit_call_npwp_pen_5_result").html("0");
                                 }
                             } else {
@@ -27119,7 +27923,7 @@
                             '<td>' + item.no_npwp + '</td>',
                             '<td style="width:135px">' + item.tempat_lahir + '</td>',
                             '<td style="width:137px">' + item.tgl_lahir + '</td>',
-                            '<td style="width:285px">' + item.alamat_ktp + '</td>',
+                            '<td style="width:2100px">' + item.alamat_ktp + '</td>',
                             '<td style="width:135px">' + item.pemasukan_penjamin + '</td>',
                             '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" data-lightbox="example-set" data-title="Lampiran Photo Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.foto_selfie_penjamin + '" /> </a> </td>',
                             '<td style="width:160px"><a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" data-lightbox="example-set" data-title="Lampiran KTP Penjamin"><img class="thumbnail img-responsive" style="width:100px" alt="" src="<?php echo $this->config->item('img_url') ?>' + item.lampiran.lamp_ktp + '" /> </a> </td>',
@@ -27440,7 +28244,7 @@
                     $('#form_edit_penjamin input[name=no_ktp_pen]').val(data.no_ktp);
                     $('#form_edit_penjamin input[name=no_npwp_pen]').val(data.no_npwp);
                     $('#form_edit_penjamin input[name=tempat_lahir_pen]').val(data.tempat_lahir);
-                    $('#form_edit_penjamin input[name=tgl_lahir_pen]').val(data.tgl_lahir);
+                    $('#form_edit_penjamin input[name=tgl_lahir_pen]').val(formatTanggal(data.tgl_lahir));
                     $('#form_edit_penjamin textarea[name=alamat_pen]').val(data.alamat_ktp);
                     $('#form_edit_penjamin input[name=pemasukan_pen]').val(data.lampiran.pemasukan_penjamin);
 
@@ -27587,7 +28391,7 @@
             formData.append('no_ktp_pen', $('input[name=no_ktp_pen]', this).val());
             formData.append('no_npwp_pen', $('input[name=no_npwp_pen]', this).val());
             formData.append('tempat_lahir_pen', $('input[name=tempat_lahir_pen]', this).val());
-            formData.append('tgl_lahir_pen', $('input[name=tgl_lahir_pen]', this).val());
+            formData.append('tgl_lahir_pen', formatTanggal($('input[name=tgl_lahir_pen]', this).val()));
             formData.append('pemasukan_penjamin', $('input[name=pemasukan_pen]', this).val());
             formData.append('alamat_ktp_pen', $('textarea[name=alamat_pen]', this).val());
 
@@ -27693,6 +28497,946 @@
                 });
         });
 
+        $('#data_telepon').on('click', '.edit', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data');
+
+            $("#modal_data_telepon").modal('show');
+            $('#form_data_telepon .form-control').prop('disabled', false);
+            $('.simpan_telepon').show();
+
+                get_hasil_telepon({}, id)
+                    .done(function(response) {
+                        var data = response.data;
+                        console.log(data);
+
+                        if (data.length != 0) {
+                            document.getElementById("button_simpan_telepon").disabled = true;
+
+                            if (data[0].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_deb").checked = "true";
+                            } else if (data[0].hasil == "tidak") {
+                                document.getElementById("tidak_nama_deb").checked = "true";
+                            } else if (data[0].hasil == "janggal") {
+                                document.getElementById("janggal_nama_deb").checked = "true";
+                            }
+
+                            if (data[1].hasil == "sesuai") {
+                                document.getElementById("sesuai_ttl_deb").checked = "true";
+                            } else if (data[1].hasil == "tidak") {
+                                document.getElementById("tidak_ttl_deb").checked = "true";
+                            } else if (data[1].hasil == "janggal") {
+                                document.getElementById("janggal_ttl_deb").checked = "true";
+                            }
+
+                            if (data[2].hasil == "sesuai") {
+                                document.getElementById("sesuai_alamat_deb").checked = "true";
+                            } else if (data[2].hasil == "tidak") {
+                                document.getElementById("tidak_alamat_deb").checked = "true";
+                            } else if (data[2].hasil == "janggal") {
+                                document.getElementById("janggal_alamat_deb").checked = "true";
+                            }
+
+                            if (data[3].hasil == "sesuai") {
+                                document.getElementById("sesuai_telp_deb").checked = "true";
+                            } else if (data[3].hasil == "tidak") {
+                                document.getElementById("tidak_telp_deb").checked = "true";
+                            } else if (data[3].hasil == "janggal") {
+                                document.getElementById("janggal_telp_deb").checked = "true";
+                            }
+
+                            if (data[4].hasil == "sesuai") {
+                                document.getElementById("sesuai_email_deb").checked = "true";
+                            } else if (data[4].hasil == "tidak") {
+                                document.getElementById("tidak_email_deb").checked = "true";
+                            } else if (data[4].hasil == "janggal") {
+                                document.getElementById("janggal_email_deb").checked = "true";
+                            }
+
+                            if (data[5].hasil == "sesuai") {
+                                document.getElementById("sesuai_saudara_deb").checked = "true";
+                            } else if (data[5].hasil == "tidak") {
+                                document.getElementById("tidak_saudara_deb").checked = "true";
+                            } else if (data[5].hasil == "janggal") {
+                                document.getElementById("janggal_saudara_deb").checked = "true";
+                            }
+
+                            if (data[6].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_pas").checked = "true";
+                            } else if (data[6].hasil == "tidak") {
+                                document.getElementById("tidak_nama_pas").checked = "true";
+                            } else if (data[6].hasil == "janggal") {
+                                document.getElementById("janggal_nama_pas").checked = "true";
+                            }
+
+                            if (data[7].hasil == "sesuai") {
+                                document.getElementById("sesuai_ttl_pas").checked = "true";
+                            } else if (data[7].hasil == "tidak") {
+                                document.getElementById("tidak_ttl_pas").checked = "true";
+                            } else if (data[7].hasil == "janggal") {
+                                document.getElementById("janggal_ttl_pas").checked = "true";
+                            }
+
+                            if (data[8].hasil == "sesuai") {
+                                document.getElementById("sesuai_alamat_pas").checked = "true";
+                            } else if (data[8].hasil == "tidak") {
+                                document.getElementById("tidak_alamat_pas").checked = "true";
+                            } else if (data[8].hasil == "janggal") {
+                                document.getElementById("janggal_alamat_pas").checked = "true";
+                            }
+
+                            if (data[9].hasil == "sesuai") {
+                                document.getElementById("sesuai_telp_pas").checked = "true";
+                            } else if (data[9].hasil == "tidak") {
+                                document.getElementById("tidak_telp_pas").checked = "true";
+                            } else if (data[9].hasil == "janggal") {
+                                document.getElementById("janggal_telp_pas").checked = "true";
+                            }
+
+                            if (data[10].hasil == "sesuai") {
+                                document.getElementById("sesuai_saudara_pas").checked = "true";
+                            } else if (data[10].hasil == "tidak") {
+                                document.getElementById("tidak_saudara_pas").checked = "true";
+                            } else if (data[10].hasil == "janggal") {
+                                document.getElementById("janggal_saudara_pas").checked = "true";
+                            }
+
+                            if (data[11].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_ibu_deb").checked = "true";
+                            } else if (data[11].hasil == "tidak") {
+                                document.getElementById("tidak_nama_ibu_deb").checked = "true";
+                            } else if (data[11].hasil == "janggal") {
+                                document.getElementById("janggal_nama_ibu_deb").checked = "true";
+                            }
+
+                            if (data[12].hasil == "sesuai") {
+                                document.getElementById("sesuai_ttl_ibu_deb").checked = "true";
+                            } else if (data[12].hasil == "tidak") {
+                                document.getElementById("tidak_ttl_ibu_deb").checked = "true";
+                            } else if (data[12].hasil == "janggal") {
+                                document.getElementById("janggal_ttl_ibu_deb").checked = "true";
+                            }
+
+                            if (data[13].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_ayah_deb").checked = "true";
+                            } else if (data[13].hasil == "tidak") {
+                                document.getElementById("tidak_nama_ayah_deb").checked = "true";
+                            } else if (data[13].hasil == "janggal") {
+                                document.getElementById("janggal_nama_ayah_deb").checked = "true";
+                            }
+
+                            if (data[14].hasil == "sesuai") {
+                                document.getElementById("sesuai_ttl_ayah_deb").checked = "true";
+                            } else if (data[14].hasil == "tidak") {
+                                document.getElementById("tidak_ttl_ayah_deb").checked = "true";
+                            } else if (data[14].hasil == "janggal") {
+                                document.getElementById("janggal_ttl_ayah_deb").checked = "true";
+                            }
+
+                            if (data[15].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_ibu_pas").checked = "true";
+                            } else if (data[15].hasil == "tidak") {
+                                document.getElementById("tidak_nama_ibu_pas").checked = "true";
+                            } else if (data[15].hasil == "janggal") {
+                                document.getElementById("janggal_nama_ibu_pas").checked = "true";
+                            }
+
+                            if (data[16].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_ayah_pas").checked = "true";
+                            } else if (data[16].hasil == "tidak") {
+                                document.getElementById("tidak_nama_ayah_pas").checked = "true";
+                            } else if (data[16].hasil == "janggal") {
+                                document.getElementById("janggal_nama_ayah_pas").checked = "true";
+                            }
+
+                            if (data[17].hasil == "sesuai") {
+                                document.getElementById("sesuai_status_deb").checked = "true";
+                            } else if (data[17].hasil == "tidak") {
+                                document.getElementById("tidak_status_deb").checked = "true";
+                            } else if (data[17].hasil == "janggal") {
+                                document.getElementById("janggal_status_deb").checked = "true";
+                            }
+
+                            if (data[18].hasil == "sesuai") {
+                                document.getElementById("sesuai_lokasi_kua").checked = "true";
+                            } else if (data[18].hasil == "tidak") {
+                                document.getElementById("tidak_lokasi_kua").checked = "true";
+                            } else if (data[18].hasil == "janggal") {
+                                document.getElementById("janggal_lokasi_kua").checked = "true";
+                            }
+
+                            if (data[19].hasil == "sesuai") {
+                                document.getElementById("sesuai_lokasi_nikah").checked = "true";
+                            } else if (data[19].hasil == "tidak") {
+                                document.getElementById("tidak_lokasi_nikah").checked = "true";
+                            } else if (data[19].hasil == "janggal") {
+                                document.getElementById("janggal_lokasi_nikah").checked = "true";
+                            }
+
+                            if (data[20].hasil == "sesuai") {
+                                document.getElementById("sesuai_tgl_nikah").checked = "true";
+                            } else if (data[20].hasil == "tidak") {
+                                document.getElementById("tidak_tgl_nikah").checked = "true";
+                            } else if (data[20].hasil == "janggal") {
+                                document.getElementById("janggal_tgl_nikah").checked = "true";
+                            }
+
+                            if (data[21].hasil == "sesuai") {
+                                document.getElementById("sesuai_tgl_cerai").checked = "true";
+                            } else if (data[21].hasil == "tidak") {
+                                document.getElementById("tidak_tgl_cerai").checked = "true";
+                            } else if (data[21].hasil == "janggal") {
+                                document.getElementById("janggal_tgl_cerai").checked = "true";
+                            }
+
+                            if (data[22].hasil == "sesuai") {
+                                document.getElementById("sesuai_pekerjaan_deb").checked = "true";
+                            } else if (data[22].hasil == "tidak") {
+                                document.getElementById("tidak_pekerjaan_deb").checked = "true";
+                            } else if (data[22].hasil == "janggal") {
+                                document.getElementById("janggal_pekerjaan_deb").checked = "true";
+                            }
+
+                            if (data[23].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_kantor_usaha").checked = "true";
+                            } else if (data[23].hasil == "tidak") {
+                                document.getElementById("tidak_nama_kantor_usaha").checked = "true";
+                            } else if (data[23].hasil == "janggal") {
+                                document.getElementById("janggal_nama_kantor_usaha").checked = "true";
+                            }
+
+                            if (data[24].hasil == "sesuai") {
+                                document.getElementById("sesuai_alamat_kantor_usaha").checked = "true";
+                            } else if (data[24].hasil == "tidak") {
+                                document.getElementById("tidak_alamat_kantor_usaha").checked = "true";
+                            } else if (data[24].hasil == "janggal") {
+                                document.getElementById("janggal_alamat_kantor_usaha").checked = "true";
+                            }
+
+                            if (data[25].hasil == "sesuai") {
+                                document.getElementById("sesuai_telp_kantor_usaha").checked = "true";
+                            } else if (data[25].hasil == "tidak") {
+                                document.getElementById("tidak_telp_kantor_usaha").checked = "true";
+                            } else if (data[25].hasil == "janggal") {
+                                document.getElementById("janggal_telp_kantor_usaha").checked = "true";
+                            }
+
+                            if (data[26].hasil == "sesuai") {
+                                document.getElementById("sesuai_jabatan").checked = "true";
+                            } else if (data[26].hasil == "tidak") {
+                                document.getElementById("tidak_jabatan").checked = "true";
+                            } else if (data[26].hasil == "janggal") {
+                                document.getElementById("janggal_jabatan").checked = "true";
+                            }
+
+                            if (data[27].hasil == "sesuai") {
+                                document.getElementById("sesuai_tgl_mulai_kerja").checked = "true";
+                            } else if (data[27].hasil == "tidak") {
+                                document.getElementById("tidak_tgl_mulai_kerja").checked = "true";
+                            } else if (data[27].hasil == "janggal") {
+                                document.getElementById("janggal_tgl_mulai_kerja").checked = "true";
+                            }
+                            
+
+                            if (data[28].hasil == "sesuai") {
+                                document.getElementById("sesuai_lama_kerja").checked = "true";
+                            } else if (data[28].hasil == "tidak") {
+                                document.getElementById("tidak_lama_kerja").checked = "true";
+                            } else if (data[28].hasil == "janggal") {
+                                document.getElementById("janggal_lama_kerja").checked = "true";
+                            }
+
+                            if (data[29].hasil == "sesuai") {
+                                document.getElementById("sesuai_gaji_kerja").checked = "true";
+                            } else if (data[29].hasil == "tidak") {
+                                document.getElementById("tidak_gaji_kerja").checked = "true";
+                            } else if (data[29].hasil == "janggal") {
+                                document.getElementById("janggal_gaji_kerja").checked = "true";
+                            }
+
+                            if (data[30].hasil == "sesuai") {
+                                document.getElementById("sesuai_bentuk_gaji").checked = "true";
+                            } else if (data[30].hasil == "tidak") {
+                                document.getElementById("tidak_bentuk_gaji").checked = "true";
+                            } else if (data[30].hasil == "janggal") {
+                                document.getElementById("janggal_bentuk_gaji").checked = "true";
+                            }
+
+                            if (data[31].hasil == "sesuai") {
+                                document.getElementById("sesuai_rekening_gaji").checked = "true";
+                            } else if (data[31].hasil == "tidak") {
+                                document.getElementById("tidak_rekening_gaji").checked = "true";
+                            } else if (data[31].hasil == "janggal") {
+                                document.getElementById("janggal_rekening_gaji").checked = "true";
+                            }
+
+                            if (data[32].hasil == "sesuai") {
+                                document.getElementById("sesuai_plafon").checked = "true";
+                            } else if (data[32].hasil == "tidak") {
+                                document.getElementById("tidak_plafon").checked = "true";
+                            } else if (data[32].hasil == "janggal") {
+                                document.getElementById("janggal_plafon").checked = "true";
+                            }
+
+                            if (data[33].hasil == "sesuai") {
+                                document.getElementById("sesuai_tenor").checked = "true";
+                            } else if (data[33].hasil == "tidak") {
+                                document.getElementById("tidak_tenor").checked = "true";
+                            } else if (data[33].hasil == "janggal") {
+                                document.getElementById("janggal_tenor").checked = "true";
+                            }
+
+                            if (data[34].hasil == "sesuai") {
+                                document.getElementById("sesuai_tujuan_pinjaman").checked = "true";
+                            } else if (data[34].hasil == "tidak") {
+                                document.getElementById("tidak_tujuan_pinjaman").checked = "true";
+                            } else if (data[34].hasil == "janggal") {
+                                document.getElementById("janggal_tujuan_pinjaman").checked = "true";
+                            }
+
+                            if (data[35].hasil == "sesuai") {
+                                document.getElementById("sesuai_yang_menggunakan").checked = "true";
+                            } else if (data[35].hasil == "tidak") {
+                                document.getElementById("tidak_yang_menggunakan").checked = "true";
+                            } else if (data[35].hasil == "janggal") {
+                                document.getElementById("janggal_yang_menggunakan").checked = "true";
+                            }
+
+                            if (data[36].hasil == "sesuai") {
+                                document.getElementById("sesuai_alamat_jaminan").checked = "true";
+                            } else if (data[36].hasil == "tidak") {
+                                document.getElementById("tidak_alamat_jaminan").checked = "true";
+                            } else if (data[36].hasil == "janggal") {
+                                document.getElementById("janggal_alamat_jaminan").checked = "true";
+                            }
+
+                            if (data[37].hasil == "sesuai") {
+                                document.getElementById("sesuai_luas_tanah").checked = "true";
+                            } else if (data[37].hasil == "tidak") {
+                                document.getElementById("tidak_luas_tanah").checked = "true";
+                            } else if (data[37].hasil == "janggal") {
+                                document.getElementById("janggal_luas_tanah").checked = "true";
+                            }
+
+                            if (data[38].hasil == "sesuai") {
+                                document.getElementById("sesuai_luas_bangunan").checked = "true";
+                            } else if (data[38].hasil == "tidak") {
+                                document.getElementById("tidak_luas_bangunan").checked = "true";
+                            } else if (data[38].hasil == "janggal") {
+                                document.getElementById("janggal_luas_bangunan").checked = "true";
+                            }
+
+                            if (data[39].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_pemilik").checked = "true";
+                            } else if (data[39].hasil == "tidak") {
+                                document.getElementById("tidak_nama_pemilik").checked = "true";
+                            } else if (data[39].hasil == "janggal") {
+                                document.getElementById("janggal_nama_pemilik").checked = "true";
+                            }
+
+                            if (data[40].hasil == "sesuai") {
+                                document.getElementById("sesuai_nama_penghuni").checked = "true";
+                            } else if (data[40].hasil == "tidak") {
+                                document.getElementById("tidak_nama_penghuni").checked = "true";
+                            } else if (data[40].hasil == "janggal") {
+                                document.getElementById("janggal_nama_penghuni").checked = "true";
+                            }
+
+                            if (data[41].hasil == "sesuai") {
+                                document.getElementById("sesuai_warna_rumah").checked = "true";
+                            } else if (data[41].hasil == "tidak") {
+                                document.getElementById("tidak_warna_rumah").checked = "true";
+                            } else if (data[41].hasil == "janggal") {
+                                document.getElementById("janggal_warna_rumah").checked = "true";
+                            }
+
+                            if (data[42].hasil == "sesuai") {
+                                document.getElementById("sesuai_lama_tinggal").checked = "true";
+                            } else if (data[42].hasil == "tidak") {
+                                document.getElementById("tidak_lama_tinggal").checked = "true";
+                            } else if (data[42].hasil == "janggal") {
+                                document.getElementById("janggal_lama_tinggal").checked = "true";
+                            }
+
+                            if (data[43].hasil == "sesuai") {
+                                document.getElementById("sesuai_terakhir_renovasi").checked = "true";
+                            } else if (data[43].hasil == "tidak") {
+                                document.getElementById("tidak_terakhir_renovasi").checked = "true";
+                            } else if (data[43].hasil == "janggal") {
+                                document.getElementById("janggal_terakhir_renovasi").checked = "true";
+                            }
+
+                            $('#form_data_telepon textarea[name=keterangan]').val(data[44].keterangan);
+
+                        } else {
+                            get_data({}, id)
+                                .done(function(response) {
+                                    var data = response.data;
+                                    console.log(data);
+
+                                    $('#form_data_telepon input[type=hidden][name=id_trans_so_telepon]').val(data.id_trans_so);
+                                })
+                                .fail(function(jqXHR) {
+                                    bootbox.alert('Gagal Memuat Data!');
+                                });
+
+                        }
+
+                    })
+                    .fail(function(jqXHR) {
+                        bootbox.alert('Data tidak ditemukan');
+                    });
+                
+
+        });
+
+        $('#data_telepon').on('click', '.detail', function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data');
+
+            $("#modal_data_telepon").modal('show');
+            $('#form_data_telepon .form-control').prop('disabled', true);
+            $('.simpan_telepon').hide();
+
+            get_hasil_telepon({}, id)
+                .done(function(response) {
+                    var data = response.data;
+                    console.log(data);
+
+                    if (data.length != 0) {
+
+                        if (data[0].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_deb").checked = "true";
+                        } else if (data[0].hasil == "tidak") {
+                            document.getElementById("tidak_nama_deb").checked = "true";
+                        } else if (data[0].hasil == "janggal") {
+                            document.getElementById("janggal_nama_deb").checked = "true";
+                        }
+
+                        if (data[1].hasil == "sesuai") {
+                            document.getElementById("sesuai_ttl_deb").checked = "true";
+                        } else if (data[1].hasil == "tidak") {
+                            document.getElementById("tidak_ttl_deb").checked = "true";
+                        } else if (data[1].hasil == "janggal") {
+                            document.getElementById("janggal_ttl_deb").checked = "true";
+                        }
+
+                        if (data[2].hasil == "sesuai") {
+                            document.getElementById("sesuai_alamat_deb").checked = "true";
+                        } else if (data[2].hasil == "tidak") {
+                            document.getElementById("tidak_alamat_deb").checked = "true";
+                        } else if (data[2].hasil == "janggal") {
+                            document.getElementById("janggal_alamat_deb").checked = "true";
+                        }
+
+                        if (data[3].hasil == "sesuai") {
+                            document.getElementById("sesuai_telp_deb").checked = "true";
+                        } else if (data[3].hasil == "tidak") {
+                            document.getElementById("tidak_telp_deb").checked = "true";
+                        } else if (data[3].hasil == "janggal") {
+                            document.getElementById("janggal_telp_deb").checked = "true";
+                        }
+
+                        if (data[4].hasil == "sesuai") {
+                            document.getElementById("sesuai_email_deb").checked = "true";
+                        } else if (data[4].hasil == "tidak") {
+                            document.getElementById("tidak_email_deb").checked = "true";
+                        } else if (data[4].hasil == "janggal") {
+                            document.getElementById("janggal_email_deb").checked = "true";
+                        }
+
+                        if (data[5].hasil == "sesuai") {
+                            document.getElementById("sesuai_saudara_deb").checked = "true";
+                        } else if (data[5].hasil == "tidak") {
+                            document.getElementById("tidak_saudara_deb").checked = "true";
+                        } else if (data[5].hasil == "janggal") {
+                            document.getElementById("janggal_saudara_deb").checked = "true";
+                        }
+
+                        if (data[6].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_pas").checked = "true";
+                        } else if (data[6].hasil == "tidak") {
+                            document.getElementById("tidak_nama_pas").checked = "true";
+                        } else if (data[6].hasil == "janggal") {
+                            document.getElementById("janggal_nama_pas").checked = "true";
+                        }
+
+                        if (data[7].hasil == "sesuai") {
+                            document.getElementById("sesuai_ttl_pas").checked = "true";
+                        } else if (data[7].hasil == "tidak") {
+                            document.getElementById("tidak_ttl_pas").checked = "true";
+                        } else if (data[7].hasil == "janggal") {
+                            document.getElementById("janggal_ttl_pas").checked = "true";
+                        }
+
+                        if (data[8].hasil == "sesuai") {
+                            document.getElementById("sesuai_alamat_pas").checked = "true";
+                        } else if (data[8].hasil == "tidak") {
+                            document.getElementById("tidak_alamat_pas").checked = "true";
+                        } else if (data[8].hasil == "janggal") {
+                            document.getElementById("janggal_alamat_pas").checked = "true";
+                        }
+
+                        if (data[9].hasil == "sesuai") {
+                            document.getElementById("sesuai_telp_pas").checked = "true";
+                        } else if (data[9].hasil == "tidak") {
+                            document.getElementById("tidak_telp_pas").checked = "true";
+                        } else if (data[9].hasil == "janggal") {
+                            document.getElementById("janggal_telp_pas").checked = "true";
+                        }
+
+                        if (data[10].hasil == "sesuai") {
+                            document.getElementById("sesuai_saudara_pas").checked = "true";
+                        } else if (data[10].hasil == "tidak") {
+                            document.getElementById("tidak_saudara_pas").checked = "true";
+                        } else if (data[10].hasil == "janggal") {
+                            document.getElementById("janggal_saudara_pas").checked = "true";
+                        }
+
+                        if (data[11].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_ibu_deb").checked = "true";
+                        } else if (data[11].hasil == "tidak") {
+                            document.getElementById("tidak_nama_ibu_deb").checked = "true";
+                        } else if (data[11].hasil == "janggal") {
+                            document.getElementById("janggal_nama_ibu_deb").checked = "true";
+                        }
+
+                        if (data[12].hasil == "sesuai") {
+                            document.getElementById("sesuai_ttl_ibu_deb").checked = "true";
+                        } else if (data[12].hasil == "tidak") {
+                            document.getElementById("tidak_ttl_ibu_deb").checked = "true";
+                        } else if (data[12].hasil == "janggal") {
+                            document.getElementById("janggal_ttl_ibu_deb").checked = "true";
+                        }
+
+                        if (data[13].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_ayah_deb").checked = "true";
+                        } else if (data[13].hasil == "tidak") {
+                            document.getElementById("tidak_nama_ayah_deb").checked = "true";
+                        } else if (data[13].hasil == "janggal") {
+                            document.getElementById("janggal_nama_ayah_deb").checked = "true";
+                        }
+
+                        if (data[14].hasil == "sesuai") {
+                            document.getElementById("sesuai_ttl_ayah_deb").checked = "true";
+                        } else if (data[14].hasil == "tidak") {
+                            document.getElementById("tidak_ttl_ayah_deb").checked = "true";
+                        } else if (data[14].hasil == "janggal") {
+                            document.getElementById("janggal_ttl_ayah_deb").checked = "true";
+                        }
+
+                        if (data[15].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_ibu_pas").checked = "true";
+                        } else if (data[15].hasil == "tidak") {
+                            document.getElementById("tidak_nama_ibu_pas").checked = "true";
+                        } else if (data[15].hasil == "janggal") {
+                            document.getElementById("janggal_nama_ibu_pas").checked = "true";
+                        }
+
+                        if (data[16].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_ayah_pas").checked = "true";
+                        } else if (data[16].hasil == "tidak") {
+                            document.getElementById("tidak_nama_ayah_pas").checked = "true";
+                        } else if (data[16].hasil == "janggal") {
+                            document.getElementById("janggal_nama_ayah_pas").checked = "true";
+                        }
+
+                        if (data[17].hasil == "sesuai") {
+                            document.getElementById("sesuai_status_deb").checked = "true";
+                        } else if (data[17].hasil == "tidak") {
+                            document.getElementById("tidak_status_deb").checked = "true";
+                        } else if (data[17].hasil == "janggal") {
+                            document.getElementById("janggal_status_deb").checked = "true";
+                        }
+
+                        if (data[18].hasil == "sesuai") {
+                            document.getElementById("sesuai_lokasi_kua").checked = "true";
+                        } else if (data[18].hasil == "tidak") {
+                            document.getElementById("tidak_lokasi_kua").checked = "true";
+                        } else if (data[18].hasil == "janggal") {
+                            document.getElementById("janggal_lokasi_kua").checked = "true";
+                        }
+
+                        if (data[19].hasil == "sesuai") {
+                            document.getElementById("sesuai_lokasi_nikah").checked = "true";
+                        } else if (data[19].hasil == "tidak") {
+                            document.getElementById("tidak_lokasi_nikah").checked = "true";
+                        } else if (data[19].hasil == "janggal") {
+                            document.getElementById("janggal_lokasi_nikah").checked = "true";
+                        }
+
+                        if (data[20].hasil == "sesuai") {
+                            document.getElementById("sesuai_tgl_nikah").checked = "true";
+                        } else if (data[20].hasil == "tidak") {
+                            document.getElementById("tidak_tgl_nikah").checked = "true";
+                        } else if (data[20].hasil == "janggal") {
+                            document.getElementById("janggal_tgl_nikah").checked = "true";
+                        }
+
+                        if (data[21].hasil == "sesuai") {
+                            document.getElementById("sesuai_tgl_cerai").checked = "true";
+                        } else if (data[21].hasil == "tidak") {
+                            document.getElementById("tidak_tgl_cerai").checked = "true";
+                        } else if (data[21].hasil == "janggal") {
+                            document.getElementById("janggal_tgl_cerai").checked = "true";
+                        }
+
+                        if (data[22].hasil == "sesuai") {
+                            document.getElementById("sesuai_pekerjaan_deb").checked = "true";
+                        } else if (data[22].hasil == "tidak") {
+                            document.getElementById("tidak_pekerjaan_deb").checked = "true";
+                        } else if (data[22].hasil == "janggal") {
+                            document.getElementById("janggal_pekerjaan_deb").checked = "true";
+                        }
+
+                        if (data[23].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_kantor_usaha").checked = "true";
+                        } else if (data[23].hasil == "tidak") {
+                            document.getElementById("tidak_nama_kantor_usaha").checked = "true";
+                        } else if (data[23].hasil == "janggal") {
+                            document.getElementById("janggal_nama_kantor_usaha").checked = "true";
+                        }
+
+                        if (data[24].hasil == "sesuai") {
+                            document.getElementById("sesuai_alamat_kantor_usaha").checked = "true";
+                        } else if (data[24].hasil == "tidak") {
+                            document.getElementById("tidak_alamat_kantor_usaha").checked = "true";
+                        } else if (data[24].hasil == "janggal") {
+                            document.getElementById("janggal_alamat_kantor_usaha").checked = "true";
+                        }
+
+                        if (data[25].hasil == "sesuai") {
+                            document.getElementById("sesuai_telp_kantor_usaha").checked = "true";
+                        } else if (data[25].hasil == "tidak") {
+                            document.getElementById("tidak_telp_kantor_usaha").checked = "true";
+                        } else if (data[25].hasil == "janggal") {
+                            document.getElementById("janggal_telp_kantor_usaha").checked = "true";
+                        }
+
+                        if (data[26].hasil == "sesuai") {
+                            document.getElementById("sesuai_jabatan").checked = "true";
+                        } else if (data[26].hasil == "tidak") {
+                            document.getElementById("tidak_jabatan").checked = "true";
+                        } else if (data[26].hasil == "janggal") {
+                            document.getElementById("janggal_jabatan").checked = "true";
+                        }
+
+                        if (data[27].hasil == "sesuai") {
+                            document.getElementById("sesuai_tgl_mulai_kerja").checked = "true";
+                        } else if (data[27].hasil == "tidak") {
+                            document.getElementById("tidak_tgl_mulai_kerja").checked = "true";
+                        } else if (data[27].hasil == "janggal") {
+                            document.getElementById("janggal_tgl_mulai_kerja").checked = "true";
+                        }
+                        
+
+                        if (data[28].hasil == "sesuai") {
+                            document.getElementById("sesuai_lama_kerja").checked = "true";
+                        } else if (data[28].hasil == "tidak") {
+                            document.getElementById("tidak_lama_kerja").checked = "true";
+                        } else if (data[28].hasil == "janggal") {
+                            document.getElementById("janggal_lama_kerja").checked = "true";
+                        }
+
+                        if (data[29].hasil == "sesuai") {
+                            document.getElementById("sesuai_gaji_kerja").checked = "true";
+                        } else if (data[29].hasil == "tidak") {
+                            document.getElementById("tidak_gaji_kerja").checked = "true";
+                        } else if (data[29].hasil == "janggal") {
+                            document.getElementById("janggal_gaji_kerja").checked = "true";
+                        }
+
+                        if (data[30].hasil == "sesuai") {
+                            document.getElementById("sesuai_bentuk_gaji").checked = "true";
+                        } else if (data[30].hasil == "tidak") {
+                            document.getElementById("tidak_bentuk_gaji").checked = "true";
+                        } else if (data[30].hasil == "janggal") {
+                            document.getElementById("janggal_bentuk_gaji").checked = "true";
+                        }
+
+                        if (data[31].hasil == "sesuai") {
+                            document.getElementById("sesuai_rekening_gaji").checked = "true";
+                        } else if (data[31].hasil == "tidak") {
+                            document.getElementById("tidak_rekening_gaji").checked = "true";
+                        } else if (data[31].hasil == "janggal") {
+                            document.getElementById("janggal_rekening_gaji").checked = "true";
+                        }
+
+                        if (data[32].hasil == "sesuai") {
+                            document.getElementById("sesuai_plafon").checked = "true";
+                        } else if (data[32].hasil == "tidak") {
+                            document.getElementById("tidak_plafon").checked = "true";
+                        } else if (data[32].hasil == "janggal") {
+                            document.getElementById("janggal_plafon").checked = "true";
+                        }
+
+                        if (data[33].hasil == "sesuai") {
+                            document.getElementById("sesuai_tenor").checked = "true";
+                        } else if (data[33].hasil == "tidak") {
+                            document.getElementById("tidak_tenor").checked = "true";
+                        } else if (data[33].hasil == "janggal") {
+                            document.getElementById("janggal_tenor").checked = "true";
+                        }
+
+                        if (data[34].hasil == "sesuai") {
+                            document.getElementById("sesuai_tujuan_pinjaman").checked = "true";
+                        } else if (data[34].hasil == "tidak") {
+                            document.getElementById("tidak_tujuan_pinjaman").checked = "true";
+                        } else if (data[34].hasil == "janggal") {
+                            document.getElementById("janggal_tujuan_pinjaman").checked = "true";
+                        }
+
+                        if (data[35].hasil == "sesuai") {
+                            document.getElementById("sesuai_yang_menggunakan").checked = "true";
+                        } else if (data[35].hasil == "tidak") {
+                            document.getElementById("tidak_yang_menggunakan").checked = "true";
+                        } else if (data[35].hasil == "janggal") {
+                            document.getElementById("janggal_yang_menggunakan").checked = "true";
+                        }
+
+                        if (data[36].hasil == "sesuai") {
+                            document.getElementById("sesuai_alamat_jaminan").checked = "true";
+                        } else if (data[36].hasil == "tidak") {
+                            document.getElementById("tidak_alamat_jaminan").checked = "true";
+                        } else if (data[36].hasil == "janggal") {
+                            document.getElementById("janggal_alamat_jaminan").checked = "true";
+                        }
+
+                        if (data[37].hasil == "sesuai") {
+                            document.getElementById("sesuai_luas_tanah").checked = "true";
+                        } else if (data[37].hasil == "tidak") {
+                            document.getElementById("tidak_luas_tanah").checked = "true";
+                        } else if (data[37].hasil == "janggal") {
+                            document.getElementById("janggal_luas_tanah").checked = "true";
+                        }
+
+                        if (data[38].hasil == "sesuai") {
+                            document.getElementById("sesuai_luas_bangunan").checked = "true";
+                        } else if (data[38].hasil == "tidak") {
+                            document.getElementById("tidak_luas_bangunan").checked = "true";
+                        } else if (data[38].hasil == "janggal") {
+                            document.getElementById("janggal_luas_bangunan").checked = "true";
+                        }
+
+                        if (data[39].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_pemilik").checked = "true";
+                        } else if (data[39].hasil == "tidak") {
+                            document.getElementById("tidak_nama_pemilik").checked = "true";
+                        } else if (data[39].hasil == "janggal") {
+                            document.getElementById("janggal_nama_pemilik").checked = "true";
+                        }
+
+                        if (data[40].hasil == "sesuai") {
+                            document.getElementById("sesuai_nama_penghuni").checked = "true";
+                        } else if (data[40].hasil == "tidak") {
+                            document.getElementById("tidak_nama_penghuni").checked = "true";
+                        } else if (data[40].hasil == "janggal") {
+                            document.getElementById("janggal_nama_penghuni").checked = "true";
+                        }
+
+                        if (data[41].hasil == "sesuai") {
+                            document.getElementById("sesuai_warna_rumah").checked = "true";
+                        } else if (data[41].hasil == "tidak") {
+                            document.getElementById("tidak_warna_rumah").checked = "true";
+                        } else if (data[41].hasil == "janggal") {
+                            document.getElementById("janggal_warna_rumah").checked = "true";
+                        }
+
+                        if (data[42].hasil == "sesuai") {
+                            document.getElementById("sesuai_lama_tinggal").checked = "true";
+                        } else if (data[42].hasil == "tidak") {
+                            document.getElementById("tidak_lama_tinggal").checked = "true";
+                        } else if (data[42].hasil == "janggal") {
+                            document.getElementById("janggal_lama_tinggal").checked = "true";
+                        }
+
+                        if (data[43].hasil == "sesuai") {
+                            document.getElementById("sesuai_terakhir_renovasi").checked = "true";
+                        } else if (data[43].hasil == "tidak") {
+                            document.getElementById("tidak_terakhir_renovasi").checked = "true";
+                        } else if (data[43].hasil == "janggal") {
+                            document.getElementById("janggal_terakhir_renovasi").checked = "true";
+                        }
+
+                        $('#form_data_telepon textarea[name=keterangan]').val(data[44].keterangan);
+                        
+                    }
+
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan');
+                });
+
+        });
+
+        $('#form_data_telepon').on('submit', function(e) {
+            var id = $('input[name=id_trans_so_telepon]', this).val();
+
+            e.preventDefault();
+
+            var formData = new FormData();
+            
+            formData.append('id_param_verif[]', 1 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 2 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=ttl_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 3 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=alamat_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 4 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=telp_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 5 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=email_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 6 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=saudara_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 7 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_pas]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 8 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=ttl_pas]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 9 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=alamat_pas]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 10 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=telp_pas]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 11 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=saudara_pas]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 12 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_ibu_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 13 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=ttl_ibu_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 14 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_ayah_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 15 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=ttl_ayah_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 16 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_ibu_pas]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 17 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_ayah_pas]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 18 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=status_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 19 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=lokasi_kua]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 20 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=lokasi_nikah]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 21 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=tgl_nikah]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 22 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=tgl_cerai]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 23 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=pekerjaan_deb]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 24 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_kantor_usaha]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 25 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=alamat_kantor_utama]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 26 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=telp_kantor_usaha]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 27 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=jabatan]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 28);
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=tgl_mulai_kerja]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 29 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=lama_kerja]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 30 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=gaji_kerja]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 31 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=bentuk_gaji]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 32 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=rekening_gaji]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 33 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=plafon]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 34 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=tenor]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 35 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=tujuan_pinjaman]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 36 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=yang_menggunakan]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 37 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=alamat_jaminan]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 38 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=luas_tanah]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 39 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=luas_bangunan]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 40 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_pemilik]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 41 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=nama_penghuni]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 42 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=warna_rumah]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 43 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=lama_tinggal]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 44 );
+            formData.append('hasil[]', formatHasil($('input[type=radio][name=terakhir_renovasi]:checked', this).val()));
+            formData.append('keterangan[]', "");
+            formData.append('id_param_verif[]', 45 );
+            formData.append('hasil[]', 0);
+            formData.append('keterangan[]', $('textarea[name=keterangan]', this).val());
+
+            verif_telepon(formData, id)
+                .done(function(res) {
+                    var data = res.data;
+                    console.log(data);
+                    bootbox.alert('Berhasil Disimpan!', function() {
+                        $('#batal').click();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    } else {
+                        $.each(data, function(index, item) {
+                            error += '<p>' + item + '</p>' + "\n";
+                        });
+                    }
+                    bootbox.alert('Gagal Disimpan!!', function() {
+                        $(".close_deb").click();
+                    })
+                })
+        });
     })
 
 </script>

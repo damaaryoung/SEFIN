@@ -467,9 +467,20 @@
                                                 <input type="text" class="form-control" name="no_hp" maxlength="13" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Email</label>
-                                            <input type="text" class="form-control" name="email">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label>Waktu terbaik menghubungi<span class="required_notification">*</span></label>
+                                                <select id="waktu_menghubungi" name="waktu_menghubungi" class="form-control">
+                                                    <option value="">--Pilih--</option>
+                                                    <option id="waktu_menghubungi1" value="1">08.00 WIB - 11.00 WIB</option>
+                                                    <option id="waktu_menghubungi2" value="2">11.00 WIB - 15.00 WIB</option>
+                                                    <option id="waktu_menghubungi3" value="3">15.00 WIB - 17.00 WIB</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Email</label>
+                                                <input type="text" class="form-control" name="email">
+                                            </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
@@ -1525,6 +1536,14 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3" id="lampiran_record">
+                                    <div class="form-group">
+                                        <label>Upload Record CA</label>
+                                        <button class="btn btn-info btn-sm edit submit record_ca_button" data-toggle="modal" data-target="#modal_edit_record_ca"><i class="fa fa-pencil-alt"></i></button>
+                                        <div id="datarecord_ca">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1934,9 +1953,9 @@
                                             <select name="cc_result" id="cc_result" class="form-control ">
                                                 <option value="">--Pilih--</option>
                                                 <option value="1">All Pinjam Kol 1</option>
-                                                <option value="2">Kol 1 Tanpa Jaminan</option>
-                                                <option value="3">Kol 1 Dengan Jaminan</option>
-                                                <option value="4">Kol 1 All Pinjaman</option>
+                                                <option value="2">> Kol 1 Tanpa Jaminan</option>
+                                                <option value="3">> Kol 1 Dengan Jaminan</option>
+                                                <option value="4">> Kol 1 All Pinjaman</option>
                                                 <option value="5">No Din</option>
                                             </select>
                                         </div>
@@ -3156,9 +3175,9 @@
                                             <select name="cc_result_detail" id="cc_result_detail" class="form-control ">
                                                 <option value="">--Pilih--</option>
                                                 <option id="cc_result1" value="1">All Pinjam Kol 1</option>
-                                                <option id="cc_result2" value="2">Kol 1 Tanpa Jaminan</option>
-                                                <option id="cc_result3" value="3">Kol 1 Dengan Jaminan</option>
-                                                <option id="cc_result4" value="4">Kol 1 All Pinjaman</option>
+                                                <option id="cc_result2" value="2">> Kol 1 Tanpa Jaminan</option>
+                                                <option id="cc_result3" value="3">> Kol 1 Dengan Jaminan</option>
+                                                <option id="cc_result4" value="4">> Kol 1 All Pinjaman</option>
                                                 <option id="cc_result5" value="5">No Din</option>
                                             </select>
                                         </div>
@@ -4068,6 +4087,27 @@
                                 <label for="exampleInputFile">Ubah Lampiran Form Persetujuan IDEB</label>
                                 <div class="input-group">
                                     <input type="file" name="lamp_form_persetujuan_edit" class="form-control" style="height: 45px">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger close_deb" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <form id="form_edit_record_ca">
+            <div class="modal fade in" id="modal_edit_record_ca" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class='modal-body text-center'>
+                            <div class="form-group">
+                                <label for="exampleInputFile">Ubah Lampiran Recording CA</label>
+                                <div class="input-group">
+                                    <input type="file" name="record_ca" class="form-control" style="height: 45px">
                                 </div>
                             </div>
                         </div>
@@ -5619,6 +5659,7 @@
                     }
                 });
             }
+
             hide_all = function() {
                 $('#lihat_data_credit').hide();
                 $('#lihat_detail').hide();
@@ -6792,13 +6833,17 @@
                 var html20 = [];
                 var html21 = [];
                 var html22 = [];
-                var html23 = []
+                var html23 = [];
+                var htmlrecord_ca = [];
                 var htmlideb = [];
                 var htmlpefindo = [];
 
                 get_credit_checking({}, id)
                     .done(function(response) {
                         var data = response.data;
+                        console.log(data);
+                        
+                        $('#lampiran_record').hide();
 
                         var id = data.id_trans_so;
                         var id_das = data.id_trans_so;
@@ -7062,7 +7107,7 @@
                             html7.push(g);
                             $('#gambar_buku_nikah').html(html7);
                         }
-
+                        
                         var h = [
                             '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.lamp_ideb + '"><p style="font-size: 13px; font-weight: 400;">' + data.lampiran_ao.lamp_ideb + '</p></a>',
                         ].join('\n');
@@ -7444,6 +7489,16 @@
                                     if (data_debitur.agama = "LAIN2 KEPERCAYAAN") {
                                         document.getElementById("kepercayaan_lain_lain").selected = "true";
                                     }
+
+                                    if (data_debitur.waktu_menghubungi == "1") {
+                                        document.getElementById("waktu_menghubungi1").selected = "true";
+                                    } else
+                                    if (data_debitur.waktu_menghubungi == "2") {
+                                        document.getElementById("waktu_menghubungi2").selected = "true";
+                                    } else
+                                    if (data_debitur.waktu_menghubungi == "3") {
+                                        document.getElementById("waktu_menghubungi3").selected = "true";
+                                    } 
 
                                     $('#form_detail input[name=tinggi_badan]').val(data_debitur.tinggi_badan);
                                     $('#form_detail input[name=berat_badan]').val(data_debitur.berat_badan);
@@ -8106,6 +8161,7 @@
                 var html22 = [];
                 var html23 = [];
                 var html24 = [];
+                var htmlrecord_ca = [];
                 var htmlideb = [];
                 var htmlpefindo = [];
                 $("#input_ca").hide();
@@ -8172,6 +8228,16 @@
                             ].join('\n');
                             html24.push(o);
                             $('#gambar_form_persetujuan_ideb').html(html24);
+                        }
+
+                        if (data.record_ca != null) {
+                            $('.record_ca_button').hide();
+                            var html_record_ca = [];
+                            var ii = [
+                                '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.record_ca + '"><p style="font-size: 13px; font-weight: 400;">' + data.record_ca + '</p></a>',
+                            ].join('\n');
+                            html_record_ca.push(ii);
+                            $('#datarecord_ca').html(html_record_ca);
                         }
 
                         var htmlpenjamin = [];
@@ -8505,6 +8571,16 @@
                                     if (data_debitur.agama = "LAIN2 KEPERCAYAAN") {
                                         document.getElementById("kepercayaan_lain_lain").selected = "true";
                                     }
+
+                                    if (data_debitur.waktu_menghubungi == "1") {
+                                        document.getElementById("waktu_menghubungi1").selected = "true";
+                                    } else
+                                    if (data_debitur.waktu_menghubungi == "2") {
+                                        document.getElementById("waktu_menghubungi2").selected = "true";
+                                    } else
+                                    if (data_debitur.waktu_menghubungi == "3") {
+                                        document.getElementById("waktu_menghubungi3").selected = "true";
+                                    } 
 
                                     $('#form_detail input[name=tinggi_badan]').val(data_debitur.tinggi_badan);
                                     $('#form_detail input[name=berat_badan]').val(data_debitur.berat_badan);
@@ -9988,6 +10064,31 @@
             });
             //=========================================================================================================
 
+            update_record_ca = function(opts, id) {
+                var data = opts;
+                var url = '<?php echo $this->config->item('api_url'); ?>api/master/mca/record_ca/' + id;
+                return $.ajax({
+                    url: url,
+                    data: data,
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    beforeSend: function() {
+                        let html =
+                            "<div width='100%' class='text-center'>" +
+                            "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                            "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
+                            "</div>";
+
+                        $('#load_data').html(html);
+                        $('#modal_load_data').modal('show');
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+            }
 
 
 
@@ -10063,6 +10164,7 @@
                 //     formData.append('tgl_lahir_anak[]', e.value);
                 // });
                 formData.append('no_telp', $('input[name=no_telp]', this).val());
+                formData.append('waktu_menghubungi', $('select[name=waktu_menghubungi]', this).val());
                 formData.append('no_hp', $('input[name=no_hp]', this).val());
                 formData.append('alamat_surat', $('select[name=alamat_surat]', this).val());
                 formData.append('pekerjaan', $('select[name=pekerjaan_deb]', this).val());
@@ -11466,7 +11568,32 @@
                     });
 
             });
-            //===============================================================================================
+
+            update_ca = function(opts, idca) {
+                    var data = opts;
+                    var url = '<?php echo $this->config->item('api_url'); ?>api/master/mca/' + idca;
+                    return $.ajax({
+                        url: url,
+                        data: data,
+                        type: 'POST',
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        beforeSend: function() {
+                            let html =
+                                "<div width='100%' class='text-center'>" +
+                                "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                                "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>" +
+                                "</div>";
+
+                            $('#load_data').html(html);
+                            $('#modal_load_data').modal('show');
+                        },
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        }
+                    });
+                }
 
             // klik submit update
             $('#form_input_ca').on('submit', function(e) {
@@ -11524,7 +11651,7 @@
                 //     formData.append('nama_bank_mutasi[]', e.value);
                 // });
                 formData.append('cc_result', $('select[name=cc_result]', this).val());
-                
+
                 $.each($('input[name="nama_bank_mutasi[]"]'), function(i, e) {
                     formData.append('nama_bank_mutasi[]', e.value);
                 });
@@ -14156,6 +14283,43 @@
 
             });
 
+            $('#form_edit_record_ca').on('submit', function(e) {
+                var id = $('#form_detail input[type=hidden][name=id]').val();
+
+                e.preventDefault();
+                var formData = new FormData();
+
+                formData.append('record_ca', $('input[name=record_ca]', this)[0].files[0]);
+
+                update_record_ca(formData, id)
+                    .done(function(res) {
+
+                        var data = res.data;
+                        bootbox.alert('Data berhasil diubah', function() {
+                            load_lampiran_record_ca();
+                            $('.record_ca_button').hide();
+                            $("#batal").click();
+                            $(".close_deb").click();
+                        });
+                    })
+                    .fail(function(jqXHR) {
+                        var data = jqXHR.responseJSON;
+                        var error = "";
+
+                        if (typeof data == 'string') {
+                            error = '<p>' + data + '</p>';
+                        } else {
+                            $.each(data, function(index, item) {
+                                error += '<p>' + item + '</p>' + "\n";
+                            });
+                        }
+                        bootbox.alert(error, function() {
+                            $("#batal").click();
+                        });
+                    });
+
+            });
+
             load_data_lampiran_foto_usaha = function() {
                 var id = $('#form_debitur input[type=hidden][name=id_debitur]').val();
                 get_data_debitur({}, id)
@@ -14190,6 +14354,25 @@
                         html.push(a1);
                         $('#gambar_form_persetujuan_ideb').html(html);
 
+
+                    })
+                    .fail(function(response) {
+                        $('#data_creditchecking').html('<tr><td colspan="4">Tidak ada data</td></tr>');
+                    });
+            }
+
+            load_lampiran_record_ca = function() {
+                var id = $('#form_detail input[type=hidden][name=id]').val();
+                get_credit_checking({}, id)
+                    .done(function(response) {
+                        var data = response.data;
+                        var html = [];
+                        
+                        var i = [
+                            '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.record_ca + '"><p style="font-size: 13px; font-weight: 400;">' + data.record_ca + '</p></a>',
+                        ].join('\n');
+                        html.push(i);
+                        $('#datarecord_ca').html(html);
 
                     })
                     .fail(function(response) {

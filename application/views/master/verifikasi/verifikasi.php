@@ -1451,6 +1451,13 @@
     }
 
     function click_edit() {
+        $("#form_npwp_debitur").hide();
+        $("#form_npwp_pasangan").hide();
+        $("#form_npwp_pen_1").hide();
+        $("#form_npwp_pen_2").hide();
+        $("#form_npwp_pen_3").hide();
+        $("#form_npwp_pen_4").hide();
+        $("#form_npwp_pen_5").hide();
         $('.prosesVerifikasiDebitur').hide();
         $('.prosesVerifikasiPasangan').hide();
         $('.prosesVerifikasiPenjamin_1').hide();
@@ -3096,7 +3103,7 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/updateVerif/";
+                                            var url = "api/master/verif/updateVerifPasangan/";
         
                                             httpRequestBuilder(requestMapperForUpdatePasanganDataNotFound(), url, id_trans_so, "POST")
                                             .done( (response) => {
@@ -3107,7 +3114,7 @@
                                         })
                                     }
                                 } else {
-                                    var url = "api/master/verif/updateVerif/";
+                                    var url = "api/master/verif/updateVerifPasangan/";
         
                                     httpRequestBuilder(requestMapperForUpdatePasangan(responseBody), url, id_trans_so, "POST")
                                     .done( (response) => {

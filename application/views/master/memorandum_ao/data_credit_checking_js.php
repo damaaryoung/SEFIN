@@ -3727,6 +3727,15 @@
                         document.getElementById("agama_deb6").selected = "true";
                     }
 
+                    if (data.data_debitur.waktu_menghubungi == "1") {
+                        document.getElementById("waktu_menghubungi1").selected = "true";
+                    } else
+                    if (data.data_debitur.waktu_menghubungi == "2") {
+                        document.getElementById("waktu_menghubungi2").selected = "true";
+                    } else
+                    if (data.data_debitur.waktu_menghubungi == "3") {
+                        document.getElementById("waktu_menghubungi3").selected = "true";
+                    } 
 
                     $('#form_detail input[name=alamat_ktp]').val(data.data_debitur.alamat_ktp.alamat_singkat);
                     $('#form_detail input[name=rt_ktp]').val(data.data_debitur.alamat_ktp.rt);
@@ -5405,7 +5414,10 @@
                 bootbox.alert("Pekerjaan Debitur Belum Di Pilih !!!");
                 return (false);
             }
-
+            if (document.getElementById('waktu_menghubungi').value == "") {
+                bootbox.alert("Waktu Terbaik untuk Menghubungi Debitur Belum Di Pilih !!!");
+                return (false);
+            }
             var stringPlafon = document.getElementById('plafon_deb').value.split('.').join("");
 
             if(document.getElementById('pekerjaan_deb').value == "01" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
@@ -5513,6 +5525,7 @@
             formData.append('no_hp', $('input[name=no_hp]', this).val());
             formData.append('email', $('input[id=email]', this).val());
             formData.append('alamat_surat', $('select[name=alamat_surat]', this).val());
+            formData.append('waktu_menghubungi', $('select[name=waktu_menghubungi]', this).val());
             formData.append('pekerjaan', $('select[name=pekerjaan_deb]', this).val());
             formData.append('nama_tempat_kerja', $('input[name=nama_perusahaan]', this).val());
             formData.append('posisi_pekerjaan', $('input[name=posisi]', this).val());
@@ -6907,6 +6920,10 @@
                 }
                 if (document.getElementById('pekerjaan_deb').value == "") {
                     bootbox.alert("Pekerjaan Debitur Belum Di Pilih !!!");
+                    return (false);
+                }
+                if (document.getElementById('waktu_menghubungi').value == "") {
+                    bootbox.alert("Waktu Terbaik untuk Menghubungi Debitur Belum Di Pilih !!!");
                     return (false);
                 }
 

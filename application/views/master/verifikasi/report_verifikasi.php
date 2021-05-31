@@ -21,7 +21,8 @@
                 <div class="col-md-4">
                     <label>Jenis Verifikasi :</label>
                     <select name="jenis_verifikasi" id="jenis_verifikasi" class="form-control">
-                        <option value="hasil_verifikasi">Hasil Verifikasi</option>
+                        <option value="hasil_verifikasi">Hasil Verifikasi Dokumen</option>
+                        <option value="verifikasi_telepon">Hasil Verifikasi Telepon</option>
                         <option value="error_verifikasi">Log Error Verifikasi</option>
                     </select>
                 </div>

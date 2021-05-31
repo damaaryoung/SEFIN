@@ -196,7 +196,7 @@ class Verifikasi_controller extends CI_Controller
             FROM trans_so AS a 
             LEFT JOIN pasangan_calon_debitur AS c ON a.`id_pasangan` = c.`id`
             LEFT JOIN verif_pasangan AS d ON a.`id` = d.`id_trans_so`
-            LEFT JOIN verif_npwp AS e ON c.`id` = e.`id_pasangan`
+            LEFT JOIN verif_npwp_pasangan AS e ON a.`id` = e.`id_trans_so`
             LEFT JOIN dpm_online.user AS f ON d.`user_id` = f.`user_id`
             LEFT JOIN dpm_online.user AS g ON e.`user_id` = g.`user_id`
             WHERE MONTH(d.`updated_at`) = $bulan
@@ -220,22 +220,22 @@ class Verifikasi_controller extends CI_Controller
             FROM trans_so AS a 
             LEFT JOIN penjamin_calon_debitur AS c ON a.`id` = c.`id_trans_so`
             LEFT JOIN verif_penjamin AS d ON c.`id` = d.`id_penjamin`
-            LEFT JOIN verif_npwp AS e ON c.`id` = e.`id_penjamin`
+            LEFT JOIN verif_npwp_penjamin AS e ON c.`id` = e.`id_penjamin`
             LEFT JOIN dpm_online.user AS f ON d.`user_id` = f.`user_id`
             LEFT JOIN dpm_online.user AS g ON e.`user_id` = g.`user_id`
             WHERE MONTH(d.`updated_at`) = $bulan
                 AND YEAR(d.`updated_at`) = $tahun
             ORDER BY d.`updated_at`";
         
-        $data['bulan'] = $bulan;
-        $data['tahun'] = $tahun;
-        $data['result_debitur'] = $this->db->query($query_debitur)->result();
-        $data['result_pasangan'] = $this->db->query($query_pasangan)->result();
-        $data['result_penjamin'] = $this->db->query($query_penjamin)->result();
-        
-        $this->load->view('master/verifikasi/export_hasil_verifikasi', $data);
+            $data['bulan'] = $bulan;
+            $data['tahun'] = $tahun;
+            $data['result_debitur'] = $this->db->query($query_debitur)->result();
+            $data['result_pasangan'] = $this->db->query($query_pasangan)->result();
+            $data['result_penjamin'] = $this->db->query($query_penjamin)->result();
+            
+            $this->load->view('master/verifikasi/export_hasil_verifikasi', $data);
 
-        } else {
+        } else if ($jenis_verifikasi == "error_verifikasi") {
             $query_error = "SELECT 
                 b.nama AS nama_kantor,
                 a.jenis_call AS jenis_call,
@@ -256,10 +256,57 @@ class Verifikasi_controller extends CI_Controller
             $data['result_error'] = $this->db->query($query_error)->result();
 
             $this->load->view('master/verifikasi/export_log_error_verifikasi', $data);
+
+        } else if ($jenis_verifikasi == "verifikasi_telepon") {
+            
+            $query_debitur = "SELECT DISTINCT
+                a.`nomor_so` AS nomor_so,
+                a.`id` AS id_trans_so,
+                c.`nama` AS kantor_cabang,
+                b.`nama_lengkap` AS nama_debitur,
+                d.`plafon` AS plafon,
+                f.`nama` AS nama_so,
+                h.`nama` AS nama_ao,
+                g.`created_at` AS tgl_memo_ao,
+                j.`nama` AS nama_ca
+                    FROM trans_so AS a
+                    LEFT JOIN calon_debitur AS b ON a.`id_calon_debitur` = b.`id`
+                    LEFT JOIN mk_cabang AS c ON a.`id_cabang` = c.`id`
+                    LEFT JOIN fasilitas_pinjaman AS d ON a.`id_fasilitas_pinjaman` = d.`id`
+                    LEFT JOIN verif_telp AS e ON e.`id_trans_so` = a.`id`
+                    LEFT JOIN dpm_online.user AS f ON a.`user_id` = f.`user_id`
+                    LEFT JOIN trans_ao AS g ON g.`id_trans_so` = a.`id`
+                    LEFT JOIN dpm_online.user AS h ON g.`user_id` = h.`user_id`
+                    LEFT JOIN trans_ca AS i ON i.`id_trans_so` = a.`id`
+                    LEFT JOIN dpm_online.user AS j ON i.`user_id` = j.`user_id`
+                    WHERE MONTH(e.`created_at`) = $bulan
+                            AND YEAR(e.`created_at`) = $tahun
+                    ORDER BY e.`created_at` ASC";
+
+            $data['result_debitur'] = $this->db->query($query_debitur)->result();
+
+            $query_telp = "SELECT 
+            a.`id_trans_so`AS id_trans_so,
+            c.`nomor_so` AS nomor_so,
+            b.`parameter` AS parameter,
+            b.`detail` AS detail,
+            a.`hasil` AS hasil,
+            a.`keterangan` AS keterangan
+                FROM verif_telp AS a 
+                LEFT JOIN verif_telp_param AS b ON a.`id_param_verif` = b.`id`
+                LEFT JOIN trans_so as c on a.`id_trans_so` = c.`id`
+                WHERE MONTH(a.`created_at`) = $bulan
+                    AND YEAR(a.`created_at`) = $tahun";
+
+            $data['result_telp'] = $this->db->query($query_telp)->result();
+
+            $query_params = "SELECT detail FROM verif_telp_param";
+            $data['result_params'] = $this->db->query($query_params)->result();
+
+            $this->load->view('master/verifikasi/verifikasi_telepon', $data);
         }
 
     }
-
 
 }
 

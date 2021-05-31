@@ -373,6 +373,7 @@
                                                 <input type="text" name="kode_pos_ktp" id="kode_pos_ktp" class="form-control">
                                             </div>
                                         </div>
+                                        
                                     </div>
 
                                     <div class="col-md-6">
@@ -464,9 +465,20 @@
                                                 <input type="text" class="form-control" name="no_hp" maxlength="13" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Email<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" id="email" name="email">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Waktu terbaik menghubungi<span class="required_notification">*</span></label>
+                                                <select id="waktu_menghubungi" name="waktu_menghubungi" class="form-control">
+                                                    <option value="">--Pilih--</option>
+                                                    <option id="waktu_menghubungi1" value="1">08.00 WIB - 11.00 WIB</option>
+                                                    <option id="waktu_menghubungi2" value="2">11.00 WIB - 15.00 WIB</option>
+                                                    <option id="waktu_menghubungi3" value="3">15.00 WIB - 17.00 WIB</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label>Email<span class="required_notification">*</span></label>
+                                                <input type="text" class="form-control" id="email" name="email">
+                                            </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
@@ -987,7 +999,7 @@
             <label style="font-style: italic; color: #383a3a;">Catatan SO</label>
             <textarea name="notes_so" style="width: 100%" rows="5" readonly></textarea>
         </div>
-        <div class="col-md-12" id="input_memorandum_ao">
+        <div class="col-md-12" id="input_memorandum_ao" style="margin-bottom: 60px">
             <form id="form_input_ao">
                 <input type="hidden" name="id" value="">
                 <!-- AREA CHART -->
@@ -1931,7 +1943,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" id="submit_ao" class="btn btn-primary submit" style="float: right; margin-right: 7px;margin-top: -25px;">Simpan</button>
+                            <button type="submit" id="submit_ao" class="btn btn-danger submit" style="float: left; margin-top: 20px ">APPROVE HM</button>
                         </div>
                     </div>
             </form>
@@ -2899,7 +2911,6 @@
         </div>
     </div>
 </div>
-</div>
 
 <form id="form_edit_photo_deb">
     <input type="hidden" id="id_debitur_photo" name="id_debitur_photo">
@@ -3122,7 +3133,7 @@
 </form>
 
 <form id="form_edit_npwp_pasangan">
-<input type="hidden" name="id_pasangan_npwp">>
+<input type="hidden" name="id_pasangan_npwp">
     <div class="modal fade in" id="modal_edit_npwp_pasangan" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
