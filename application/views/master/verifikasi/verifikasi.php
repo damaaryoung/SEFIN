@@ -1704,7 +1704,7 @@
                             "nik" : $("#nik").text(),
                             "jenis_call" : "COMPLETE ID",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -1719,7 +1719,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiDebitur').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -1848,7 +1848,7 @@
                                 "nik" : $("#nik").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -1860,7 +1860,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiDebitur').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -2101,7 +2101,7 @@
                                 "nik" : $("#nik").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -2116,7 +2116,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiDebitur').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -2246,7 +2246,7 @@
                                     "nik" : $("#nik").text(),
                                     "jenis_call" : "COMPLETE ID",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -2258,7 +2258,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiDebitur').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -2499,7 +2499,7 @@
                             "nik" : $("#nik_pasangan").text(),
                             "jenis_call" : "COMPLETE ID",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -2514,7 +2514,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiPasangan').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -2645,7 +2645,7 @@
                                 "nik" : $("#nik_pasangan").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -2657,7 +2657,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPasangan').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -2894,7 +2894,7 @@
                                 "nik" : $("#nik_pasangan").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -2909,7 +2909,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPasangan').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -3040,7 +3040,7 @@
                                     "nik" : $("#nik_pasangan").text(),
                                     "jenis_call" : "COMPLETE ID",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -3052,7 +3052,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiPasangan').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -3277,7 +3277,7 @@
                             "nik" : $("#nik_penjamin_1").text(),
                             "jenis_call" : "COMPLETE ID",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -3292,7 +3292,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiPenjamin_1').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -3423,7 +3423,7 @@
                                 "nik" : $("#nik_penjamin_1").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -3435,7 +3435,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_1').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -3645,7 +3645,7 @@
                             "nik" : $("#nik_penjamin_2").text(),
                             "jenis_call" : "COMPLETE ID",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -3660,7 +3660,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiPenjamin_2').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -3791,7 +3791,7 @@
                                 "nik" : $("#nik_penjamin_2").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -3803,7 +3803,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_2').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -4003,7 +4003,7 @@
                             "nik" : $("#nik_penjamin_3").text(),
                             "jenis_call" : "COMPLETE ID",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -4018,7 +4018,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiPenjamin_3').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -4149,7 +4149,7 @@
                                 "nik" : $("#nik_penjamin_3").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -4161,7 +4161,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_3').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -4350,7 +4350,7 @@
                             "nik" : $("#nik_penjamin_4").text(),
                             "jenis_call" : "COMPLETE ID",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -4365,7 +4365,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiPenjamin_4').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -4496,7 +4496,7 @@
                             "nik" : $("#nik_penjamin_4").text(),
                             "jenis_call" : "COMPLETE ID",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -4508,7 +4508,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiPenjamin_4').hide();
                         })
                         } else if(responseBody.status == 502) {
@@ -4678,7 +4678,7 @@
                             "nik" : $("#nik_penjamin_5").text(),
                             "jenis_call" : "COMPLETE ID",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -4693,7 +4693,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiPenjamin_5').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -4824,7 +4824,7 @@
                                 "nik" : $("#nik_penjamin_5").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -4836,7 +4836,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_5').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -5063,7 +5063,7 @@
                                 "nik" : $("#nik_penjamin_1").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -5078,7 +5078,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_1').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -5209,7 +5209,7 @@
                                     "nik" : $("#nik_penjamin_1").text(),
                                     "jenis_call" : "COMPLETE ID",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -5221,7 +5221,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiPenjamin_1').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -5438,7 +5438,7 @@
                                 "nik" : $("#nik_penjamin_2").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -5453,7 +5453,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_2').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -5584,7 +5584,7 @@
                                     "nik" : $("#nik_penjamin_2").text(),
                                     "jenis_call" : "COMPLETE ID",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -5596,7 +5596,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiPenjamin_2').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -5802,7 +5802,7 @@
                                 "nik" : $("#nik_penjamin_3").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -5817,7 +5817,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_3').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -5948,7 +5948,7 @@
                                     "nik" : $("#nik_penjamin_3").text(),
                                     "jenis_call" : "COMPLETE ID",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -5960,7 +5960,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiPenjamin_3').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -6155,7 +6155,7 @@
                                 "nik" : $("#nik_penjamin_4").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -6170,7 +6170,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_4').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -6301,7 +6301,7 @@
                                     "nik" : $("#nik_penjamin_4").text(),
                                     "jenis_call" : "COMPLETE ID",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -6313,7 +6313,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiPenjamin_4').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -6490,7 +6490,7 @@
                                 "nik" : $("#nik_penjamin_5").text(),
                                 "jenis_call" : "COMPLETE ID",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -6505,7 +6505,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiPenjamin_5').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -6636,7 +6636,7 @@
                                     "nik" : $("#nik_penjamin_5").text(),
                                     "jenis_call" : "COMPLETE ID",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -6648,7 +6648,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiPenjamin_5').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -6849,7 +6849,7 @@
                             "npwp" : $("#no_npwp").text(),
                             "jenis_call" : "PENDAPATAN",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -6864,7 +6864,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiNpwp').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -6972,7 +6972,7 @@
                                 "npwp" : $("#no_npwp").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -6984,7 +6984,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwp').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -7166,7 +7166,7 @@
                                 "npwp" : $("#no_npwp").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -7181,7 +7181,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwp').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -7289,7 +7289,7 @@
                                     "npwp" : $("#no_npwp").text(),
                                     "jenis_call" : "PENDAPATAN",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -7301,7 +7301,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiNpwp').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -7481,7 +7481,7 @@
                             "npwp" : $("#no_npwp_pas").text(),
                             "jenis_call" : "PENDAPATAN",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -7496,7 +7496,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiNpwpPasangan').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -7604,7 +7604,7 @@
                                 "npwp" : $("#no_npwp_pas").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -7616,7 +7616,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPasangan').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -7796,7 +7796,7 @@
                                 "npwp" : $("#no_npwp_pas").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -7811,7 +7811,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPasangan').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -7919,7 +7919,7 @@
                                     "npwp" : $("#no_npwp_pas").text(),
                                     "jenis_call" : "PENDAPATAN",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -7931,7 +7931,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiNpwpPasangan').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -8100,7 +8100,7 @@
                             "npwp" : $("#no_npwp_pen_1").text(),
                             "jenis_call" : "PENDAPATAN",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -8115,7 +8115,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiNpwpPenjamin_1').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -8223,7 +8223,7 @@
                                 "npwp" : $("#no_npwp_pen_1").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -8235,7 +8235,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_1').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -8393,7 +8393,7 @@
                             "npwp" : $("#no_npwp_pen_2").text(),
                             "jenis_call" : "PENDAPATAN",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -8408,7 +8408,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiNpwpPenjamin_2').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -8516,7 +8516,7 @@
                                 "npwp" : $("#no_npwp_pen_2").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -8528,7 +8528,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_2').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -8679,7 +8679,7 @@
                             "npwp" : $("#no_npwp_pen_3").text(),
                             "jenis_call" : "PENDAPATAN",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -8694,7 +8694,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiNpwpPenjamin_3').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -8802,7 +8802,7 @@
                                 "npwp" : $("#no_npwp_pen_3").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -8814,7 +8814,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_3').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -8960,7 +8960,7 @@
                             "npwp" : $("#no_npwp_pen_4").text(),
                             "jenis_call" : "PENDAPATAN",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -8975,7 +8975,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiNpwpPenjamin_4').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -9083,7 +9083,7 @@
                                 "npwp" : $("#no_npwp_pen_4").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -9095,7 +9095,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_4').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -9230,7 +9230,7 @@
                             "npwp" : $("#no_npwp_pen_5").text(),
                             "jenis_call" : "PENDAPATAN",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -9245,7 +9245,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiNpwpPenjamin_5').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -9353,7 +9353,7 @@
                                 "npwp" : $("#no_npwp_pen_5").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -9365,7 +9365,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_5').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -9534,7 +9534,7 @@
                                 "npwp" : $("#no_npwp_pen_1").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -9549,7 +9549,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_1').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -9657,7 +9657,7 @@
                                     "npwp" : $("#no_npwp_pen_1").text(),
                                     "jenis_call" : "PENDAPATAN",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -9669,7 +9669,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiNpwpPenjamin_1').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -9831,7 +9831,7 @@
                                 "npwp" : $("#no_npwp_pen_2").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -9846,7 +9846,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_2').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -9954,7 +9954,7 @@
                                     "npwp" : $("#no_npwp_pen_2").text(),
                                     "jenis_call" : "PENDAPATAN",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -9966,7 +9966,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiNpwpPenjamin_2').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -10121,7 +10121,7 @@
                                 "npwp" : $("#no_npwp_pen_3").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -10136,7 +10136,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_3').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -10244,7 +10244,7 @@
                                     "npwp" : $("#no_npwp_pen_3").text(),
                                     "jenis_call" : "PENDAPATAN",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -10256,7 +10256,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiNpwpPenjamin_3').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -10406,7 +10406,7 @@
                                 "npwp" : $("#no_npwp_pen_4").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -10421,7 +10421,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_4').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -10529,7 +10529,7 @@
                                     "npwp" : $("#no_npwp_pen_4").text(),
                                     "jenis_call" : "PENDAPATAN",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -10541,7 +10541,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiNpwpPenjamin_4').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -10680,7 +10680,7 @@
                                 "npwp" : $("#no_npwp_pen_5").text(),
                                 "jenis_call" : "PENDAPATAN",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -10695,7 +10695,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiNpwpPenjamin_5').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -10803,7 +10803,7 @@
                                     "npwp" : $("#no_npwp_pen_5").text(),
                                     "jenis_call" : "PENDAPATAN",
                                     "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
+                                    "messages" : responseBody.errors.message,
                                 }
 
                                 $.ajax({
@@ -10815,7 +10815,7 @@
                                     },
                                 })
                                 .done(function(res) {
-                                    bootbox.alert(responseBody.message);
+                                    bootbox.alert(responseBody.errors.message);
                                     $('.prosesVerifikasiNpwpPenjamin_5').hide();
                                 })
                             } else if(responseBody.status == 502) {
@@ -10989,7 +10989,7 @@
                             "nop" : $("#nop_1").text(),
                             "jenis_call" : "PROPERTI",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -11004,7 +11004,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiProperti_1').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -11110,7 +11110,7 @@
                                 "nop" : $("#nop_1").text(),
                                 "jenis_call" : "PROPERTI",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -11122,7 +11122,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiProperti_1').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -11282,7 +11282,7 @@
                             "nop" : $("#nop_2").text(),
                             "jenis_call" : "PROPERTI",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -11297,7 +11297,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiProperti_2').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -11403,7 +11403,7 @@
                                 "nop" : $("#nop_2").text(),
                                 "jenis_call" : "PROPERTI",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -11415,7 +11415,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiProperti_2').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -11567,7 +11567,7 @@
                             "nop" : $("#nop_3").text(),
                             "jenis_call" : "PROPERTI",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -11582,7 +11582,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiProperti_3').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -11688,7 +11688,7 @@
                                 "nop" : $("#nop_3").text(),
                                 "jenis_call" : "PROPERTI",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -11700,7 +11700,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiProperti_3').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -11848,7 +11848,7 @@
                             "nop" : $("#nop_4").text(),
                             "jenis_call" : "PROPERTI",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -11863,7 +11863,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiProperti_4').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -11969,7 +11969,7 @@
                                 "nop" : $("#nop_4").text(),
                                 "jenis_call" : "PROPERTI",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -11981,7 +11981,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiProperti_4').hide();
                             })
                         } else if(responseBody.status == 502) {
@@ -12119,7 +12119,7 @@
                             "nop" : $("#nop_5").text(),
                             "jenis_call" : "PROPERTI",
                             "rc" : responseBody.status,
-                            "messages" : responseBody.message,
+                            "messages" : responseBody.errors.message,
                         }
 
                         $.ajax({
@@ -12134,7 +12134,7 @@
                             },
                         })
                         .done(function(res) {
-                            bootbox.alert(responseBody.message);
+                            bootbox.alert(responseBody.errors.message);
                             $('.prosesVerifikasiProperti_5').hide();
                         })
                     } else if(responseBody.status == 502) {
@@ -12240,7 +12240,7 @@
                                 "nop" : $("#nop_5").text(),
                                 "jenis_call" : "PROPERTI",
                                 "rc" : responseBody.status,
-                                "messages" : responseBody.message,
+                                "messages" : responseBody.errors.message,
                             }
 
                             $.ajax({
@@ -12252,7 +12252,7 @@
                                 },
                             })
                             .done(function(res) {
-                                bootbox.alert(responseBody.message);
+                                bootbox.alert(responseBody.errors.message);
                                 $('.prosesVerifikasiProperti_5').hide();
                             })
                         } else if(responseBody.status == 502) {
