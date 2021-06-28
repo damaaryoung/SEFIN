@@ -23,6 +23,7 @@
                     <select name="jenis_verifikasi" id="jenis_verifikasi" class="form-control">
                         <option value="hasil_verifikasi">Hasil Verifikasi Dokumen</option>
                         <option value="verifikasi_telepon">Hasil Verifikasi Telepon</option>
+                        <!-- <option value="tracking_order">Tracking Order Memo CA</option> -->
                         <option value="error_verifikasi">Log Error Verifikasi</option>
                     </select>
                 </div>

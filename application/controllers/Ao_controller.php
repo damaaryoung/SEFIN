@@ -8,6 +8,7 @@ class Ao_controller extends CI_Controller
     {
         parent::__construct();
         $this->load->model('Model_ao');
+        $this->load->model('Model_tracking_order');
         $this->load->model('Model_so_approve_hm');
     }
 
@@ -321,6 +322,65 @@ class Ao_controller extends CI_Controller
             "last_page" => $res->data->last_page,
             "last_page_url" => $res->data->last_page_url,
             "prev_page_url" => $res->data->prev_page_url
+        );
+
+        echo json_encode($output);
+    }
+
+    function get_data_tracking_order()
+    {
+        $list = $this->Model_tracking_order->get_datatables();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $field) {
+            $no++;
+
+            $id_trans_so = $field->id_trans_so;
+            $plafon_kredit = $field->plafon_kredit;
+            $status_pending = $field->tgl_pending;
+            $status_return = $field->status_return;
+            $id_caa = $field->id_caa;
+            $id_verif = $field->id_verif;
+            $id_cancel = $field->cancel_debitur;
+
+            if ($id_cancel == 2) {
+                $status_tracking = '<p style="background-color: #dc4836; text-align: center; vertical-align: middle">Cancel By Debitur</p>';
+            } else {
+                if ($id_trans_so != NULL && $id_verif != NULL && $id_caa == NULL){
+                    $status_tracking = '<p style="text-align: center; vertical-align: middle">Proses Pengajuan CAA</p>';
+                } else if($id_trans_so == NULL) {
+                    $status_tracking = '<p style="text-align: center; vertical-align: middle">Proses Memorandum CA</p>';
+                } else if ($plafon_kredit == 0) {
+                    $status_tracking = '<p style="background-color: #dc4836; text-align: center; vertical-align: middle">Not Recommend CA</p>';
+                } else if ($id_trans_so != NULL && $id_verif == NULL) {
+                    $status_tracking = '<p style="text-align: center; vertical-align: middle">Proses Verifikasi</p>';
+                } else if ($id_caa != NULL) {
+                    $status_tracking = '<p style="background-color: #00d807; text-align: center; vertical-align: middle">Sudah Pengajuan CAA</p>';
+                } else if ($status_pending != NULL && $id_trans_so == NULL) {
+                    $status_tracking = '<p style="background-color: #f1f1f1; text-align: center; vertical-align: middle">Pending</p>';
+                } else if ($status_return != NULL && $id_trans_so == NULL) {
+                    $status_tracking = '<p style="background-color: #f1f1f1; text-align: center; vertical-align: middle">Return</p>';
+                } else {
+                    $status_tracking = '<p style="text-align: center; vertical-align: middle">Status Lain</p>';
+                }
+            }
+
+            $row = array();
+            $row[] = $no;
+            $row[] = $field->tgl_transaksi;
+            $row[] = $field->nomor_so;
+            $row[] = $field->nama_so;
+            $row[] = $field->nama_debitur;
+            $row[] = $field->nama_cabang;
+            $row[] = $status_tracking;
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->Model_tracking_order->count_all(),
+            "recordsFiltered" => $this->Model_tracking_order->count_filtered(),
+            "data" => $data,
         );
 
         echo json_encode($output);

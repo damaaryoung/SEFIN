@@ -63,6 +63,7 @@
                         <option value="" selected="selected" disabled>- Pilih Activity -</option>
                         <option value="verifikasi_dokumen">Verifikasi Dokumen <i>(Verijelas)</i></option>
                         <option value="verifikasi_telepon">Verifikasi Telepon</option>
+                        <!-- <option value="tracking_order">Tracking Order Memo CA</option> -->
                     </select>
                 </div>
             </div>
@@ -157,8 +158,6 @@
                                 <tbody id="data_telepon" style="font-size: 13px">
                                 </tbody>
                             </table>
-                            <div id="paginationBar">
-                            </div>
                         </div>
                         <div class="box-body table-responsive no-padding" id="table_filter">
                             <table id="table_verifikasi_filter" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
@@ -184,8 +183,70 @@
                                 <tbody id="data_verifikasi_filter" style="font-size: 13px">
                                 </tbody>
                             </table>
-                            <div id="paginationBar">
+                            <div id="paginationBarVerifikasi">
                             </div>
+                        </div>
+                        <div class="box-body table-responsive no-padding" id="table_data_telepon_filter">
+                            <table id="table_telepon_filter" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                <thead style="font-size: 15px" class="bg-danger">
+                                    <tr>
+                                        <th>
+                                            No
+                                        </th>
+                                        <th>
+                                            Tanggal Transaksi
+                                        </th>
+                                        <th>
+                                            No. SO
+                                        </th>
+                                        <th>
+                                            Nama Debitur
+                                        </th>
+                                        <th>
+                                            Aksi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data_telepon_filter" style="font-size: 13px">
+                                </tbody>
+                            </table>
+                            <div id="paginationBarTelepon">
+                            </div>
+                        </div>
+                        <div class="box-body table-responsive no-padding" id="table_data_tracking_order">
+                            <button class="btn btn-primary tambah" id="tambah_tracking_order" style="margin-bottom: 9px;"><i class="fa fa-user-plus">Tambah</i></button>
+                            <table id="table_tracking_order" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                <thead style="font-size: 15px" class="bg-danger">
+                                    <tr>
+                                        <th>
+                                            No
+                                        </th>
+                                        <th>
+                                            Tanggal
+                                        </th>
+                                        <th>
+                                            Cabang
+                                        </th>
+                                        <th>
+                                            No. SO
+                                        </th>
+                                        <th>
+                                            Nama Debitur
+                                        </th>
+                                        <th>
+                                            Plafon
+                                        </th>
+                                        <th>
+                                            Status
+                                        </th>
+                                        <th>
+                                            Aksi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data_tracking_order" style="font-size: 13px">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1011,6 +1072,105 @@
     </div>
 </div>
 
+<div id="activity_tracking_order" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Tracking Order</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Tracking Order</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="col-md-12">
+        <div class="box box-primary" style="background-color: #ffffff1f">
+            <div class="box-body">
+                <form id="form_tracking_order">
+                    <div class="card mb-3">
+                        <div class="card-header bg-gradient-danger" data-toggle="collapse" href="#collapse_1" role="button" aria-expanded="false" aria-controls="collapse_1">
+                            <a class="text-light">
+                                <b>TRACKING ORDER</b>
+                            </a>
+                        </div>
+                        <div class="card-body collapse" id="collapse_1">
+                            <div class="row">
+                                <div class="form-group text-primary" style="margin-left: 10px">
+                                    <i class="far fa-clock"></i> <?php echo date(' d-m-Y') ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input type="hidden" name="id_trans_so" value="">
+                                        <label>Nomor SO<span class="required_notification">*</span></label>
+                                        <div class="input-group">
+                                            <input type="text" id="nomor_so" name="nomor_so" class="form-control" disabled>
+                                                <span class="input-group-append">
+                                                <button type="button" class="btn btn-info button_nomor_so" data-toggle="modal" data-target="#modal_nomor_so">Pilih Nomor SO</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Cabang<span class="required_notification">*</span></label>
+                                        <?php
+                                            $kode_cabang = $this->db->get('mk_cabang')->result(); 
+                                        ?>
+                                        <select id="kode_cabang" class="form-control" name="kode_cabang" disabled> 
+                                            <option value="">-- Pilih --</option>
+                                            <?php foreach($kode_cabang as $r): ?>
+                                                <option id="kode_cabang<?php echo $r->id ?>" value="<?php echo $r->id ?>"><?php echo $r->nama; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nama Debitur<span class="required_notification">*</span></label>
+                                        <input type="text" class="form-control" name="nama_debitur" id="nama_debitur" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Plafon<span class="required_notification">*</span></label>
+                                        <input type="text" class="form-control" name="plafon" id="plafon" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="" selected="selected" disabled>--Pilih--</option>
+                                            <option value="Sudah Pengajuan CAA">Sudah Pengajuan CAA</option>
+                                            <option value="Not Recommend CA">Not Recomend CA</option>
+                                            <option value="Not Recommend AO">Not Recommend AO</option>
+                                            <option value="Cancel by Debitur">Cancel by Debitur</option>
+                                            <option value="Proses Verifikasi">Proses Verifikasi</option>
+                                            <option value="Proses Memorandum CA">Proses Memorandum CA</option>
+                                            <option value="Proses Pengajuan CAA">Proses Pengajuan CAA</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Return">Return</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Keterangan</label>
+                                        <textarea name="keterangan" id="keterangan" style="width: 100%;resize: none;" rows="3"></textarea>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" id="submit" class="btn btn-success submit_tracking_order"><i class="fa fa-save"></i> Submit</button>
+                    <button type="update" id="update" class="btn btn-info update update_tracking_order" id="update_tracking_ca"><i class="fa fa-save"></i> Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade in" id="modal_data_telepon" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -1789,6 +1949,57 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal_nomor_so" tabindex="-1" role="dialog" aria-labelledby="modal_nomor_soLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_nomor_soLabel">Pilih Nomor SO</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="box-body table-responsive no-padding">
+                                    <table id="table_nomor_so" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                        <thead style="font-size: 14px" class="bg-danger">
+                                            <tr>
+                                                <th width="5px">
+                                                    No
+                                                </th>
+                                                <th>
+                                                    Cabang
+                                                </th>
+                                                <th>
+                                                    Tanggal Transaksi
+                                                </th>
+                                                <th>
+                                                    Nomor SO
+                                                </th>
+                                                <th>
+                                                    Nama Debitur
+                                                </th>
+                                                <th width="10px">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="data_nomor_so" style="font-size: 13px">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <form id="form_edit_penjamin">
     <div class="modal fade in" id="modal_penjamin" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-lg">
@@ -2148,6 +2359,15 @@
     $("#table_not_filter").hide();
     $("#table_filter").hide();
     $("#table_data_telepon").hide();
+    $("#table_data_telepon_filter").hide();
+    $("#table_data_tracking_order").hide();
+
+    $("#tambah_tracking_order").click(function() {
+        hide_all();
+        $("#activity_tracking_order").show();
+        $('.update_tracking_order').hide();
+        $('.submit_tracking_order').show();
+    });
 
     var areaSelect = document.getElementById("kode_area");
     areaSelect.addEventListener("change", function(e) {
@@ -2162,7 +2382,7 @@
     });
 
     var cabangSelect = document.getElementById("kode_kantor");
-    cabangSelect.addEventListener("change", (e) => {
+    cabangSelect.addEventListener("change", function(e) {
         var selectedCabang = $("#kode_kantor option:selected").val();
 
         if (selectedCabang !== "") {
@@ -2172,6 +2392,62 @@
         }
 
     });
+
+    var activitySelect = document.getElementById("select_activity");
+    activitySelect.addEventListener("change", function(e) {
+        var selectedActivity = $("#select_activity option:selected").val();
+
+        if (selectedActivity == "tracking_order") {
+            $('#kode_kantor').prop('disabled', 'disabled');
+            $('#kode_area').prop('disabled', 'disabled');
+        } else {
+            $('#kode_kantor').prop('disabled', false);
+            $('#kode_area').prop('disabled', false);
+        }
+
+    });
+
+    var plafon = document.getElementById('plafon');
+	plafon.addEventListener('keyup', function(e)
+	{
+		plafon.value = formatRupiah(this.value);
+	});
+	
+	plafon.addEventListener('keydown', function(event)
+	{
+		limitCharacter(event);
+    });
+
+    function formatRupiah(bilangan, prefix){
+        
+		var number_string = bilangan.replace(/[^,\d]/g, '').toString(),
+			split	= number_string.split(','),
+			sisa 	= split[0].length % 3,
+			rupiah 	= split[0].substr(0, sisa),
+			ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+			
+		if (ribuan) {
+			separator = sisa ? '.' : '';
+			rupiah += separator + ribuan.join('.');
+		}
+		
+		rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+		return prefix == undefined ? rupiah : (rupiah ? rupiah : '');
+	}
+
+    function rubah(angka) {
+        var reverse = angka.toString().split('').reverse().join(''),
+            ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join('.').split('').reverse().join('');
+        return ribuan;
+    }
+
+    function removePoint(stringBilangan) {
+        var formattedBilangan = stringBilangan;
+        formattedBilangan = stringBilangan.replaceAll(".", "");
+        formattedBilangan = formattedBilangan.replace(",", ".");
+        return formattedBilangan;
+    }
 
     function hanyaAngka(evt) {
         var charCode = (evt.which) ? evt.which : event.keyCode
@@ -2189,8 +2465,8 @@
             kode_area   : $("#kode_area option:selected").val(),
             draw: 1
         }
-
-        if (requestBody.kode_area == "" && requestBody.kode_kantor == "") {
+        
+        if (requestBody.kode_area == "" && requestBody.kode_kantor == "" && requestBody.select_activity != "tracking_order") {
             bootbox.alert("Salah satu dari Area atau Cabang tidak boleh kosong!");
         } else if (requestBody.select_activity == "") {
             bootbox.alert("Pilih salah satu Activity!");
@@ -2198,17 +2474,19 @@
             if (requestBody.kode_area == "konsolidasi" || requestBody.kode_kantor == "konsolidasi") {
                 tampil_data_verifikasi();
             } else {
-                // call AJAX data verifikasi yang sudah di filter berdasarkan area dan kantor
                 hit_filter_data_pagination(requestBody);
                     
             }
         } else if (requestBody.select_activity == "verifikasi_telepon") {
             if (requestBody.kode_area == "konsolidasi" || requestBody.kode_kantor == "konsolidasi") {
                 tampil_data_telepon();
-            } else {
-                // call AJAX data telepon yang sudah di filter berdasarkan area dan kantor       
+            } else {    
                 hit_filter_data_telepon(requestBody);
             }
+        } else if (requestBody.select_activity == "tracking_order") {
+            tampil_data_tracking_order();
+        } else if (requestBody.kode_area != "" && requestBody.kode_kantor != "") {
+            bootbox.alert("Pilih salah satu area atau cabang !!");
         }
     }
 
@@ -2216,6 +2494,8 @@
         $("#table_not_filter").hide();
         $("#table_filter").show();
         $("#table_data_telepon").hide();
+        $("#table_data_telepon_filter").hide();
+        $("#table_data_tracking_order").hide();
 
         $.ajax({
             url: "<?php echo site_url('Ao_controller/get_data_verifikasi_filter') ?>",
@@ -2252,24 +2532,24 @@
 
                 $('#data_verifikasi_filter').html(html);
 
-                $("#paginationBar").html(`
+                $("#paginationBarVerifikasi").html(`
                     <nav aria-label="Page navigation example">
-                        <ul class="pagination" id="paginationList">
+                        <ul class="pagination" id="paginationListVerifikasi">
                         </ul>
                     </nav>
                 `);
 
                 for (var i=1; i<=res.last_page; i++) {
                     if (i == requestBody.draw) {
-                        $("#paginationList").append(`<li class="page-item active"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
+                        $("#paginationListVerifikasi").append(`<li class="page-item active"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
                     } else {
-                        $("#paginationList").append(`<li class="page-item"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
+                        $("#paginationListVerifikasi").append(`<li class="page-item"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
                     }
                     
                     document.getElementById(`${i}id`).addEventListener("click", (e) => {
                         requestBody.draw = e.target.getAttribute("data-value");
                         hit_filter_data_pagination(requestBody);
-                        $("#paginationList").empty();
+                        $("#paginationListVerifikasi").empty();
                     })
                 }
 
@@ -2281,7 +2561,9 @@
     function hit_filter_data_telepon(requestBody) {
         $("#table_not_filter").hide();
         $("#table_filter").hide();
-        $("#table_data_telepon").show();
+        $("#table_data_telepon").hide();
+        $("#table_data_telepon_filter").show();
+        $("#table_data_tracking_order").hide();
 
         $.ajax({
             url: "<?php echo site_url('Ao_controller/get_data_telepon_filter') ?>",
@@ -2300,7 +2582,7 @@
                     '<td colspan="5" style="text-align: center">Tidak ada data</td>',
                 '</tr>'
                 ].join('\n');
-                $('#data_telepon').html(tr);
+                $('#data_telepon_filter').html(tr);
                 return;
             } else {
                 $.each(res.data, function(index,item){
@@ -2316,26 +2598,26 @@
                     html.push(tr);
                 });
 
-                $('#data_telepon').html(html);
+                $('#data_telepon_filter').html(html);
 
-                $("#paginationBar").html(`
+                $("#paginationBarTelepon").html(`
                     <nav aria-label="Page navigation example">
-                        <ul class="pagination" id="paginationList">
+                        <ul class="pagination" id="paginationListTelepon">
                         </ul>
                     </nav>
                 `);
 
                 for (var i=1; i<=res.last_page; i++) {
                     if (i == requestBody.draw) {
-                        $("#paginationList").append(`<li class="page-item active"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
+                        $("#paginationListTelepon").append(`<li class="page-item active"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
                     } else {
-                        $("#paginationList").append(`<li class="page-item"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
+                        $("#paginationListTelepon").append(`<li class="page-item"><a class="page-link" id="${i}id" data-value="${i}">${i}</a></li>`);
                     }
                     
                     document.getElementById(`${i}id`).addEventListener("click", (e) => {
                         requestBody.draw = e.target.getAttribute("data-value");
                         hit_filter_data_telepon(requestBody);
-                        $("#paginationList").empty();
+                        $("#paginationListTelepon").empty();
                     })
                 }
 
@@ -2348,6 +2630,8 @@
         $("#table_not_filter").show();
         $("#table_filter").hide();
         $("#table_data_telepon").hide();
+        $("#table_data_telepon_filter").hide();
+        $("#table_data_tracking_order").hide();
 
         $('#table_verifikasi').DataTable({
 
@@ -2381,6 +2665,8 @@
         $("#table_not_filter").hide();
         $("#table_filter").hide();
         $("#table_data_telepon").show();
+        $("#table_data_telepon_filter").hide();
+        $("#table_data_tracking_order").hide();
         
         $('#table_telepon').DataTable({
 
@@ -2408,6 +2694,68 @@
             }, ],
 
         })
+    }
+
+    function tampil_data_tracking_order() {
+        $("#table_not_filter").hide();
+        $("#table_filter").hide();
+        $("#table_data_telepon").hide();
+        $("#table_data_telepon_filter").hide();
+        $("#table_data_tracking_order").show();
+        $('.button_nomor_so').show();
+
+        var html  = [];
+
+        get_tracking_order()
+            .done(function(response){
+                var data = response.data;
+                console.log(data);
+                var no = 0;
+                
+                if(data.length === 0 ){
+                    var tr =[
+                    '<tr valign="middle">',
+                        '<td colspan="8" style="text-align: center">Tidak ada data</td>',
+                    '</tr>'
+                    ].join('\n');
+                    $('#data_tracking_order').html(tr);
+                    return;
+                }
+
+                $.each(data,function(index,item){
+                    no++;
+                    var tr = [
+                    '<tr>',
+                        '<td style="text-align: center">'+ no +'</td>',
+                        '<td>' + formatTanggalActivity(item.created_at) + '</td>',
+                        '<td>' + item.nama_cabang + '</td>',
+                        '<td>' + item.nomor_so + '</td>',
+                        '<td>' + item.nama_debitur + '</td>',
+                        '<td>' + rubah(item.plafon) + '</td>',
+                        '<td>' + item.status + '</td>',
+                        '<td style="text-align: center">',
+                            '<button type="button"class="btn btn-warning btn-sm edit" data="' + item.id_trans_so + '"><i style="color: #fff" class="fas fa-pencil-alt"></i></button>',
+                        '</td>',
+                    '</tr>'
+                    ].join('\n');
+                    html.push(tr);
+                });
+
+                $('#data_tracking_order').html(html);
+                $('#table_tracking_order').DataTable({
+                    "paging": true,
+                    "retrieve": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                });
+            })
+
+            .fail(function(response){
+                $('#data_tracking_order').html('<tr><td colspan="8" style="text-align: center">Tidak ada data</td></tr>');
+            });
     }
 
     function click_edit() {
@@ -13347,6 +13695,20 @@
         
     }
 
+    function formatTanggalActivity(tanggal) {
+        var splittedTanggalActivity = tanggal.split(" ");
+
+        var objTanggalActivity = {
+            tanggal : splittedTanggalActivity[0],
+            waktu   : splittedTanggalActivity[1]
+        }
+
+        var formattedTanggal = objTanggalActivity.tanggal.split("-").reverse().join("-");
+
+        return `${formattedTanggal} | ${objTanggalActivity.waktu}`
+        
+    }
+
     function removePoint(stringBilangan) {
         var formattedBilangan = stringBilangan;
         formattedBilangan = stringBilangan.replaceAll(".", "");
@@ -14210,6 +14572,7 @@
             $('#lihat_data_credit').hide();
             $('#lihat_detail').hide();
             $('#edit_detail').hide();
+            $('#activity_tracking_order').hide();
         };
 
         hide_all();
@@ -14295,6 +14658,123 @@
                 }
             });
         }
+
+        get_tracking_order = function(opts, id){
+            var url = '<?php echo config_item('api_url') ?>api/master/mca/track/ca';
+
+            if(id != undefined){
+                url+=id;
+            }
+
+            if(opts != undefined){
+                var data = opts;
+            }
+
+            return $.ajax({
+                type : 'GET',
+                url: url,
+                data: data,
+                headers: {
+                    'Authorization': 'Bearer '+localStorage.getItem('token')
+                }
+            });
+        }
+
+        get_nomor_so = function(opts, id){
+            var url = '<?php echo config_item('api_url') ?>api/master/mca/status/ca/waiting/';
+
+            if(id != undefined){
+                url+=id;
+            }
+
+            if(opts != undefined){
+                var data = opts;
+            }
+
+            return $.ajax({
+                type : 'GET',
+                url: url,
+                data: data,
+                headers: {
+                    'Authorization': 'Bearer '+localStorage.getItem('token')
+                }
+            });
+        }
+
+        get_credit_checking = function(opts, id) {
+            var url = '<?php echo config_item('api_url') ?>api/master/mca/';
+            if (id != undefined) {
+                url += id;
+            }
+
+            if (opts != undefined) {
+                var data = opts;
+            }
+
+            return $.ajax({
+                // type : 'GET',
+                url: url,
+                data: data,
+                dataSrc: "",
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        }
+
+        get_tracking_detail = function(opts, id) {
+            var url = '<?php echo config_item('api_url') ?>api/master/mca/track/ca/show/';
+            if (id != undefined) {
+                url += id;
+            }
+
+            if (opts != undefined) {
+                var data = opts;
+            }
+
+            return $.ajax({
+                type : 'GET',
+                url: url,
+                data: data,
+                dataSrc: "",
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        }
+
+        tambah_tracking_order = function(opts) {
+            var url = '<?php echo $this->config->item('api_url');?>api/master/mca/track/ca/store';
+            var data = opts;
+
+            return $.ajax({
+                url : url,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: data,
+                headers : {
+                    'Authorization': 'Bearer '+localStorage.getItem('token')
+                }
+            });
+        }   
+
+        update_tracking_order = function(opts, id) {
+            var data = opts;
+            var url = '<?php echo $this->config->item('api_url');?>api/master/mca/track/ca/update/' + id;
+
+            return $.ajax({
+                url : url,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                data: data,
+                headers : {
+                    'Authorization': 'Bearer '+localStorage.getItem('token')
+                }
+            });
+        }  
 
         update_debitur = function(opts, id) {
             var data = opts;
@@ -29452,6 +29932,377 @@
                     })
                 })
         });
+
+        load_data_nomor_so = function(pagin){
+            get_nomor_so()
+                .done(function(response){
+                    var data = response.data;
+                    console.log(data);
+                    var html = [];
+                    var no   = 0;
+                    
+                    if(data.length === 0 ){
+                        var tr =[
+                        '<tr valign="middle">',
+                        '<td colspan="6" style="text-align: center">Tidak ada data</td>',
+                        '</tr>'
+                        ].join('\n');
+                        $('#data_nomor_so').html(tr);
+
+                        return;
+                    }
+
+                    $.each(data,function(index,item){
+                        no++;
+                        var tr = [
+                        '<tr>',
+                            '<td style="text-align: center">'+ no +'</td>',
+                            '<td>' + item.cabang + '</td>',
+                            '<td>' + item.tgl_transaksi + '</td>',
+                            '<td>' + item.nomor_so + '</td>',
+                            '<td>' + item.nama_debitur + '</td>',
+                            '<td style="text-align: center">',
+                                '<button type="button" class="btn btn-info btn-sm edit" data="' + item.id_trans_so + '"><i class="fas fa-plus-circle"></i></button>',
+                            '</td>',
+                        '</tr>'
+                        ].join('\n');
+                        html.push(tr);
+                    });
+
+                    $('#data_nomor_so').html(html);
+                    $('#table_nomor_so').DataTable({
+                        "paging": true,
+                        "retrieve": true,
+                        "lengthChange": true,
+                        "searching": true,
+                        "ordering": true,
+                        "info": true,
+                        "autoWidth": false,
+                    });
+                })
+
+                .fail(function(response){
+                    $('#data_nomor_so').html('<tr><td colspan="6" style="text-align: center">Tidak ada data</td></tr>');
+                });
+        }
+
+        $('#data_nomor_so').show();
+        load_data_nomor_so();
+
+        $('#data_nomor_so').on('click', '.edit', function(e) {
+           
+            e.preventDefault();
+            var id = $(this).attr('data');
+            var html = [];
+
+            get_credit_checking({}, id)
+                .done(function(response) {
+                    var data = response.data;
+                    console.log(data);
+
+                    $('#form_tracking_order input[type=hidden][name=id_trans_so]').val(data.id_trans_so);
+                    $('#form_tracking_order input[name=nomor_so]').val(data.nomor_so);
+                    $('#form_tracking_order input[name=plafon]').val(rubah(data.fasilitas_pinjaman.plafon));
+                    $('#form_tracking_order input[name=nama_debitur]').val(data.data_debitur.nama_lengkap);
+
+                    if (data.cabang.id == "1") {
+                        document.getElementById("kode_cabang1").selected = "true";
+                    } else if (data.cabang.id == "2") {
+                        document.getElementById("kode_cabang2").selected = "true";
+                    } else if (data.cabang.id == "3") {
+                        document.getElementById("kode_cabang3").selected = "true";
+                    } else if (data.cabang.id == "4") {
+                        document.getElementById("kode_cabang4").selected = "true";
+                    } else if (data.cabang.id == "5") {
+                        document.getElementById("kode_cabang5").selected = "true";
+                    } else if (data.cabang.id == "6") {
+                        document.getElementById("kode_cabang6").selected = "true";
+                    } else if (data.cabang.id == "7") {
+                        document.getElementById("kode_cabang7").selected = "true";
+                    } else if (data.cabang.id == "8") {
+                        document.getElementById("kode_cabang8").selected = "true";
+                    } else if (data.cabang.id == "9") {
+                        document.getElementById("kode_cabang9").selected = "true";
+                    } else if (data.cabang.id == "10") {
+                        document.getElementById("kode_cabang10").selected = "true";
+                    } else if (data.cabang.id == "11") {
+                        document.getElementById("kode_cabang11").selected = "true";
+                    } else if (data.cabang.id == "12") {
+                        document.getElementById("kode_cabang12").selected = "true";
+                    } else if (data.cabang.id == "13") {
+                        document.getElementById("kode_cabang13").selected = "true";
+                    } else if (data.cabang.id == "14") {
+                        document.getElementById("kode_cabang14").selected = "true";
+                    } else if (data.cabang.id == "15") {
+                        document.getElementById("kode_cabang15").selected = "true";
+                    } else if (data.cabang.id == "16") {
+                        document.getElementById("kode_cabang16").selected = "true";
+                    } else if (data.cabang.id == "17") {
+                        document.getElementById("kode_cabang17").selected = "true";
+                    } else if (data.cabang.id == "18") {
+                        document.getElementById("kode_cabang18").selected = "true";
+                    } else if (data.cabang.id == "19") {
+                        document.getElementById("kode_cabang19").selected = "true";
+                    } else if (data.cabang.id == "20") {
+                        document.getElementById("kode_cabang20").selected = "true";
+                    } else if (data.cabang.id == "21") {
+                        document.getElementById("kode_cabang21").selected = "true";
+                    } else if (data.cabang.id == "22") {
+                        document.getElementById("kode_cabang22").selected = "true";
+                    } else  if (data.cabang.id == "23") {
+                        document.getElementById("kode_cabang23").selected = "true";
+                    } else if (data.cabang.id == "24") {
+                        document.getElementById("kode_cabang24").selected = "true";
+                    } else if (data.cabang.id == "25") {
+                        document.getElementById("kode_cabang25").selected = "true";
+                    } else if (data.cabang.id == "26") {
+                        document.getElementById("kode_cabang26").selected = "true";
+                    } else if (data.cabang.id == "27") {
+                        document.getElementById("kode_cabang27").selected = "true";
+                    } else if (data.cabang.id == "28") {
+                        document.getElementById("kode_cabang28").selected = "true";
+                    } else if (data.cabang.id == "29") {
+                        document.getElementById("kode_cabang29").selected = "true";
+                    } else if (data.cabang.id == "30") {
+                        document.getElementById("kode_cabang30").selected = "true";
+                    } else if (data.cabang.id == "31") {
+                        document.getElementById("kode_cabang31").selected = "true";
+                    }
+
+                })
+
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!', function() {
+                        $('.close').on('click');
+                    });
+
+                });
+            $("#modal_nomor_so").modal('hide');
+            $('#activity_tracking_order').show();
+        });
+
+        $('#form_tracking_order').on('submit', function(e){
+
+            if (document.getElementById('nomor_so').value == "") {
+                bootbox.alert("Nomor SO Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('nama_debitur').value == "") {
+                bootbox.alert("Nama Debitur Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('kode_cabang').value == "") {
+                bootbox.alert("Cabang Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('plafon').value == "") {
+                bootbox.alert("Plafon Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('status').value == "") {
+                bootbox.alert("Status Tidak Boleh Kosong !!!");
+                return (false);
+            }
+
+            e.preventDefault();
+            var formData = new FormData();
+
+            formData.append('id_trans_so',$('input[name=id_trans_so]',this).val());
+            formData.append('nomor_so',$('input[name=nomor_so]',this).val());
+            formData.append('id_cabang',$('select[name=kode_cabang]',this).val());
+            formData.append('nama_debitur',$('input[name=nama_debitur]',this).val());
+            formData.append('plafon', removePoint($('input[name=plafon]',this).val()));
+            formData.append('status',$('select[name=status]',this).val());
+            formData.append('keterangan',$('textarea[name=keterangan]',this).val());
+
+            tambah_tracking_order(formData)
+                .done(function(res){
+                    var data = res;
+                    console.log(data);
+                    bootbox.alert('Data berhasil ditambah',function(){
+                        $('#form_tracking_order')[0].reset();
+                        // $('#table_tracking_order').DataTable().clear();
+                        // $('#table_tracking_order').DataTable().destroy();
+                        hide_all();
+                        $("#lihat_data_credit").show();
+                        tampil_data_tracking_order();
+                    });
+                    
+                })
+                .fail(function(jqXHR){
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if(typeof data == 'string') {
+                        error = '<p>'+ data +'</p>';
+                    } else {
+                        $.each(data, function(index, item){
+                            error += '<p>'+ item +'</p>'+"\n";
+                        });
+                    }
+                    bootbox.alert(error);
+                });
+        });
+
+        $('#data_tracking_order').on('click', '.edit', function(e) {
+            $('.submit_tracking_order').hide();
+            $('.update_tracking_order').show();
+            $('.button_nomor_so').hide();
+            e.preventDefault();
+
+            var id = $(this).attr('data');
+            var html = [];
+
+            get_tracking_detail({}, id)
+                .done(function(response) {
+                    var data = response.data;
+                    console.log(data);
+
+                    $('#form_tracking_order input[type=hidden][name=id_trans_so]').val(data.id_trans_so);
+                    $('#form_tracking_order input[name=nomor_so]').val(data.nomor_so); 
+                    $('#form_tracking_order input[name=plafon]').val(rubah(data.plafon));
+                    $('#form_tracking_order input[name=nama_debitur]').val(data.nama_debitur);
+                    $('#form_tracking_order select[name=status]').val(data.status);
+                    $('#form_tracking_order textarea[name=keterangan]').val(data.keterangan);
+
+                    if (data.id_cabang == "1") {
+                        document.getElementById("kode_cabang1").selected = "true";
+                    } else if (data.id_cabang == "2") {
+                        document.getElementById("kode_cabang2").selected = "true";
+                    } else if (data.id_cabang == "3") {
+                        document.getElementById("kode_cabang3").selected = "true";
+                    } else if (data.id_cabang == "4") {
+                        document.getElementById("kode_cabang4").selected = "true";
+                    } else if (data.id_cabang == "5") {
+                        document.getElementById("kode_cabang5").selected = "true";
+                    } else if (data.id_cabang == "6") {
+                        document.getElementById("kode_cabang6").selected = "true";
+                    } else if (data.id_cabang == "7") {
+                        document.getElementById("kode_cabang7").selected = "true";
+                    } else if (data.id_cabang == "8") {
+                        document.getElementById("kode_cabang8").selected = "true";
+                    } else if (data.id_cabang == "9") {
+                        document.getElementById("kode_cabang9").selected = "true";
+                    } else if (data.id_cabang == "10") {
+                        document.getElementById("kode_cabang10").selected = "true";
+                    } else if (data.id_cabang == "11") {
+                        document.getElementById("kode_cabang11").selected = "true";
+                    } else if (data.id_cabang == "12") {
+                        document.getElementById("kode_cabang12").selected = "true";
+                    } else if (data.id_cabang == "13") {
+                        document.getElementById("kode_cabang13").selected = "true";
+                    } else if (data.id_cabang == "14") {
+                        document.getElementById("kode_cabang14").selected = "true";
+                    } else if (data.id_cabang == "15") {
+                        document.getElementById("kode_cabang15").selected = "true";
+                    } else if (data.id_cabang == "16") {
+                        document.getElementById("kode_cabang16").selected = "true";
+                    } else if (data.id_cabang == "17") {
+                        document.getElementById("kode_cabang17").selected = "true";
+                    } else if (data.id_cabang == "18") {
+                        document.getElementById("kode_cabang18").selected = "true";
+                    } else if (data.id_cabang == "19") {
+                        document.getElementById("kode_cabang19").selected = "true";
+                    } else if (data.id_cabang == "20") {
+                        document.getElementById("kode_cabang20").selected = "true";
+                    } else if (data.id_cabang == "21") {
+                        document.getElementById("kode_cabang21").selected = "true";
+                    } else if (data.id_cabang == "22") {
+                        document.getElementById("kode_cabang22").selected = "true";
+                    } else  if (data.id_cabang == "23") {
+                        document.getElementById("kode_cabang23").selected = "true";
+                    } else if (data.id_cabang == "24") {
+                        document.getElementById("kode_cabang24").selected = "true";
+                    } else if (data.id_cabang == "25") {
+                        document.getElementById("kode_cabang25").selected = "true";
+                    } else if (data.id_cabang == "26") {
+                        document.getElementById("kode_cabang26").selected = "true";
+                    } else if (data.id_cabang == "27") {
+                        document.getElementById("kode_cabang27").selected = "true";
+                    } else if (data.id_cabang == "28") {
+                        document.getElementById("kode_cabang28").selected = "true";
+                    } else if (data.id_cabang == "29") {
+                        document.getElementById("kode_cabang29").selected = "true";
+                    } else if (data.id_cabang == "30") {
+                        document.getElementById("kode_cabang30").selected = "true";
+                    } else if (data.id_cabang == "31") {
+                        document.getElementById("kode_cabang31").selected = "true";
+                    }
+
+                })
+
+                .fail(function(jqXHR) {
+                    bootbox.alert('Data tidak ditemukan, coba refresh kembali!!', function() {
+                        $('.close').on('click');
+                    });
+
+                });
+            hide_all();
+            $('#activity_tracking_order').show();
+        });
+
+        $('#form_tracking_order').on('click', '.update',function(e){
+
+            if (document.getElementById('nomor_so').value == "") {
+                bootbox.alert("Nomor SO Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('nama_debitur').value == "") {
+                bootbox.alert("Nama Debitur Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('kode_cabang').value == "") {
+                bootbox.alert("Cabang Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('plafon').value == "") {
+                bootbox.alert("Plafon Tidak Boleh Kosong !!!");
+                return (false);
+            }
+            if (document.getElementById('status').value == "") {
+                bootbox.alert("Status Tidak Boleh Kosong !!!");
+                return (false);
+            }
+
+            var id = $('#form_tracking_order input[name=id_trans_so]').val();
+
+            e.preventDefault();
+            var formData = new FormData();
+
+            formData.append('nomor_so',$('#form_tracking_order input[name=nomor_so]').val());
+            formData.append('id_cabang',$('#form_tracking_order select[name=kode_cabang]').val());
+            formData.append('nama_debitur',$('#form_tracking_order input[name=nama_debitur]').val());
+            formData.append('plafon', removePoint($('#form_tracking_order input[name=plafon]').val()));
+            formData.append('status',$('#form_tracking_order select[name=status]').val());
+            formData.append('keterangan',$('#form_tracking_order textarea[name=keterangan]').val());
+
+            update_tracking_order(formData, id)
+                .done(function(res){
+                    var data = res;
+                    console.log(data);
+                    bootbox.alert('Data berhasil diupdate',function(){
+                        $('#form_tracking_order')[0].reset();
+                        hide_all();
+                        $("#lihat_data_credit").show();
+                        tampil_data_tracking_order();
+                    });
+                    
+                })
+                .fail(function(jqXHR){
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if(typeof data == 'string') {
+                        error = '<p>'+ data +'</p>';
+                    } else {
+                        $.each(data, function(index, item){
+                            error += '<p>'+ item +'</p>'+"\n";
+                        });
+                    }
+                    bootbox.alert(error);
+                });
+        });
+
     })
 
 </script>

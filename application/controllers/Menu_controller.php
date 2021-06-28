@@ -321,7 +321,10 @@ class Menu_controller extends MY_Controller
         $this->load->view('master/memorandum_ao/data_credit_checking',$data);
     }
     public function ca()
-    {
+    {   
+        $outputs   = $this->model_menu->getUser();
+        $user_id   = $outputs['data']['user_id'];
+        $data['user_id'] = $user_id;
         $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
         $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['data_collateral'] = $this->Model_view_master->data_collateral();
@@ -332,6 +335,7 @@ class Menu_controller extends MY_Controller
         $data['data_sumber_data_untuk_setoran'] =  $this->Model_view_master->sumber_data_untuk_setoran();
         $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
         $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
+        
         $this->load->view('master/memorandum_ca/data_credit_checking', $data);
     }
 
@@ -868,5 +872,20 @@ class Menu_controller extends MY_Controller
         $user_id   = $outputs['data']['user_id'];
         $data['user_id'] = $user_id;
         $this->load->view('master/activity/activity_ca', $data);
+    }
+
+    public function dashboard_memo_ca()
+    {
+        $this->load->view('master/dashboard_memo_ca/dashboard_memo_ca');
+    }
+
+    public function table_tracking_order()
+    {
+        $this->load->view('master/tracking_order/table_tracking_order');
+    }
+
+    public function dashboard_tracking_order()
+    {
+        $this->load->view('master/tracking_order/dashboard_tracking_order');
     }
 }

@@ -13892,6 +13892,7 @@
 
                     $('#form_penjamin_1 input[type=hidden][name=id_penjamin_1]').val(data.data_penjamin[0].id);
                     $('#form_penjamin_2 input[type=hidden][name=id_penjamin_2]').val(data.data_penjamin[1].id);
+                    
                     $('#form_npwp_pen_1 input[type=hidden][name=id_npwp_penjamin_1]').val(data.data_penjamin[0].id);
                     $('#form_npwp_pen_2 input[type=hidden][name=id_npwp_penjamin_2]').val(data.data_penjamin[1].id);
 

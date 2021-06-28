@@ -24,7 +24,25 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="box-body table-responsive no-padding">
-                            <button class="btn btn-primary tambah" id="modal_pengajuan" style="margin-bottom: 9px;"><i class="fa fa-user-plus">Tambah</i></button>
+                            
+                            <?php 
+                                $list_spv = $this->db->query("SELECT user_id AS user FROM pic_ca WHERE jenis_pic = 'SPV CREDIT ANALYST'")->result(); 
+
+                                $flag_spv = false;
+                                
+                                foreach ($list_spv as $spv):
+                                    if ($user_id == $spv->user) {
+                                        $flag_spv = true;
+                                    }
+                                endforeach;
+                            ?>
+
+                            <?php if($flag_spv) { ?>
+                                <button class="btn btn-success assign" id="modal_assign" style="margin-bottom: 9px;"><i class="fa fa-user-edit"> Assign</i></button>
+                            <?php } else { ?>
+                                <button class="btn btn-primary tambah" id="modal_pengajuan" style="margin-bottom: 9px;"><i class="fa fa-user-plus"> Tambah</i></button>
+                            <?php } ?>
+
                             <table id="table_ca" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
                                 <thead style="font-size: 14px" class="bg-danger">
                                     <tr>
@@ -64,7 +82,6 @@
         </div>
     </section>
 </div>
-
 
 <div class="modal fade" id="modal_data_pengajuan">
     <div class="modal-dialog modal-xl">
@@ -115,8 +132,176 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer justify-content-between">
+            <div class="modal-footer">
                 <button type="button" id="close_pengajuan" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_data_assign">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Data Pengajuan Credit Checking</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="box-body table-responsive no-padding">
+                            <table id="table_assign" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                <thead style="font-size: 12px" class="bg-danger">
+                                    <tr>
+                                        <th>
+                                            No
+                                        </th>
+                                        <th>
+                                            Tanggal Transaksi
+                                        </th>
+                                        <th>
+                                            No SO
+                                        </th>
+                                        <th>
+                                            Nama Debitur
+                                        </th>
+                                        <th>
+                                            Cabang
+                                        </th>
+                                        <th>
+                                            Aksi
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="data_assign" style="font-size: 12px">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default close_data_assign" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_assign_ca">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <form id="form_assign_ca">
+                <div class="modal-header">
+                    <h4 class="modal-title">Assign Memorandum CA</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" name="id_trans_so" value="">
+                        <input type="hidden" name="user_id_ca" value="">
+                        <div class="col-md-3">
+                            <label>Nomor SO :</label>
+                            <input type="text" class="form-control" name="nomor_so" id="nomor_so" disabled>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Nama Debitur :</label>
+                            <input type="text" class="form-control" name="nama_debitur" id="nama_debitur" disabled>
+                        </div> 
+                        <div class="col-md-3">
+                            <label>Cabang :</label>
+                            <input type="text" class="form-control" name="kantor_cabang" id="kantor_cabang" disabled>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Pilih CA :</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="pilih_ca" id="pilih_ca">
+                                <span class="input-group-append">
+                                    <button type="button" class="btn btn-primary pilih_ca" data-toggle="modal" data-target="#modal_pilih_ca" ><i class="fas fa-search"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default close_assign" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_return">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form id="form_return_ca">
+                <div class="modal-header">
+                    <h4 class="modal-title">Return Memorandum CA</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>Notes CA</label>
+                            <textarea type="text" rows="5" style="resize:none" class="form-control" name="note_return" id="note_return"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default close_return" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary return">Return</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_pilih_ca" tabindex="-1" role="dialog" aria-labelledby="modal_pilih_caLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_pilih_caLabel">Pilih CA</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="box-body table-responsive no-padding">
+                                    <table id="table_pic_ca" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                                        <thead style="font-size: 14px" class="bg-danger">
+                                            <tr>
+                                                <th width="5px">
+                                                    No
+                                                </th>
+                                                <th>
+                                                    Posisi CA
+                                                </th>
+                                                <th>
+                                                    Nama CA
+                                                </th>
+                                                <th width="10px">
+                                                    Aksi
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="data_pic_ca" style="font-size: 13px">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -139,6 +324,7 @@
         </div>
     </section>
     <div id="form_detail" method="GET">
+        <input type="hidden" id="tgl_pending" name="tgl_pending" value="<?php echo date('Y-m-d H:i:s')?>">
         <div class="col-md-12">
             <div class="box box-primary" style="background-color: #ffffff1f">
                 <div class="box-header with-border">
@@ -2757,7 +2943,9 @@
                             </div>
                         </div>
                         <div class="form-group" style="margin-bottom: 57px">
-                            <button type="submit" id="submit_ca" class="btn btn-primary submit" style="float: right; margin-right: 7px">Simpan</button>
+                            <button class="btn btn-primary submit" style="float: right; margin-right: 7px">Simpan</button>
+                            <button class="btn btn-danger return" style="float: right; margin-right: 7px"> Return</button>
+                            <button class="btn btn-secondary pending" style="float: right; margin-right: 7px"> Pending</button>
                         </div>
                     </div>
                 </div>
@@ -4006,6 +4194,10 @@
                             </div>
                         </div>
                     </form>
+
+                    <div class="form-group">
+                        <button class="btn btn-warning cancel" style="float: left; margin-bottom: 30px; margin-right:10px; color: #ffffff">CANCEL BY DEBITUR</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -5611,6 +5803,7 @@
                     }
                 });
             }
+
             tambah_analisa_cc = function(opts, id) {
                 var data = opts;
                 var url = '<?php echo $this->config->item('api_url'); ?>api/info_cc/' + id;
@@ -5664,6 +5857,7 @@
                 $('#lihat_data_credit').hide();
                 $('#lihat_detail').hide();
             }
+
             hide_all();
             $('#lihat_data_credit').show();
 
@@ -5948,10 +6142,8 @@
                 });
             }
 
-
             get_pengajuan = function(opts, id) {
                 var url = '<?php echo config_item('api_url') ?>api/master/mca/status/ca/waiting/';
-                // var url = '<?php echo config_item('api_url') ?>api/master/mao/status/ao/waiting';
                 if (id != undefined) {
                     url += id;
                 }
@@ -5971,8 +6163,142 @@
                 });
             }
 
+            get_assign = function(opts, id) {
+                var url = '<?php echo config_item('api_url') ?>api/master/mca/status/pic/ca/waiting/';
+                if (id != undefined) {
+                    url += id;
+                }
+
+                if (opts != undefined) {
+                    var data = opts;
+                }
+
+                return $.ajax({
+                    // type : 'GET',
+                    url: url,
+                    data: data,
+                    dataSrc: "",
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                });
+            }
+
+            get_data_ca = function(opts, id) {
+                var url = '<?php echo config_item('api_url') ?>api/master/mca/pic_ca/get_team';
+
+                if (id != undefined) {
+                    url += id;
+                }
+
+                if (opts != undefined) {
+                    var data = opts;
+                }
+
+                return $.ajax({
+                    type : 'GET',
+                    url: url,
+                    data: data,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                });
+            }
+
+            get_detail_ca = function(opts, id) {
+                var url = '<?php echo config_item('api_url') ?>api/master/mca/pic_ca/get_team/';
+
+                if (id != undefined) {
+                    url += id;
+                }
+
+                if (opts != undefined) {
+                    var data = opts;
+                }
+
+                return $.ajax({
+                    type : 'GET',
+                    url: url,
+                    data: data,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                });
+            }
+
             $("#modal_pengajuan").click(function() {
                 load_data_pengajuan = function() {
+
+                    <?php 
+                        $day_now = date('d');
+                        $month_now = date('m');
+                        $year_now = date('Y');
+
+                        $total_memo = $this->db->query("SELECT COUNT(id_trans_so) AS total FROM trans_ca WHERE YEAR(created_at) = $year_now AND MONTH(created_at) = $month_now AND DAY(created_at) = $day_now AND user_id = $user_id")->row(); 
+                    ?>
+                    
+                    <?php if ($total_memo->total == 5) { ?>
+                        $('#data_pengajuan').html('<tr><td colspan="8" align="center">Sudah Mencapai Limit Harian Memo CA</td></tr>');
+                    <?php } else { ?>
+                        get_assign()
+                            .done(function(response) {
+                                var data = response.data;
+                                console.log(data);
+                                var html = [];
+                                var no = 0;
+                                if (data.length === 0) {
+                                    var tr = [
+                                        '<tr valign="middle">',
+                                        '<td colspan="8">No Data</td>',
+                                        '</tr>'
+                                    ].join('\n');
+                                    $('#data_pengajuan').html(tr);
+
+                                    return;
+                                }
+                                $.each(data, function(index, item) {
+                                    no++;
+
+                                    var tr = [
+                                        '<tr>',
+                                        '<td>' + no + '</td>',
+                                        '<td>' + item.tgl_transaksi + '</td>',
+                                        '<td>' + item.nomor_so + '</td>',
+                                        '<td>' + item.asal_data + '</td>',
+                                        '<td>' + item.pic + '</td>',
+                                        '<td>' + item.nama_debitur + '</td>',
+                                        '<td>' + item.cabang + '</td>',
+                                        '<td style="width: 60px;">',
+                                        '<button type="button" class="btn btn-info btn-sm edit"   data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-plus-circle"></i></button>',
+                                        '</td>',
+                                        '</tr>'
+                                    ].join('\n');
+                                    html.push(tr);
+                                });
+                                $('#data_pengajuan').html(html);
+                                $('#table_pengajuan').DataTable({
+                                    "paging": true,
+                                    "retrieve": true,
+                                    "lengthChange": true,
+                                    "searching": true,
+                                    "ordering": true,
+                                    "info": true,
+                                    "autoWidth": false,
+                                });
+                                $('#batal').on('click');
+                            })
+                            .fail(function(response) {
+                                $('#data_pengajuan').html('<tr><td colspan="8">Tidak ada data</td></tr>');
+                                $('#batal').on('click');
+                            });
+                    <?php } ?>
+                }
+                load_data_pengajuan();
+                $("#modal_data_pengajuan").modal('show');
+            })
+
+            $("#modal_assign").click(function() {
+                load_data_assign = function() {
                     get_pengajuan()
                         .done(function(response) {
                             var data = response.data;
@@ -5981,35 +6307,39 @@
                             var no = 0;
                             if (data.length === 0) {
                                 var tr = [
-                                    '<tr valign="midle">',
-                                    '<td colspan="4">No Data</td>',
+                                    '<tr valign="middle">',
+                                    '<td colspan="6">No Data</td>',
                                     '</tr>'
                                 ].join('\n');
-                                $('#data_pengajuan').html(tr);
+                                $('#data_assign').html(tr);
 
                                 return;
                             }
                             $.each(data, function(index, item) {
                                 no++;
 
+                                if(item.ao.assign_to != "-") {
+                                        var nama_deb = '<p style="background-color: #00d807;">' + item.nama_debitur + '</p>';
+                                    } else {
+                                        var nama_deb = item.nama_debitur;
+                                    }
+
                                 var tr = [
                                     '<tr>',
                                     '<td>' + no + '</td>',
                                     '<td>' + item.tgl_transaksi + '</td>',
                                     '<td>' + item.nomor_so + '</td>',
-                                    '<td>' + item.asal_data + '</td>',
-                                    '<td>' + item.pic + '</td>',
-                                    '<td>' + item.nama_debitur + '</td>',
+                                    '<td>' + nama_deb + '</td>',
                                     '<td>' + item.cabang + '</td>',
                                     '<td style="width: 60px;">',
-                                    '<button type="button" class="btn btn-info btn-sm edit"   data-target="#update" data="' + item.id_trans_so + '"><i class="fas fa-plus-circle"></i></button>',
+                                    '<button type="button" class="btn btn-info btn-sm edit"   data-target="#update" style="text-align: center"data="' + item.id_trans_so + '"><i class="fas fa-user-plus"></i></button>',
                                     '</td>',
                                     '</tr>'
                                 ].join('\n');
                                 html.push(tr);
                             });
-                            $('#data_pengajuan').html(html);
-                            $('#table_pengajuan').DataTable({
+                            $('#data_assign').html(html);
+                            $('#table_assign').DataTable({
                                 "paging": true,
                                 "retrieve": true,
                                 "lengthChange": true,
@@ -6021,15 +6351,67 @@
                             $('#batal').on('click');
                         })
                         .fail(function(response) {
-                            $('#data_pengajuan').html('<tr><td colspan="4">Tidak ada data</td></tr>');
+                            $('#data_assign').html('<tr><td colspan="6">Tidak ada data</td></tr>');
                             $('#batal').on('click');
                         });
                 }
-                load_data_pengajuan();
-                // tampil_data_pengajuan();
-                $("#modal_data_pengajuan").modal('show');
+                $("#modal_data_assign").modal('show');
+                load_data_assign();
             })
 
+            load_data_ca = function(pagin){
+                get_data_ca()
+                    .done(function(response){
+                        var data = response.data;
+                        // console.log(data);
+                        var html = [];
+                        var no   = 0;
+                        
+                        if(data.length === 0 ){
+                            var tr =[
+                            '<tr valign="middle">',
+                            '<td colspan="4" style="text-align: center">Tidak ada data</td>',
+                            '</tr>'
+                            ].join('\n');
+                            $('#data_pic_ca').html(tr);
+
+                            return;
+                        }
+
+                        $.each(data,function(index,item){
+                            no++;
+                            var tr = [
+                            '<tr>',
+                                '<td style="text-align: center">'+ no +'</td>',
+                                '<td>'+ item.id_ca +'</td>',
+                                '<td>'+ item.nama +'</td>',
+                                '<td style="text-align: center">',
+                                    '<button type="button" class="btn btn-info btn-sm edit" data-target="#update" data="' + item.id + '"><i class="fas fa-check"></i></button>',
+                                '</td>',
+                            '</tr>'
+                            ].join('\n');
+                            html.push(tr);
+                        });
+
+                        $('#data_pic_ca').html(html);
+                        $('#table_pic_ca').DataTable({
+                            "paging": true,
+                            "retrieve": true,
+                            "lengthChange": true,
+                            "searching": true,
+                            "ordering": true,
+                            "info": true,
+                            "autoWidth": false,
+                        });
+                    })
+
+                    .fail(function(response){
+                        $('#data_pic_ca').html('<tr><td colspan="4" style="text-align: center">Tidak ada data</td></tr>');
+                    });
+            }
+
+            $('#data_pic_ca').show();
+            load_data_ca();
 
             //RIBUAN
             $('.uang').mask('0.000.000.000', {
@@ -6059,7 +6441,6 @@
                 }
             }
 
-
             function hanyaAngka(evt) {
                 var charCode = (evt.which) ? evt.which : event.keyCode
                 if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -6067,7 +6448,6 @@
                     return false;
                 return true;
             }
-
 
             function rubah(angka) {
                 var reverse = angka.toString().split('').reverse().join(''),
@@ -6730,7 +7110,6 @@
                 recom_plafon = recom_plafon.replace(/[^\d]/g, "");
 
                 var t = (document.getElementById('recom_tenor').value);
-                console.log(t)
 
                 var b = (document.getElementById('recom_bunga_pinjaman').value);
 
@@ -6759,7 +7138,6 @@
                 recom_plafon = recom_plafon.replace(/[^\d]/g, "");
 
                 var t = (document.getElementById('recom_tenor_detail').value);
-                console.log(t)
 
                 var b = (document.getElementById('recom_bunga_pinjaman_detail').value);
 
@@ -8183,6 +8561,10 @@
                         // var id_pemeriksaan_agunan_kendaraan = data.pemeriksaan.agunan_kendaraan[0].id;
                         var id_kapasitas_bulanan = data.kapasitas_bulanan.id;
                         var id_pendapatan_usaha = data.pendapatan_usaha.id;
+                        
+                        if(data.flg_cancel_debitur == 2) {
+                            bootbox.alert("Memorandum ini telah di-Cancel oleh Debitur!!!");
+                        }
 
                         $('#form_detail input[type=hidden][name=id]').val(data.id_trans_so);
                         $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id_trans_so);
@@ -9675,7 +10057,6 @@
                         //==================================================================       
 
                         //RINGKASAN ANALISA KUALITATIF
-                        console.log(data.ringkasan_analisa.id)
                         $('#detail_ca input[name=id_data_kualitatif]').val(data.ringkasan_analisa.id);
                         $('#detail_ca textarea[name=kualitatif_analisa_detail]').val(data.ringkasan_analisa.kualitatif_analisa);
                         $('#detail_ca textarea[name=kualitatif_strenght_detail]').val(data.ringkasan_analisa.kualitatif_strenght);
@@ -9687,7 +10068,6 @@
 
 
                         //ANALISA KUANTITATIF     
-                        console.log(data.ringkasan_analisa.id);
                         $('#detail_ca input[name=id_data_kuantitatif]').val(data.ringkasan_analisa.id)
 
                         var kuantitatif_ttl_pendapatan = (rubah(data.ringkasan_analisa.kuantitatif_ttl_pendapatan));
@@ -9989,7 +10369,104 @@
 
             });
 
+            $('#data_assign').on('click', '.edit', function(e) {
+                e.preventDefault();
+                var id = $(this).attr('data');
+            
+                get_credit_checking({}, id)
+                    .done(function(response) {
+                        var data = response.data;
+                        console.log(data);
 
+                        $('#form_assign_ca input[type=hidden][name=id_trans_so]').val(data.id_trans_so);
+                        $('#form_assign_ca input[name=nomor_so]').val(data.nomor_so);
+                        $('#form_assign_ca input[name=nama_debitur]').val(data.data_debitur.nama_lengkap);
+                        $('#form_assign_ca input[name=kantor_cabang]').val(data.cabang.nama);
+                    })
+                    .fail(function(jqXHR) {
+                        bootbox.alert('Data tidak ditemukan, coba refresh kembali!!', function() {
+                            $('.close_assign').on('click');
+                        });
+
+                    });
+
+                $("#modal_assign_ca").modal('show');
+
+            });
+
+            $('#data_pic_ca').on('click', '.edit', function(e) {
+                e.preventDefault();
+                var id = $(this).attr('data');
+            
+                get_detail_ca({}, id)
+                    .done(function(response) {
+                        var data = response.data;
+
+                        $('#form_assign_ca input[type=hidden][name=user_id_ca]').val(data.user_id);
+                        $('#form_assign_ca input[name=pilih_ca]').val(data.nama);
+                    })
+                    .fail(function(jqXHR) {
+                        bootbox.alert('Data tidak ditemukan, coba refresh kembali!!', function() {
+                            $('.close_assign').on('click');
+                        });
+
+                    });
+
+                $("#modal_pilih_ca").modal('hide');
+                $('#modal_assign_ca').show();
+
+            });
+
+            update_assign_ca = function(opts, id) {
+                var data = opts;
+                var url = '<?php echo $this->config->item('api_url'); ?>api/master/mao/assign_to_ca/' + id;
+                return $.ajax({
+                    url: url,
+                    data: data,
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+            }
+
+            $("#form_assign_ca").on('submit', function(e) {
+                
+                var id = $('input[name=id_trans_so]', this).val();
+
+                e.preventDefault();
+                var formData = new FormData();
+                formData.append('assign_to', $('input[name=user_id_ca]', this).val());
+            
+                update_assign_ca(formData, id)
+                    .done(function(res) {
+                        var data = res.data;
+                        console.log(data);
+                        bootbox.alert('Berhasil Assign !!', function() {
+                            $('#form_assign_ca')[0].reset();
+                            $('#modal_assign_ca').modal('hide');
+                        });
+                    })
+                    .fail(function(jqXHR) {
+                        var data = jqXHR.responseJSON;
+                        var error = "";
+    
+                        if (typeof data == 'string') {
+                            error = '<p>' + data + '</p>';
+                        } else {
+                            $.each(data, function(index, item) {
+                                error += '<p>' + item + '</p>' + "\n";
+                            });
+                        }
+                        bootbox.alert('Gagal assign !!', function() {
+                            $("#batal").click();
+                        });
+                    });
+
+            });
 
             //UPDATE FASILITAS
 
@@ -10089,8 +10566,6 @@
                     }
                 });
             }
-
-
 
             //UPDATE DEBITUR
             update_debitur = function(opts, id) {
@@ -10771,7 +11246,6 @@
             });
             //==========================================================================================
 
-
             //TOTAL PEMASUKAN KAPASITAS BULANAN
             function total_pemasukan_kapasitas_bulanan() {
 
@@ -10839,7 +11313,6 @@
                 document.getElementById('total_pengeluaran').value = total_pengeluaran;
             }
             // ============================================================================================
-
 
             //UPDATE KAPASITAS BULANAN
             update_kapasitas_bulanan_ao = function(opts, id) {
@@ -10930,7 +11403,6 @@
                     });
             });
             //========================================================================================
-
 
             //UPDATE PENDAPATAN USAHA
             update_usaha_cadeb = function(opts, id) {
@@ -11139,7 +11611,6 @@
                 document.getElementById('keuntungan_usaha').value = total_keuntungan;
             }
             // =============================================================
-
 
             //UPDATE PEMERIKSAAN AGUNAN TANAH
             update_pemeriksaan_agunan_tanah = function(opts, id) {
@@ -11596,7 +12067,8 @@
                 }
 
             // klik submit update
-            $('#form_input_ca').on('submit', function(e) {
+            
+            $('#form_input_ca').on('click', '.submit', function(e) {
 
                 if(document.getElementById('cc_result').value == "" ) {
                     bootbox.alert("Jenis Credit Checking Tidak Boleh Kosong!!!");
@@ -11989,6 +12461,217 @@
                     });
             });
 
+            $('#form_input_ca').on('click', '.return', function(e) {
+                var idca = $('#form_detail input[type=hidden][name=id]').val();
+
+                e.preventDefault();
+                var formData = new FormData();
+
+                $('#modal_return').modal('show');
+            });
+
+            update_verif_cancel = function(opts, id) {
+            var data = opts;
+            var url = '<?php echo $this->config->item('api_url'); ?>api/master/mao/updateHMCancel/' + id;
+            return $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                beforeSend: function() {
+                    let html =
+                        "<div width='100%' class='text-center'>" +
+                        "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                        "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
+                        "</div>";
+
+                    $('#load_data').html(html);
+                    $('#modal_load_data').modal('show');
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        }
+
+            $('#detail_ca').on('click', '.cancel', function(e) {
+                var id = $('#form_detail input[type=hidden][name=id]').val();
+
+                e.preventDefault();
+                var formData = new FormData();
+
+                formData.append('verifikasi_hm', "");
+                formData.append('flg_cancel_debitur', 2);
+
+                update_verif_cancel(formData, id)
+
+                    .done(function(res) {
+                        console.log(res);
+
+                        bootbox.alert('Data berhasil di-Cancel', function() {
+                            hide_all();
+                            $("#batal").click();
+                            $('#lihat_data_credit').show();
+                            $(".close_deb").click();
+                        });
+                    })
+                    .fail(function(jqXHR) {
+                        bootbox.alert(JSON.stringify(jqXHR));
+                        $("#batal").click();
+                    });
+            });
+
+            update_return = function(opts, idca) {
+                var data = opts;
+                var url = '<?php echo $this->config->item('api_url'); ?>api/master/mao/updatePending/' + idca;
+                return $.ajax({
+                    url: url,
+                    data: data,
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    beforeSend: function() {
+                        let html =
+                            "<div width='100%' class='text-center'>" +
+                            "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                            "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>" +
+                            "</div>";
+
+                        $('#load_data').html(html);
+                        $('#modal_load_data').modal('show');
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+            }
+
+            update_pending = function(opts, idca) {
+                var data = opts;
+                var url = '<?php echo $this->config->item('api_url'); ?>api/master/mao/updatePending/' + idca;
+                return $.ajax({
+                    url: url,
+                    data: data,
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    beforeSend: function() {
+                        let html =
+                            "<div width='100%' class='text-center'>" +
+                            "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                            "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>" +
+                            "</div>";
+
+                        $('#load_data').html(html);
+                        $('#modal_load_data').modal('show');
+                    },
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+            }
+
+            $('#form_return_ca').on('click', '.return', function(e) {
+                var idca = $('#form_detail input[type=hidden][name=id]').val();
+
+                e.preventDefault();
+                var formData = new FormData();
+
+                formData.append('status_return', 1);
+                formData.append('tgl_pending', "");
+                formData.append('note_return', $('#form_return_ca textarea[name=note_return]').val());
+
+                update_return(formData, idca)
+                    .done(function(res) {
+                        var data = res.data;
+                        console.log(data);
+                        bootbox.alert('Data berhasil direturn !!!', function() {
+                            $('#form_return_ca')[0].reset();
+                            $("#batal").click();
+                            hide_all();
+                            $('#modal_return').modal('hide');
+                            $('#lihat_data_credit').show();
+                            // hide_all();
+                            // load_data_ca();
+                            // $('#lihat_data_credit').show();
+                        });
+                    })
+                    .fail(function(jqXHR) {
+                        var data = jqXHR.responseJSON;
+                        var error = "";
+
+                        if (typeof data == 'string') {
+                            error = '<p>' + data + '</p>';
+                        } else {
+                            $.each(data, function(index, item) {
+                                error += '<p>' + item + '</p>' + "\n";
+                            });
+                        }
+                        bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                            $("#batal").click();
+                        })
+                        // bootbox.alert(error);
+                    });
+
+                // bootbox.alert("Apakah Anda Yakin?", function() {
+                //     hide_all();
+                //     $('#lihat_data_credit').show();
+                // });
+                
+            });
+
+            $('#form_input_ca').on('click', '.pending', function(e) {
+                var idca = $('#form_detail input[type=hidden][name=id]').val();
+
+                e.preventDefault();
+                var formData = new FormData();
+
+                formData.append('status_return', "");
+                formData.append('tgl_pending', $('#form_detail input[name=tgl_pending]').val());
+                formData.append('note_return', "");
+
+                update_pending(formData, idca)
+                    .done(function(res) {
+                        var data = res.data;
+                        console.log(data);
+                        bootbox.alert('Data berhasil dipending!!!', function() {
+                            $("#batal").click();
+                            hide_all();
+                            $('#lihat_data_credit').show();
+                            // $('#form_input_ca')[0].reset();
+                            // hide_all();
+                            // load_data_ca();
+                            // $('#lihat_data_credit').show();
+                        });
+                    })
+                    .fail(function(jqXHR) {
+                        var data = jqXHR.responseJSON;
+                        var error = "";
+
+                        if (typeof data == 'string') {
+                            error = '<p>' + data + '</p>';
+                        } else {
+                            $.each(data, function(index, item) {
+                                error += '<p>' + item + '</p>' + "\n";
+                            });
+                        }
+                        bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                            $("#batal").click();
+                        })
+                        // bootbox.alert(error);
+                    });
+
+                // bootbox.alert("Apakah Anda Yakin?", function() {
+                //     hide_all();
+                //     $('#lihat_data_credit').show();
+                // });
+                
+            });
+
             //UPDATE CC RESULT
             $('#form_cc').on('submit', function(e) {
                 if(document.getElementById('cc_result_detail').value == "" ) {
@@ -12092,7 +12775,6 @@
                     $('#form_detail select[id=produk]').html(select);
                 })
             //==================================================
-
 
             //TOTAL PENDAPATAN USAHA
             function total_pendapatan_usaha_ca() {
@@ -12744,7 +13426,6 @@
                     });
             }
 
-
             // Click ubah agunan dipengajuan
             get_data_agunan = function(opts, id) {
                 var url = '<?php echo config_item('api_url') ?>api/agunan/tanah/' + id;
@@ -13089,7 +13770,6 @@
                 });
             });
 
-
             //UPDATE AGUNAN
             $('#form_edit_agunan').on('submit', function(e) {
 
@@ -13322,8 +14002,6 @@
                 get_data_agunan({}, id)
                     .done(function(response) {
                         var data = response.data;
-                        console.log(data)
-
                         var htmlagunantanah = [];
                         var id_agunan_tanah = {};
                         var no = 0;
@@ -13765,7 +14443,6 @@
             //SUBMIT ASPEK KUALITATIF
             $('#form_edit_data_kualitatif').on('submit', function(e) {
                 var id = $('input[name=id_data_kualitatif]', this).val();
-                console.log(id)
                 e.preventDefault();
                 var formData = new FormData();
 
@@ -13807,9 +14484,6 @@
             $('#btn_penyimpangan').on('click', function() {
                 var id = $('#id_data_penyimpangan').val();
                 var penyimpangan_struktur = $('#penyimpangan_struktur_detail').val();
-
-                console.log(penyimpangan_struktur);
-                console.log(id);
 
                 $.ajax({
                     type: "POST",
@@ -13866,7 +14540,6 @@
             // klik submit update
             $('#form_edit_struktur_pinjaman').on('submit', function(e) {
                 var id = $('input[name=id_struktur_pinjaman]', this).val();
-                console.log(id);
                 e.preventDefault();
                 var formData = new FormData();
                 //STRUKTUR PINJAMAN
@@ -14018,7 +14691,6 @@
                 var bunga_pinjaman = $('#recom_bunga_pinjaman_detail').val();
                 var note_recom = $('#note_recom_detail').val();
 
-                console.log(id);
                 $.ajax({
                     type: "POST",
                     url: "<?php echo site_url('Transaksi/update_rekomendasi_pinjaman') ?>",
@@ -14127,7 +14799,6 @@
             //SUBMIT ASPEK KUALITATIF
             $('#form_edit_data_kuantitatif').on('submit', function(e) {
                 var id = $('input[name=id_data_kuantitatif]', this).val();
-                console.log(id)
                 e.preventDefault();
                 var formData = new FormData();
                 var kuantitatif_ttl_pendapatan_detail = $('input[name=kuantitatif_ttl_pendapatan_detail]', this).val();
@@ -14325,7 +14996,6 @@
                 get_data_debitur({}, id)
                     .done(function(response) {
                         var data_debitur = response.data;
-                        console.log(data_debitur)
                         var html = [];
 
                         var a1 = [
@@ -14379,7 +15049,6 @@
                         $('#data_creditchecking').html('<tr><td colspan="4">Tidak ada data</td></tr>');
                     });
             }
-
 
             $("#tambah_agunan_sertifikat").click(function() {
                 $('#modal_tambah_agunan_sertifikat').modal('show');
@@ -14662,7 +15331,6 @@
                 get_agunan({}, id)
                     .done(function(response) {
                         var data = response.data.data_agunan.agunan_tanah;
-                        console.log(data);
                         var html = [];
                         var no = 0;
 
@@ -14751,7 +15419,6 @@
                         "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                         "</div>";
                     $('#load_data').html(html);
-                    console.log(e);
                 })
             });
 
@@ -14854,7 +15521,6 @@
                         "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                         "</div>";
                     $('#load_data').html(html);
-                    console.log(e);
                 })
             });
 
@@ -14905,7 +15571,6 @@
                         "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                         "</div>";
                     $('#load_data').html(html);
-                    console.log(e);
                 })
             });
 
@@ -14956,7 +15621,6 @@
                         "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                         "</div>";
                     $('#load_data').html(html);
-                    console.log(e);
                 })
             });
 
@@ -14970,7 +15634,6 @@
                         $.each(data.data_penjamin, function(index, item) {
                             var id_penjamin = [];
                             id_penjamin = item.id;
-                            console.log(id_penjamin);
 
                             var jenis_kelamin_pen = "";
 
@@ -15098,7 +15761,6 @@
                 tambah_penjamin(formData, id)
                     .done(function(res) {
                         var data = res.data;
-                        console.log(data);
                         bootbox.alert('Lanjut lengkapi lampiran !!!', function() {
                             $("#batal").click();
                             $("#lamp_penjamin").click();
@@ -15380,7 +16042,6 @@
                 tambah_analisa_cc(formData, id)
                     .done(function(res) {
                         var data = res.data;
-                        console.log(data);
                         bootbox.alert('Data berhasil disimpan', function() {
                             $("#batal").click();
                             $('#form_modal_tambah_analisa_cc')[0].reset();
@@ -15452,7 +16113,6 @@
                 edit_analisa_cc(data, id)
                     .done(function(res) {
                         var data = res.data;
-                        console.log(data);
                         bootbox.alert('Data berhasil diubah', function() {
                             $("#batal").click();
                             $('#form_modal_edit_analisa_cc')[0].reset();
@@ -15528,3 +16188,5 @@
                 $('#form_modal_edit_analisa_cc input[name=edit_id_info_analisa_cc]').val($(this).attr('data'));
             });
         </script>
+    </div>
+</div>

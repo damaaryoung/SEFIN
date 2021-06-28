@@ -2356,6 +2356,32 @@
             });
         }
 
+        update_verif_cancel = function(opts, id) {
+            var data = opts;
+            var url = '<?php echo $this->config->item('api_url'); ?>api/master/mao/updateHMCancel/' + id;
+            return $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                beforeSend: function() {
+                    let html =
+                        "<div width='100%' class='text-center'>" +
+                        "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                        "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
+                        "</div>";
+
+                    $('#load_data').html(html);
+                    $('#modal_load_data').modal('show');
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        }
+
 
         //UPDATE FASILITAS
         $(function() {
@@ -3480,6 +3506,20 @@
                         }
                     }
 
+                    if(data.status_return == 1) {
+                        bootbox.alert("Memorandum ini telah direturn oleh CA, harap periksa kembali!!!");
+                    }
+                    if(data.flg_cancel_debitur == 2) {
+                        bootbox.alert("Memorandum ini telah di-Cancel oleh Debitur!!!");
+                    }
+                    if(data.verifikasi_hm == 1) {
+                        bootbox.alert("Memorandum ini telah di-Approve HM!!!");
+                    } else if (data.verifikasi_hm == 2) {
+                        bootbox.alert("Memorandum ini telah di-Reject HM!!!");
+                    } else {
+                        bootbox.alert("Memorandum ini belum di Verifikasi HM!!!");
+                    }
+
                     id = data.id;
                     var id_debitur = data.data_debitur.id;
                     var id_pasangan = data.data_pasangan.id;
@@ -3958,6 +3998,7 @@
                     //     $('#data_anak').html(html14);
                     // })
                     $('#form_detail textarea[name=notes_so]').val(data.notes_so);
+                    $('#detail_ao textarea[name=note_return]').val(data.note_return);
 
                     //LAMPIRAN
 
@@ -6900,7 +6941,7 @@
         });
 
         // klik submit update
-        $('#form_input_ao').on('submit', function(e) {
+        $('#form_input_ao').on('click', '.submit', function(e) {
             e.preventDefault();
             var id = $('input[name=id]', this).val();
             var formData = new FormData();
@@ -7444,6 +7485,90 @@
                     bootbox.alert(error);
                     $("#batal").click();
                 });
+        });
+
+        $('#detail_ao').on('click', '.submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData();
+
+            var id = $('input[name=id]').val();
+
+            formData.append('verifikasi_hm', 1);
+            formData.append('flg_cancel_debitur', "");
+
+            update_verif_cancel(formData, id)
+
+                .done(function(res) {
+                    console.log(res);
+
+                    bootbox.alert('Data berhasil di-Approve HM', function() {
+                        hide_all();
+                        $("#batal").click();
+                        $('#lihat_data_credit').show();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert(JSON.stringify(jqXHR));
+                    $("#batal").click();
+                });
+            
+        });
+
+        $('#detail_ao').on('click', '.reject', function(e) {
+            e.preventDefault();
+            var formData = new FormData();
+
+            var id = $('input[name=id]').val();
+
+            formData.append('verifikasi_hm', 2);
+            formData.append('flg_cancel_debitur', "");
+
+            update_verif_cancel(formData, id)
+
+                .done(function(res) {
+                    console.log(res);
+
+                    bootbox.alert('Data berhasil di-Reject HM', function() {
+                        hide_all();
+                        $("#batal").click();
+                        $('#lihat_data_credit').show();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert(JSON.stringify(jqXHR));
+                    $("#batal").click();
+                });
+            
+        });
+
+        $('#detail_ao').on('click', '.cancel', function(e) {
+            e.preventDefault();
+            var formData = new FormData();
+
+            var id = $('input[name=id]').val();
+
+            formData.append('verifikasi_hm', "");
+            formData.append('flg_cancel_debitur', 2);
+
+            update_verif_cancel(formData, id)
+
+                .done(function(res) {
+                    console.log(res);
+
+                    bootbox.alert('Data berhasil di-Cancel', function() {
+                        hide_all();
+                        $("#batal").click();
+                        $('#lihat_data_credit').show();
+                        $(".close_deb").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    bootbox.alert(JSON.stringify(jqXHR));
+                    $("#batal").click();
+                });
+            
         });
 
     });

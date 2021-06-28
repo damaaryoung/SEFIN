@@ -22,29 +22,42 @@
 					<th colspan="12" align="center" style="background-color: black;color: white;font-size: 10px"></th>
 				</tr>
 				<tr>
-				 	<td colspan ="12"></td>
+				 	<td colspan ="12">
 						<table>
 							<tr>
 								<td width="120"><b>Nomor SO</b></td>
 								<td width="2"><b>:</b></td>
-								<td><b><?php echo $nomor_so ?></b></td>
-							</tr>
-							<tr colspan="12">
+								<td width="220"><b><?php echo $nomor_so ?></b></td>
 								<td width="120"><b>Nama Debitur</b></td>
 								<td width="2"><b>:</b></td>
 								<td><b><?php echo $nama_debitur ?></b></td>
 							</tr>
-							<tr colspan="12">
+							<tr>
+								<td width="120"><b>Nama SO</b></td>
+								<td width="2"><b>:</b></td>
+								<td width="220"><b><?php echo $nama_so ?></b></td>
 								<td width="120"><b>Plafon</b></td>
 								<td width="2"><b>:</b></td>
 								<td><b><?php echo "Rp ".number_format($plafon, 2, ',', '.') ?></b></td>
 							</tr>
-							<tr colspan="12">
+							<tr>
+								<td width="120"><b>Nama AO</b></td>
+								<td width="2"><b>:</b></td>
+								<td width="220"><b><?php echo $nama_ao ?></b></td>
 								<td width="120"><b>Cabang</b></td>
 								<td width="2"><b>:</b></td>
 								<td><b><?php echo $kantor_cabang ?></b></td>
 							</tr>
+							<tr>
+								<td width="120"><b>Tanggal Memo AO</b></td>
+								<td width="2"><b>:</b></td>
+								<td width="220"><b><?php echo $tgl_memo_ao ?></b></td>
+								<td width="120"><b>Nama CA</b></td>
+								<td width="2"><b>:</b></td>
+								<td><b><?php echo $nama_ca ?></b></td>
+							</tr>
 						</table>
+					</td>
 				</tr>
 				<br>
 				<tbody>
@@ -107,7 +120,7 @@
 						<td><b><?php echo $nama_ca ?></b></td>
 					</tr>
 					<tr>
-						<td><b><?php echo date('d-m-Y, H:i:s') ?></b></td>
+						<td>Dicetak pada: <b><?php echo date('d-m-Y, H:i:s') ?></b></td>
 					</tr>
 				</table>
 			<?php } ?>

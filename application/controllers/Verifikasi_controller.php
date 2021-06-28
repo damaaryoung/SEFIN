@@ -304,6 +304,31 @@ class Verifikasi_controller extends CI_Controller
             $data['result_params'] = $this->db->query($query_params)->result();
 
             $this->load->view('master/verifikasi/verifikasi_telepon', $data);
+        // } else if ($jenis_verifikasi == "tracking_order") {
+        //     $query_tracking_order = "SELECT 
+        //         a.`created_at` AS tanggal,
+        //         a.`nomor_so` AS nomor_so,
+        //         a.`nama_debitur` AS nama_debitur,
+        //         d.`nama` AS nama_ao,
+        //         b.`created_at` AS tgl_memo_ao,
+        //         a.`plafon` AS plafon,
+        //         e.`nama` AS cabang,
+        //         c.`nama` AS nama_ca,
+        //         c.`id_ca` AS posisi_ca,
+        //         a.`status` AS status_memo,
+        //         a.`keterangan` AS keterangan
+        //     FROM tracking_order_ca AS a
+        //     LEFT JOIN trans_ao AS b ON a.`id_trans_so` = b.`id_trans_so`
+        //     LEFT JOIN pic_ca AS c ON a.`user_id` = c.`user_id`
+        //     LEFT JOIN dpm_online.user AS d ON b.`user_id` = d.`user_id`
+        //     LEFT JOIN mk_cabang AS e ON a.`id_cabang` = e.`id`
+        //     WHERE MONTH(a.`created_at`) = $bulan
+        //         AND YEAR(a.`created_at`) = $tahun
+        //     ORDER BY a.`created_at`";
+        
+        //     $data['result_tracking_order'] = $this->db->query($query_tracking_order)->result();
+
+        //     $this->load->view('master/verifikasi/export_tracking_order', $data);
         }
 
     }

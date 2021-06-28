@@ -1943,9 +1943,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" id="submit_ao" class="btn btn-danger submit" style="float: left; margin-top: 20px ">APPROVE HM</button>
+                            <button class="btn btn-info submit" style="float: left; margin-top: 20px; margin-right:10px">Simpan</button>
                         </div>
                     </div>
+                </div>
             </form>
         </div>
     </div>
@@ -2906,6 +2907,19 @@
 
                         </div>
                     </div>
+                </div>
+                <div class="form-group" style="margin-top: 10px;">
+                    <label style="font-style: italic; color: #383a3a;">Notes Return</label>
+                    <textarea name="note_return" style="width: 100%" rows="5" readonly></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success submit" style="float: left; margin-bottom: 30px; margin-right:10px">APPROVE HM</button>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-danger reject" style="float: left; margin-bottom: 30px; margin-right:10px">REJECT HM</button>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-warning cancel" style="float: left; margin-bottom: 30px; margin-right:10px; color: #ffffff">CANCEL BY DEBITUR</button>
                 </div>
             </div>
         </div>
