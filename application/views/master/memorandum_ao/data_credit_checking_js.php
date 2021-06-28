@@ -15,6 +15,20 @@
     // =============================================================
     
     $(function() {
+
+        $(".add-row").click(function() {
+            var markup = '<tr><td><input type="checkbox" name="record_lampiran_lain" width="4" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><input type="file" class="form-control" name="lampiran_lain[]" id="lampiran_lain[]" onkeyup="javascript:this.value=this.value.toUpperCase()"></td></tr>';
+            $("#table1 ").append(markup);
+        });
+
+        $(".delete-row").click(function() {
+            $("table tbody").find('input[name="record_lampiran_lain"]').each(function() {
+                if ($(this).is(":checked")) {
+                    $(this).parents("tr").remove();
+                }
+            });
+        });
+
         $("#tambah_data_anak").click(function() {
             // var id_data_anak = $('#form_tambah_data_anak input[type=hidden][name=id_debitur_anak]').val();
             // var url_data_anak = "<?php echo config_item('api_url') ?>api/master/mca/" + id_data_anak;
@@ -2382,6 +2396,89 @@
             });
         }
 
+        update_lampiran_lain = function(opts, id) {
+            var data = opts;
+            var url = '<?php echo $this->config->item('api_url'); ?>api/master/mao/LampiranLain/' + id;
+            return $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                beforeSend: function() {
+                    let html =
+                        "<div width='100%' class='text-center'>" +
+                        "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                        "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>" +
+                        "</div>";
+
+                    $('#load_data').html(html);
+                    $('#modal_load_data').modal('show');
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        }
+
+        $('#form_lampiran_lain').on('submit', function(e) {
+            var id = $('input[name=id_trans_so]').val();
+            
+            e.preventDefault();
+            var formData = new FormData();
+
+            $.each($('input[name="lampiran_lain[]"]', this), function(i, e) {
+                formData.append('lampiran_lain[]', e.files[0]);
+            });
+            
+            update_lampiran_lain(formData, id)
+                .done(function(res) {
+                    var data = res.data;
+                    bootbox.alert('Berhasil Menambahkan Lampiran Lain-Lain!!!', function() {
+                        load_lampiran_lain();
+                        $("#batal").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    console.log(JSON.stringify(jqXHR));
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    } else {
+                        $.each(data, function(index, item) {
+                            error += '<p>' + item + '</p>' + "\n";
+                        });
+                    }
+                    bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                        $("#batal").click();
+                    });
+                });
+        });
+
+    
+        load_lampiran_lain = function() {
+            var id = $('#form_lampiran_lain input[name=id_trans_so]').val();
+            get_detail({}, id)
+                .done(function(response) {
+                    var data = response.data;
+
+                    var html_lampiran_lain = [];
+                    $.each(data.lampiran_ao.lampiran_lain, function(item) {
+                        var ii = [
+                            '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.lampiran_lain[item] + '"><p style="font-size: 13px; font-weight: 400;">' + data.lampiran_ao.lampiran_lain[item] + '</p></a>',
+                        ].join('\n');
+                        html_lampiran_lain.push(ii);
+                    });
+                    $('#lamp_data_lain').html(html_lampiran_lain);
+                                    })
+                .fail(function(response) {
+                    $('#lamp_data_lain').html('<tr><td colspan="4">Tidak ada data</td></tr>');
+                });
+        }
+
 
         //UPDATE FASILITAS
         $(function() {
@@ -3505,9 +3602,10 @@
                             $('.buttonPhotoPasangan').hide();
                         }
                     }
-
+                    $('#notes_return').hide();
                     if(data.status_return == 1) {
                         bootbox.alert("Memorandum ini telah direturn oleh CA, harap periksa kembali!!!");
+                        $('#notes_return').show();
                     }
                     if(data.flg_cancel_debitur == 2) {
                         bootbox.alert("Memorandum ini telah di-Cancel oleh Debitur!!!");
@@ -3521,6 +3619,7 @@
                     }
 
                     id = data.id;
+
                     var id_debitur = data.data_debitur.id;
                     var id_pasangan = data.data_pasangan.id;
                     var id_credit = data.id;
@@ -3572,6 +3671,7 @@
                             $('#form_detail select[id=provinsi_domisili_dup]').html(select1 + select);
                         })
 
+                    $('#form_lampiran_lain input[type=hidden][name=id_trans_so]').val(data.id_trans_so);    
                     $('#form_detail input[type=hidden][name=id]').val(data.id_trans_so);
                     $('#form_penjamin input[type=hidden][name=id_trans_so_pen]').val(data.id_trans_so);
                     $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id_trans_so);
@@ -4172,6 +4272,15 @@
                         html9.push(i);
                     });
                     $('#lamp_datapefindo').html(html9);
+
+                    var html_lampiran_lain = [];
+                    $.each(data.lampiran_ao.lampiran_lain, function(item) {
+                        var ii = [
+                            '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.lampiran_lain[item] + '"><p style="font-size: 13px; font-weight: 400;">' + data.lampiran_ao.lampiran_lain[item] + '</p></a>',
+                        ].join('\n');
+                        html_lampiran_lain.push(ii);
+                    });
+                    $('#lamp_data_lain').html(html_lampiran_lain);
 
                     if (data.data_debitur.lampiran.lamp_skk == null) {
                         var j = [

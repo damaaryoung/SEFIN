@@ -2858,7 +2858,7 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="exampleInput1" class="bmd-label-floating">Lampiran Surat Keterangan Usaha</label>
+                                    <label for="exampleInput1" class="bmd-label-floating">Surat Keterangan Usaha</label>
                                     <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_lamp_sku_detail"><i class="fa fa-pencil-alt"></i></button>
                                     <div class="form-group form-file-upload form-file-multiple">
                                         <div class="col-md-6">
@@ -2881,9 +2881,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>Lampiran Form Persetujuan IDEB</label>
+                                    <label>Form Persetujuan IDEB</label>
                                     <button type="button" class="btn btn-info btn-sm edit" data-toggle="modal" data-target="#modal_form_persetujuan_ideb"><i class="fa fa-pencil-alt"></i></button>
                                     <div id="lamp_form_persetujuan_ideb">
                                     </div>
@@ -2904,11 +2904,49 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Lampiran Lain-Lain</label>
+                                    <div id="lamp_data_lain">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <form id="form_lampiran_lain">
+                                <input type="hidden" id="id_trans_so" name="id_trans_so">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label>Upload Lampiran Lain-Lain</label>
+                                            <div class="form-group form-file-upload form-file-multiple">
+                                                <button type="button" class="btn btn-success add-row"><i class="fa fa-plus"></i>&nbsp; Tambah </button>&nbsp;
+                                                <button type="button" class="btn btn-danger delete-row"><i class="fa fa-trash"></i>&nbsp; Delete </button>
+                                                <button type="submit" class="btn btn-info">Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table id="table1" class="table table-hover table-striped table-bordered nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th width="4">Pilih</th>
+                                                    <th>Lampiran Lain-Lain</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><input type="checkbox" name="record_lampiran_lain" width="4" onkeyup="javascript:this.value=this.value.toUpperCase()"></td>
+                                                    <td><input type="file" class="form-control" name="lampiran_lain[]" multiple id="lampiran_lain" onkeyup="javascript:this.value=this.value.toUpperCase()"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
 
                         </div>
                     </div>
                 </div>
-                <div class="form-group" style="margin-top: 10px;">
+                <div id="notes_return" class="form-group" style="margin-top: 10px;">
                     <label style="font-style: italic; color: #383a3a;">Notes Return</label>
                     <textarea name="note_return" style="width: 100%" rows="5" readonly></textarea>
                 </div>
@@ -5175,4 +5213,5 @@
         $("#lama_kerja").val(lama_kerja < 0 ? 0 : lama_kerja);
         
     }
+    
 </script>

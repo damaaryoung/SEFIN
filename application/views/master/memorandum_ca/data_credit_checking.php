@@ -1730,6 +1730,44 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Lampiran Lain-Lain</label>
+                                        <div id="lamp_data_lain">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <form id="form_lampiran_lain">
+                                        <input type="hidden" id="id_trans_so" name="id_trans_so">
+                                        <div class="row">
+                                            <div class="form-group">
+                                                <label>Upload Lampiran Lain-Lain</label>
+                                                <div class="form-group form-file-upload form-file-multiple">
+                                                    <button type="button" class="btn btn-success add-row"><i class="fa fa-plus"></i>&nbsp; Tambah </button>&nbsp;
+                                                    <button type="button" class="btn btn-danger delete-row"><i class="fa fa-trash"></i>&nbsp; Delete </button>
+                                                    <button type="submit" class="btn btn-info">Upload</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="table1" class="table table-hover table-striped table-bordered nowrap">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="4">Pilih</th>
+                                                        <th>Lampiran Lain-Lain</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><input type="checkbox" name="record_lampiran_lain" width="4" onkeyup="javascript:this.value=this.value.toUpperCase()"></td>
+                                                        <td><input type="file" class="form-control" name="lampiran_lain[]" multiple id="lampiran_lain" onkeyup="javascript:this.value=this.value.toUpperCase()"></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -6205,7 +6243,7 @@
                 });
             }
 
-            get_detail_ca = function(opts, id) {
+            get_pic_ca = function(opts, id) {
                 var url = '<?php echo config_item('api_url') ?>api/master/mca/pic_ca/get_team/';
 
                 if (id != undefined) {
@@ -6427,7 +6465,103 @@
                 $('.select2bs4').select2({
                     theme: 'bootstrap4'
                 })
+
+                $(".add-row").click(function() {
+                    var markup = '<tr><td><input type="checkbox" name="record_lampiran_lain" width="4" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><input type="file" class="form-control" name="lampiran_lain[]" id="lampiran_lain[]" onkeyup="javascript:this.value=this.value.toUpperCase()"></td></tr>';
+                    $("#table1 ").append(markup);
+                });
+
+                $(".delete-row").click(function() {
+                    $("table tbody").find('input[name="record_lampiran_lain"]').each(function() {
+                        if ($(this).is(":checked")) {
+                            $(this).parents("tr").remove();
+                        }
+                    });
+                });
             });
+
+            update_lampiran_lain = function(opts, id) {
+            var data = opts;
+            var url = '<?php echo $this->config->item('api_url'); ?>api/master/mao/LampiranLain/' + id;
+            return $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                cache: false,
+                beforeSend: function() {
+                    let html =
+                        "<div width='100%' class='text-center'>" +
+                        "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+                        "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>" +
+                        "</div>";
+
+                    $('#load_data').html(html);
+                    $('#modal_load_data').modal('show');
+                },
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                }
+            });
+        }
+
+        $('#form_lampiran_lain').on('submit', function(e) {
+            var id = $('#form_detail input[type=hidden][name=id]').val();
+            
+            e.preventDefault();
+            var formData = new FormData();
+
+            $.each($('input[name="lampiran_lain[]"]', this), function(i, e) {
+                formData.append('lampiran_lain[]', e.files[0]);
+            });
+            
+            update_lampiran_lain(formData, id)
+                .done(function(res) {
+                    var data = res.data;
+                    bootbox.alert('Berhasil Menambahkan Lampiran Lain-Lain!!!', function() {
+                        load_lampiran_lain();
+                        $("#batal").click();
+                    });
+                })
+                .fail(function(jqXHR) {
+                    console.log(JSON.stringify(jqXHR));
+                    var data = jqXHR.responseJSON;
+                    var error = "";
+
+                    if (typeof data == 'string') {
+                        error = '<p>' + data + '</p>';
+                    } else {
+                        $.each(data, function(index, item) {
+                            error += '<p>' + item + '</p>' + "\n";
+                        });
+                    }
+                    bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
+                        $("#batal").click();
+                    });
+                });
+        });
+
+    
+        load_lampiran_lain = function() {
+            var id = $('#form_lampiran_lain input[name=id_trans_so]').val();
+            get_credit_checking({}, id)
+                .done(function(response) {
+                    var data = response.data;
+
+                    var html_lampiran_lain = [];
+                    $.each(data.lampiran_ao.lampiran_lain, function(item) {
+                        var ii = [
+                            '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.lampiran_lain[item] + '"><p style="font-size: 13px; font-weight: 400;">' + data.lampiran_ao.lampiran_lain[item] + '</p></a>',
+                        ].join('\n');
+                        html_lampiran_lain.push(ii);
+                    });
+                    $('#lamp_data_lain').html(html_lampiran_lain);
+                                    })
+                .fail(function(response) {
+                    $('#lamp_data_lain').html('<tr><td colspan="4">Tidak ada data</td></tr>');
+                });
+        }
 
             //PERIODE MUTASI BANK
             function validasi() {
@@ -7235,6 +7369,7 @@
                         var id_kapasitas_bulanan = data.kapasitas_bulanan.id;
                         var id_pendapatan_usaha = data.pendapatan_usaha.id;
 
+                        $('#form_lampiran_lain input[type=hidden][name=id_trans_so]').val(data.id_trans_so); 
                         $('#form_detail input[type=hidden][name=id]').val(data.id_trans_so);
                         $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id_trans_so);
                         $('#form_modal_agunan_sertifikat input[type=hidden][name=id_trans_so_aguanan]').val(data.id_trans_so);
@@ -7609,6 +7744,15 @@
                             html21.push(y);
                             $('#gambar_pembukuan_usaha').html(html21);
                         }
+
+                        var html_lampiran_lain = [];
+                        $.each(data.lampiran_ao.lampiran_lain, function(item) {
+                            var ii = [
+                                '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.lampiran_lain[item] + '"><p style="font-size: 13px; font-weight: 400;">' + data.lampiran_ao.lampiran_lain[item] + '</p></a>',
+                            ].join('\n');
+                            html_lampiran_lain.push(ii);
+                        });
+                        $('#lamp_data_lain').html(html_lampiran_lain);
 
                         get_asaldata = function(opts) {
                             var url = '<?php echo $this->config->item('api_url'); ?>/api/master/asal_data';
@@ -8566,6 +8710,7 @@
                             bootbox.alert("Memorandum ini telah di-Cancel oleh Debitur!!!");
                         }
 
+                        $('#form_lampiran_lain input[type=hidden][name=id_trans_so]').val(data.id_trans_so);
                         $('#form_detail input[type=hidden][name=id]').val(data.id_trans_so);
                         $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id_trans_so);
                         $('#form_penjamin input[type=hidden][name=id_trans_so_pen]').val(data.id_trans_so);
@@ -10398,7 +10543,7 @@
                 e.preventDefault();
                 var id = $(this).attr('data');
             
-                get_detail_ca({}, id)
+                get_pic_ca({}, id)
                     .done(function(response) {
                         var data = response.data;
 
