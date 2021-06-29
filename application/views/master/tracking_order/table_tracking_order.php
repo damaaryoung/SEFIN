@@ -191,6 +191,10 @@
     });
 
     function filter_tracking_order() {
+
+        $('#table_tracking').DataTable().clear();
+        $('#table_tracking').DataTable().destroy();
+
         $('.buttonCari').hide();
         $('.buttonProses').show();
 
