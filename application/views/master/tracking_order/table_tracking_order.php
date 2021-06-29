@@ -252,7 +252,7 @@
                             } else {
                                 if (item.id_trans_so != null && item.id_verif != null && item.id_caa == null) {
                                     var status = '<td style="text-align: center; vertical-align: middle">Proses Pengajuan CAA</td>';
-                                } else if (item.id_trans_so == null && (item.tgl_pending == null && item.status_return == null) {
+                                } else if (item.id_trans_so == null && item.tgl_pending == null && item.status_return == null) {
                                     var status = '<td style="text-align: center; vertical-align: middle">Proses Memorandum CA</td>';
                                 } else if (item.plafon_kredit == 0) {
                                     var status = '<td style="background-color: #dc4836; text-align: center; vertical-align: middle">Not Recommend CA</td>';
