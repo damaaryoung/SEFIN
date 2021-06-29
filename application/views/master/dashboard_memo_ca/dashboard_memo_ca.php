@@ -130,7 +130,7 @@ $('.buttonProses').hide();
                 var hk = memo_ca_response.hk;
                 var total_kerja = memo_ca_response.total_kerja;
                 var user_id = memo_ca_response.user_id_ca;
-                var total_region = memo_ca_response.region;
+                var region = memo_ca_response.region;
 
                 <?php 
                     $region_ca = $this->db->query("SELECT region FROM pic_ca WHERE flg_aktif = 1 AND jenis_pic = 'CREDIT ANALYST' GROUP BY region")->result(); 
@@ -157,35 +157,26 @@ $('.buttonProses').hide();
                     html_tgl.push(arr);
                 });
 
-                var html_memo_hk = [];
-                $.each(hk, function(index,item){
-                    var arr = [
-                        '<td></td>'
-                    ];
-                    html_memo_hk.push(arr);
-                });
-
-                var html_memo_hk = [];
-                $.each(hk, function(index,item){
-                    var arr = [
-                        '<td></td>'
-                    ];
-                    html_memo_hk.push(arr);
-                });
-
                 function get_hk_td(userId, list_hk) {
                     var array_hk = [];
 
                     for (var key in list_hk) {
-                        if (array_hk[key] == 0) {
-                            stringTd = `<td align="center" style="background-color: red" id="${userId}_${key}"></td>`;
-                        } else {
-                            stringTd = `<td align="center" id="${userId}_${key}"></td>`;
-                        }
+                        stringTd = `<td align="center" id="${userId}_${key}"></td>`;
                         array_hk.push(stringTd);
                     }
                     
                     return array_hk.join("");
+                };
+
+                function get_hk_td_reg(reg, list_hk_reg) {
+                    var array_hk_reg = [];
+
+                    for (var key_reg in list_hk_reg) {
+                        stringTdReg = `<td align="center" id="${reg}_${key_reg}"></td>`;
+                        array_hk_reg.push(stringTdReg);
+                    }
+                    
+                    return array_hk_reg.join("");
                 };
 
                 <?php foreach($region_ca as $row): ?>
@@ -226,7 +217,7 @@ $('.buttonProses').hide();
                                         <?php endforeach?>
                                         <tr style="font-size: 13px">
                                             <td style="border:2px solid; padding-left: 5px" height="30"><b>Total Naik CA</b></td>
-                                            ${html_memo_hk.join("")}
+                                            ${get_hk_td_reg(<?php echo $row->region?>, hk)}
                                             <td align="center" id="total_regional_<?php echo $row->region?>"></td>
                                         </tr>
                                     </table>
@@ -245,11 +236,13 @@ $('.buttonProses').hide();
                     }
                 });
 
-                total_region.forEach( (region) => {
+                region.forEach( (region) => {
                     $(`#total_regional_${region.regional}`).html(region.memo_region);
+
+                    for (var hari_reg in region.memo_pertanggal) {
+                        $(`#${region.regional}_${hari_reg}`).html(region.memo_pertanggal[hari_reg]);
+                    }
                 })
-
-
 
             }
         });

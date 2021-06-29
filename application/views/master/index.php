@@ -154,7 +154,7 @@
            style="opacity: .8;">
       <span class="brand-text font-weight-light" style="color: #4a4747"><strong>SEFIN</strong>SYSTEM</span>
     </a>
-    <div class="sidebar" style="max-width: 1160px;">
+    <div class="sidebar">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column load_menu" id="data-menu" data-widget="treeview" role="menu" data-accordion="false">
           <!-- rendered data menu -->

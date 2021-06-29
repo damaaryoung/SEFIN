@@ -27,12 +27,6 @@ class Dashboard_memo_ca extends CI_Controller
             
             $user->total_memo = $total_memo; 
 
-            if($user->total_memo != 0) {
-                $region = $this->db->query("SELECT a.region as region FROM pic_ca as a LEFT JOIN trans_ca as b ON a.user_id = b.user_id WHERE MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun AND b.user_id = $user->id")->row()->region;
-        
-                $user->region = $region;
-            }
-
             $list_hk = $this->looping_get_hk(1, $total_kerja, $date_now);
 
             $memo = array();
@@ -54,6 +48,19 @@ class Dashboard_memo_ca extends CI_Controller
             $total_region = $this->db->query("SELECT COUNT(a.id_trans_so) as total_memo_region FROM trans_ca as a LEFT JOIN pic_ca as b ON a.user_id = b.user_id WHERE MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun AND b.region = $reg->regional")->row()->total_memo_region;
 
             $reg->memo_region = $total_region;
+
+            $list_hk_reg = $this->looping_get_hk(1, $total_kerja, $date_now);
+
+            $memo_reg = array();
+            foreach ($list_hk_reg as $hari_kerja_reg) {
+                $day = substr($hari_kerja_reg['tanggal'], -2);
+                $hk_reg = $hari_kerja_reg['hk'];
+                $memo_ca_reg = $this->db->query("SELECT COUNT(a.id_trans_so) as total_memo FROM trans_ca AS a LEFT JOIN pic_ca as b ON a.user_id = b.user_id WHERE YEAR(created_at) = $tahun AND MONTH(created_at) = $bulan AND DAY(created_at) = $day AND b.region = $reg->regional")->row()->total_memo;
+
+                $memo_reg["$hk_reg"] = $memo_ca_reg;
+            }
+
+            $reg->memo_pertanggal = $memo_reg;
 
         }
 
