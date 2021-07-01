@@ -58,6 +58,7 @@
                                     <option value="CA">CA</option>
                                     <option value="CAA">CAA</option>
                                     <option value="LPDK">LPDK</option>
+                                    <option value="Pipeline_Lending">Pipeline Lending</option>
                                 </select>
                             </div>
                             <div class="form-group col-md">

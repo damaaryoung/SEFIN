@@ -16637,12 +16637,23 @@
                                         verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("1");
-                                } else {
+                                } else if (data.penjamin[0].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                     $("#verifikasi_penjamin_1").on('click', function() {
                                         verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.penjamin[0].user_id) {
+                                        
+                                        document.getElementById("verifikasi_penjamin_1").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_penjamin_1").on('click', function() {
+                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                    });
+                                    $("#limit_call_penjamin_1_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_1").on('click', function() {

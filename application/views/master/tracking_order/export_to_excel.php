@@ -54,16 +54,16 @@
                             <td class="border" style="text-align: center; vertical-align: middle">Proses Pengajuan CAA</td>
                         <?php } else if ($r->id_trans_so == null && $r->tgl_pending == null && $r->status_return == null) { ?>
                             <td class="border" style="text-align: center; vertical-align: middle">Proses Memorandum CA</td>
-                        <?php } else if ($r->plafon_kredit == 0) { ?>
+                        <?php } else if ($r->plafon_kredit == "0") { ?>
                             <td class="border" style="background-color: #dc4836; text-align: center; vertical-align: middle">Not Recommend CA</td>
                         <?php } else if ($r->id_trans_so != null && $r->id_verif == null) { ?>
                             <td class="border" style="text-align: center; vertical-align: middle">Proses Verifikasi</td>
                         <?php } else if ($r->id_caa != null && $r->id_trans_so != null) { ?>
                             <td class="border" style="background-color: #00d807; text-align: center; vertical-align: middle">Sudah Pengajuan CAA</td>
                         <?php } else if ($r->tgl_pending != null && $r->id_trans_so == null) { ?>
-                            <td class="border" style="background-color: #f1f1f1; text-align: center; vertical-align: middle">Pending</td>
+                            <td class="border" style="background-color: #a8b4ae; text-align: center; vertical-align: middle">Pending</td>
                         <?php } else if ($r->status_return != null && $r->id_trans_so == null) { ?>
-                            <td class="border" style="background-color: #f1f1f1; text-align: center; vertical-align: middle">Return</td>
+                            <td class="border" style="background-color: #a8b4ae; text-align: center; vertical-align: middle">Return</td>
                         <?php } else { ?>
                             <td class="border" style="text-align: center; vertical-align: middle">Status Lain</td>
                         <?php } ?>

@@ -1001,7 +1001,7 @@
         </div>
         <div class="col-md-12" id="input_memorandum_ao" style="margin-bottom: 60px">
             <form id="form_input_ao">
-                <input type="hidden" name="id" value="">
+                <input type="hidden" name="id_trans_so" value="">
                 <!-- AREA CHART -->
                 <div class="box box-primary" style="background-color: #ffffff1f">
                     <div class="box-header with-border">
@@ -1543,7 +1543,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Calon Debitur<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control uang" data-a-sep="." data-a-dec="," id="pemasukan_debitur" id="pemasukan_debitur" name="pemasukan_debitur" onkeyup="total_pemasukan_kapasitas_bulanan();" value="0">
+                                            <input type="text" class="form-control uang" data-a-sep="." data-a-dec="," id="pemasukan_debitur" name="pemasukan_debitur" onkeyup="total_pemasukan_kapasitas_bulanan();" value="0">
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Pasangan</label>

@@ -2517,7 +2517,7 @@
                 //     //Data Pasangan
                 formData.append('id_asal_data', $('select[name=asal_data]', this).val());
                 formData.append('nama_marketing', $('input[name=nama_marketing]', this).val());
-                var plafon = $('input[name=plafon]', this).val();
+                var plafon = $('input[name=plafon]').val();
                 plafon = plafon.replace(/[^\d]/g, "");
                 formData.append('plafon_pinjaman', plafon);
 
@@ -2934,6 +2934,7 @@
                         })
 
                     $('#form_detail input[type=hidden][name=id]').val(data.id);
+                    $('#form_input_ao input[type=hidden][name=id_trans_so]').val(data.id);
                     $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id);
                     $('#form_edit_photo_pasangan input[type=hidden][name=id_pasangan_photo]').val(data.data_pasangan.id);
                     $('#form_edit_ktp_pasangan input[type=hidden][name=id_pasangan_ktp]').val(data.data_pasangan.id);
@@ -5261,7 +5262,7 @@
             formData.append('tgl_ukur_sertifikat', $('input[name=no_ukur_sertifikat]', this).val());
             formData.append('tgl_berlaku_shgb', $('input[name=tgl_berlaku_shgb]', this).val());
             formData.append('no_imb', $('input[name=no_imb]', this).val());
-            var njop = $('input[name=njop]', this).val();
+            var njop = $('input[name=njop]').val();
             njop = njop.replace(/[^\d]/g, "");
             formData.append('njop', njop);
 
@@ -7052,12 +7053,13 @@
         // klik submit update
         $('#form_input_ao').on('click', '.submit', function(e) {
             e.preventDefault();
-            var id = $('input[name=id]', this).val();
+            var id = $('input[name=id_trans_so]').val();
+            console.log(id);
             var formData = new FormData();
 
             if ($('#radioPrimary3').prop('checked')) {
-                formData.append('catatan_ao', $('textarea[name=catatan_ao]', this).val());
-                formData.append('status_ao', $('input[type=radio][name=status_ao2]', this).val());
+                formData.append('catatan_ao', $('textarea[name=catatan_ao]').val());
+                formData.append('status_ao', $('input[type=radio][name=status_ao2]').val());
             } else {
 
                 if (document.getElementById('tinggi_badan').value == "") {
@@ -7369,48 +7371,48 @@
                 }
 
                 //verifikasi
-                formData.append('ver_ktp_debt', $('select[name=ver_ktp_calon_debitur]', this).val());
-                formData.append('ver_kk_debt', $('select[name=ver_kk]', this).val());
-                formData.append('ver_akta_cerai_debt', $('select[name=ver_surat_cerai]', this).val());
-                formData.append('ver_akta_kematian_debt', $('select[name=ver_akta_kematian]', this).val());
-                formData.append('ver_rek_tabungan_debt', $('select[name=ver_rekening_tabungan]', this).val());
-                formData.append('ver_sertifikat_debt', $('select[name=ver_sertifikat]', this).val());
-                formData.append('ver_sttp_pbb_debt', $('select[name=ver_sttp_pbb]', this).val());
-                formData.append('ver_imb_debt', $('select[name=ver_imb]', this).val());
-                formData.append('ver_ktp_pasangan', $('select[name=ver_ktp_pasangan]', this).val());
-                formData.append('ver_akta_nikah_pasangan', $('select[name=ver_akta_nikah]', this).val());
-                formData.append('ver_data_penjamin', $('select[name=ver_data_penjamin]', this).val());
-                formData.append('ver_sku_debt', $('select[name=ver_keterangan_kerja_usaha]', this).val());
-                formData.append('ver_pembukuan_usaha_debt', $('select[name=ver_slip_gaji]', this).val());
-                formData.append('catatan_verifikasi', $('textarea[name=catatan_verifikasi]', this).val());
+                formData.append('ver_ktp_debt', $('select[name=ver_ktp_calon_debitur]').val());
+                formData.append('ver_kk_debt', $('select[name=ver_kk]').val());
+                formData.append('ver_akta_cerai_debt', $('select[name=ver_surat_cerai]').val());
+                formData.append('ver_akta_kematian_debt', $('select[name=ver_akta_kematian]').val());
+                formData.append('ver_rek_tabungan_debt', $('select[name=ver_rekening_tabungan]').val());
+                formData.append('ver_sertifikat_debt', $('select[name=ver_sertifikat]').val());
+                formData.append('ver_sttp_pbb_debt', $('select[name=ver_sttp_pbb]').val());
+                formData.append('ver_imb_debt', $('select[name=ver_imb]').val());
+                formData.append('ver_ktp_pasangan', $('select[name=ver_ktp_pasangan]').val());
+                formData.append('ver_akta_nikah_pasangan', $('select[name=ver_akta_nikah]').val());
+                formData.append('ver_data_penjamin', $('select[name=ver_data_penjamin]').val());
+                formData.append('ver_sku_debt', $('select[name=ver_keterangan_kerja_usaha]').val());
+                formData.append('ver_pembukuan_usaha_debt', $('select[name=ver_slip_gaji]').val());
+                formData.append('catatan_verifikasi', $('textarea[name=catatan_verifikasi]').val());
 
                 //Validasi
-                formData.append('val_data_debt', $('select[name=val_calon_debitur]', this).val());
-                formData.append('val_lingkungan_debt', $('select[name=val_cek_lingkungan]', this).val());
-                formData.append('val_domisili_debt', $('select[name=val_domisili_tinggal]', this).val());
-                formData.append('val_pekerjaan_debt', $('select[name=val_pekerjaan]', this).val());
-                formData.append('val_data_pasangan', $('select[name=val_pas_calon_debitur]', this).val());
-                formData.append('val_data_penjamin', $('select[name=val_penjamin]', this).val());
-                formData.append('val_agunan_tanah', $('select[name=val_agunan_tanah]', this).val());
-                formData.append('catatan_validasi', $('textarea[name=catatan_val]', this).val());
+                formData.append('val_data_debt', $('select[name=val_calon_debitur]').val());
+                formData.append('val_lingkungan_debt', $('select[name=val_cek_lingkungan]').val());
+                formData.append('val_domisili_debt', $('select[name=val_domisili_tinggal]').val());
+                formData.append('val_pekerjaan_debt', $('select[name=val_pekerjaan]').val());
+                formData.append('val_data_pasangan', $('select[name=val_pas_calon_debitur]').val());
+                formData.append('val_data_penjamin', $('select[name=val_penjamin]').val());
+                formData.append('val_agunan_tanah', $('select[name=val_agunan_tanah]').val());
+                formData.append('catatan_validasi', $('textarea[name=catatan_val]').val());
 
                 //Pemeriksa Tanah & Bangunan
-                $.each($('input[name="nama_penghuni_agunan[]"]', this), function(i, e) {
+                $.each($('input[name="nama_penghuni_agunan[]"]'), function(i, e) {
                     formData.append('nama_penghuni_agunan[]', e.value);
                 });
-                $.each($('select[name="status_penghuni_agunan[]"]', this), function(i, e) {
+                $.each($('select[name="status_penghuni_agunan[]"]'), function(i, e) {
                     formData.append('status_penghuni_agunan[]', e.value);
                 });
-                $.each($('input[name="bentuk_bangunan_agunan[]"]', this), function(i, e) {
+                $.each($('input[name="bentuk_bangunan_agunan[]"]'), function(i, e) {
                     formData.append('bentuk_bangunan_agunan[]', e.value);
                 });
-                $.each($('select[name="kondisi_bangunan_agunan[]"]', this), function(i, e) {
+                $.each($('select[name="kondisi_bangunan_agunan[]"]'), function(i, e) {
                     formData.append('kondisi_bangunan_agunan[]', e.value);
                 });
-                $.each($('input[name="fasilitas_agunan[]"]', this), function(i, e) {
+                $.each($('input[name="fasilitas_agunan[]"]'), function(i, e) {
                     formData.append('fasilitas_agunan[]', e.value);
                 });
-                $.each($('input[name="listrik_agunan[]"]', this), function(i, e) {
+                $.each($('input[name="listrik_agunan[]"]'), function(i, e) {
                     formData.append('listrik_agunan[]', e.value);
                 });
 
@@ -7421,136 +7423,138 @@
                     formData.append('nilai_taksasi_bangunan[]', e.value.replace(/[^\d]/g, ""));
                 });
 
-                $.each($('input[name="tgl_taksasi_agunan[]"]', this), function(i, e) {
+                $.each($('input[name="tgl_taksasi_agunan[]"]'), function(i, e) {
                     formData.append('tgl_taksasi_agunan[]', e.value);
                 });
-                $.each($('input[name="nilai_likuidasi_agunan[]"]', this), function(i, e) {
+                $.each($('input[name="nilai_likuidasi_agunan[]"]'), function(i, e) {
                     formData.append('nilai_likuidasi_agunan[]', e.value.replace(/[^\d]/g, ""));
                 });
 
-                $.each($('input[name="nilai_agunan_independen[]"]', this), function(i, e) {
+                $.each($('input[name="nilai_agunan_independen[]"]'), function(i, e) {
                     formData.append('nilai_agunan_independen[]', e.value.replace(/[^\d]/g, ""));
                 });
-                $.each($('input[name="perusahaan_penilai_independen[]"]', this), function(i, e) {
+                $.each($('input[name="perusahaan_penilai_independen[]"]'), function(i, e) {
                     formData.append('perusahaan_penilai_independen[]', e.value);
                 });
 
                 //Kapasitas Bulanan
-                var pemasukan_debitur = $('input[name=pemasukan_debitur]', this).val();
+                var pemasukan_debitur = $('input[name=pemasukan_debitur]').val();
+                console.log(pemasukan_debitur);
                 pemasukan_debitur = pemasukan_debitur.replace(/[^\d]/g, "");
                 formData.append('pemasukan_debitur', pemasukan_debitur);
 
-                var pemasukan_pasangan = $('input[name=pemasukan_pasangan]', this).val();
+                var pemasukan_pasangan = $('input[name=pemasukan_pasangan]').val();
                 pemasukan_pasangan = pemasukan_pasangan.replace(/[^\d]/g, "");
                 formData.append('pemasukan_pasangan', pemasukan_pasangan);
 
-                var pemasukan_penjamin = $('input[name=pemasukan_penjamin]', this).val();
+                var pemasukan_penjamin = $('input[name=pemasukan_penjamin]').val();
                 pemasukan_penjamin = pemasukan_penjamin.replace(/[^\d]/g, "");
                 formData.append('pemasukan_penjamin', pemasukan_penjamin);
 
-                var biaya_rumah_tangga = $('input[name=biaya_rumah_tangga]', this).val();
+                var biaya_rumah_tangga = $('input[name=biaya_rumah_tangga]').val();
                 biaya_rumah_tangga = biaya_rumah_tangga.replace(/[^\d]/g, "");
                 formData.append('biaya_rumah_tangga', biaya_rumah_tangga);
 
-                var biaya_transportasi = $('input[name=biaya_transportasi]', this).val();
+                var biaya_transportasi = $('input[name=biaya_transportasi]').val();
                 biaya_transportasi = biaya_transportasi.replace(/[^\d]/g, "");
                 formData.append('biaya_transport', biaya_transportasi);
 
-                var biaya_pendidikan = $('input[name=biaya_pendidikan]', this).val();
+                var biaya_pendidikan = $('input[name=biaya_pendidikan]').val();
                 biaya_pendidikan = biaya_pendidikan.replace(/[^\d]/g, "");
                 formData.append('biaya_pendidikan', biaya_pendidikan);
 
-                var biaya_telp_listr_air = $('input[name=biaya_telp_listr_air]', this).val();
+                var biaya_telp_listr_air = $('input[name=biaya_telp_listr_air]').val();
                 biaya_telp_listr_air = biaya_telp_listr_air.replace(/[^\d]/g, "");
                 formData.append('telp_listr_air', biaya_telp_listr_air);
 
-                var biaya_lain = $('input[name=biaya_lain]', this).val();
+                var biaya_lain = $('input[name=biaya_lain]').val();
                 biaya_lain = biaya_lain.replace(/[^\d]/g, "");
                 formData.append('biaya_lain', biaya_lain);
 
                 // //Pendapatan Usaha
-                var pemasukan_tunai = $('input[name=pemasukan_tunai]', this).val();
+                var pemasukan_tunai = $('input[name=pemasukan_tunai]').val();
                 pemasukan_tunai = pemasukan_tunai.replace(/[^\d]/g, "");
                 formData.append('pemasukan_tunai', pemasukan_tunai);
 
-                var pemasukan_kredit = $('input[name=pemasukan_kredit]', this).val();
+                var pemasukan_kredit = $('input[name=pemasukan_kredit]').val();
                 pemasukan_kredit = pemasukan_kredit.replace(/[^\d]/g, "");
                 formData.append('pemasukan_kredit', pemasukan_kredit);
                 // pengeluaran sewa 
 
-                var biaya_sewa = $('input[name=biaya_sewa]', this).val();
+                var biaya_sewa = $('input[name=biaya_sewa]').val();
                 biaya_sewa = biaya_sewa.replace(/[^\d]/g, "");
                 formData.append('biaya_sewa', biaya_sewa);
 
-                var biaya_gaji_pegawai = $('input[name=biaya_gaji_pegawai]', this).val();
+                var biaya_gaji_pegawai = $('input[name=biaya_gaji_pegawai]').val();
                 biaya_gaji_pegawai = biaya_gaji_pegawai.replace(/[^\d]/g, "");
                 formData.append('biaya_gaji_pegawai', biaya_gaji_pegawai);
 
-                var biaya_belanja_brg = $('input[name=biaya_belanja_brg]', this).val();
+                var biaya_belanja_brg = $('input[name=biaya_belanja_brg]').val();
                 biaya_belanja_brg = biaya_belanja_brg.replace(/[^\d]/g, "");
                 formData.append('biaya_belanja_brg', biaya_belanja_brg);
 
-                var biaya_telp_listr_air_usaha = $('input[name=biaya_telp_listr_air_usaha]', this).val();
+                var biaya_telp_listr_air_usaha = $('input[name=biaya_telp_listr_air_usaha]').val();
                 biaya_telp_listr_air_usaha = biaya_telp_listr_air_usaha.replace(/[^\d]/g, "");
                 formData.append('biaya_telp_listr_air', biaya_telp_listr_air_usaha);
 
-                var biaya_sampah_keamanan = $('input[name=biaya_sampah_keamanan]', this).val();
+                var biaya_sampah_keamanan = $('input[name=biaya_sampah_keamanan]').val();
                 biaya_sampah_keamanan = biaya_sampah_keamanan.replace(/[^\d]/g, "");
                 formData.append('biaya_sampah_kemanan', biaya_sampah_keamanan);
 
-                var biaya_kirim_barang = $('input[name=biaya_kirim_barang]', this).val();
+                var biaya_kirim_barang = $('input[name=biaya_kirim_barang]').val();
                 biaya_kirim_barang = biaya_kirim_barang.replace(/[^\d]/g, "");
                 formData.append('biaya_kirim_barang', biaya_kirim_barang);
 
-                var biaya_hutang_dagang = $('input[name=biaya_hutang_dagang]', this).val();
+                var biaya_hutang_dagang = $('input[name=biaya_hutang_dagang]').val();
                 biaya_hutang_dagang = biaya_hutang_dagang.replace(/[^\d]/g, "");
                 formData.append('biaya_hutang_dagang', biaya_hutang_dagang);
 
-                var biaya_angsuran = $('input[name=biaya_angsuran]', this).val();
+                var biaya_angsuran = $('input[name=biaya_angsuran]').val();
                 biaya_angsuran = biaya_angsuran.replace(/[^\d]/g, "");
                 formData.append('biaya_angsuran', biaya_angsuran);
 
-                var biaya_lain_lain = $('input[name=biaya_lain_lain]', this).val();
+                var biaya_lain_lain = $('input[name=biaya_lain_lain]').val();
                 biaya_lain_lain = biaya_lain_lain.replace(/[^\d]/g, "");
                 formData.append('biaya_lain_lain', biaya_lain_lain);
 
                 //Recom AO
-                formData.append('produk', $('select[name=produk]', this).val());
+                formData.append('produk', $('select[name=produk]').val());
 
-                var plafon_kredit = $('input[name=plafon_kredit]', this).val();
+                var plafon_kredit = $('input[name=plafon_kredit]').val();
                 plafon_kredit = plafon_kredit.replace(/[^\d]/g, "");
                 formData.append('plafon_kredit', plafon_kredit);
 
-                formData.append('tujuan_pinjaman', $('textarea[name=tujuan_pinjaman_rekomendasi]', this).val());
-                formData.append('jenis_pinjaman', $('select[name=jenis_pinjaman]', this).val());
-                formData.append('jangka_waktu', $('select[name=jangka_waktu]', this).val());
-                formData.append('suku_bunga', $('input[name=suku_bunga]', this).val());
-                var pembayaran_bunga = $('input[name=pembayaran_bunga]', this).val();
+                formData.append('tujuan_pinjaman', $('textarea[name=tujuan_pinjaman_rekomendasi]').val());
+                formData.append('jenis_pinjaman', $('select[name=jenis_pinjaman]').val());
+                formData.append('jangka_waktu', $('select[name=jangka_waktu]').val());
+                formData.append('suku_bunga', $('input[name=suku_bunga]').val());
+                var pembayaran_bunga = $('input[name=pembayaran_bunga]').val();
                 pembayaran_bunga = pembayaran_bunga.replace(/[^\d]/g, "");
                 formData.append('pembayaran_bunga', pembayaran_bunga);
-                formData.append('akad_kredit', $('select[name=akad_kredit]', this).val());
-                formData.append('ikatan_agunan', $('select[name=ikatan_agunan]', this).val());
-                formData.append('analisa_ao', $('input[name=analisa_ao]', this).val());
-                var biaya_provisi = $('input[name=biaya_provisi]', this).val();
+                formData.append('akad_kredit', $('select[name=akad_kredit]').val());
+                formData.append('ikatan_agunan', $('select[name=ikatan_agunan]').val());
+                formData.append('analisa_ao', $('input[name=analisa_ao]').val());
+                var biaya_provisi = $('input[name=biaya_provisi]').val();
                 biaya_provisi = biaya_provisi.replace(/[^\d]/g, "");
                 formData.append('biaya_provisi', biaya_provisi);
-                var biaya_administrasi = $('input[name=biaya_administrasi]', this).val();
+                var biaya_administrasi = $('input[name=biaya_administrasi]').val();
                 biaya_administrasi = biaya_administrasi.replace(/[^\d]/g, "");
                 formData.append('biaya_administrasi', biaya_administrasi);
-                var biaya_credit_checking = $('input[name=biaya_credit_checking]', this).val();
+                var biaya_credit_checking = $('input[name=biaya_credit_checking]').val();
                 biaya_credit_checking = biaya_credit_checking.replace(/[^\d]/g, "");
                 formData.append('biaya_credit_checking', biaya_credit_checking);
-                var biaya_tabungan = $('input[name=biaya_tabungan]', this).val();
+                var biaya_tabungan = $('input[name=biaya_tabungan]').val();
                 biaya_tabungan = biaya_tabungan.replace(/[^\d]/g, "");
                 formData.append('biaya_tabungan', biaya_tabungan);
-                formData.append('catatan_ao', $('textarea[name=catatan_ao]', this).val());
-                formData.append('status_ao', $('input[type=radio][name=status_ao1]', this).val());
+                formData.append('catatan_ao', $('textarea[name=catatan_ao]').val());
+                formData.append('status_ao', $('input[type=radio][name=status_ao1]').val());
             }
 
             update_ao(formData, id)
 
                 .done(function(res) {
                     var data = res.data;
+                    console.log(data);
 
                     $('#form_modal_agunan_sertifikat input[type=hidden][name=id_trans_so_aguanan]').val(data.trans_ao.id_trans_so);
 
@@ -7567,31 +7571,32 @@
                     });
                 })
                 .fail(function(jqXHR) {
-                    var data = jqXHR.responseJSON.message;
-                    var error = "";
-                    if (typeof data == 'string') {
-                        error = '<p>' + data + '</p>';
-                    } else {
-                        $.each(data.lamp_slip_gaji, function(index, item) {
-                            error += '<p>' + item + "</p>";
-                        });
-                        $.each(data['agunan_bag_dapur.0'], function(index, item) {
-                            error += '<p>' + item + "</p>";
-                        });
-                        $.each(data['agunan_bag_depan.0'], function(index, item) {
-                            error += '<p>' + item + "</p>";
-                        });
-                        $.each(data['agunan_bag_jalan.0'], function(index, item) {
-                            error += '<p>' + item + "</p>";
-                        });
-                        $.each(data['agunan_bag_kamarmandi.0'], function(index, item) {
-                            error += '<p>' + item + "</p>";
-                        });
-                        $.each(data['agunan_bag_ruangtamu.0'], function(index, item) {
-                            error += '<p>' + item + "</p>";
-                        });
-                    }
-                    bootbox.alert(error);
+                    console.log(JSON.stringify(jqXHR));
+                    // var data = jqXHR.responseJSON.message;
+                    // var error = "";
+                    // if (typeof data == 'string') {
+                    //     error = '<p>' + data + '</p>';
+                    // } else {
+                    //     $.each(data.lamp_slip_gaji, function(index, item) {
+                    //         error += '<p>' + item + "</p>";
+                    //     });
+                    //     $.each(data['agunan_bag_dapur.0'], function(index, item) {
+                    //         error += '<p>' + item + "</p>";
+                    //     });
+                    //     $.each(data['agunan_bag_depan.0'], function(index, item) {
+                    //         error += '<p>' + item + "</p>";
+                    //     });
+                    //     $.each(data['agunan_bag_jalan.0'], function(index, item) {
+                    //         error += '<p>' + item + "</p>";
+                    //     });
+                    //     $.each(data['agunan_bag_kamarmandi.0'], function(index, item) {
+                    //         error += '<p>' + item + "</p>";
+                    //     });
+                    //     $.each(data['agunan_bag_ruangtamu.0'], function(index, item) {
+                    //         error += '<p>' + item + "</p>";
+                    //     });
+                    // }
+                    // bootbox.alert(error);
                     $("#batal").click();
                 });
         });
@@ -8248,7 +8253,7 @@
         formData.append('tgl_ukur_sertifikat', $('input[name=no_ukur_sertifikat]', this).val());
         formData.append('tgl_berlaku_shgb', $('input[name=tgl_berlaku_shgb]', this).val());
         formData.append('no_imb', $('input[name=no_imb]', this).val());
-        var njop = $('input[name=njop]', this).val();
+        var njop = $('input[name=njop]').val();
         njop = njop.replace(/[^\d]/g, "");
         formData.append('njop', njop);
         formData.append('nop', $('input[name=nop]', this).val());
@@ -8388,7 +8393,7 @@
         formData.append('tgl_ukur_sertifikat', $('input[name=no_ukur_sertifikat_detail]', this).val());
         formData.append('tgl_berlaku_shgb', $('input[name=tgl_berlaku_shgb_detail]', this).val());
         formData.append('no_imb', $('input[name=no_imb_detail]', this).val());
-        var njop = $('input[name=njop_detail]', this).val();
+        var njop = $('input[name=njop_detail]').val();
         njop = njop.replace(/[^\d]/g, "");
         formData.append('njop', njop);
         formData.append('nop', $('input[name=nop_detail]', this).val());
@@ -8987,7 +8992,6 @@
 
     $('#form_pemeriksaan_tanah_bangunan').on('submit', function(e) {
         var id = $('input[name=id_pemeriksaan_tanah_bangunan]', this).val();
-        console.log(id)
         e.preventDefault();
         var formData = new FormData();
         formData.append('nama_penghuni_agunan', $('input[name=nama_penghuni_agunan_detail]', this).val());
@@ -8997,23 +9001,23 @@
         formData.append('fasilitas_agunan', $('input[name=fasilitas_agunan_detail]', this).val());
         formData.append('listrik_agunan', $('input[name=listrik_agunan_detail]', this).val());
 
-        var nilai_taksasi_bangunan_detail = $('input[name=nilai_taksasi_bangunan_detail]', this).val();
+        var nilai_taksasi_bangunan_detail = $('input[name=nilai_taksasi_bangunan_detail]').val();
         nilai_taksasi_bangunan_detail = nilai_taksasi_bangunan_detail.replace(/[^\d]/g, "");
         formData.append('nilai_taksasi_bangunan', nilai_taksasi_bangunan_detail);
 
-        var nilai_taksasi_agunan_detail = $('input[name=nilai_taksasi_agunan_detail]', this).val();
+        var nilai_taksasi_agunan_detail = $('input[name=nilai_taksasi_agunan_detail]').val();
         nilai_taksasi_agunan_detail = nilai_taksasi_agunan_detail.replace(/[^\d]/g, "");
         formData.append('nilai_taksasi_agunan', nilai_taksasi_agunan_detail);
 
         formData.append('tgl_taksasi_agunan', $('input[name=tgl_taksasi_agunan_detail]', this).val());
 
-        var nilai_likuidasi_agunan_detail = $('input[name=nilai_likuidasi_agunan_detail]', this).val();
+        var nilai_likuidasi_agunan_detail = $('input[name=nilai_likuidasi_agunan_detail]').val();
         nilai_likuidasi_agunan_detail = nilai_likuidasi_agunan_detail.replace(/[^\d]/g, "");
         formData.append('nilai_likuidasi_agunan', nilai_likuidasi_agunan_detail);
 
         formData.append('perusahaan_penilai_independen', $('input[name=perusahaan_penilai_independen_detail]', this).val());
 
-        var nilai_agunan_independen_detail = $('input[name=nilai_agunan_independen_detail]', this).val();
+        var nilai_agunan_independen_detail = $('input[name=nilai_agunan_independen_detail]').val();
         nilai_agunan_independen_detail = nilai_agunan_independen_detail.replace(/[^\d]/g, "");
         formData.append('nilai_agunan_independen', nilai_agunan_independen_detail);
 
@@ -9073,35 +9077,35 @@
         e.preventDefault();
         var formData = new FormData();
 
-        var pemasukan_debitur = $('input[name=pemasukan_debitur_detail]', this).val();
+        var pemasukan_debitur = $('input[name=pemasukan_debitur_detail]').val();
         pemasukan_debitur = pemasukan_debitur.replace(/[^\d]/g, "");
         formData.append('pemasukan_debitur', pemasukan_debitur);
 
-        var pemasukan_pasangan = $('input[name=pemasukan_pasangan_detail]', this).val();
+        var pemasukan_pasangan = $('input[name=pemasukan_pasangan_detail]').val();
         pemasukan_pasangan = pemasukan_pasangan.replace(/[^\d]/g, "");
         formData.append('pemasukan_pasangan', pemasukan_pasangan);
 
-        var pemasukan_penjamin = $('input[name=pemasukan_penjamin_detail]', this).val();
+        var pemasukan_penjamin = $('input[name=pemasukan_penjamin_detail]').val();
         pemasukan_penjamin = pemasukan_penjamin.replace(/[^\d]/g, "");
         formData.append('pemasukan_penjamin', pemasukan_penjamin);
 
-        var biaya_rumah_tangga = $('input[name=biaya_rumah_tangga_detail]', this).val();
+        var biaya_rumah_tangga = $('input[name=biaya_rumah_tangga_detail]').val();
         biaya_rumah_tangga = biaya_rumah_tangga.replace(/[^\d]/g, "");
         formData.append('biaya_rumah_tangga', biaya_rumah_tangga);
 
-        var biaya_transportasi = $('input[name=biaya_transportasi_detail]', this).val();
+        var biaya_transportasi = $('input[name=biaya_transportasi_detail]').val();
         biaya_transportasi = biaya_transportasi.replace(/[^\d]/g, "");
         formData.append('biaya_transport', biaya_transportasi);
 
-        var biaya_pendidikan = $('input[name=biaya_pendidikan_detail]', this).val();
+        var biaya_pendidikan = $('input[name=biaya_pendidikan_detail]').val();
         biaya_pendidikan = biaya_pendidikan.replace(/[^\d]/g, "");
         formData.append('biaya_pendidikan', biaya_pendidikan);
 
-        var biaya_telp_listr_air = $('input[name=biaya_telp_listr_air_detail]', this).val();
+        var biaya_telp_listr_air = $('input[name=biaya_telp_listr_air_detail]').val();
         biaya_telp_listr_air = biaya_telp_listr_air.replace(/[^\d]/g, "");
         formData.append('telp_listr_air', biaya_telp_listr_air);
 
-        var biaya_lain = $('input[name=biaya_lain_detail]', this).val();
+        var biaya_lain = $('input[name=biaya_lain_detail]').val();
         biaya_lain = biaya_lain.replace(/[^\d]/g, "");
         formData.append('biaya_lain', biaya_lain);
 
@@ -9162,47 +9166,47 @@
         e.preventDefault();
         var formData = new FormData();
 
-        var pemasukan_tunai = $('input[name=pemasukan_tunai_detail]', this).val();
+        var pemasukan_tunai = $('input[name=pemasukan_tunai_detail]').val();
         pemasukan_tunai = pemasukan_tunai.replace(/[^\d]/g, "");
         formData.append('pemasukan_tunai', pemasukan_tunai);
 
-        var pemasukan_kredit = $('input[name=pemasukan_kredit_detail]', this).val();
+        var pemasukan_kredit = $('input[name=pemasukan_kredit_detail]').val();
         pemasukan_kredit = pemasukan_kredit.replace(/[^\d]/g, "");
         formData.append('pemasukan_kredit', pemasukan_kredit);
 
-        var biaya_sewa = $('input[name=biaya_sewa_detail]', this).val();
+        var biaya_sewa = $('input[name=biaya_sewa_detail]').val();
         biaya_sewa = biaya_sewa.replace(/[^\d]/g, "");
         formData.append('biaya_sewa', biaya_sewa);
 
-        var biaya_gaji_pegawai = $('input[name=biaya_gaji_pegawai_detail]', this).val();
+        var biaya_gaji_pegawai = $('input[name=biaya_gaji_pegawai_detail]').val();
         biaya_gaji_pegawai = biaya_gaji_pegawai.replace(/[^\d]/g, "");
         formData.append('biaya_gaji_pegawai', biaya_gaji_pegawai);
 
-        var biaya_belanja_brg = $('input[name=biaya_belanja_brg_detail]', this).val();
+        var biaya_belanja_brg = $('input[name=biaya_belanja_brg_detail]').val();
         biaya_belanja_brg = biaya_belanja_brg.replace(/[^\d]/g, "");
         formData.append('biaya_belanja_brg', biaya_belanja_brg);
 
-        var biaya_telp_listr_air_usaha_detail = $('input[name=biaya_telp_listr_air_usaha_detail]', this).val();
+        var biaya_telp_listr_air_usaha_detail = $('input[name=biaya_telp_listr_air_usaha_detail]').val();
         biaya_telp_listr_air_usaha_detail = biaya_telp_listr_air_usaha_detail.replace(/[^\d]/g, "");
         formData.append('biaya_telp_listr_air', biaya_telp_listr_air_usaha_detail);
 
-        var biaya_sampah_keamanan_detail = $('input[name=biaya_sampah_keamanan_detail]', this).val();
+        var biaya_sampah_keamanan_detail = $('input[name=biaya_sampah_keamanan_detail]').val();
         biaya_sampah_keamanan_detail = biaya_sampah_keamanan_detail.replace(/[^\d]/g, "");
         formData.append('biaya_sampah_kemanan', biaya_sampah_keamanan_detail);
 
-        var biaya_kirim_barang = $('input[name=biaya_kirim_barang_detail]', this).val();
+        var biaya_kirim_barang = $('input[name=biaya_kirim_barang_detail]').val();
         biaya_kirim_barang = biaya_kirim_barang.replace(/[^\d]/g, "");
         formData.append('biaya_kirim_barang', biaya_kirim_barang);
 
-        var biaya_hutang_dagang = $('input[name=biaya_hutang_dagang_detail]', this).val();
+        var biaya_hutang_dagang = $('input[name=biaya_hutang_dagang_detail]').val();
         biaya_hutang_dagang = biaya_hutang_dagang.replace(/[^\d]/g, "");
         formData.append('biaya_hutang_dagang', biaya_hutang_dagang);
 
-        var angsuran = $('input[name=biaya_angsuran_detail]', this).val();
+        var angsuran = $('input[name=biaya_angsuran_detail]').val();
         angsuran = angsuran.replace(/[^\d]/g, "");
         formData.append('biaya_angsuran', angsuran);
 
-        var biaya_lain_lain = $('input[name=biaya_lain_lain_detail]', this).val();
+        var biaya_lain_lain = $('input[name=biaya_lain_lain_detail]').val();
         biaya_lain_lain = biaya_lain_lain.replace(/[^\d]/g, "");
         formData.append('biaya_lain_lain', biaya_lain_lain);
 
@@ -9260,17 +9264,17 @@
         var id = $('input[name=id_recom_ao_detail]', this).val();
         e.preventDefault();
         var formData = new FormData();
-        var plafon_kredit_detail = $('input[name=plafon_kredit_detail]', this).val();
+        var plafon_kredit_detail = $('input[name=plafon_kredit_detail]').val();
         plafon_kredit_detail = plafon_kredit_detail.replace(/[^\d]/g, "");
-        var pembayaran_bunga_detail = $('input[name=pembayaran_bunga_detail]', this).val();
+        var pembayaran_bunga_detail = $('input[name=pembayaran_bunga_detail]').val();
         pembayaran_bunga_detail = pembayaran_bunga_detail.replace(/[^\d]/g, "");
-        var biaya_provisi_detail = $('input[name=biaya_provisi_detail]', this).val();
+        var biaya_provisi_detail = $('input[name=biaya_provisi_detail]').val();
         biaya_provisi_detail = biaya_provisi_detail.replace(/[^\d]/g, "");
-        var biaya_administrasi_detail = $('input[name=biaya_administrasi_detail]', this).val();
+        var biaya_administrasi_detail = $('input[name=biaya_administrasi_detail]').val();
         biaya_administrasi_detail = biaya_administrasi_detail.replace(/[^\d]/g, "");
-        var biaya_credit_checking_detail = $('input[name=biaya_credit_checking_detail]', this).val();
+        var biaya_credit_checking_detail = $('input[name=biaya_credit_checking_detail]').val();
         biaya_credit_checking_detail = biaya_credit_checking_detail.replace(/[^\d]/g, "");
-        var biaya_tabungan_detail = $('input[name=biaya_tabungan_detail]', this).val();
+        var biaya_tabungan_detail = $('input[name=biaya_tabungan_detail]').val();
         biaya_tabungan_detail = biaya_tabungan_detail.replace(/[^\d]/g, "");
 
         var data = {
