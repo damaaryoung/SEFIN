@@ -1,4 +1,18 @@
 <script>
+    function changeBirthDate() {
+            var date = $("#tgl_lahir_deb").val();
+            var today = new Date();
+            var birthDate = new Date(date);
+            var umur = today.getFullYear() - birthDate.getFullYear();
+            var m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                umur--;
+            }
+
+            $("#umur").val(umur);
+
+    }
+
     $("#uploadOCRKtpdebitur").click(function() {
         $('#ModalCamera').modal('show');
     });
@@ -47,7 +61,8 @@
                             type: "success"
                         },
                         function() {
-                            // $('#form_tambah_so .form-control').prop('readonly', false);
+						//	$('.form-group').show();
+                          //  $('#form_tambah_so .form-control').prop('readonly', false);
                             $('#submit').prop('disabled', false);
                             $('#form_tambah_so input[name=no_ktp]').val(data.data.NO_ID);
                             $('#form_tambah_so input[name=no_ktp_kk]').val(data.data.NO_ID);
@@ -225,11 +240,19 @@
     });
 
     $('#form_pasangan').hide();
-
+    var i = 0;
+    var a = 1;
     var np = 1;
     $(".add-row").click(function() {
         var datepicker = 'datepicker' + np++;
-        var markup = '<tr><td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><div class="row"><div class="col-md-6"><div class="form-group"><label>Nama Lengkap <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label><input type="text" name="nama_ktp_pen[]" onkeyup="this.value = this.value.toUpperCase()" class="form-control "></div><div class="form-group"><label>Nama Ibu Kandung<span class="required_notification">*</span></label><input type="text" name="nama_ibu_kandung_pen[]" onkeyup="this.value = this.value.toUpperCase()" class="form-control "></div><div class="form-row"><div class="form-group col-md-6"><label>Tempat Lahir<span class="required_notification">*</span></label><input type="text" onkeyup="this.value = this.value.toUpperCase()" name="tempat_lahir_pen[]" class="form-control"></div><div class="form-group col-md-6"><label>Tanggal Lahir<span class="required_notification">*</span></label><input type="text" name="tgl_lahir_pen[]" class="datepicker-here form-control" id="' + datepicker + '" data-language="en"  data-date-format="dd-mm-yyyy"/></div></div><div class="form-group"><label>Jenis Kelamin<span class="required_notification">*</span></label><select name="jenis_kelamin_pen[]" id="jenis_kelamin_pen[]" class="form-control select2 select2-danger" style="width: 100%;"><option value="">--Pilih--</option><option value="L">LAKI-LAKI</option><option value="P">PEREMPUAN</option></select></div><div class="form-row"><div class="form-group col-md-6"><label>No KTP<span class="required_notification">*</span></label><input type="text" name="no_ktp_pen[]" class="form-control" minlength="16" maxlength="16" onkeypress="return hanyaAngka(event)"></div><div class="form-group col-md-6"><label>No NPWP</label><input type="text"  name="no_npwp_pen[]" class="form-control" minlength="15" maxlength="15" onkeypress="return hanyaAngka(event)"></div></div></div><div class="col-md-6"><div class="form-group"><label>No Telpon<span class="required_notification">*</span></label><input type="text" name="no_telp_pen[]" class="form-control" minlength="9" maxlength="13" onkeypress="return hanyaAngka(event)"></div><div class="form-group"><label>Hubungan<span class="required_notification">*</span></label><select name="hubungan_debitur_pen[]" id="hubungan_debitur_pen[]" class="form-control select2 select2-danger" style="width: 100%;" onchange="showDiv()"><option value="">-- Pilih --</option><option value="ORANG TUA">ORANG TUA</option><option value="KAKAK">KAKAK</option><option value="ADIK">ADIK</option><option value="MERTUA">MERTUA</option><option value="ANAK">ANAK</option></select></div><div class="form-group"><label>Alamat<small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label><textarea name="alamat_ktp_pen[]" class="form-control " onkeyup="this.value = this.value.toUpperCase()" rows="5" cols="40" style="height: 213px;"></textarea></div></div></div></div></div></td></tr></tbody></table></div></td></tr>';
+        var markup = ''+ 
+        '<tr><td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td><td><div class="row"><div class="col-md-12"><div class="form-group row" id="form_foto_ktp_penjamin">'+
+                    '<p class="col-md-3 text-left control-label col-form-label">Foto KTP Penjamin :</p>'+
+                    '<div class="col-md-12 input-group"><div class="upload-btn-wrapper">'+
+                    '<button class="btn_file"><i class="fa fa-camera"></i></button>'+
+                    '<input type="file" name="inp_ktp_penjamin[]" id="inp_ktp_penjamin'+ a +'" accept="image/*" capture />'+
+                    '</div><button type="button" onclick="take_snapshot_penjamin('+a++ +')" class="btn btn-success btn_cek_penjamin" style="width: 256px;margin-left: 12px;">'+
+                    'Cek</button><img hidden id="img" height="150"></div></div><div class="form-group"><label>Nama Lengkap <small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label><input type="text" name="nama_ktp_pen[]" onkeyup="this.value = this.value.toUpperCase()" class="form-control "></div><div class="form-group"><label>Nama Ibu Kandung<span class="required_notification">*</span></label><input type="text" name="nama_ibu_kandung_pen[]" onkeyup="this.value = this.value.toUpperCase()" class="form-control "></div><div class="form-row"><div class="form-group col-md-6"><label>Tempat Lahir<span class="required_notification">*</span></label><input type="text" onkeyup="this.value = this.value.toUpperCase()" name="tempat_lahir_pen[]" class="form-control"></div><div class="form-group col-md-6"><label>Tanggal Lahir<span class="required_notification">*</span></label><input type="text" name="tgl_lahir_pen[]" class="datepicker-here form-control" id="' + datepicker + '" data-language="en"  data-date-format="dd-mm-yyyy"/></div></div><div class="form-group"><label>Jenis Kelamin<span class="required_notification">*</span></label><select name="jenis_kelamin_pen[]" id="jenis_kelamin_pen[]" class="form-control select2 select2-danger" style="width: 100%;"><option value="">--Pilih--</option><option value="L">LAKI-LAKI</option><option value="P">PEREMPUAN</option></select></div><div class="form-row"><div class="form-group col-md-6"><label>No KTP<span class="required_notification">*</span></label><input type="text" name="no_ktp_pen[]" class="form-control" minlength="16" maxlength="16" onkeypress="return hanyaAngka(event)"></div><div class="form-group col-md-6"><label>No NPWP</label><input type="text"  name="no_npwp_pen[]" class="form-control" minlength="15" maxlength="15" onkeypress="return hanyaAngka(event)"></div></div></div><div class="col-md-6"><div class="form-group"><label>No Telpon<span class="required_notification">*</span></label><input type="text" name="no_telp_pen[]" class="form-control" minlength="9" maxlength="13" onkeypress="return hanyaAngka(event)"></div><div class="form-group"><label>Hubungan<span class="required_notification">*</span></label><select name="hubungan_debitur_pen[]" id="hubungan_debitur_pen[]" class="form-control select2 select2-danger" style="width: 100%;" onchange="showDiv()"><option value="">-- Pilih --</option><option value="ORANG TUA">ORANG TUA</option><option value="KAKAK">KAKAK</option><option value="ADIK">ADIK</option><option value="MERTUA">MERTUA</option><option value="ANAK">ANAK</option></select></div><div class="form-group"><label>Alamat<small><i>(Sesuai KTP)</i></small><span class="required_notification">*</span></label><textarea name="alamat_ktp_pen[]" class="form-control " onkeyup="this.value = this.value.toUpperCase()" rows="5" cols="40" style="height: 213px;"></textarea></div></div></div></div></div></td></tr></tbody></table></div></td></tr>';
         $("#table tbody").append(markup);
 
         $(function() {
@@ -1547,148 +1570,148 @@
             });
         });
     });
-    function take_snapshot_modals() {
-        var base_64 = $('#b64modals').val();
-        var key = "21594885e26346e668dedda0c13a1b4fafbf3c095305911ca10aca0f81d4727f3bdab34febfbdf21dedf620c6e4bdb4c01a7199f2e206e1667110cef4546d1ff";
-        // console.log(base_64);
-        $('.bd-example-modal-sm').modal('hide');
-        $.ajax({
-            type: "POST",
-            url: "http://ai.inergi.id:8001/document_classifier",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                "key": key,
-                "image": base_64,
-                "return_segmented": false,
-                "return_photo": false,
-                "return_signature_photo": false
-            }),
-            beforeSend: function() {
-                let html =
-                    "<div width='100%' class='text-center'>" +
-                    "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
-                    "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
-                    "</div>";
-                $('#load_data').html(html);
-                $('#modal_load_data').modal('show');
-            },
+    // function take_snapshot_modals() {
+    //     var base_64 = $('#b64modals').val();
+    //     var key = "21594885e26346e668dedda0c13a1b4fafbf3c095305911ca10aca0f81d4727f3bdab34febfbdf21dedf620c6e4bdb4c01a7199f2e206e1667110cef4546d1ff";
+    //     // console.log(base_64);
+    //     $('.bd-example-modal-sm').modal('hide');
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "http://ai.inergi.id:8001/document_classifier",
+    //         contentType: "application/json",
+    //         dataType: "json",
+    //         data: JSON.stringify({
+    //             "key": key,
+    //             "image": base_64,
+    //             "return_segmented": false,
+    //             "return_photo": false,
+    //             "return_signature_photo": false
+    //         }),
+    //         beforeSend: function() {
+    //             let html =
+    //                 "<div width='100%' class='text-center'>" +
+    //                 "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
+    //                 "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Batal</a>" +
+    //                 "</div>";
+    //             $('#load_data').html(html);
+    //             $('#modal_load_data').modal('show');
+    //         },
 
-            success: function(res) {
-                // console.log(res);
-                $('#batal').click();
-                var data = res.data;
+    //         success: function(res) {
+    //             // console.log(res);
+    //             $('#batal').click();
+    //             var data = res.data;
 
-                $('[id="no_ktp_cadeb_cek"]').val(data.NIK.value);
-                $('[id="no_ktp"]').val(data.NIK.value);
-                $('[id="nama_lengkap"]').val(data.Nama.value);
-                $('[name="alamat_ktp"]').val(data.Alamat.value);
-                $('[name="tempat_lahir"]').val(data['Tempat Lahir'].value);
-                $('[name="tgl_lahir_deb"]').val(data['Tgl Lahir'].value);
-                $('[name="umur"]').val(data['Umur'].value);
-                $('[name="rt_ktp"]').val(data['RT/RW'].value.substr(0, 3));
-                $('[name="rw_ktp"]').val(data['RT/RW'].value.substr(4));
+    //             $('[id="no_ktp_cadeb_cek"]').val(data.NIK.value);
+    //             $('[id="no_ktp"]').val(data.NIK.value);
+    //             $('[id="nama_lengkap"]').val(data.Nama.value);
+    //             $('[name="alamat_ktp"]').val(data.Alamat.value);
+    //             $('[name="tempat_lahir"]').val(data['Tempat Lahir'].value);
+    //             $('[name="tgl_lahir_deb"]').val(data['Tgl Lahir'].value);
+    //             $('[name="umur"]').val(data['Umur'].value);
+    //             $('[name="rt_ktp"]').val(data['RT/RW'].value.substr(0, 3));
+    //             $('[name="rw_ktp"]').val(data['RT/RW'].value.substr(4));
 
-                if (data.Agama.value == "ISLAM") {
-                    document.getElementById("islam").selected = "true";
-                } else if (data.Agama.value == "KATHOLIK") {
-                    document.getElementById("katholik").selected = "true";
-                } else if (data.Agama.value == "KRISTEN") {
-                    document.getElementById("kristen").selected = "true";
-                } else if (data.Agama.value == "KATHOLIK") {
-                    document.getElementById("katholik").selected = "true";
-                } else if (data.Agama.value == "HINDU") {
-                    document.getElementById("hindu").selected = "true";
-                } else if (data.Agama.value == "BUDHA") {
-                    document.getElementById("budha").selected = "true";
-                } else {
-                    document.getElementById("lain2_kepercayaan").selected = "true";
-                }
+    //             if (data.Agama.value == "ISLAM") {
+    //                 document.getElementById("islam").selected = "true";
+    //             } else if (data.Agama.value == "KATHOLIK") {
+    //                 document.getElementById("katholik").selected = "true";
+    //             } else if (data.Agama.value == "KRISTEN") {
+    //                 document.getElementById("kristen").selected = "true";
+    //             } else if (data.Agama.value == "KATHOLIK") {
+    //                 document.getElementById("katholik").selected = "true";
+    //             } else if (data.Agama.value == "HINDU") {
+    //                 document.getElementById("hindu").selected = "true";
+    //             } else if (data.Agama.value == "BUDHA") {
+    //                 document.getElementById("budha").selected = "true";
+    //             } else {
+    //                 document.getElementById("lain2_kepercayaan").selected = "true";
+    //             }
 
-                if (data['Status Perkawinan'].value == "BELUM KAWIN") {
-                    document.getElementById("single").selected = "true";
-                } else if (data['Status Perkawinan'].value == "KAWIN") {
-                    document.getElementById("menikah").selected = "true";
-                } else {
-                    document.getElementById("janda_duda").selected = "true";
-                }
+    //             if (data['Status Perkawinan'].value == "BELUM KAWIN") {
+    //                 document.getElementById("single").selected = "true";
+    //             } else if (data['Status Perkawinan'].value == "KAWIN") {
+    //                 document.getElementById("menikah").selected = "true";
+    //             } else {
+    //                 document.getElementById("janda_duda").selected = "true";
+    //             }
 
-                if (data['Jenis Kelamin'].value == "LAKI-LAKI") {
-                    document.getElementById("L_deb").selected = "true";
-                } else if (data['Jenis Kelamin'].value == "PEREMPUAN") {
-                    document.getElementById("P_deb").selected = "true";
-                }
-                get_provinsi()
-                    .done(function(res) {
-                        var select = [];
-                        var select1 = '<option value="">--Pilih--</option>';
-                        $.each(res.data, function(i, e) {
-                            var option = [
-                                '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'
-                            ].join('\n');
-                            select.push(option);
-                        });
-                        $('#form_tambah_so select[id=select_provinsi_ktp]').html(select);
-                        document.getElementById('' + data.Provinsi.value + '').selected = "true";
-                    })
-                swal({
-                    title: "Data Berhasil Diambil",
-                    type: "success"
-                });
+    //             if (data['Jenis Kelamin'].value == "LAKI-LAKI") {
+    //                 document.getElementById("L_deb").selected = "true";
+    //             } else if (data['Jenis Kelamin'].value == "PEREMPUAN") {
+    //                 document.getElementById("P_deb").selected = "true";
+    //             }
+    //             get_provinsi()
+    //                 .done(function(res) {
+    //                     var select = [];
+    //                     var select1 = '<option value="">--Pilih--</option>';
+    //                     $.each(res.data, function(i, e) {
+    //                         var option = [
+    //                             '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'
+    //                         ].join('\n');
+    //                         select.push(option);
+    //                     });
+    //                     $('#form_tambah_so select[id=select_provinsi_ktp]').html(select);
+    //                     document.getElementById('' + data.Provinsi.value + '').selected = "true";
+    //                 })
+    //             swal({
+    //                 title: "Data Berhasil Diambil",
+    //                 type: "success"
+    //             });
 
-                get_kecamatan = function(opts, id) {
-                    var url = '<?php echo config_item('api_url') ?>wilayah/kecamatan/';
-                    var data = opts;
+    //             get_kecamatan = function(opts, id) {
+    //                 var url = '<?php echo config_item('api_url') ?>wilayah/kecamatan/';
+    //                 var data = opts;
 
-                    return $.ajax({
-                        url: url,
-                        data: data,
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem('token')
-                        }
-                    });
-                }
-                get_kecamatan()
-                    .done(function(res) {
-                        console.log(res);
-                        var select = [];
-                        var select1 = '<option value="">--Pilih--</option>';
-                        $.each(res.data, function(i, e) {
-                            var option = [
-                                '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'
-                            ].join('\n');
-                            select.push(option);
-                        });
-                        $('#form_tambah_so select[id=select_kecamatan_ktp]').html(select);
-                        document.getElementById('' + data.Kecamatan.value + '').selected = "true";
-                    })
-                $('#select_kecamatan_ktp').change(function() {
-                    var nama = document.getElementById('select_kecamatan_ktp').value;
-                    console.log(nama);
-                    $.ajax({
-                        url: "<?php echo base_url(); ?>Kelurahan/get_kelurahan",
-                        method: "POST",
-                        data: {
-                            nama: nama
-                        },
-                        async: false,
-                        dataType: 'json',
-                        success: function(data) {
-                            var html = '';
-                            var i;
-                            for (i = 0; i < data.length; i++) {
-                                html += '<option id="' + data[i].nama + '" value="' + data[i].id + '">' + data[i].nama + '</option>';
-                            }
-                            $('#form_tambah_so select[id=select_kelurahan_ktp').html(html);
-                        }
+    //                 return $.ajax({
+    //                     url: url,
+    //                     data: data,
+    //                     headers: {
+    //                         'Authorization': 'Bearer ' + localStorage.getItem('token')
+    //                     }
+    //                 });
+    //             }
+    //             get_kecamatan()
+    //                 .done(function(res) {
+    //                     console.log(res);
+    //                     var select = [];
+    //                     var select1 = '<option value="">--Pilih--</option>';
+    //                     $.each(res.data, function(i, e) {
+    //                         var option = [
+    //                             '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'
+    //                         ].join('\n');
+    //                         select.push(option);
+    //                     });
+    //                     $('#form_tambah_so select[id=select_kecamatan_ktp]').html(select);
+    //                     document.getElementById('' + data.Kecamatan.value + '').selected = "true";
+    //                 })
+    //             $('#select_kecamatan_ktp').change(function() {
+    //                 var nama = document.getElementById('select_kecamatan_ktp').value;
+    //                 console.log(nama);
+    //                 $.ajax({
+    //                     url: "<?php echo base_url(); ?>Kelurahan/get_kelurahan",
+    //                     method: "POST",
+    //                     data: {
+    //                         nama: nama
+    //                     },
+    //                     async: false,
+    //                     dataType: 'json',
+    //                     success: function(data) {
+    //                         var html = '';
+    //                         var i;
+    //                         for (i = 0; i < data.length; i++) {
+    //                             html += '<option id="' + data[i].nama + '" value="' + data[i].id + '">' + data[i].nama + '</option>';
+    //                         }
+    //                         $('#form_tambah_so select[id=select_kelurahan_ktp').html(html);
+    //                     }
 
-                    });
-                    document.getElementById('' + data['Kel/Desa'].value + '').selected = "true";
-                });
-                // console.log(data['Kel/Desa'].value);
-            }
-        });
-    }
+    //                 });
+    //                 document.getElementById('' + data['Kel/Desa'].value + '').selected = "true";
+    //             });
+    //             // console.log(data['Kel/Desa'].value);
+    //         }
+    //     });
+    // }
 
     function take_snapshot() {
         var base_64 = $('#b64').val();
@@ -2114,64 +2137,64 @@
     }
     // KTP MODALS ALERT
     //KTP DEBITUR BASE_64 
-    document.getElementById("inp1").addEventListener("change", next_upload_foto_ktp_deb);
-    function next_upload_foto_ktp_deb(inp1) {
-        const file = document.getElementById("inp1").files[0];
-        var typeFile = file.type;
-        new Compressor(file, {
-            quality: 0.8, // turunkan kualitas gambar sampai 80%
-            maxWidth: 500, // set maksimal elbar gambar menjadi 500px
-            success(result) {
-                var reader = new FileReader()
-                reader.readAsDataURL(result);
-                reader.onloadend = function() {
-                    var base64data = reader.result;
-                    document.getElementById("b64").value = base64data.substr(23);
-                    // console.log(base64data)
-                }
-            }
-        });
-    }
+    // document.getElementById("inp1").addEventListener("change", next_upload_foto_ktp_deb);
+    // function next_upload_foto_ktp_deb(inp1) {
+    //     const file = document.getElementById("inp1").files[0];
+    //     var typeFile = file.type;
+    //     new Compressor(file, {
+    //         quality: 0.8, // turunkan kualitas gambar sampai 80%
+    //         maxWidth: 500, // set maksimal elbar gambar menjadi 500px
+    //         success(result) {
+    //             var reader = new FileReader()
+    //             reader.readAsDataURL(result);
+    //             reader.onloadend = function() {
+    //                 var base64data = reader.result;
+    //                 document.getElementById("b64").value = base64data.substr(23);
+    //                 // console.log(base64data)
+    //             }
+    //         }
+    //     });
+    // }
     //KTP PENJAMIN BASE_64 
-    document.getElementById("inp_ktp_penjamin").addEventListener("change", next_upload_foto_ktp_penjamin);
-    function next_upload_foto_ktp_penjamin(inp_ktp_penjamin) {
-        const file = document.getElementById("inp_ktp_penjamin").files[0];
-        var typeFile = file.type;
-        new Compressor(file, {
-            quality: 0.8, // turunkan kualitas gambar sampai 80%
-            maxWidth: 500, // set maksimal elbar gambar menjadi 500px
-            success(result) {
-                var reader = new FileReader()
-                reader.readAsDataURL(result);
-                reader.onloadend = function() {
-                    var base64data = reader.result;
-                    document.getElementById("b64_penjamin").value = base64data.substr(23);
-                }
-            }
-        });
-    }
+    // document.getElementById("inp_ktp_penjamin").addEventListener("change", next_upload_foto_ktp_penjamin);
+    // function next_upload_foto_ktp_penjamin(inp_ktp_penjamin) {
+    //     const file = document.getElementById("inp_ktp_penjamin").files[0];
+    //     var typeFile = file.type;
+    //     new Compressor(file, {
+    //         quality: 0.8, // turunkan kualitas gambar sampai 80%
+    //         maxWidth: 500, // set maksimal elbar gambar menjadi 500px
+    //         success(result) {
+    //             var reader = new FileReader()
+    //             reader.readAsDataURL(result);
+    //             reader.onloadend = function() {
+    //                 var base64data = reader.result;
+    //                 document.getElementById("b64_penjamin").value = base64data.substr(23);
+    //             }
+    //         }
+    //     });
+    // }
     //KTP PASANGAN BASE_64
-    document.getElementById("inp_ktp_pas").addEventListener("change", next_upload_foto_ktp_pas);
+    // document.getElementById("inp_ktp_pas").addEventListener("change", next_upload_foto_ktp_pas);
 
-    function next_upload_foto_ktp_pas(inp_ktp_pas) {
-        const file = document.getElementById("inp_ktp_pas").files[0];
-        var typeFile = file.type;
+    // function next_upload_foto_ktp_pas(inp_ktp_pas) {
+    //     const file = document.getElementById("inp_ktp_pas").files[0];
+    //     var typeFile = file.type;
 
 
-        new Compressor(file, {
-            quality: 0.8, // turunkan kualitas gambar sampai 80%
-            maxWidth: 500, // set maksimal elbar gambar menjadi 500px
-            success(result) {
-                var reader = new FileReader()
-                reader.readAsDataURL(result);
-                reader.onloadend = function() {
-                    var base64data = reader.result;
-                    document.getElementById("b64_pas").value = base64data.substr(23);
-                    // console.log(base64data)
-                }
-            }
-        });
-    }
+    //     new Compressor(file, {
+    //         quality: 0.8, // turunkan kualitas gambar sampai 80%
+    //         maxWidth: 500, // set maksimal elbar gambar menjadi 500px
+    //         success(result) {
+    //             var reader = new FileReader()
+    //             reader.readAsDataURL(result);
+    //             reader.onloadend = function() {
+    //                 var base64data = reader.result;
+    //                 document.getElementById("b64_pas").value = base64data.substr(23);
+    //                 // console.log(base64data)
+    //             }
+    //         }
+    //     });
+    // }
 </script>
 <script>
     $(function() {
@@ -2183,4 +2206,353 @@
                 (96 > e.keyCode || 105 < e.keyCode) && e.preventDefault()
         });
     })
+</script>
+
+<script>
+$('#submit_ektp_deb').submit(function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: '<?php echo base_url();?>memo_so/take_snapshot_identity_debitur',
+        dataType: "JSON",
+        type: "post",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        cache: false,
+        async: false,
+        success: function(res) {
+            var data = res.data;
+            console.log(data);
+            var kabupaten = data.city;
+            $('[id="no_ktp_cadeb_cek"]').val(data.idNumber);
+            $('[id="no_ktp"]').val(data.idNumber);
+            $('[id="nama_lengkap"]').val(data.name);
+            $('[name="alamat_ktp"]').val(data.address);
+            var pl_dt_birth = data.birthPlaceBirthday;
+            var split_pl_dt_birth = pl_dt_birth.split(",");
+            var split_dt_birth = split_pl_dt_birth[1].split("-");
+            var dt_birth = new Date(split_dt_birth[2], split_dt_birth[1]-1, split_dt_birth[0]); //29-11-2012
+            $('[name="tempat_lahir"]').val(split_pl_dt_birth[0]);
+            var dd = dt_birth.getDate();
+            var mm = dt_birth.getMonth() + 1;
+            var yyyy = dt_birth.getFullYear();
+            if(dd<10){
+                dd ='0'+dd;
+            }else{
+                dd = dd;
+            }
+            if(mm<10){
+                mm ='0'+mm;
+            }else{
+                mm = mm;
+            }
+
+            dt_birth = yyyy + '-' + mm + '-' + dd;                
+            document.getElementById("tgl_lahir_deb").defaultValue =dt_birth+"";
+            // alert(dt_birth);
+            // var month = parseInt(mm) - parseInt(split_dt_birth[1].trim());
+            // var umur = parseInt(yyyy) - parseInt(split_dt_birth[2].trim());
+            // if (month < 0) {
+            //     umur = umur - 1;
+            // } else if (month == 0) {
+            //     var day = parseInt(dd) - split_dt_birth[2];
+            //     if (day < 0) {
+            //         umur = umur - 1;
+            //     }
+            // }
+            // alert(umur);
+
+            //$('[name="umur"]').val(changeBirthDate(umur));
+            changeBirthDate();
+            //$('[name="tgl_lahir_deb"]').val(dt_birth.toDateString());
+            $('[name="rt_ktp"]').val(data['rtrw'].substr(0, 3));
+            $('[name="rw_ktp"]').val(data['rtrw'].substr(4));
+
+            if (data.religion == "ISLAM") {
+                document.getElementById("islam").selected = "true";
+            } else if (data.religion == "KATHOLIK") {
+                document.getElementById("katholik").selected = "true";
+            } else if (data.religion == "KRISTEN") {
+                document.getElementById("kristen").selected = "true";
+            } else if (data.religion == "KATHOLIK") {
+                document.getElementById("katholik").selected = "true";
+            } else if (data.religion == "HINDU") {
+                document.getElementById("hindu").selected = "true";
+            } else if (data.religion == "BUDHA") {
+                document.getElementById("budha").selected = "true";
+            } else {
+                document.getElementById("lain2_kepercayaan").selected = "true";
+            }
+
+            if (data.maritalStatus == "BELUM KAWIN") {
+                document.getElementById("single").selected = "true";
+                $('#form_pasangan').hide();
+            } else if (data.maritalStatus == "KAWIN") {
+                document.getElementById("menikah").selected = "true";
+                $('#form_pasangan').show();
+            } else {
+                document.getElementById("janda_duda").selected = "true";
+            }
+
+            if (data.gender == "LAKI-LAKI") {
+                document.getElementById("L_deb").selected = "true";
+            } else if (data.gender == "PEREMPUAN") {
+                document.getElementById("P_deb").selected = "true";
+            }
+            get_provinsi()
+            .done(function(res) {
+                var select = [];
+                var select1 = '<option value="">--Pilih--</option>';
+                $.each(res.data, function(i, e) {
+                    var option = [
+                        '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'
+                    ].join('\n');
+                        select.push(option);
+                });
+                $('#form_tambah_so select[id=select_provinsi_ktp]').html(select);
+                document.getElementById('' + data.province + '').selected = "true";
+            });
+
+            swal({
+                title: "Data Berhasil Diambil",
+                type: "success"
+            });
+
+            get_kabupaten = function(opts, id){
+                var url = "<?php echo $this->config->item('api_url')?>wilayah/kabupaten";
+                var data = opts;
+                return $.ajax({
+                    url:url,
+                    data: data,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+            }
+
+            get_kabupaten()
+                .done(function(res){
+                    var select = [];
+                    var select1 = '<option value="">--</option>';
+                     $.each(res.data, function(i, e) {
+                        var option = [
+                            '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'
+                        ].join('\n');
+                        select.push(option);
+                    });
+                    $('#form_tambah_so select[id=select_kabupaten_ktp]').html(select);
+                    document.getElementById('' + data.city + '').selected = "true";
+            });
+
+            $('#select_kabupaten_ktp').change(function() {
+                var id = $(this).val();
+                $.ajax({
+                    url: "<?php echo $this->config->item('api_url'); ?>wilayah/kabupaten",
+                    method: "GET",
+                    data: {
+                        id: id
+                    },
+                    async: false,
+                    dataType: 'json',
+                    success: function(res) {
+                        //console.log(res);
+                        var select = [];
+                        var select1 = '<option value="">--Pilih--</option>';
+                        $.each(res.data, function(i, e) {
+                            var option = [
+                                '<option value="' + e.id + '">' + e.nama + '</option>'
+                            ].join('\n');
+                            select.push(option);
+                        });
+                        $('#form_tambah_so select[id=select_kecamatan_ktp]').html(select1 + select);
+                    }
+                });
+            });
+            get_kecamatan = function(opts, id) {
+                var url = "<?php echo $this->config->item('api_url'); ?>wilayah/kecamatan";
+                var data = opts;
+
+                return $.ajax({
+                    url: url,
+                    data: data,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+            }
+            get_kecamatan()
+                .done(function(res) {
+                    //console.log(res);
+                    var select = [];
+                    var select1 = '<option value="">--Pilih--</option>';
+                    $.each(res.data, function(i, e) {
+                        var option = [
+                            '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'
+                        ].join('\n');
+                        select.push(option);
+                    });
+                    $('#form_tambah_so select[id=select_kecamatan_ktp]').html(select);
+                    document.getElementById('' + data.district + '').selected = "true";
+            });
+            $('#select_kecamatan_ktp').change(function() {
+                var id = $(this).val();
+                var nama = document.getElementById('select_kecamatan_ktp').value;
+                //console.log(nama);
+                $.ajax({
+                    url: "<?php echo $this->config->item('api_url'); ?>wilayah/kelurahan",
+                    method: "GET",
+                    data: {
+                        id: id
+                    },
+                    async: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(res);
+                        var select = [];
+                        var select1 = '<option value="">--Pilih--</option>';
+                        $.each(res.data, function(i, e) {
+                            var option = [
+                                '<option value="' + e.id + '">' + e.nama + '</option>'
+                            ].join('\n');
+                            select.push(option);
+                        });
+                        $('#form_tambah_so select[id=select_kelurahan_ktp]').html(select1 + select);
+                    }
+
+                });
+                //document.getElementById('' + data.village + '').selected = "true";
+                });
+                
+
+                get_kelurahan = function(opts, id){
+                    var url = "<?php echo base_url();?>memo_so/get_kelurahan";
+                    //var data = opts;
+                    return $.ajax({
+                        method:"POST",
+                        data:{
+                            "nama_kecamatan":data.district,
+                        },
+                        url:url,
+                        dataType:"JSON"
+                        // headers:{
+                        //     'Authorization': 'Bearer ' + localStorage.getItem('token')
+                        // }
+                    });
+                }
+
+                get_kelurahan()
+                .done(function(res){
+                    console.log(res);
+                    var select = [];
+                    var select1 = '<option value="">--Pilih--</option>';
+                    // alert(res[0].nama_kelurahan);
+                    $.each(res, function(i, e) {
+                        var option = [
+                            '<option id="' + e.nama_kelurahan + '" value="' + e.id_kelurahan + '">' + e.nama_kelurahan + '</option>'
+                        ].join('\n');
+                        select.push(option);
+                        var post_code = e.kode_pos;
+                    });
+                    $('#form_tambah_so select[id=select_kelurahan_ktp]').html(select);
+                    document.getElementById('' + data.village + '').selected = "true";
+                    $('#form_tambah_so input[id=kode_pos_ktp]').val(res[0].kode_pos);
+                });
+
+                
+            
+
+
+        }
+    });
+
+});
+</script>
+
+<script>
+$('#submit_ektp_pasangan').submit(function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: '<?php echo base_url();?>memo_so/take_snapshot_identity_pasangan',
+        dataType: "JSON",
+        type: "post",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        cache: false,
+        async: false,
+        success: function(res) {
+            console.log(res);
+            var data = res.data;
+            $('#batal').click();
+                // var tempat_lahir = "Tempat Lahir"
+            var data = res.data;
+                // var tempat_lahir = 'data.Tempat Lahir.value'
+            var pl_dt_birth = data.birthPlaceBirthday;
+            var split_pl_dt_birth = pl_dt_birth.split(",");
+            var split_dt_birth = split_pl_dt_birth[1].split("-");
+            var dt_birth = new Date(split_dt_birth[2], split_dt_birth[1]-1, split_dt_birth[0]); //29-11-2012
+            $('[name="tempat_lahir"]').val(split_pl_dt_birth[0]);
+            var dd = dt_birth.getDate();
+            var mm = dt_birth.getMonth() + 1;
+            var yyyy = dt_birth.getFullYear();
+            if(dd<10){
+                dd ='0'+dd;
+            }else{
+                dd = dd;
+            }
+            if(mm<10){
+                mm ='0'+mm;
+            }else{
+                mm = mm;
+            }
+
+            dt_birth = dd + '-' + mm + '-' + yyyy;                
+            document.getElementById("tgl_lahir_pas").defaultValue =dt_birth+"";
+            $('[id="no_ktp_pas"]').val(data.idNumber);
+            $('[id="no_ktp_kk_pas"]').val(data.idNumber);
+            $('[id="nama_lengkap_pas"]').val(data.name);
+            $('[name="alamat_ktp_pas"]').val(data.address + ' RT: ' + data['rtrw'].substr(0, 3) + ' RW: ' + data['rtrw'].substr(4) + ' PROVINSI: ' + data.province + ' KABUPATEN/KOTA: ' + data.city + ' KECAMATAN: ' + data.district + ' KELURAHAN: ' + data.village);
+            $('[name="tempat_lahir_pas"]').val(split_pl_dt_birth[0]);
+            $('[name="tgl_lahir_pas"]').val(dt_birth.toDateString());
+
+
+            if (data.gender == "LAKI-LAKI") {
+                document.getElementById("L_pas").selected = "true";
+            } else if (data.gender == "PEREMPUAN") {
+                document.getElementById("P_pas").selected = "true";
+            }
+
+            swal({
+                title: "Data Berhasil Diambil",
+                    // text: "Terimakasih",
+                type: "success"
+            });
+
+        }
+    });
+});
+
+function take_snapshot_penjamin(id){
+    var file_data = $('#inp_ktp_penjamin'+id).prop('files')[0];
+    var form_data = new FormData();
+    form_data.append('file', file_data);
+    return $.ajax({
+        url:"<?php echo base_url();?>memo_so/take_snapshot_identity_penjamin",
+        dataType:"JSON",
+        type:"POST",
+        data: form_data,
+        processData: false,
+        contentType: false,
+        cache: false,
+        async: false,
+        success: function(data,status){
+            if(data.status!='error'){
+                alert('berhasil');
+            }else{
+                alert('error');
+            }
+        }
+
+    });
+}
 </script>

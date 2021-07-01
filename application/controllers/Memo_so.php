@@ -5,6 +5,7 @@ class Memo_so extends CI_Controller {
 
 	function __construct(){
         parent::__construct();
+        $this->load->library('Curl');
     }
 
 	public function index()
@@ -93,5 +94,174 @@ class Memo_so extends CI_Controller {
         $html = $this->load->view('report/memo_so',$data,true);
         $mpdf->WriteHTML($html);
         $mpdf->Output();
+	}
+
+	// function take_snapshot_identity(){
+	// 	$this->load->library('curl');
+	// 	$fp = $this->input->post('foto_debt');
+	// 	$target_dir = "/upload";
+	// 	$target_file = $target_dir. basename(fp);
+	//     $post = array(
+	//     	'X-ADVAI-KEY' => 'c3609576a2f72065',
+	//     	'Content-Type'=> 'multipart/form-data'
+	//     );
+	//     $url_file = "Users/lby/Desktop/ocrImage.jpg";
+	//     echo $this->curl->get_rest_api_file($post,$url_file,$fp);
+	// }
+
+	// function take_snapshot_identity(){
+	// 	$this->load->library('curl');
+	// 	$name_file = $_FILES['foto_debt']['name'];
+	// 	$tmp_file = $_FILES['foto_debt']['tmp_name'];
+	// 	$size_file = $_FILES['foto_debt']['size'];
+	// 	$target_dir = "/uploads";
+	// 	$target_file = $target_dir. basename($name_file);
+	// 	$uploadOk = 1;
+	// 	$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+	// 	$check  = getimagesize($tmp_file);
+	// 	if($check !=false){
+	// 		echo "File is an image - ".$check['mime'].".";
+	// 		$uploadOk = 1;
+	// 	}else{
+	// 		echo "file is not an image.";
+	// 		$uploadOk = 0;
+	// 	}
+
+	// 	if(file_exists($target_file)){
+	// 		echo "Sorry, file already exists.";
+	// 		$uploadOk = 0;
+	// 	}
+
+	// 	if($size_file > 500000){
+	// 		echo "sorry, your file is too large";
+	// 		$uploadOk = 0;
+	// 	}
+
+	// 	if($imageFileType !="jpg" && $imageFileType !="png" && $imageFileType !="gif"){
+	// 		echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+	// 		$uploadOk = 0;
+	// 	}
+
+	// 	if ($uploadOk == 0) {
+	// 	  echo "Sorry, your file was not uploaded.";
+	// 	// if everything is ok, try to upload file
+	// 	} else {
+	// 	  if (move_uploaded_file($tmp_file, $target_file)) {
+	// 	    echo "The file ". htmlspecialchars( basename( $name_file)). " has been uploaded.";
+	// 	  } else {
+	// 	    echo "Sorry, there was an error uploading your file.";
+	// 	  }
+	// 	}
+	// }
+
+	public function take_snapshot_identity_debitur(){
+		$config = array(
+			'upload_path'   => './uploads/debitur',
+			'allowed_types' => 'gif|jpg|png',
+			'max_size'      => '2000',
+			'min_width'		=> 256,
+			'min_height'    => 256,
+			'max_width'		=> 4096,
+			'max_height'	=> 4096,
+			'file_name'		=> date("Y-m-d").'_'.time()."_ektp"
+		);
+
+		$this->load->library('upload',$config);
+
+		if(!$this->upload->do_upload('inp1'))
+		{
+			$error = array('error' => $this->upload->display_errors());
+			echo json_encode($error);
+		}else{
+			$data = array('upload_data'=> $this->upload->data());
+
+
+			require('./application/third_party/ocr/CurlClient.php');
+	        $api_host = 'https://api.advance.ai';
+	        $api_name = '/openapi/face-recognition/v1/ocr-ktp-check';
+	        $access_key = 'c3609576a2f72065'; // your access key
+	        $secret_key = '5fe5320ef5712301'; // your secret key
+
+	        $ocrImage = array(
+	            'ocrImage' => base_url()."uploads/debitur/".$config['file_name'].".jpg"
+	        );
+
+	        $client = new ai\advance\CurlClient($api_host, $access_key, $secret_key);
+
+	        $result = $client -> request($api_name, null, $ocrImage);
+	        echo $result;
+		}
+	}
+
+	public function take_snapshot_identity_pasangan(){
+		$config = array(
+			'upload_path'   => './uploads/pasangan',
+			'allowed_types' => 'gif|jpg|png',
+			'max_size'      => '2000',
+			'min_width'		=> 256,
+			'min_height'    => 256,
+			'max_width'		=> 4096,
+			'max_height'	=> 4096,
+			'file_name'		=> date("Y-m-d").'_'.time()."_ektp"
+		);
+
+		$this->load->library('upload',$config);
+
+		if(!$this->upload->do_upload('inp_pasangan'))
+		{
+			$error = array('error' => $this->upload->display_errors());
+			echo json_encode($error);
+		}else{
+			$data = array('upload_data'=> $this->upload->data());
+
+
+			require('./application/third_party/ocr/CurlClient.php');
+	        $api_host = 'https://api.advance.ai';
+	        $api_name = '/openapi/face-recognition/v1/ocr-ktp-check';
+	        $access_key = 'c3609576a2f72065'; // your access key
+	        $secret_key = '5fe5320ef5712301'; // your secret key
+
+	        $ocrImage = array(
+	            'ocrImage' => base_url()."uploads/pasangan/".$config['file_name'].".jpg"
+	        );
+
+	        $client = new ai\advance\CurlClient($api_host, $access_key, $secret_key);
+
+	        $result = $client -> request($api_name, null, $ocrImage);
+	        echo $result;
+		}
+	}
+
+	public function get_kelurahan(){
+		$this->load->model('Model_so');
+		$kecamatan = $this->input->post('nama_kecamatan');
+		$get_kelurahan = $this->Model_so->get_kelurahan($kecamatan);
+		echo json_encode($get_kelurahan->result());
+
+	}
+
+	public function take_snapshot_identity_penjamin(){
+		$config = array(
+			'upload_path'   => './uploads/penjamin',
+			'allowed_types' => 'gif|jpg|png',
+			'max_size'      => '2000',
+			'min_width'		=> 256,
+			'min_height'    => 256,
+			'max_width'		=> 4096,
+			'max_height'	=> 4096,
+			'file_name'		=> date("Y-m-d").'_'.time()."_ektp"
+		);
+		$this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload('file')){
+            $status = "error";
+            $msg = $this->upload->display_errors();
+        }
+        else{
+            $dataupload = $this->upload->data();
+            $status = "success";
+            $msg = $dataupload['file_name']." berhasil diupload";
+        }
+        $this->output->set_content_type('application/json')->set_output(json_encode(array('status'=>$status,'msg'=>$msg)));
 	}
 }

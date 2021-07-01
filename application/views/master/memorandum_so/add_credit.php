@@ -48,6 +48,7 @@
             top: 0;
             opacity: 0;
         }
+
         @media only screen and (max-width: 769px) {
             .upload-btn-wrapper input[type=file] {
                 font-size: 100px;
@@ -96,7 +97,7 @@
                     </form>
                 </div>
             </div>
-            <div class="container-fluid" id="form_foto_ktp">
+            <!-- <div class="container-fluid" id="form_foto_ktp">
                 <div>
                     <form>
                         <div class="form-group row">
@@ -113,7 +114,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
 
             <div class="row">
                 <div class="col-md-12" style="margin-bottom: 16px;">
@@ -239,14 +240,14 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-row">
-                                        <div class="form-group col-md-5">
+                                            <div class="form-group col-md-5">
                                                 <label>Tempat Lahir<span class="required_notification">*</span></label>
                                                 <input type="text" id="tempat_lahir" name="tempat_lahir" onkeyup="this.value = this.value.toUpperCase()" class="form-control">
                                             </div>
                                             <div class="form-group col-md-5">
                                                 <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control" data-date-format="d-m-Y"/>
+                                                    <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control" data-date-format="d-m-Y" />
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-2">
@@ -275,14 +276,14 @@
                                                 <label>Pendidikan Terakhir<span class="required_notification">*</span></label>
                                                 <select name="pendidikan_terakhir" id="pendidikan_terakhir" class="form-control select2 select2-danger" style="width: 100%;">
                                                     <option value="">--Pilih--</option>
-                                                    <?php foreach ($pendidikan as $key) {?>
+                                                    <?php foreach ($pendidikan as $key) { ?>
                                                         <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                        <label>Jumlah Tanggungan<span class="required_notification">*</span></label>
+                                            <label>Jumlah Tanggungan<span class="required_notification">*</span></label>
                                             <input type="text" class="form-control" name="jumlah_tanggungan" id="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
                                         </div>
                                         <div class="row">
@@ -448,18 +449,22 @@
                                 </a>
                             </div>
                             <div class="card-body collapse" id="collapse_3">
-                                <div class="form-group row" id="form_foto_ktp_pas">
-                                    <p class="col-md-2 text-left control-label col-form-label">Foto KTP Pasangan :</p>
-                                    <div class="col-md-6 input-group">
-                                        <div class="upload-btn-wrapper">
-                                            <button class="btn_file"><i class="fa fa-camera"></i></button>
-                                            <input type="file" name="inp_ktp_pas" id="inp_ktp_pas" accept="image/*" capture />
+                                    <!-- <div class="form-group row" id="form_foto_ktp_pas">
+                                        
+                                        <p class="col-md-2 text-left control-label col-form-label">Foto KTP Pasangan :</p>
+                                        <div class="col-md-6 input-group">
+                                            <div class="upload-btn-wrapper">
+                                                <button class="btn_file"><i class="fa fa-camera"></i></button>
+                                                <input type="file" name="inp_ktp_pas" id="inp_ktp_pas" accept="image/*" capture />
+                                            </div>
+                                            <textarea id="b64_pas" hidden></textarea>
+                                            <button type="submit"  class="btn btn-success" style="width: 256px;margin-left: 12px;">Cek</button>
+                                            <img hidden id="img" height="150">
                                         </div>
-                                        <textarea id="b64_pas" hidden></textarea>
-                                        <button type="button" onclick="take_snapshot_ktp_pas()" class="btn btn-success" style="width: 256px;margin-left: 12px;">Cek</button>
-                                        <img hidden id="img" height="150">
-                                    </div>
-                                </div>
+                                        
+                                    </div> -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#debt_pasangan">Upload Foto Pasangan</button>
+                                
                                 <div class="row">
 
                                     <div class="col-md-6">
@@ -541,7 +546,7 @@
                             </div>
                             <div class="card-body collapse" id="collapse_4">
                                 <div class="col-md-12" id="">
-                                    <div class="form-group row" id="form_foto_ktp_penjamin">
+                                    <!-- <div class="form-group row" id="form_foto_ktp_penjamin">
                                         <p class="col-md-2 text-left control-label col-form-label">Foto KTP Penjamin :</p>
                                         <div class="col-md-6 input-group">
                                             <div class="upload-btn-wrapper">
@@ -552,7 +557,7 @@
                                             <button type="button" onclick="take_snapshot_ktp_penjamin()" class="btn btn-success" style="width: 256px;margin-left: 12px;">Cek</button>
                                             <img hidden id="img" height="150">
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="row">
                                         <div class="form-group">
                                             <div class="form-group form-file-upload form-file-multiple">
@@ -986,38 +991,76 @@
         </div>
     </div>
 
-    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <form>
-            <div class="modal-body">
-                <section class="modal-title">
-                  <div class="text-center">
-                      <img src="<?= base_url(); ?>/assets/dist/img/warning.svg" class="rounded" alt="..." width="50%">
-                  </div>
-              </section>
-                <section>
-                    <h5 class="text-center"><strong>Oops...</strong></h5>
-                    <p class="text-center" style="font-size: 0.9rem !important;font-family: 'montserrat';"><i>NIK belum terdaftar, silahkan Foto KTP Debitur & Input Credit Checking !</i></p>
-                    <div class="form-group row">
-                        <p class="col-md-8 text-right control-label col-form-label">Foto KTP Debitur :</p>
-                        <div class="col-md-4 input-group">
-                            <div class="upload-btn-wrapper">
-                                <button class="btn_file"><i class="fa fa-camera"></i></button>
-                                <input type="file" name="inp1" id="inp1modals" accept="image/*" capture />
+    <div class="modal fade" id="debt_pasangan" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form id = "submit_ektp_pasangan">
+                    <div class="modal-body">
+                        <section class="modal-title">
+                            <div class="text-center">
+                                <img src="<?= base_url(); ?>/assets/dist/img/warning.svg" class="rounded" alt="..." width="50%">
                             </div>
-                            <textarea id="b64modals" hidden></textarea>
-                        </div>
+                        </section>
+                        <section>
+                            <h5 class="text-center"><strong>Oops...</strong></h5>
+                            <p class="text-center" style="font-size: 0.9rem !important;font-family: 'montserrat';"><i>NIK belum terdaftar, silahkan Foto KTP Debitur & Input Credit Checking !</i></p>
+                            <div class="form-group row">
+                                <!-- <p class="col-md-8 text-right control-label col-form-label">Foto KTP Debitur :</p> -->
+                                <div class="col-md-4 input-group">
+                                    <div class="upload-btn-wrapper">
+                                        <button class="btn_file"><i class="fa fa-camera"></i></button>
+                                        <input type="file" name="inp_pasangan" id="inp1modals" accept="image/*" capture /> 
+                                    </div>
+                                    <textarea id="b64modals" hidden></textarea>
+                                </div>
+                            </div>
+                        </section>
                     </div>
-                </section>
+                    <div class="modal-footer">
+                        <button type="submit" id="take" class="btn btn-success" style="width: 256px;margin-left: 12px;">Cek</button>
+                        <img hidden id="img" height="150">
+                        <a href="#" data-dismiss="modal" class="btn btn-primary close_deb">Ok</a>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" id="take" onclick="take_snapshot_modals()" class="btn btn-success" style="width: 256px;margin-left: 12px;">Cek</button>
-                <img hidden id="img" height="150">
-            </div>
-          </form>
         </div>
-      </div>
+    </div>
+
+
+
+    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form id = "submit_ektp_deb">
+                    <div class="modal-body">
+                        <section class="modal-title">
+                            <div class="text-center">
+                                <img src="<?= base_url(); ?>/assets/dist/img/warning.svg" class="rounded" alt="..." width="50%">
+                            </div>
+                        </section>
+                        <section>
+                            <h5 class="text-center"><strong>Oops...</strong></h5>
+                            <p class="text-center" style="font-size: 0.9rem !important;font-family: 'montserrat';"><i>NIK belum terdaftar, silahkan Foto KTP Debitur & Input Credit Checking !</i></p>
+                            <div class="form-group row">
+                                <!-- <p class="col-md-8 text-right control-label col-form-label">Foto KTP Debitur :</p> -->
+                                <div class="col-md-4 input-group">
+                                    <div class="upload-btn-wrapper">
+                                        <button class="btn_file"><i class="fa fa-camera"></i></button>
+                                        <input type="file" name="inp1" id="inp1modals" accept="image/*" capture /> 
+                                    </div>
+                                    <textarea id="b64modals" hidden></textarea>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="take" class="btn btn-success" style="width: 256px;margin-left: 12px;">Cek</button>
+                        <img hidden id="img" height="150">
+                        <a href="#" data-dismiss="modal" class="btn btn-primary close_deb">Ok</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.js"></script>
@@ -1026,20 +1069,19 @@
     <script src="<?php echo base_url('assets/dist/js/compressor.js') ?>"></script>
     <!-- <script src="<?php echo base_url('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') ?>"></script> -->
     <?php $this->view('master/memorandum_so/add_credit_js.php'); ?>
-    
+
     <script>
         function changeBirthDate() {
-        var date = $("#tgl_lahir_deb").val();
-        var today = new Date();
-        var birthDate = new Date(date);
-        var umur = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            umur--;
-        }
+            var date = $("#tgl_lahir_deb").val();
+            var today = new Date();
+            var birthDate = new Date(date);
+            var umur = today.getFullYear() - birthDate.getFullYear();
+            var m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                umur--;
+            }
 
-        $("#umur").val(umur);
-        
-        }
+            $("#umur").val(umur);
 
+        }
     </script>
