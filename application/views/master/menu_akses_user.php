@@ -4,8 +4,9 @@
     for($i=0; $i<count($menu); $i++):
 ?>
     <li class="nav-item">
-        <a href="" class="nav-link " style="color: #fff">
-            <img src="<?= base_url();?>assets/dist/img/menu-icon/<?= strtolower($menu[$i]->icon_menu); ?>" width="15%">
+        <a href="" class="nav-link " style="color: #fff">    
+<img src="<?= base_url(); ?>assets/dist/img/menu-icon/<?= strtolower($menu[$i]->icon_menu);   ?>" width="15%">
+ 
             <p>
                 <?php echo $menu[$i]->master_menu?>
                 <i class="right fas fa-angle-left"></i>
@@ -58,4 +59,4 @@
         </ul>
     </li>
 <?php endfor ?>
-<!-- AKSES MENU
+<!-- AKSES MENU -->

@@ -40,10 +40,11 @@ class Model_so extends CI_Model
 
         if (isset($_POST['order'])) {
             $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-        } else if (isset($this->order)) {
-            $order = $this->order;
-            $this->db->order_by(key($order), $order[key($order)]);
         }
+        // else if (isset($this->order)) {
+        //     $order = $this->order;
+        //     $this->db->order_by(key($order), $order[key($order)]);
+        // }
     }
 
     function sql_so()
@@ -59,7 +60,7 @@ class Model_so extends CI_Model
         }
         $this->db->select("a.id,a.id_cabang,a.id_pic, a.nomor_so, b.nama AS asal_data,d.nama as cabang,DATE_FORMAT(a.created_at,'%d/%m/%Y %H:%i:%s') as tanggal, a.nama_so, a.status_das, a.status_hm, c.nama_lengkap as nama_debitur", false);
         $this->db->from('trans_so a');
-        $this->db->join('master_asal_data b', 'b.id=a.id_asal_data', 'left');
+        $this->db->join('view_kode_group4 b', 'b.id=a.id_asal_data', 'left');
         $this->db->join('calon_debitur c', 'c.id=a.id_calon_debitur', 'left');
         $this->db->join('mk_cabang d', 'd.id=a.id_cabang', 'left');
         $this->db->where_in('a.id_cabang', $cabang);
@@ -86,14 +87,5 @@ class Model_so extends CI_Model
     {
         $this->sql_so();
         return $this->db->count_all_results();
-    }
-
-    function get_kelurahan($kecamatan){
-        $sql = "SELECT nama_kecamatan,nama_kelurahan,id_kelurahan,kode_pos FROM dpm_online.app_kelurahan a
-        INNER JOIN dpm_online.app_kecamatan b ON a.id_kecamatan = b.id_kecamatan
-         WHERE nama_kecamatan = '".$kecamatan."'";
-        // die($sql);
-        $query = $this->db->query($sql);
-        return $query;
     }
 }

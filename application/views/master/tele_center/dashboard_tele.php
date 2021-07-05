@@ -185,13 +185,16 @@
                     var dataTeleCollResponse = JSON.parse(res).teleDataColl;
                     var dataTeleSalesResponse = JSON.parse(res).teleDataSales;
 
+                    console.log(dataTeleCollResponse);
                     var titleResponse = JSON.parse(res).title;
                     var allcabangResponse = JSON.parse(res).all_cabang_by_area;
 
+                    console.log(allcabangResponse, "ini all cabang response")
                     var formattedDataTeleColl;
                     var formattedDataTeleSales;
 
                     if (allcabangResponse != undefined && allcabangResponse.length != 0) {
+                        console.log("Masuk sini")
                         allcabangResponse.forEach(cabang => {
                             var requestBodyForLoop = {
                                 kode_kantor  : cabang.kode_kantor,

@@ -48,10 +48,11 @@
             $tenor_app = $key['tenor'];
             $status_app = $key['status'];
             $rincian = $key['rincian'];
+            $tgl_approval = $key['tgl_approval'];
 
 
             if ($nama_pic == 'OCSARIO SITINJAK') {
-               $nama_pic = 'OPIK HIDAYAT';
+               $nama_pic = 'OCSARIO SITINJAK';
             } else if ($nama_pic == 'EKO BUDI MARTONO') {
                $nama_pic = 'OPIK HIDAYAT';
             } else if ($nama_pic == 'MAD YUSUF') {
@@ -64,10 +65,11 @@
                         <tr>
                            <td width="200">' . $jabatan . ' : ' . $nama_pic . '</td>
                            <td>Plafond : ' . number_format($plafon) . ' Tenor : ' . $tenor_app . ' </td>
+                           <td>Tanggal : ' . $tgl_approval . '</td>
                            <td width="100"><center>Paraf</center></td>
                         </tr>
                         <tr>
-                           <td colspan="2" height="100" class="pre"><pre>' . $rincian . '</pre> </td>
+                           <td colspan="3" height="100" class="pre"><pre>' . $rincian . '</pre> </td>
                         </tr>
                      </table><br>';
          }

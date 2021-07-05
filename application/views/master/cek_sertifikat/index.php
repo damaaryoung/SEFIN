@@ -26,6 +26,9 @@
         cursor: pointer;
     }
 </style>
+<!-- <link href="<?php echo base_url('assets/dist/css/datepicker.min.css') ?>" rel="stylesheet" type="text/css">
+<script src="<?php echo base_url('assets/dist/js/datepicker.js') ?>"></script> -->
+
 <link href="<?php echo base_url('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>" rel="stylesheet" type="text/css">
 <script src="<?php echo base_url('assets/plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
 <div id="lihat_data_credit" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
@@ -54,9 +57,6 @@
                         <input type="text" class="form-control cari-berdasarkan" placeholder="Cari berdasarkan nomor so.....">
                         <div class="input-group-append">
                           <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        </div>
-                        <div class="input-group-append">
-                          <a type="button" onclick="view_modal_excell()" class="input-group-text btn-sm btn-success" target="_blank"> <i class="fas fa-file-export"></i> Export Excel  </a>
                         </div>
                       </div>
                     </div>

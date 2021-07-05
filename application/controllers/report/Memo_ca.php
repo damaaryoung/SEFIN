@@ -13,14 +13,14 @@ class Memo_ca extends CI_Controller
 	{
 
 		$id = $this->input->post('id');
-		$query = $this->db->query("SET @pv_id_trans ='$id' ");
-		$query = $this->db->query("SELECT DISTINCT * FROM `view_report_ca`");
-		// $result = $this->db->query($query);
+ $query = $this->db->query("SET @pv_id_trans ='$id' ");
+$query = $this->db->query("SELECT DISTINCT * FROM `view_report_ca`");
+		$result = $this->db->query($query);
 		//$count = $result->num_rows();
 
-		$ss = $query->row();
-		//var_dump($query);
-		// die();
+$ss = $query->row();
+ //var_dump($query);
+// die();
 		if ($ss !== null) {
 			$x      = $query->row();
 			$id_calon_debitur = $x->id_calon_debitur;
@@ -83,7 +83,7 @@ class Memo_ca extends CI_Controller
 			$data['nama_asuransi'] = $x->nama_asuransi;
 			$data['jangka_waktu_asuransi'] = $x->jangka_waktu_asuransi;
 			$data['nilai_pertanggungan'] = $x->nilai_pertanggungan;
-			$data['jatuh_tempo'] = date('d-m-Y', strtotime($x->jatuh_tempo));
+			$data['jatuh_tempo'] = $x->jatuh_tempo;
 			$data['berat_badan_asuransi'] = $x->berat_badan_asuransi;
 			$data['tinggi_badan_asuransi'] = $x->tinggi_badan_asuransi;
 			$data['umur_nasabah'] = $x->umur_nasabah;
@@ -91,12 +91,12 @@ class Memo_ca extends CI_Controller
 			$data['nama_asuransi_jaminan_kebakaran'] = $x->nama_asuransi_jaminan_kebakaran;
 			$data['jangka_waktu_jaminan_kebakaran'] = $x->jangka_waktu_jaminan_kebakaran;
 			$data['nilai_pertanggungan_jaminan_kebakaran'] = $x->nilai_pertanggungan_jaminan_kebakaran;
-			$data['jatuh_tempo_jaminan_kebakaran'] =  date('d-m-Y', strtotime($x->jatuh_tempo_jaminan_kebakaran));
+			$data['jatuh_tempo_jaminan_kebakaran'] = $x->jatuh_tempo_jaminan_kebakaran;
 
 			$data['nama_asuransi_jaminan_kendaraan'] = $x->nama_asuransi_jaminan_kendaraan;
 			$data['jangka_waktu_jaminan_kendaraan'] = $x->jangka_waktu_jaminan_kendaraan;
 			$data['nilai_pertanggungan_jaminan_kendaraan'] = $x->nilai_pertanggungan_jaminan_kendaraan;
-			$data['jatuh_tempo_jaminan_kendaraan'] =  date('d-m-Y', strtotime($x->jatuh_tempo_jaminan_kendaraan));
+			$data['jatuh_tempo_jaminan_kendaraan'] = $x->jatuh_tempo_jaminan_kendaraan;
 
 			$data['penyimpangan_struktur'] = $x->penyimpangan_struktur;
 			$data['penyimpangan_dokumen'] = $x->penyimpangan_dokumen;
@@ -264,13 +264,10 @@ class Memo_ca extends CI_Controller
 			$data['data_mutasi_bank'] = $mts;
 
 
-			$mpdf = new \Mpdf\Mpdf();
-			// $mpdf = new \Mpdf\Mpdf(['debug' => true, 'format' => 'A4-P', 'mode' => 'utf-8']);
+			// $mpdf = new \Mpdf\Mpdf();
+			$mpdf = new \Mpdf\Mpdf(['debug' => true]);
 			$html = $this->load->view('report/memo_ca', $data, true);
 			$mpdf->WriteHTML($html);
-			// $mpdf->AddPage();
-			// $mpdf->use_kwt = true;
-			// $mpdf->shrink_tables_to_fit = 1;
 			$mpdf->Output();
 		} else {
 		}

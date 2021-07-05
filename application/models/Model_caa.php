@@ -48,7 +48,7 @@ class Model_caa extends CI_Model
     {
         $outputs   = $this->model_menu->getUser();
         $user_id   = $outputs['data']['user_id'];
-        $get_cabang = "SELECT id_cabang FROM m_pic WHERE user_id='$user_id'";
+        $get_cabang = "SELECT id_cabang FROM m_pic WHERE user_id='$user_id' AND flg_aktif=1";
         $data = $this->db->query($get_cabang)->result();
         foreach ($data as $data2) {
             $cabang[] = $data2->id_cabang;

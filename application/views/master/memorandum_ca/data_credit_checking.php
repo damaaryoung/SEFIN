@@ -8766,6 +8766,17 @@
                             html_record_ca.push(ii);
                             $('#datarecord_ca').html(html_record_ca);
                         }
+                        
+                        if (data.lampiran_ao.lampiran_lain.length != 0) {
+                            var html_lampiran_lain = [];
+                            $.each(data.lampiran_ao.lampiran_lain, function(item) {
+                                var ii = [
+                                    '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.lampiran_lain[item] + '"><p style="font-size: 13px; font-weight: 400;">' + data.lampiran_ao.lampiran_lain[item] + '</p></a>',
+                                ].join('\n');
+                                html_lampiran_lain.push(ii);
+                            });
+                            $('#lamp_data_lain').html(html_lampiran_lain);
+                        }
 
                         var htmlpenjamin = [];
                         var id_penjamin = {};
@@ -9893,6 +9904,17 @@
                         console.log(data);
                         $('#submit_ca').hide();
 
+                        // var html_lampiran_lain = [];
+                        // $.each(data.lampiran_ao.lampiran_lain, function(item) {
+                        //     var ii = [
+                        //         '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data.lampiran_ao.lampiran_lain[item] + '"><p style="font-size: 13px; font-weight: 400;">' + data.lampiran_ao.lampiran_lain[item] + '</p></a>',
+                        //     ].join('\n');
+                        //     html_lampiran_lain.push(ii);
+                        // });
+                        // $('#lamp_data_lain').html(html_lampiran_lain);
+                        // console.log(data.lampiran_ao.lampiran_lain);
+
+
                         //INFORMASI & ANALISA CREDIT CHECKING
 
                         if (data.cc_result == "1") {
@@ -10508,6 +10530,7 @@
                         $('#detail_ca input[id=saldo3_b2_ca]').val(data.mutasi_bank[1].table[2].saldo);
                         $('#rata_rata_mutasi_bank2').click();
                         //============================================================
+                        
                     })
                 hide_all();
                 $('#lihat_detail').show();

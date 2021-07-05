@@ -98,7 +98,7 @@
                                 <th>Plafon</th>
                                 <th>Baki Debet</th>
                                 <th>Angsuran</th>
-                                <th>Klektabilitas</th>
+                                <th>Kolektabilitas</th>
                                 <th>Jenis Kredit</th>
                             </tr>
                         </thead>
@@ -562,10 +562,12 @@
             var nama_pic = ' <?php echo $nama_user['data']['nama'] ?>';
             var id_mj_pic = ' <?php echo $id_mj_pic ?>';
             var status_crm = '<?php echo $status_crm ?>';
+ var tgl_sk = '<?php echo $tgl_sk ?>';
             // console.log(id_mj_pic);
             console.log(status_crm);
+console.log(tgl_sk);
             console.log(status);
-
+console.log(id_mj_pic);
             // if (plafon <= plafon_max) {
             // if (input_plafon > plafon_max) {
             //     var radio_done = "" +
@@ -592,6 +594,13 @@
                     "<input type='radio' name='status_crm' value='Tidak'><small>Tidak</small>";
                 $('.radio_accept').html(radio_accept);
                 $('#not_recommend').hide();
+            } else if (status == 'forward' && id_mj_pic == '6' || tgl_sk == []) {
+                var radio_done = "" + "<input type='radio' name='status' value='<?php echo $status_app ?>'> " +
+                    "<small><?php echo ucfirst($status_app) . $forward_to ?></small>";
+                "<input type='radio' hidden name='status' value='forward' checked> " +
+                "<small>Ya</small>";
+                $('.radio_done').html(radio_done);
+                $('.radio_accept').hide();
             } else if (status == 'forward' && id_mj_pic == ' 6') {
                 var radio_done = "" +
                     "<input type='radio' name='status' value='<?php echo $status_app ?>'> " +

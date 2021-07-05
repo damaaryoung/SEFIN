@@ -1117,14 +1117,14 @@
                 'Authorization': 'Bearer ' + localStorage.getItem('token')
             },
             beforeSend: function() {
-                // let html =
+                // let html = 
                 //             "<div width='100%' class='text-center'>"+
                 //                 "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>"+
                 //                 "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>"+
 
-                //             "</div>";
+                //             "</div>";                
                 // $('#data_pengajuan').html(html);
-                // $('#modal_load_data').modal('show');
+                // $('#modal_load_data').modal('show');   
             },
         });
     }
@@ -1642,13 +1642,20 @@
                     } else {
                         var disabled_edit = "";
                     }
+
+     if (item.tanggal_selesai.length > 0) {
+                            var new_tgl_Selesai = item.tanggal_selesai[0].created_at;
+                        } else {
+                            var new_tgl_Selesai = '';
+                        }
+
                     var plafon = (rubah(item.plafon));
                     var tr = [
                         '<tr>',
                         '<td title="Detail" class="details-control" data="' + item.trans_so + '"></td>',
                         '<td>' + item.status_kredit + '</td>',
                         '<td>' + item.created_at + '</td>',
-                        '<td></td>',
+                        '<td>' + new_tgl_Selesai + '</td>',
                         '<td>' + item.nomor_so + '</td>',
                         '<td>' + item.nama_so + '</td>',
                         '<td>' + item.request_by + '</td>',
@@ -2125,7 +2132,7 @@
 
                 let html111 =
                     "<h5 class='card-title' style='color:#d93444;'>" +
-                    "Checking Data Calon Debitur (" + data.nama_marketing + ") " +
+                    "Checking Data Calon Debitur (" + data.nama_debitur + ") " +
                     "</h5>" +
 
                     "</div>";
@@ -2528,7 +2535,7 @@
 
     });
 
-    //TAMBAH PENGAJUAN LPDK
+    //TAMBAH PENGAJUAN LPDK     
 
     $('#form_pengajuan').on('submit', function(e) {
         e.preventDefault();

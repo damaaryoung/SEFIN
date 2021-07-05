@@ -40,7 +40,7 @@
                                             </div>
                                             <input type="text" class="form-control" style="width:200px" placeholder="Date ended" id="datepicker2" data-language="en" data-date-format="dd-mm-yyyy" name="end">
                                             <div class="text-alert"></div>
-                                            <select class="form-control select2 select2-danger" style="width:255px" name="cabang" id="cabang">
+                                            <select class="form-control select2 select2-danger" style="width:255px" name="nama_cabang" id="nama_cabang">
                                                 <option value="SEMUA CABANG">SEMUA CABANG</option>
                                                 <?php foreach ($cabang as $key => $value) { ?>
                                                     <option value="<?= $value->id ?>"><?= $value->nama ?></option>
@@ -75,6 +75,7 @@
                                         <!-- <th>KEPATUHAN</th> -->
                                         <th>DIR BIS</th>
                                         <th>DIR RISK</th>
+ 					<th>KEPATUHAN</th>
                                         <th>DIRUT</th>
                                     </tr>
                                 </thead>

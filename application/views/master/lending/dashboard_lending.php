@@ -7,6 +7,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1>Dashboard Lending</h1>
+
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -81,6 +82,7 @@
                     <select name="y" id="y" class="form-control">
                         <?php
                             if($y):
+echo "<option value='2020'>2020</option>";
                                 echo "<option value='$y'>$y</option>";
                             endif;
                         ?>
@@ -91,7 +93,7 @@
                     <div class="form-group">
                         <?php
                             $this->db->group_by('view_kode_kantor.kode_area');
-                            $kode_area = $this->db->get('view_kode_kantor')->result();
+                            $kode_area = $this->db->get('view_kode_kantor')->result(); 
                         ?>
                         <select id="kode_area" class="form-control" name="kode_area">
                             <option value="" selected="selected">- Pilih Area -</option>
@@ -106,7 +108,7 @@
                     <label for="kode_kantor">Pilih Cabang :</label>
                     <div class="form-group">
                         <?php
-                            $kode_kantor = $this->db->get('view_kode_kantor')->result();
+                            $kode_kantor = $this->db->get('view_kode_kantor')->result(); 
                         ?>
                         <select id="kode_kantor" class="form-control" name="kode_kantor">
                             <option value="" selected="selected">- Pilih Cabang -</option>
@@ -139,7 +141,7 @@
         } else {
             $('#kode_kantor').prop('disabled', false);
         }
-
+        
     });
 
     var cabangSelect = document.getElementById("kode_kantor");
@@ -151,7 +153,7 @@
         } else {
             $('#kode_area').prop('disabled', false);
         }
-
+        
     });
 
     function numberWithCommas(x) {
@@ -172,7 +174,7 @@
         if (requestBody.kode_area == "" && requestBody.kode_kantor == "") {
              alert("Salah satu dari Area atau Cabang tidak boleh kosong!");
         } else {
-            $.ajax({
+            $.ajax({ 
                 type : 'post',
                 url : 'Dashboard_lending_controller/get_data_lending_for_chart',
                 data :  requestBody,
@@ -190,7 +192,7 @@
                                 y            : $("#y option:selected").val(),
                             }
 
-                            $.ajax({
+                            $.ajax({ 
                                 type : 'post',
                                 url : 'Dashboard_lending_controller/get_data_lending_for_single_chart',
                                 data :  requestBodyForLoop,
@@ -199,7 +201,7 @@
                                     var { lending_data_kantor, chart_title_kantor } = JSON.parse(res);
 
                                     $("#chartLending").append(`
-                                        <div class="col-md-4">
+                                        <div class="col-md-4">                
                                             <div id="kantor${cabang.kode_kantor}"></div><br>
                                         </div>
                                     `);
@@ -215,7 +217,7 @@
                                             text: chart_title_kantor
                                         },
                                         subtitle : {
-                                            text: `Total NoA: ${Number(lending_data_kantor.jml_nasabah)} | Achieve: ${(Number(lending_data_kantor.realisasi) / Number(lending_data_kantor.target) * 100).toFixed(2)} %
+                                            text: `Total NoA: ${Number(lending_data_kantor.jml_nasabah)} | Achieve: ${(Number(lending_data_kantor.realisasi) / Number(lending_data_kantor.target) * 100).toFixed(2)} % 
                                             Amount : Rp ${( numberWithCommas(Number(lending_data_kantor.realisasi)) )}`
                                         },
                                         accessibility: {
@@ -249,10 +251,10 @@
                                     });
                                 }
                             });
-                        });
+                        });           
                     } else {
                         $("#chartLending").append(`
-                            <div class="col-md-4">
+                            <div class="col-md-4">                
                                 <div id="lendingChart"></div><br>
                             </div>
                         `);
@@ -267,7 +269,7 @@
                                 text: chart_titleResponse
                             },
                             subtitle : {
-                                text: `Total NoA: ${Number(lendingResponse.jml_nasabah)} | Achieve: ${(Number(lendingResponse.realisasi) / Number(lendingResponse.target) * 100).toFixed(2)} %
+                                text: `Total NoA: ${Number(lendingResponse.jml_nasabah)} | Achieve: ${(Number(lendingResponse.realisasi) / Number(lendingResponse.target) * 100).toFixed(2)} % 
                                 Amount : Rp ${( numberWithCommas(Number(lendingResponse.realisasi)) )}`
                             },
                             accessibility: {
@@ -300,8 +302,10 @@
                             }]
                         });
                     }
+
                 }
             });
         }
+
     };
 </script>

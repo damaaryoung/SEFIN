@@ -36,10 +36,10 @@ class Dashboard_tele_controller extends CI_Controller
             $data['title'] = $title;
         }        
 
-        $Q = "SELECT * FROM activity_tele WHERE MONTH(`tanggal_telpon`) = $bulan AND YEAR(`tanggal_telpon`) = $tahun";
+        $Q = "SELECT * FROM activity_tele WHERE MONTH(`tanggal_telpon`) >= $bulan AND YEAR(`tanggal_telpon`) >= $tahun";
         $data['teleDataColl'] = $this->db->query($Q)->result();
         
-        $Q = "SELECT * FROM activity_telesales WHERE MONTH(`tgl_telp`) = $bulan AND YEAR(`tgl_telp`) = $tahun";
+        $Q = "SELECT * FROM activity_telesales WHERE MONTH(`tgl_telp`) >= $bulan AND YEAR(`tgl_telp`) >= $tahun";
         $data['teleDataSales'] = $this->db->query($Q)->result();
         
         echo json_encode($data);

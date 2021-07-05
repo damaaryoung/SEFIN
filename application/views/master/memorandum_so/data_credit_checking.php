@@ -555,7 +555,7 @@
                                     <div class="col-md-4" id="photo_deb">
                                         <div class="form-group">
                                             <label class="bmd-label-floating">Photo Debitur</label>
-                                            <button class="btn btn-info btn-sm edit submit buttonPhotoDebitur" data-toggle="modal" data-target="#modal_edit_photo_deb" data-id="65"><i class="fa fa-pencil-alt"></i></button>
+                                            <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_photo_deb" data-id="65"><i class="fa fa-pencil-alt"></i></button>
                                             <div class="form-group form-file-upload form-file-multiple">
                                                 <div class="col-md-6">
                                                     <div class="well" id="gambar_photo">
@@ -641,7 +641,7 @@
                                     <div class="col-md-4" id="form_gambar_photo_pasangan">
                                         <div class="form-group">
                                             <label for="exampleInput1" class="bmd-label-floating">Photo Pasangan</label>
-                                            <button class="btn btn-info btn-sm edit submit buttonPhotoPasangan" data-toggle="modal" data-target="#modal_edit_photo_pasangan" data-id="65"><i class="fa fa-pencil-alt"></i></button>
+                                            <button class="btn btn-info btn-sm edit submit" data-toggle="modal" data-target="#modal_edit_photo_pasangan" data-id="65"><i class="fa fa-pencil-alt"></i></button>
                                             <div class="form-group form-file-upload form-file-multiple">
                                                 <div class="col-md-6">
                                                     <div class="well" id="gambar_photo_pasangan">
@@ -1991,15 +1991,6 @@
                     var id_fasilitas = data.fasilitas_pinjaman.id;
                     var id_pasangan = data.pasangan.id
                     console.log(data);
-
-                    if(data.tracking.ca == "complete") {
-                        $('#form_debitur .form-control').prop('disabled', true);
-                        $('.buttonPhotoDebitur').hide();
-                        if(data.pasangan != null) {
-                            $('#form_pasangan .form-control').prop('disabled', true);
-                            $('.buttonPhotoPasangan').hide();
-                        }
-                    }
 
                     $('#form_detail input[type=hidden][name=id]').val(data.id);
                     $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id);
