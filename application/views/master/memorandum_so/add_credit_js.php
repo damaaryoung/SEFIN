@@ -2335,13 +2335,26 @@ $('#submit_ektp_deb').submit(function(e) {
                     var select = [];
                     var select1 = '<option value="">--</option>';
                      $.each(res.data, function(i, e) {
-                        var option = [
-                            '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'
-                        ].join('\n');
+                        var kota = e.nama;
+                        var split_kota = kota.split(" ")[0];
+                        if(split_kota == "KOTA"){
+                            var kabupaten = kota.replace("KOTA","");
+                            var option = [
+                            '<option id="' + kabupaten + '" value="' + e.id + '">' + e.nama + '</option>'].join('\n');
+                        }else{
+                            var option = [
+                            '<option id="' + e.nama + '" value="' + e.id + '">' + e.nama + '</option>'].join('\n');
+                        }
+                        
                         select.push(option);
                     });
                     $('#form_tambah_so select[id=select_kabupaten_ktp]').html(select);
-                    document.getElementById('' + data.city + '').selected = "true";
+                    
+                    //if(document.getElementById('' + data.city + '').length==0){
+                        //document.getElementById('KOTA ' + data.city + '').selected = "true";
+                    //}else{
+                        document.getElementById('' + data.city + '').selected = "true";
+                    //}
             });
 
             $('#select_kabupaten_ktp').change(function() {
