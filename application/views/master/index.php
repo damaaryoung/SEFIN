@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="<?php echo base_url('assets/plugins/summernote/summernote-bs4.css') ?>">
   <link rel="stylesheet" href="<?php echo base_url('assets/dist/css/sweetalert.css') ?>">
   <script src="<?php echo base_url('assets/dist/js/sweetalert-dev.js') ?>"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Google Font: Source Sans Pro -->
 
   <style type="text/css">
@@ -751,6 +752,28 @@
     window.location.replace('<?php echo $this->config->base_url('Master/form_ol'); ?>');
     NProgress.done();
   });
+
+  $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+    {
+      return {
+          "iStart": oSettings._iDisplayStart,
+          "iEnd": oSettings.fnDisplayEnd(),
+          "iLength": oSettings._iDisplayLength,
+          "iTotal": oSettings.fnRecordsTotal(),
+          "iFilteredTotal": oSettings.fnRecordsDisplay(),
+          "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+          "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+      };
+    };
+
+  function ajax_call(data, url, method='GET') {
+      return $.ajax({
+          url: url,
+          data: data,
+          method: method,
+          dataType: 'json'
+      });
+  }
 </script>
 </body>
 

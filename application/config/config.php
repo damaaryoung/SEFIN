@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $default_domain = 'kreditmandiri.co.id';
-$config['base_url'] = 'http://' . $_SERVER['HTTP_HOST'] . '/SEFIN/';
+$config['base_url'] = 'http://' . $_SERVER['HTTP_HOST'] . '/'.'SEFIN_MASTER'.'/';
 // $config['base_url'] = 'https://' . $default_domain . '/sefino/SEFIN';
 $config['api_url'] = 'http://103.31.232.146/API_WEBTOOL3/';
 $config['api_url_2'] = 'http://103.31.232.146/API_WEBTOOL3_2/';

@@ -950,4 +950,9 @@ function tracker_data_visit_kolektor(){
     {
         $this->load->view('master/tracking_order/dashboard_tracking_order');
     }
+
+    public function penyimpangan()
+    {   
+        $this->load->view('master/penyimpangan/v_index');
+    }
 }
