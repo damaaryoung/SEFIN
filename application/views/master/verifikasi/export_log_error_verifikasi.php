@@ -32,7 +32,7 @@
             </tr>
             <tr style="background-color: #f39c12">
                 <th class="border" style="height: 50px">NO.</th>
-                <th class="border" style="width: 200px">KANTOR</th>
+                <th class="border" style="width: 120px">KANTOR</th>
                 <th class="border" style="width: 120px">JENIS CALL</th>
                 <th class="border" style="width: 150px">NIK</th>
                 <th class="border" style="width: 150px">NPWP</th>

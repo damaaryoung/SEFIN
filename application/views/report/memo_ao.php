@@ -145,7 +145,7 @@
                <tr>
                   <td>Provinsi</td>
                   <td width="2">:</td>
-                  <td><?php echo $provinsi_ktp ?></td>
+                  <td><?php echo $provinsi_domisili ?></td>
                   <td>Kelurahan / Desa</td>
                   <td width="2">:</td>
                   <td><?php echo $kelurahan_domisili ?></td>
@@ -605,6 +605,12 @@
                   <td><?php echo $keterangan_validasi ?></td>
                </tr>
                <?php
+   $query = "SELECT
+  *
+FROM
+  view_agunan_tanah
+WHERE id_trans_so = '$id_trans_so'";
+                  $h = $this->db->query($query);
                $j = 1;
                foreach ($agunan_tanah->result_array() as $data) {
                   $no = $j++;

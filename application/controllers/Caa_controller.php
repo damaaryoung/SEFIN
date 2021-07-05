@@ -36,7 +36,7 @@ class Caa_controller extends CI_Controller
             LEFT JOIN m_pic mp ON mp.`id`=tba.`id_pic`
             LEFT JOIN mj_pic mj ON mj.`id`=mp.`id_mj_pic`
             WHERE tba.`id_trans_so`=$id
-            ORDER BY FIELD(mj.`nama_jenis`, 'DSH', 'AM', 'CRM', 'DIR BIS', 'DIR RISK', 'DIR UT')")->result();
+            ORDER BY FIELD(mj.`nama_jenis`, 'DSH', 'AM', 'CRM', 'DIR BIS', 'DIR RISK','KEPATUHAN', 'DIR UT')")->result();
 
             if ($tb_app[0]->status === 'accept' || $tb_app[1]->status === 'accept' || $tb_app[2]->status === 'accept' || $tb_app[3]->status === 'accept' || $tb_app[4]->status === 'accept' || $tb_app[5]->status === 'accept') {
                 $nomor_so = '<p style="background-color: #00d807;">' . $no_so . '</p>';
@@ -104,13 +104,25 @@ class Caa_controller extends CI_Controller
                 $dir_risk = '-';
             }
 
-            if ($tb_app[5]->nama_jenis === 'DIR UT') {
+ if ($tb_app[5]->nama_jenis === 'KEPATUHAN') {
                 if ($tb_app[5]->status === 'accept') {
-                    $dir_ut = '<b class="text-success">' . $tb_app[5]->plafon . '</b>';
+                    $kepatuhan = '<b class="text-success">' . $tb_app[5]->plafon . '</b>';
                 } else if ($tb_app[5]->status === 'reject') {
-                    $dir_ut = '<b class="text-danger">' . $tb_app[5]->plafon . '</b>';
+                    $kepatuhan = '<b class="text-danger">' . $tb_app[5]->plafon . '</b>';
                 } else {
-                    $dir_ut = $tb_app[5]->plafon;
+                    $kepatuhan = $tb_app[5]->plafon;
+                }
+            } else {
+                $kepatuhan = '-';
+            }
+
+            if ($tb_app[6]->nama_jenis === 'DIR UT') {
+                if ($tb_app[6]->status === 'accept') {
+                    $dir_ut = '<b class="text-success">' . $tb_app[6]->plafon . '</b>';
+                } else if ($tb_app[6]->status === 'reject') {
+                    $dir_ut = '<b class="text-danger">' . $tb_app[6]->plafon . '</b>';
+                } else {
+                    $dir_ut = $tb_app[6]->plafon;
                 }
             } else {
                 $dir_ut = '-';
@@ -134,6 +146,7 @@ class Caa_controller extends CI_Controller
             $row[] = $crm;
             $row[] = $dir_bis;
             $row[] = $dir_risk;
+ $row[] = $kepatuhan;
             $row[] = $dir_ut;
             // $row[] = '<form method="post" target="_blank" action="' . $url . '"> <button type="button"  class="btn btn-info btn-sm edit"   data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
             // <button type="button" class="btn btn-warning btn-sm edit" onclick="click_detail()" data-target="#update" data="' . $id . '"><i style="color: #fff;" class="fas fa-eye"></i></button>
@@ -230,7 +243,6 @@ class Caa_controller extends CI_Controller
         $plafon_pengajuan = $this->input->post('plafon');
         $nst = $this->input->post('nst');
         $cabang = $this->input->post('cabang');
-        // $cabang = 'Kantor Cimahi';
 
         $get_teamCAA = $this->model_auth->get_data('/api/master/team_caa');
         $teamCAA = $get_teamCAA['data'];
@@ -238,7 +250,7 @@ class Caa_controller extends CI_Controller
         if ($nst == 'TIDAK') :
 
             for ($i = 0; $i < count($teamCAA); $i++) {
-                if ($teamCAA[$i]['jabatan'] == 'DSH') {
+                if ($teamCAA[$i]['jabatan'] == 'DSH' && $teamCAA[$i]['flg_aktif'] == true) {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
                         echo "
                         <div class='col-md-4'>
@@ -461,6 +473,7 @@ class Caa_controller extends CI_Controller
             $arr_nst_crm = array();
             $arr_nst_bis = array('STRUKTUR KREDIT', 'LTV', 'TENOR', 'BD150', 'KTA', 'PASTDUE RO', 'BIAYA PROVISI', 'BIAYA KREDIT', 'BIAYA ADMIN', 'BD50', 'PROFESI BERESIKO', 'JAMINAN DI PERKAMPUNGAN');
             $arr_nst_risk = array('LTV', 'TENOR', 'BD150', 'KTA', 'PASTDUE RO', 'BIAYA PROVISI', 'BIAYA KREDIT', 'BIAYA ADMIN', 'BD50', 'PROFESI BERESIKO', 'JAMINAN DI PERKAMPUNGAN', 'STRUKTUR KREDIT');
+
             if ($nst_struktur) {
                 foreach ($nst_struktur as $nst) {
                     if (in_array($nst, $arr_nst_am)) {
@@ -648,6 +661,10 @@ class Caa_controller extends CI_Controller
         $data_pic = $this->db->query($pic_id)->result();
         foreach ($data_pic as $data1) {
             $data['id_mj_pic'] = $data1->id_mj_pic;
+$data['tgl_sk'] = $data1->tgl_sk;
+            if (empty($data['tgl_sk'] = $data1->tgl_sk)) {
+                $data['tgl_sk'] = null;
+            }
         }
 
         $query_cabang = "SELECT b.nama as cabang FROM trans_so as a LEFT JOIN mk_cabang as b on a.id_cabang=b.id WHERE a.id='$id'";

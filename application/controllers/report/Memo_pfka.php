@@ -49,7 +49,7 @@ class Memo_pfka extends CI_Controller
 			$data['jenis_pinjaman'] = $r['data']->pengajuan->jenis_pinjaman;
 			$data['produk'] = $r['data']->rekomendasi_ca->produk;
 			$data['tenor'] = $tenor_approval;
-			$data['plafon'] = $plafon_approval;
+			$data['plafon'] = $r['data']->rekomendasi_ca->plafon;
 			$data['suku_bunga'] = $r['data']->rekomendasi_ca->suku_bunga;
 			$data['pembayaran_bunga'] = $r['data']->rekomendasi_ca->pembayaran_bunga;
 			$data['rekomendasi_angsuran'] = $r['data']->rekomendasi_ca->pembayaran_bunga;

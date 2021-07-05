@@ -472,7 +472,6 @@
                     $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-secondary btn-sm" style="float: right;" disabled>Approve</button>');
                 },
                 success: function(response) {
-                    console.log(response);
                     $('#team_caa').html(response);
                     $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-success btn-sm" style="float: right;">Approve</button>');
                 }

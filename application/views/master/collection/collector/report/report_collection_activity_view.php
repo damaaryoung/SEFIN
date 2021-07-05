@@ -1,3 +1,4 @@
+<?php echo $params['custom_css'];?>
 <div class="content-wrapper" id="content">
     <section class="content-header">
         <div class="container-fluid">
@@ -57,7 +58,7 @@
                                 <button type="button" class="btn btn-primary" id="btn_export" onclick="report_data_collection_activity()">Export</button>
                             </div>
                         <div class="table-responsive" id="table-responsive">
-                            <table id="listData" width="100%" class="table table-striped table-bordered display" data-turbolinks="false" style="white-space: nowrap; font-size:10px">
+                            <table id="listData1" width="100%" class="table table-striped table-bordered display" data-turbolinks="false" style="white-space: nowrap; font-size:10px">
                               <thead>
                                 <tr>
                                     <th rowspan=2>No.</th>
@@ -214,67 +215,7 @@ $(document).ready(function(){
 
   
   // get_dataTable(nama_kolektor,nama_kolektor);
-   $('#btn_refresh').click(function(){
-    get_dataTable(1);
-            });
-function get_dataTable(draw){
-  
-  var kode_area = $("#kode_area option:selected").val();
-  var kode_cabang = $("#kode_cabang option:selected").val();
-  var kode_kolektor = $("#kode_kolektor option:selected").val();
-  var pic = $("#get_pic option:selected").val();
-  var from = $("#from").val();
-  var to = $("#to").val();
-  var table = $("#listData").DataTable({
-                    stateSave: true,
-                    "stateSaveCallback": function (settings, data) {
-                        localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
-                    },
-                    "stateLoadCallback": function (settings) {
-                        return JSON.parse(localStorage.getItem("Datatables_" + window.location.pathname));
-                    },
-                    "dom": '<"bottom"lpf>rt<"top"ip><"clear">',
-                    "oLanguage": {
-                        "sProcessing": "<i class=\'fa fa-refresh fa-spin\'><\/i> Loading"
-                    },
-                    "processing": true,
-                    "serverSide": true,
-                    "bDestroy": true,
-                    "autoWidth": false,
-                    // fixedHeader: true,
-                    "pagingType": "full_numbers",
-                    "ajax": {
-                        "url": "<?php echo base_url();?>assignment_collection/ajax_list_collection_activity",
-                        "type": "POST",
-                        "data":{
-                            "kode_area": kode_area,
-                            "kode_cabang" : kode_cabang,
-                            "kode_kolektor" : kode_kolektor,
-                            "pic" : pic,
-                            "from" : from,
-                            "to" : to
-                        },
-                        // beforeSend: function(){
-                        //     $('#table-responsive').html("<div class='d-flex justify-content-center'><div class='spinner-border' role='status'><span class='sr-only'>Loading...</span></div></div>");
-                        // }
-                         
-                    },
-                    responsive:{details:{type:"column",target:"tr"}},
-                    columnDefs:[{className:"control",orderable:1,targets:"_all"}],
-                    order:[3,"asc"],
-                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
-                    "pageLength":100,
-                    dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
-                });
-
-
-
-  
-    if (draw == 1) {
-     table.destroy();
-    }
-  
-}
+   
 
 function report_data_collection_activity(){
     var kode_area = $("#kode_area option:selected").val();
@@ -297,3 +238,4 @@ function report_data_collection_activity(){
     $('body').find('form#frmprint').attr('target',winName).submit().remove();
 }
 </script>
+<?php echo $params['custom_js'];?>

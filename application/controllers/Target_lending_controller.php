@@ -25,9 +25,8 @@ class Target_lending_controller extends CI_Controller
     }
 
     public function create()
-    {   
-        $id = $this->input->post('id');
-        $data['data_edit']=$this->Model_target_lending->view($id);
+    {
+        $data['data_area_kerja']=$this->Model_target_lending->get_area_kerja();
         $data['data_area']=$this->Model_target_lending->get_area();
         $this->load->view('master/target_lending/add_target', $data);
     }

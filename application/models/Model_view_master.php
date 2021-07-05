@@ -5,8 +5,12 @@ class Model_view_master extends ci_model
     {
         // $query = "SELECT * from view_sumber_penghasilan";
         // return $this->db->query($query);
-        $x = array('id_parameter =' => '06', 'nama_parameter =' => 'JUMLAH PENDAPATAN', 'flg_aktif' => '1');
-        return $this->db->select('nama_detail' , 'id_detail_params')->where($x)->get('view_creditscoring');
+   //     $x = array('id_parameter =' => '06', 'nama_parameter =' => 'JUMLAH PENDAPATAN', 'flg_aktif' => '1');
+     //   return $this->db->select('nama_detail' , 'id_detail_params')->where($x)->get('view_creditscoring');
+  $query = "SELECT nama_detail, id_detail_params from view_creditscoring WHERE nama_parameter='JUMLAH PENDAPATAN' AND id_parameter='06'";
+       return $this->db->query($query);
+     //   return $data;
+
     }
     function pemasukan_perbulan()
     {
@@ -83,16 +87,22 @@ class Model_view_master extends ci_model
         return $result;
     }
 
-    function jenis_kredit()
+    // function jenis_kredit()
+    // {
+    //     $query = "SELECT * from view_creditscoring WHERE nama_parameter='KREDIT CHECKING' AND id_parameter='01'";
+    //     $data=$this->db->query($query)->result();
+    //     return $data;
+    // }
+ function jenis_kredit()
     {
-        $query = "SELECT * from view_creditscoring WHERE nama_parameter='CREDIT CHECKING RESULT' AND id_parameter='020'";
-        $data=$this->db->query($query)->result();
-        return $data;
-    }
+       $query = "SELECT * from view_creditscoring WHERE nama_parameter='CREDIT CHECKING RESULT' AND id_parameter='020'";
+       $data=$this->db->query($query)->result();
+       return $data;
+   }
 
     function tampil_lokasi_jaminan()
     {
-        $query = "SELECT * from view_creditscoring WHERE nama_parameter='LOKASI JAMINAN' AND id_parameter='026'";
+         $query = "SELECT * from view_creditscoring WHERE nama_parameter='LOKASI JAMINAN' AND id_parameter='026'";
         $data=$this->db->query($query)->result();
         return $data;
     }

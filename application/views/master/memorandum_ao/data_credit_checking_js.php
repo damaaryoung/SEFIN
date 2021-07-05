@@ -2423,7 +2423,7 @@
         }
 
         $('#form_lampiran_lain').on('submit', function(e) {
-            var id = $('input[name=id_trans_so]').val();
+            var id = $('input[name=id_trans_so_lamp]').val();
             
             e.preventDefault();
             var formData = new FormData();
@@ -2460,7 +2460,7 @@
 
     
         load_lampiran_lain = function() {
-            var id = $('#form_lampiran_lain input[name=id_trans_so]').val();
+            var id = $('#form_lampiran_lain input[name=id_trans_so_lamp]').val();
             get_detail({}, id)
                 .done(function(response) {
                     var data = response.data;
@@ -3672,7 +3672,7 @@
                             $('#form_detail select[id=provinsi_domisili_dup]').html(select1 + select);
                         })
 
-                    $('#form_lampiran_lain input[type=hidden][name=id_trans_so]').val(data.id_trans_so);    
+                    $('#form_lampiran_lain input[type=hidden][name=id_trans_so_lamp]').val(data.id_trans_so);    
                     $('#form_detail input[type=hidden][name=id]').val(data.id_trans_so);
                     $('#form_penjamin input[type=hidden][name=id_trans_so_pen]').val(data.id_trans_so);
                     $('#form_modal_tambah_penjamin input[type=hidden][name=add_id_so_penjamin]').val(data.id_trans_so);
@@ -7601,7 +7601,7 @@
                 });
         });
 
-        $('#detail_ao').on('click', '.submit', function(e) {
+        $('#detail_ao').on('click', '.approve', function(e) {
             e.preventDefault();
             var formData = new FormData();
 

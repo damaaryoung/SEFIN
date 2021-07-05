@@ -340,6 +340,7 @@
                 if(result){
                     delete_kelurahan(id)
                     .done(function(res){
+                        // console.log(res);
                         load_data();
                     })
                     .fail(function(jqXHR){
