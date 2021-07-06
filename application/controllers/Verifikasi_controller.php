@@ -14,36 +14,44 @@ class Verifikasi_controller extends CI_Controller
 
     function verifikasi_id() {
 
-        $url = 'https://api.verijelas.com/bprkm_poc/completeid' ;
-        $ch = curl_init();
+        $trx_id = $this->input->post('trx_id');
+        if ($trx_id == "") {
+            $data['pesan'] = 'Tidak Dapat Membentuk TRX_ID, Silahkan Refresh Kembali!!!';
+            echo json_encode($data);
+        } else {
+            $url = 'https://api.verijelas.com/bprkm_poc/completeid' ;
+            $ch = curl_init();
+    
+            $data = [
+                "trx_id" => $this->input->post('trx_id', true),
+                "nik" => $this->input->post('nik', true),
+                "name" => $this->input->post('name', true),
+                "birthdate" => $this->input->post('birthdate', true),
+                "birthplace" => $this->input->post('birthplace', true),
+                "identity_photo" => "",
+                "selfie_photo" => $this->input->post('selfie_photo', true) 
+            ];
+            
+            $postdata = json_encode($data);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Token: c2a6ac14-14b9-44d5-98db-c8a3631d676c',
+                'Content-Type: application/json',
+                'Accept: application/json'
+            ));
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
+            
+            $output = curl_exec($ch);
+            curl_close($ch);
+            print_r ($output);
+            // print_r( $postdata);
+            // echo json_encode($output);
+            // return json_encode(['status'=>'success']);
 
-        $data = [
-            "trx_id" => $this->input->post('trx_id', true),
-            "nik" => $this->input->post('nik', true),
-            "name" => $this->input->post('name', true),
-            "birthdate" => $this->input->post('birthdate', true),
-            "birthplace" => $this->input->post('birthplace', true),
-            "identity_photo" => "",
-            "selfie_photo" => $this->input->post('selfie_photo', true) 
-        ];
-        
-        $postdata = json_encode($data);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Token: c2a6ac14-14b9-44d5-98db-c8a3631d676c',
-            'Content-Type: application/json',
-            'Accept: application/json'
-        ));
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);
-        
-        $output = curl_exec($ch);
-        curl_close($ch);
-        print_r ($output);
-        // print_r( $postdata);
-        // echo json_encode($output);
-        // return json_encode(['status'=>'success']);
+        }
+
     }
 
     function verifikasi_npwp() {
