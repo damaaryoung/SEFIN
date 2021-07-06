@@ -2913,7 +2913,7 @@
                             </div>
                             <div class="col-md-4">
                                 <form id="form_lampiran_lain">
-                                <input type="hidden" id="id_trans_so" name="id_trans_so">
+                                <input type="hidden" id="id_trans_so_lamp" name="id_trans_so_lamp">
                                     <div class="row">
                                         <div class="form-group">
                                             <label>Upload Lampiran Lain-Lain</label>
@@ -2951,7 +2951,7 @@
                     <textarea name="note_return" style="width: 100%" rows="5" readonly></textarea>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-success submit" style="float: left; margin-bottom: 30px; margin-right:10px">APPROVE HM</button>
+                    <button class="btn btn-success approve" style="float: left; margin-bottom: 30px; margin-right:10px">APPROVE HM</button>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-danger reject" style="float: left; margin-bottom: 30px; margin-right:10px">REJECT HM</button>

@@ -164,7 +164,7 @@ class Dashboard_tracking_order extends CI_Controller
 
     function export_to_excel($bulan='', $tahun='', $kode_area='', $kode_cabang='')
     {   
-        if ($kode_area == "*" && $kode_cabang == "") {
+        if ($kode_area == "KONSOLIDASI" && $kode_cabang == "") {
             $data_tracking_order = "SELECT c.id_trans_so AS id_trans_so,
                 b.nomor_so AS nomor_so,
                 DATE_FORMAT(b.created_at, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,
@@ -192,7 +192,7 @@ class Dashboard_tracking_order extends CI_Controller
             WHERE MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun
             ORDER BY a.id_trans_so ASC";
             $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
-        } else if ($kode_area != "*" && $kode_cabang == "") {
+        } else if ($kode_area != "KONSOLIDASI" && $kode_cabang == "") {
             $data_tracking_order = "SELECT c.id_trans_so AS id_trans_so,
                 b.nomor_so AS nomor_so,
                 DATE_FORMAT(b.created_at, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,
@@ -220,7 +220,7 @@ class Dashboard_tracking_order extends CI_Controller
             WHERE MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun AND b.id_area = $kode_area
             ORDER BY a.id_trans_so ASC";
             $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
-        } else if ($kode_area == "" && $kode_cabang == "*") {
+        } else if ($kode_area == "" && $kode_cabang == "Konsolidasi") {
             $data_tracking_order = "SELECT c.id_trans_so AS id_trans_so,
                 b.nomor_so AS nomor_so,
                 DATE_FORMAT(b.created_at, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,
@@ -248,7 +248,7 @@ class Dashboard_tracking_order extends CI_Controller
             WHERE MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun
             ORDER BY a.id_trans_so ASC";
             $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
-        } else if ($kode_area == "" && $kode_cabang != "*") {
+        } else if ($kode_area == "" && $kode_cabang != "Konsolidasi") {
             $data_tracking_order = "SELECT c.id_trans_so AS id_trans_so,
                 b.nomor_so AS nomor_so,
                 DATE_FORMAT(b.created_at, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,

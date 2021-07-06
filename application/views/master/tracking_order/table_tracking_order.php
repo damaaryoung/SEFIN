@@ -86,7 +86,7 @@
                         ?>
                         <select id="kode_area" class="form-control" name="kode_area">
                             <option value="" selected="selected">- Pilih Area -</option>
-                            <option value="*">KONSOLIDASI</option>
+                            <option value="KONSOLIDASI">KONSOLIDASI</option>
                             <?php foreach($kode_area as $r): ?>
                                 <option value="<?php echo $r->id; ?>"><?php echo $r->nama; ?></option>
                             <?php endforeach; ?>
@@ -100,7 +100,7 @@
                         ?>
                         <select id="kode_cabang" class="form-control" name="kode_cabang">
                             <option value="" selected="selected">- Pilih Cabang -</option>
-                            <option value="*">Konsolidasi</option>
+                            <option value="Konsolidasi">Konsolidasi</option>
                             <?php foreach($kode_cabang as $r): ?>
                                 <option value="<?php echo $r->id; ?>"><?php echo $r->nama; ?></option>
                             <?php endforeach; ?>
@@ -241,10 +241,12 @@
                         $.each(data,function(index,item){
                             no++;
 
-                            if (item.nama_ca == null) {
-                                var nama_ca = '<td>-</td>';
-                            } else {
+                            if (item.nama_ca != null) {
                                 var nama_ca = '<td>'+ item.nama_ca +'</td>';
+                            } else if (item.nama_assign != null) {
+                                var nama_ca = '<td>'+ item.nama_assign +'</td>';
+                            } else {
+                                var nama_ca = '<td>-</td>';
                             }
 
                             if (item.cancel_debitur == 2) {
@@ -252,7 +254,7 @@
                             } else {
                                 if (item.id_trans_so != null && item.id_verif != null && item.id_caa == null) {
                                     var status = '<td style="text-align: center; vertical-align: middle">Proses Pengajuan CAA</td>';
-                                } else if (item.id_trans_so == null && item.tgl_pending == null && item.status_return == null) {
+                                } else if (item.id_trans_so == null && item.tgl_pending == null && item.status_return == null || item.nama_assign != null) {
                                     var status = '<td style="text-align: center; vertical-align: middle">Proses Memorandum CA</td>';
                                 } else if (item.plafon_kredit == "0") {
                                     var status = '<td style="background-color: #dc4836; text-align: center; vertical-align: middle">Not Recommend CA</td>';
