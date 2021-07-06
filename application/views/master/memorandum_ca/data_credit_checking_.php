@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <div class="box-body table-responsive no-padding">
                             <button class="btn btn-primary tambah" id="modal_pengajuan" style="margin-bottom: 9px;"><i class="fa fa-user-plus">Tambah</i></button>
-                            <table id="table_ca" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                            <table id="table_data_ca" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
                                 <thead style="font-size: 14px" class="bg-danger">
                                     <tr>
                                         <th>
@@ -79,7 +79,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="box-body table-responsive no-padding">
-                            <table id="table_pengajuan" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
+                            <table id="example3" class="table table-bordered table-hover table-sm" style="white-space: nowrap;">
                                 <thead style="font-size: 12px" class="bg-danger">
                                     <tr>
                                         <th>
@@ -287,19 +287,20 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-5">
+                                            <div class="form-group col-md-6">
                                                 <label>Tempat Lahir</label>
                                                 <input type="text" class="form-control" name="tempat_lahir" onkeyup="this.value = this.value.toUpperCase()">
                                             </div>
-                                            <div class="form-group col-md-5">
-                                                <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
+                                            <div class="form-group col-md-6">
+                                                <label>Tanggal Lahir<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control"/>
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="far fa-calendar-alt"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="tgl_lahir_deb" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
                                                 </div>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label>Umur<span class="required_notification">*</span></label>
-                                                <input type="text" id="umur" name="umur" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -445,16 +446,12 @@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label>Pendidikan Terakhir<span class="required_notification">*</span></label>
-                                                <select name="pendidikan_terakhir" id="pendidikan_terakhir" class="form-control select2 select2-danger" style="width: 100%;">
-                                                    <option value="">--Pilih--</option>
-                                                    <?php foreach ($pendidikan as $key) {?>
-                                                        <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                    <?php } ?>
+                                                <select id="select_pendidikan_terakhir" name="pendidikan_terakhir" class="form-control" onkeyup="this.value = this.value.toUpperCase()">
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label>Jumlah Tanggungan</label>
-                                                <input type="text" class="form-control" name="jumlah_tanggungan"  id="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
+                                                <input type="text" class="form-control" name="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
                                         <div class="row">
@@ -466,10 +463,6 @@
                                                 <label>No Handphone</label>
                                                 <input type="text" class="form-control" name="no_hp" maxlength="13" onkeypress="return hanyaAngka(event)">
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Email</label>
-                                            <input type="text" class="form-control" name="email">
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
@@ -512,7 +505,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group" id="select_provinsi_kantor">
-                                            <label>Provinsi<span class="required_notification">*</span></label>
+                                            <label>Provinsi<span class="required_notification">*</span><span class="required_notification">*</span></label>
                                             <select name="provinsi_kantor" id="provinsi_kantor" class="form-control select2 select2-danger" data-dropdown-css-class="select2-danger">
                                             </select>
                                         </div>
@@ -540,19 +533,20 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-md-4">
-                                                <label>Mulai Bekerja<span class="required_notification">*</span></label>
+                                            <div class="form-group col-md-6">
+                                                <label>Tanggal Mulai Bekerja<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="date" id="tgl_mulai_kerja" onchange="changeWorkDate()" name="tgl_mulai_kerja" class="form-control" data-date-format="d-m-Y"/>
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="far fa-calendar-alt"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input type="text" name="masa_kerja_usaha" class="datepicker-here form-control" data-language='en' data-date-format="dd-mm-yyyy" />
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-4">
-                                                <label>Lama Bekerja (bln)<span class="required_notification">*</span></label>
-                                                <input type="text" id="lama_kerja" name="lama_kerja" class="form-control" readonly="">
-                                            </div>
-                                            <div class="form-group col-md-4">
-                                                <label>No Telp Kantor<span class="required_notification">*</span></label>
-                                                <input type="text" class="form-control" id="no_telp_kantor_usaha" name="no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
+                                            <div class="form-group col-md-6">
+                                                <label>No Telpon Kantor/Usaha<span class="required_notification">*</span></label>
+                                                <input type="text" class="form-control" name="no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
                                             </div>
                                         </div>
                                     </div>
@@ -825,10 +819,7 @@
                                                     No
                                                 </th>
                                                 <th>
-                                                    Lokasi Jaminan
-                                                </th>
-                                                <th>
-                                                    Collateral
+                                                    Lokasi Agunan
                                                 </th>
                                                 <th>
                                                     Alamat
@@ -918,12 +909,13 @@
                                             <input type="text" class="form-control" name="nama_penghuni_agunan" onkeyup="this.value = this.value.toUpperCase()">
                                         </div>
                                         <div class="form-group">
-                                            <label>Pemilik Jaminan<span class="required_notification">*</span></label>
-                                            <select id="status_penghuni_agunan" name="status_penghuni_agunan" class="form-control ">
-                                                <option value="">--Pilih Pemilik Jaminan--</option>
-                                                <?php foreach ($pemilik_jaminan as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                <?php } ?>
+                                            <label>Status Penghuni<span class="required_notification">*</span></label>
+                                            <select name="status_penghuni_agunan" class="form-control ">
+                                                <option value="">--Pilih Status Penghuni--</option>
+                                                <option id="pemilik" value="PEMILIK">PEMILIK</option>
+                                                <option id="penyewa" value="PENYEWA">PENYEWA</option>
+                                                <option id="tidak_dihuni" value="TIDAK DIHUNI">TIDAK DIHUNI</option>
+                                                <option id="keluarga" value="KELUARGA">KELUARGA</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -1531,11 +1523,6 @@
                 </div>
             </div>
         </div>
-        <div class="form-group" style="margin-top: 20px;">
-            <label style="font-style: italic; color: #383a3a;">Catatan SO</label>
-            <textarea name="notes_so" style="width: 100%" rows="5"></textarea>
-        </div>
-
         <div class="col-md-12" id="input_ca">
             <form id="form_input_ca">
                 <input type="hidden" id="id_trans_so" name="id" value="">
@@ -1843,7 +1830,7 @@
                                                 <option value="">--Pilih--</option>
                                                 <?php foreach ($data_sumber_penghasilan->result() as $p) { ?>
                                                     echo "
-                                                    <option value="<?php echo $p->id_detail_params ?>"><?php echo $p->nama_detail ?></option>";
+                                                    <option value="<?php echo $p->kode_sumber_penghasilan ?>"><?php echo $p->desk_sumber_penghasilan ?></option>";
                                                 <?php  } ?>
 
                                             </select>
@@ -1922,7 +1909,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card mb-3" id="form_cc">
+                        <div class="card mb-3">
                             <div class="card-header bg-gradient-danger" data-toggle="collapse" href="#collapse_16" role="button" aria-expanded="false" aria-controls="collapse_16">
                                 <a class="text-light">
                                     <b>INFORMASI DAN ANALISA CREDIT CHECKING</b>
@@ -1930,17 +1917,6 @@
                             </div>
                             <div class="card-body collapse" id="collapse_16">
                                 <div class="col-md-12" id="">
-                                    <div class="row">
-                                        <div class="form-group">
-                                            <label for="exampleInput1" class="bmd-label-floating">Credit Checking<span class="required_notification">*</span></label>
-                                            <select name="cc_result" id="cc_result" class="form-control ">
-                                                <option value="">--Pilih--</option>
-                                                <?php foreach ($jenis_kredit as $key) {?>
-                                                        <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                    <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
                                     <div class="row">
                                         <div class="form-group">
                                             <div class="form-group form-file-upload form-file-multiple">
@@ -3053,7 +3029,7 @@
                                                 <option value="">--Pilih--</option>
                                                 <?php foreach ($data_sumber_penghasilan->result() as $p) { ?>
                                                     echo "
-                                                    <option value="<?php echo $p->id_detail_params ?>"><?php echo $p->nama_detail ?></option>";
+                                                    <option id="sumber_penghasilan<?php echo $p->kode_sumber_penghasilan ?>" value="<?php echo $p->kode_sumber_penghasilan ?>"><?php echo $p->desk_sumber_penghasilan ?></option>";
                                                 <?php  } ?>
 
                                             </select>
@@ -3064,6 +3040,7 @@
                                                 <select name="pemasukan_per_bulan_ca" class="form-control" style="width: 100%;">
                                                     <option value="">--Pilih--</option>
                                                     <?php foreach ($data_pemasukan_perbulan->result() as $p) { ?>
+                                                        echo "
                                                         <option id="pemasukan_perbulan<?php echo $p->kode_pemasukan_per_bulan ?>" value="<?php echo $p->kode_pemasukan_per_bulan ?>"><?php echo $p->desk_pemasukan_per_bulan ?></option>";
                                                     <?php  } ?>
                                                 </select>
@@ -3135,7 +3112,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="card mb-3" id="form_cc">
+                    <div class="card mb-3">
                         <div class="card-header bg-gradient-danger" data-toggle="collapse" href="#collapse_16" role="button" aria-expanded="false" aria-controls="collapse_16">
                             <a class="text-light">
                                 <b>INFORMASI DAN ANALISA CREDIT CHECKING</b>
@@ -3143,17 +3120,6 @@
                         </div>
                         <div class="card-body collapse" id="collapse_16">
                             <div class="col-md-12" id="">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <label for="exampleInput1" class="bmd-label-floating">Credit Checking<span class="required_notification">*</span></label>
-                                        <select name="cc_result" id="cc_result" class="form-control ">
-                                            <option value="">--Pilih--</option>
-                                            <?php foreach ($jenis_kredit as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="box-body table-responsive no-padding">
                                     <button type="button" class="btn btn-primary" id="tambah_informasi_cc" style="margin-bottom: 9px;"><i class="fa fa-user-plus">Tambah</i></button>
                                     <table id="example4" class="table table-bordered table-hover table-sm">
@@ -3188,9 +3154,6 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                            </div>
-                            <div style="float: right;">
-                                <button type="submit" class="btn btn-success far fa-save submit">Update</button>
                             </div>
                         </div>
                     </div>
@@ -4429,7 +4392,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>No Telpon Kantor</label>
+                                    <label>No Telpon Kantor/Usaha</label>
                                     <input type="text" class="form-control" name="no_telp_tempat_kerja_pen" maxlength="13" onkeypress="return hanyaAngka(event)">
                                 </div>
                             </div>
@@ -4601,21 +4564,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label>
-                                            <select name="tipe_lokasi_agunan" id="tipe_lokasi_agunan" class="form-control ">
+                                            <label for="exampleInput1">Lokasi Agunan<span class="required_notification">*</span></label>
+                                            <select name="tipe_lokasi_agunan" class="form-control ">
                                                 <option value="">-- Pilih --</option>
-                                                <?php foreach ($lokasi_jaminan as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInput1">Collateral<span class="required_notification">*</span></label>
-                                            <select id="tipe_lokasi_agunan_collateral" name="tipe_lokasi_agunan_collateral" class="form-control ">
-                                                <option value="">-- Pilih --</option>
-                                                <?php foreach ($data_collateral as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                <?php } ?>
+                                                <option id="lok_perum" value="PERUM">PERUMAHAN</option>
+                                                <option id="lok_biasa" value="BIASA">NON PERUMAHAN</option>
                                             </select>
                                         </div>
                                         <div class="form-row">
@@ -4684,9 +4637,8 @@
                                             <label for="exampleInput1">Jenis Sertifikat</label>
                                             <select id="jenis_sertifikat" name="jenis_sertifikat" class="form-control " onchange="showshgb()">
                                                 <option value="">-- Pilih --</option>
-                                                <?php foreach ($jenis_sertifikat as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                <?php } ?>
+                                                <option id="jenis_shm" value="SHM">SHM</option>
+                                                <option id="jenis_shgb" value="SHGB">SHGB</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -4699,7 +4651,7 @@
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label>Tgl Berlaku SHGB<span id="wajib_shgb" class="required_notification">*</span></label>
+                                                <label>Tanggal Berlaku SHGB<span id="wajib_shgb" class="required_notification">*</span></label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">
@@ -4905,21 +4857,11 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="exampleInput1">Lokasi Jaminan<span class="required_notification">*</span></label>
+                                            <label for="exampleInput1">Lokasi Agunan<span class="required_notification">*</span></label>
                                             <select id="tipe_lokasi_agunan_tbh" name="tipe_lokasi_agunan" class="form-control ">
                                                 <option value="">-- Pilih --</option>
-                                                <?php foreach ($lokasi_jaminan as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInput1">Collateral<span class="required_notification">*</span></label>
-                                            <select id="tipe_lokasi_agunan_collateral_tbh" name="tipe_lokasi_agunan_collateral" class="form-control ">
-                                                <option value="">-- Pilih --</option>
-                                                <?php foreach ($data_collateral as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                <?php } ?>
+                                                <option value="PERUM">PERUMAHAN</option>
+                                                <option value="BIASA">NON PERUMAHAN</option>
                                             </select>
                                         </div>
                                         <div class="form-row">
@@ -4989,9 +4931,8 @@
                                             <label for="exampleInput1">Jenis Sertifikat</label>
                                             <select id="jenis_sertifikat_tbh" name="jenis_sertifikat" class="form-control " onchange="showshgb()">
                                                 <option value="">-- Pilih --</option>
-                                                <?php foreach ($jenis_sertifikat as $key) {?>
-                                                    <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                <?php } ?>
+                                                <option value="SHM">SHM</option>
+                                                <option value="SHGB">SHGB</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -5004,7 +4945,7 @@
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label>Tgl Berlaku SHGB<span id="wajib_shgb" class="required_notification">*</span></label>
+                                                <label>Tanggal Berlaku SHGB<span id="wajib_shgb" class="required_notification">*</span></label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
                                                         <span class="input-group-text">
@@ -5288,7 +5229,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label>No Telpon Kantor</label>
+                                        <label>No Telpon Kantor/Usaha</label>
                                         <input type="text" class="form-control" id="add_no_telp_kantor_usaha" name="add_no_telp_kantor_usaha" maxlength="13" onkeypress="return hanyaAngka(event)">
                                     </div>
                                 </div>
@@ -5434,14 +5375,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Jenis Kredit<span class="required_notification">*</span></label>
-                                        <select id="add_jenis_kredit" name="add_jenis_kredit" class="form-control ">
-                                            <option disabled value="" selected="selected">-- Pilih --</option>
-                                            <option value="No Din">No Din</option>
-                                            <option value="KTA">KTA</option>
-                                            <option value="CC">CC (Credit Card)</option>
-                                            <option value="Sertifikat">Sertifikat</option>
-                                            <option value="BPKB">BPKB</option>
-                                        </select>
+                                        <input type="text" name="add_jenis_kredit" id="add_jenis_kredit" onkeyup="this.value = this.value.toUpperCase()" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -5516,11 +5450,11 @@
             }
             edit_analisa_cc = function(opts, id) {
                 var data = opts;
-                var url = '<?php echo $this->config->item('api_url'); ?>api/info_cc/' + id;
+                var url = '<?php echo $this->config->item('api_url'); ?>api/info_cc/update' + id;
                 return $.ajax({
                     url: url,
                     data: data,
-                    type: 'PUT',
+                    type: 'POST',
                     beforeSend: function() {
                         let html =
                             "<div width='100%' class='text-center'>" +
@@ -5732,55 +5666,10 @@
 
             // //LOAD DATA
             $('#lihat_data_credit').show();
-            // load_data_ca();
-            // $('#table_data_ca').dataTable({
+            load_data_ca();
+            $('#table_data_ca').dataTable({
 
-            // });
-
-
-            tampil_data_ca();
-
-            function tampil_data_ca() {
-                $('#table_ca').DataTable({
-
-                    "processing": true,
-                    "serverSide": true,
-                    'destroy': true,
-                    "order": [],
-
-                    "ajax": {
-                        "url": "<?php echo site_url('Ca_controller/get_data_ca') ?>",
-                        "type": "POST"
-                    },
-
-                    "columnDefs": [{
-                        "targets": [0],
-                        "orderable": false,
-                    }, ],
-
-                })
-            };
-
-            function tampil_data_pengajuan() {
-                $('#table_pengajuan').DataTable({
-
-                    "processing": true,
-                    "serverSide": true,
-                    'destroy': true,
-                    "order": [],
-
-                    "ajax": {
-                        "url": "<?php echo site_url('Ca_controller/get_data_pengajuan') ?>",
-                        "type": "POST"
-                    },
-
-                    "columnDefs": [{
-                        "targets": [0],
-                        "orderable": false,
-                    }, ],
-
-                })
-            };
+            });
 
             function load_data_ca() {
                 $.ajax({
@@ -5852,7 +5741,6 @@
                     get_pengajuan()
                         .done(function(response) {
                             var data = response.data;
-                            console.log(data);
                             var html = [];
                             var no = 0;
                             if (data.length === 0) {
@@ -5885,7 +5773,7 @@
                                 html.push(tr);
                             });
                             $('#data_pengajuan').html(html);
-                            $('#table_pengajuan').DataTable({
+                            $('#example3').DataTable({
                                 "paging": true,
                                 "retrieve": true,
                                 "lengthChange": true,
@@ -5902,7 +5790,6 @@
                         });
                 }
                 load_data_pengajuan();
-                // tampil_data_pengajuan();
                 $("#modal_data_pengajuan").modal('show');
             })
 
@@ -6716,7 +6603,6 @@
                 get_credit_checking({}, id)
                     .done(function(response) {
                         var data = response.data;
-                        console.log(data);
 
                         var id = data.id_trans_so;
                         var id_das = data.id_trans_so;
@@ -6751,7 +6637,6 @@
 
                         $('#form_detail input[name=nomor_so]').val(data.nomor_so);
                         $('#form_detail input[name=nama_sales_officer]').val(data.nama_so);
-                        $('#form_detail textarea[name=notes_so]').val(data.notes_so);
 
                         get_nama_asuransi = function(opts) {
                             var url = '<?php echo $this->config->item('api_url'); ?>namaAsuransi';
@@ -6858,7 +6743,6 @@
                                 '<tr>',
                                 '<td>' + no + '</td>',
                                 '<td>' + item.tipe_lokasi + '</td>',
-                                '<td>' + item.collateral + '</td>',
                                 '<td>' + item.alamat + '</td>',
                                 '<td>' + item.luas_tanah + '</td>',
                                 '<td>' + item.luas_bangunan + '</td>',
@@ -7329,7 +7213,6 @@
                                     $('#form_detail input[name=no_npwp]').val(data_debitur.no_npwp);
                                     $('#form_detail input[name=tempat_lahir]').val(data_debitur.tempat_lahir);
                                     $('#form_detail input[name=tgl_lahir_deb]').val(data_debitur.tgl_lahir);
-                                    $('#form_detail input[name=umur]').val(data_debitur.umur);
 
                                     var select_agama = [];
                                     var option_agama = [
@@ -7435,11 +7318,16 @@
                                     var select_pendidikan_terakhir = [];
                                     var option_pendidikan_terakhir = [
                                         '<option value="' + data_debitur.pendidikan_terakhir + '">' + data_debitur.pendidikan_terakhir + '</option>',
-                                        '<option value=">= S2">>= S2</option>',
+                                        '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
+                                        '<option value="SD">SD</option>',
+                                        '<option value="SMP">SMP</option>',
+                                        '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
+                                        '<option value="D1">D1</option>',
+                                        '<option value="D2">D2</option>',
                                         '<option value="D3">D3</option>',
-                                        '<option value="SLTA">SLTA</option>',
                                         '<option value="S1">S1</option>',
-                                        '<option value="SLTP/SD/TIDAK SEKOLAH">SLTP/SD/TIDAK SEKOLAH</option>',
+                                        '<option value="S2">S2</option>',
+                                        '<option value="S3">S3</option>'
                                     ].join('\n');
                                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -7447,7 +7335,6 @@
                                     $('#form_detail input[name=jumlah_tanggungan]').val(data_debitur.jumlah_tanggungan);
                                     $('#form_detail input[name=no_telp]').val(data_debitur.no_telp);
                                     $('#form_detail input[name=no_hp]').val(data_debitur.no_hp);
-                                    $('#form_detail input[name=email]').val(data_debitur.email);
 
                                     var select_alamat_surat = [];
                                     var option_alamat_surat = [
@@ -7478,8 +7365,7 @@
                                     $('#form_detail input[name=posisi]').val(data_debitur.pekerjaan.posisi_pekerjaan);
                                     $('#form_detail input[name=nama_perusahaan]').val(data_debitur.pekerjaan.nama_tempat_kerja);
                                     $('#form_detail input[name=jenis_usaha]').val(data_debitur.pekerjaan.jenis_pekerjaan);
-                                    $('#form_detail input[name=tgl_mulai_kerja]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
-                                    $('#form_detail input[name=lama_kerja]').val(data_debitur.pekerjaan.lama_kerja);
+                                    $('#form_detail input[name=masa_kerja_usaha]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
                                     $('#form_detail input[name=no_telp_kantor_usaha]').val(data_debitur.pekerjaan.no_telp_tempat_kerja);
                                     $('#form_detail input[name=alamat_usaha_kantor]').val(data_debitur.pekerjaan.alamat.alamat_singkat);
                                     $('#form_detail input[name=rt_usaha_kantor]').val(data_debitur.pekerjaan.alamat.rt);
@@ -7743,17 +7629,18 @@
                                     //pemeriksaan agunan
                                     $('#form_detail input[name="nama_penghuni_agunan"]').val(data_pemeriksaan_agunan.nama_penghuni);
 
-                                    var select_status_penghuni = [];
-                                    var option_status_penghuni = [
-                                        '<option value="' + data_pemeriksaan_agunan.status_penghuni + '">' + data_pemeriksaan_agunan.status_penghuni + '</option>',
-                                        '<option value="Suami/Istri">Suami/Istri</option>',
-                                        '<option value="Orang Tua">Orang Tua</option>',
-                                        '<option value="Take Over a/n Sendiri">Take Over a/n Sendiri</option>',
-                                        '<option value="Take Over a/n Orang Lain">Take Over a/n Orang Lain</option>',
-                                        '<option value="Belum Balik Nama/waris">Belum Balik Nama/waris</option>'
-                                    ].join('\n');
-                                    select_status_penghuni.push(option_status_penghuni);
-                                    $('#form_detail select[name=status_penghuni_agunan]').html(select_status_penghuni);
+                                    if (data_pemeriksaan_agunan.status_penghuni == "PEMILIK") {
+                                        document.getElementById("pemilik").selected = "true";
+                                    } else
+                                    if (data_pemeriksaan_agunan.status_penghuni == "PENYEWA") {
+                                        document.getElementById("penyewa").selected = "true";
+                                    } else
+                                    if (data_pemeriksaan_agunan.status_penghuni == "TIDAK DIHUNI") {
+                                        document.getElementById("tidak_dihuni").selected = "true";
+                                    } else
+                                    if (data_pemeriksaan_agunan.status_penghuni == "KELUARGA") {
+                                        document.getElementById("keluarga").selected = "true";
+                                    }
 
                                     $('#form_detail input[name="bentuk_bangunan_agunan"]').val(data_pemeriksaan_agunan.bentuk_bangunan);
 
@@ -8075,7 +7962,6 @@
 
                         $('#form_detail input[name=nomor_so]').val(data.nomor_so);
                         $('#form_detail input[name=nama_sales_officer]').val(data.nama_so);
-                        $('#form_detail textarea[name=notes_so]').val(data.notes_so);
 
                         if (data.lampiran_ao.form_persetujuan_ideb == null) {
                             var o = [
@@ -8145,7 +8031,6 @@
                                 '<tr>',
                                 '<td>' + no + '</td>',
                                 '<td>' + item.tipe_lokasi + '</td>',
-                                '<td>' + item.collateral+ '</td>',
                                 '<td>' + item.alamat + '</td>',
                                 '<td>' + item.luas_tanah + '</td>',
                                 '<td>' + item.luas_bangunan + '</td>',
@@ -8388,8 +8273,6 @@
                                     $('#form_detail input[name=no_npwp]').val(data_debitur.no_npwp);
                                     $('#form_detail input[name=tempat_lahir]').val(data_debitur.tempat_lahir);
                                     $('#form_detail input[name=tgl_lahir_deb]').val(data_debitur.tgl_lahir);
-                                    $('#form_detail input[name=umur]').val(data_debitur.umur);
-                                    $('#form_detail input[name=email]').val(data_debitur.email);
 
                                     var select_agama = [];
                                     var option_agama = [
@@ -8495,11 +8378,16 @@
                                     var select_pendidikan_terakhir = [];
                                     var option_pendidikan_terakhir = [
                                         '<option value="' + data_debitur.pendidikan_terakhir + '">' + data_debitur.pendidikan_terakhir + '</option>',
-                                        '<option value=">= S2">>= S2</option>',
+                                        '<option value="TIDAK TAMAT SD">TIDAK TAMAT SD</option>',
+                                        '<option value="SD">SD</option>',
+                                        '<option value="SMP">SMP</option>',
+                                        '<option value="SMA SEDERAJAT">SMA SEDERAJAT</option>',
+                                        '<option value="D1">D1</option>',
+                                        '<option value="D2">D2</option>',
                                         '<option value="D3">D3</option>',
-                                        '<option value="SLTA">SLTA</option>',
                                         '<option value="S1">S1</option>',
-                                        '<option value="SLTP/SD/TIDAK SEKOLAH">SLTP/SD/TIDAK SEKOLAH</option>',
+                                        '<option value="S2">S2</option>',
+                                        '<option value="S3">S3</option>'
                                     ].join('\n');
                                     select_pendidikan_terakhir.push(option_pendidikan_terakhir);
                                     $('#form_detail select[name=pendidikan_terakhir]').html(select_pendidikan_terakhir);
@@ -8537,8 +8425,7 @@
                                     $('#form_detail input[name=posisi]').val(data_debitur.pekerjaan.posisi_pekerjaan);
                                     $('#form_detail input[name=nama_perusahaan]').val(data_debitur.pekerjaan.nama_tempat_kerja);
                                     $('#form_detail input[name=jenis_usaha]').val(data_debitur.pekerjaan.jenis_pekerjaan);
-                                    $('#form_detail input[name=tgl_mulai_kerja]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
-                                    $('#form_detail input[name=lama_kerja]').val(data_debitur.pekerjaan.lama_kerja);
+                                    $('#form_detail input[name=masa_kerja_usaha]').val(data_debitur.pekerjaan.tgl_mulai_kerja);
                                     $('#form_detail input[name=no_telp_kantor_usaha]').val(data_debitur.pekerjaan.no_telp_tempat_kerja);
                                     $('#form_detail input[name=alamat_usaha_kantor]').val(data_debitur.pekerjaan.alamat.alamat_singkat);
                                     $('#form_detail input[name=rt_usaha_kantor]').val(data_debitur.pekerjaan.alamat.rt);
@@ -8987,18 +8874,16 @@
                                     var data_pemeriksaan_agunan = response.data;
                                     //pemeriksaan agunan
                                     $('#form_detail input[name="nama_penghuni_agunan"]').val(data_pemeriksaan_agunan.nama_penghuni);
-
                                     var select_status_penghuni = [];
                                     var option_status_penghuni = [
                                         '<option value="' + data_pemeriksaan_agunan.status_penghuni + '">' + data_pemeriksaan_agunan.status_penghuni + '</option>',
-                                        '<option value="Suami/Istri">Suami/Istri</option>',
-                                        '<option value="Orang Tua">Orang Tua</option>',
-                                        '<option value="Take Over a/n Sendiri">Take Over a/n Sendiri</option>',
-                                        '<option value="Take Over a/n Orang Lain">Take Over a/n Orang Lain</option>',
-                                        '<option value="Belum Balik Nama/waris">Belum Balik Nama/waris</option>'
+                                        '<option value="SANGAT TERAWAT">SANGAT TERAWAT</option>',
+                                        '<option value="PEMILIK">PEMILIK</option>',
+                                        '<option value="PENYEWA">PENYEWA</option>',
+                                        '<option value="TIDAK DIHUNI">TIDAK DIHUNI</option>'
                                     ].join('\n');
                                     select_status_penghuni.push(option_status_penghuni);
-                                    $('#form_detail select[name=status_penghuni_agunan]').html(select_status_penghuni);
+                                    $('#form_detail select[name="status_penghuni_agunan"]').html(select_status_penghuni);
 
                                     $('#form_detail input[name="bentuk_bangunan_agunan"]').val(data_pemeriksaan_agunan.bentuk_bangunan);
 
@@ -9208,20 +9093,6 @@
                         $('#submit_ca').hide();
 
                         //INFORMASI & ANALISA CREDIT CHECKING
-                        // $('#form_cc select[name=cc_result]').val(data.cc_result);
-
-                        var select_cc_result = [];
-                        var option_cc_result = [
-                            '<option value="' + data.cc_result + '">' + data.cc_result + '</option>',
-                            '<option value="1 / All Pinjam Kol 1">1 / All Pinjam Kol 1</option>',
-                            '<option value="2 / Kol 1 Tanpa Jaminan">2 / Kol 1 Tanpa Jaminan</option>',
-                            '<option value="3 / Kol 1 Dengan Jaminan">3 / Kol 1 Dengan Jaminan</option>',
-                            '<option value="4 / Kol 1 All Pinjaman">4 / Kol 1 All Pinjaman</option>',
-                            '<option value="5 / No Din">5 / No Din</option>'
-                        ].join('\n');
-                        select_cc_result.push(option_cc_result);
-                        $('#form_cc select[id=cc_result]').html(select_cc_result);
-
                         var htmlinformasi_analisa_credit = [];
                         var htmlinformasi_analisa_credit_tot = [];
                         $.each(data.informasi_analisa_cc.table, function(index, item) {
@@ -9455,7 +9326,7 @@
                             '<option id="recomtenor30_ca" value="30">30</option>',
                             '<option id="recomtenor36_ca" value="36">36</option>',
                             '<option id="recomtenor48_ca" value="48">48</option>',
-                            '<option id="recomtenor60_ca" value="60">60</option>'
+                            '<option id="recomtenor60_Ca" value="60">60</option>'
                         ].join('\n');
                         select_recomtenor.push(option_recomtenor);
                         $('#detail_ca  select[id=recom_tenor_detail]').html(select_recomtenor);
@@ -9536,6 +9407,7 @@
 
                         $('#detail_ca input[name=kuantitatif_ltv_detail]').val(data.ringkasan_analisa.kuantitatif_ltv);
                         $('#detail_ca input[name=kuantitatif_dsr_detail]').val(data.ringkasan_analisa.kuantitatif_dsr);
+                        $('#detail_ca input[name=kuantitatif_idir_detail]').val(data.ringkasan_analisa.kuantitatif_idir);
                         $('#detail_ca input[name=kuantitatif_idir_detail]').val(data.ringkasan_analisa.kuantitatif_idir);
                         $('#detail_ca input[name=kuantitatif_hasil_detail]').val(data.ringkasan_analisa.kuantitatif_hasil);
                         //==================================================================
@@ -9942,7 +9814,6 @@
                 formData.append('no_npwp', $('input[name=no_npwp]', this).val());
                 formData.append('tempat_lahir', $('input[name=tempat_lahir]', this).val());
                 formData.append('tgl_lahir', $('input[name=tgl_lahir_deb]', this).val());
-                formData.append('umur', $('input[name=umur]', this).val());
                 formData.append('agama', $('select[name=agama]', this).val());
                 formData.append('alamat_ktp', $('input[name=alamat_ktp]', this).val());
                 formData.append('rt_ktp', $('input[name=rt_ktp]', this).val());
@@ -9983,10 +9854,8 @@
                 formData.append('id_kab_tempat_kerja', $('select[name=kabupaten_kantor]', this).val());
                 formData.append('id_kec_tempat_kerja', $('select[name=kecamatan_kantor]', this).val());
                 formData.append('id_kel_tempat_kerja', $('select[name=kelurahan_kantor]', this).val());
-                formData.append('tgl_mulai_kerja', $('input[name=tgl_mulai_kerja]', this).val());
-                formData.append('lama_kerja', $('input[name=lama_kerja]', this).val());
+                formData.append('tgl_mulai_kerja', $('input[name=masa_kerja_usaha]', this).val());
                 formData.append('no_telp_tempat_kerja', $('input[name=no_telp_kantor_usaha]', this).val());
-                formData.append('email', $('input[name=email]', this).val());
 
                 update_debitur(formData, id)
                     .done(function(res) {
@@ -10431,35 +10300,6 @@
                         });
                     });
             });
-
-            function changeBirthDate() {
-                var date = $("#tgl_lahir_deb").val();
-                var today = new Date();
-                var birthDate = new Date(date);
-                var umur = today.getFullYear() - birthDate.getFullYear();
-                var m = today.getMonth() - birthDate.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                    umur--;
-                }
-
-                $("#umur").val(umur);
-                
-            }
-
-            function changeWorkDate() {
-                var date = $("#tgl_mulai_kerja").val();
-                var today = new Date();
-                var workDate = new Date(date);
-                var lama_kerja = (today.getFullYear() - workDate.getFullYear()) * 12;
-                lama_kerja -= workDate.getMonth();
-                lama_kerja += today.getMonth();
-                if (today.getDate() < workDate.getDate()) {
-                    lama_kerja -= 1;
-                }
-
-                $("#lama_kerja").val(lama_kerja < 0 ? 0 : lama_kerja);
-                
-            }
             //========================================================================================
 
             //FUNGSI PROVINSI, KAB.KEC, KEL BERDASARKAN KTP DEBITUR
@@ -11375,82 +11215,8 @@
             });
             //===============================================================================================
 
-            //UPDATE CC RESULT
-            $('#form_cc').on('submit', function(e) {
-                if(document.getElementById('cc_result').value == "" ) {
-                    bootbox.alert("Jenis Credit Checking Tidak Boleh Kosong!!!");
-                return (false);
-                }   
-                update_ca = function(opts, idca) {
-                    var data = opts;
-                    var url = '<?php echo $this->config->item('api_url'); ?>api/master/mca/' + idca;
-                    return $.ajax({
-                        url: url,
-                        data: data,
-                        type: 'POST',
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        beforeSend: function() {
-                            let html =
-                                "<div width='100%' class='text-center'>" +
-                                "<i class='fa fa-spinner fa-spin fa-4x text-danger'></i><br><br>" +
-                                "<a id='batal' href='javascript:void(0)' class='text-primary batal' data-dismiss='modal'>Batal</a>" +
-                                "</div>";
-
-                            $('#load_data').html(html);
-                            $('#modal_load_data').modal('show');
-                        },
-                        headers: {
-                            'Authorization': 'Bearer ' + localStorage.getItem('token')
-                        }
-                    });
-                }
-                var idca = $('#form_detail input[type=hidden][name=id]').val();
-
-                e.preventDefault();
-                var formData = new FormData();
-
-                formData.append('cc_result', $('select[name=cc_result]', this).val());
-
-                update_ca(formData, idca)
-                    .done(function(res) {
-                        var data = res.data;
-                        bootbox.alert('Data berhasil disimpan', function() {
-                            $("#batal").click();
-                            // $('#form_input_ca')[0].reset();
-                            // hide_all();
-                            // load_data_ca();
-                            // $('#lihat_data_credit').show();
-                        });
-                    })
-                    .fail(function(jqXHR) {
-                        var data = jqXHR.responseJSON;
-                        var error = "";
-
-                        if (typeof data == 'string') {
-                            error = '<p>' + data + '</p>';
-                        } else {
-                            $.each(data, function(index, item) {
-                                error += '<p>' + item + '</p>' + "\n";
-                            });
-                        }
-                        bootbox.alert('Data gagal diubah, Silahkan coba lagi dan cek jaringan anda !!', function() {
-                            $("#batal").click();
-                        })
-                        // bootbox.alert(error);
-                    });
-                
-                
-            });
-            //========================================================================================
-
             // klik submit update
             $('#form_input_ca').on('submit', function(e) {
-                if(document.getElementById('cc_result').value == "" ) {
-                    bootbox.alert("Jenis Credit Checking Tidak Boleh Kosong!!!");
-                return (false);
-                }   
                 update_ca = function(opts, idca) {
                     var data = opts;
                     var url = '<?php echo $this->config->item('api_url'); ?>api/master/mca/' + idca;
@@ -11476,7 +11242,7 @@
                         }
                     });
                 }
-                var idca = $('#form_detail input[type=hidden][name=id]').val();
+                var idca = $('input[name=id]', this).val();
                 e.preventDefault();
                 var formData = new FormData();
                 //MUTASI BANK
@@ -11553,8 +11319,6 @@
                 //==============================================================================================
 
                 //INFORMASI DAN ANALISA
-
-                formData.append('cc_result', $('select[name=cc_result]', this).val());
 
                 $.each($('input[name="nama_bank_acc[]"]'), function(i, e) {
                     formData.append('nama_bank_acc[]', e.value);
@@ -12538,23 +12302,11 @@
                         $('#form_edit_agunan_tampak_dapur input[type=hidden][name=id_agunan_dapur]').val(data.id);
                         $('#form_edit_agunan_tampak_kamar_mandi input[type=hidden][name=id_agunan_kamar_mandi]').val(data.id);
 
-                        // if (data.tipe_lokasi == "PERUM") {
-                        //     document.getElementById("lok_perum").selected = "true";
-                        // } else if (data.tipe_lokasi == "BIASA") {
-                        //     document.getElementById("lok_biasa").selected = "true";
-                        // }
-                        var select_tipe_lokasi_agunan = [];
-                        var option_tipe_lokasi_agunan = [
-                            '<option value="' + data.tipe_lokasi + '">' + data.tipe_lokasi + '</option>',
-                            '<option value="Mini Cluster / Perkampungan Pinggir Jalan Raya">Mini Cluster / Perkampungan Pinggir Jalan Raya</option>',
-                            '<option value="Perumahan Cluster">Perumahan Cluster</option>',
-                            '<option value="Perkampungan Akses Jalan Gang">Perkampungan Akses Jalan Gang</option>',
-                            '<option value="Perkampungan Desa Akses Jalan Non Aspal">Perkampungan Desa Akses Jalan Non Aspal</option>',
-                            '<option value="Perkampungan Jalan Desa">Perkampungan Jalan Desa</option>'
-                        ].join('\n');
-                        select_tipe_lokasi_agunan.push(option_tipe_lokasi_agunan);
-                        $('#form_edit_agunan select[name=tipe_lokasi_agunan]').html(select_tipe_lokasi_agunan);
-
+                        if (data.tipe_lokasi == "PERUM") {
+                            document.getElementById("lok_perum").selected = "true";
+                        } else if (data.tipe_lokasi == "BIASA") {
+                            document.getElementById("lok_biasa").selected = "true";
+                        }
 
                         $('#form_edit_agunan input[name=alamat_agunan]').val(data.alamat.alamat_singkat);
                         $('#form_edit_agunan input[name=rt_agunan]').val(data.alamat.rt);
@@ -12609,17 +12361,11 @@
                         $('#form_edit_agunan input[name=luas_bangunan]').val(data.luas_bangunan);
                         $('#form_edit_agunan input[name=nama_pemilik_sertifikat]').val(data.nama_pemilik_sertifikat);
 
-                        var select_jenis_sertifikat = [];
-                        var option_jenis_sertifikat = [
-                            '<option value="' + data.jenis_sertifikat + '">' + data.jenis_sertifikat + '</option>',
-                            '<option value="SHM">SHM</option>',
-                            '<option value="SHGB AKTIF">SHGB AKTIF</option>',
-                            '<option value="SHGB Akan Expired < 5 Tahun">SHGB Akan Expired < 5 Tahun</option>',
-                            '<option value="SHM PTSL">SHM PTSL</option>',
-                            '<option value="LAINNYA">LAINNYA</option>'
-                        ].join('\n');
-                        select_jenis_sertifikat.push(option_jenis_sertifikat);
-                        $('#form_edit_agunan select[name=jenis_sertifikat]').html(select_jenis_sertifikat);
+                        if (data.jenis_sertifikat == "SHM") {
+                            document.getElementById("jenis_shm").selected = "true";
+                        } else if (data.jenis_sertifikat == "SHGB") {
+                            document.getElementById("jenis_shgb").selected = "true";
+                        }
 
                         $('#form_edit_agunan input[name=no_sertifikat]').val(data.no_sertifikat);
                         $('#form_edit_agunan input[name=no_ukur_sertifikat]').val(data.tgl_ukur_sertifikat);
@@ -12860,7 +12606,6 @@
 
                 var formData = new FormData();
                 formData.append('tipe_lokasi_agunan', $('select[name=tipe_lokasi_agunan]', this).val());
-                formData.append('tipe_lokasi_agunan_collateral', $('select[name=tipe_lokasi_agunan_collateral]', this).val());
                 formData.append('alamat_agunan', $('input[name=alamat_agunan]', this).val());
                 formData.append('id_prov_agunan', $('select[name=id_prov_agunan]', this).val());
                 formData.append('id_kab_agunan', $('select[name=id_kab_agunan]', this).val());
@@ -13102,7 +12847,6 @@
                                 '<tr>',
                                 '<td>' + no + '</td>',
                                 '<td>' + item.tipe_lokasi + '</td>',
-                                '<td>' + item.collateral + '</td>',
                                 '<td>' + item.alamat + '</td>',
                                 '<td>' + item.luas_tanah + '</td>',
                                 '<td>' + item.luas_bangunan + '</td>',
@@ -13888,8 +13632,8 @@
 
             //SUBMIT ASPEK KUALITATIF
             $('#form_edit_data_kuantitatif').on('submit', function(e) {
-
                 var id = $('input[name=id_data_kuantitatif]', this).val();
+                console.log(id)
                 e.preventDefault();
                 var formData = new FormData();
                 var kuantitatif_ttl_pendapatan_detail = $('input[name=kuantitatif_ttl_pendapatan_detail]', this).val();
@@ -14218,11 +13962,7 @@
                 var formData = new FormData();
 
                 if (document.getElementById('tipe_lokasi_agunan_tbh').value == "") {
-                    bootbox.alert("Tipe Lokasi Jaminan Belum Di Pilih !!!");
-                    return (false);
-                }
-                if (document.getElementById('tipe_lokasi_agunan_collateral_tbh').value == "") {
-                    bootbox.alert("Tipe Collateral Belum Di Pilih !!!");
+                    bootbox.alert("Tipe Lokasi Agunan Belum Di Pilih !!!");
                     return (false);
                 }
                 if (document.getElementById('alamat_agunan_tbh').value == "") {
@@ -14283,7 +14023,6 @@
                 }
 
                 formData.append('tipe_lokasi_agunan', $('select[name=tipe_lokasi_agunan]', this).val());
-                formData.append('tipe_lokasi_agunan_collateral', $('select[name=tipe_lokasi_agunan_collateral]', this).val());
                 formData.append('alamat_agunan', $('input[name=alamat_agunan]', this).val());
                 formData.append('rt_agunan', $('input[name=rt_agunan]', this).val());
                 formData.append('rw_agunan', $('input[name=rw_agunan]', this).val());
@@ -14365,7 +14104,6 @@
                                 '<tr>',
                                 '<td>' + no + '</td>',
                                 '<td>' + item.tipe_lokasi + '</td>',
-                                '<td>' + item.collateral + '</td>',
                                 '<td>' + item.alamat + '</td>',
                                 '<td>' + item.luas_tanah + '</td>',
                                 '<td>' + item.luas_bangunan + '</td>',
@@ -15147,7 +14885,6 @@
                 get_detail_ca({}, id)
                     .done(function(response) {
                         var data = response.data;
-                        console.log(data);
                         var htmlinformasi_analisa_credit = [];
                         var htmlinformasi_analisa_credit_tot = [];
                         $.each(data.informasi_analisa_cc.table, function(index, item) {

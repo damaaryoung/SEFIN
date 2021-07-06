@@ -12,16 +12,18 @@ class Memo_ao extends CI_Controller
 	public function index()
 	{
 		$id = $this->input->post('id');
-		$query = "SELECT view_report_ao.*, trans_so.nomor_so, recom_ao.tujuan_pinjaman as recom_tujuan_pinjaman, recom_ao.jenis_pinjaman as recom_jenis_pinjaman from `view_report_ao` LEFT JOIN trans_so on view_report_ao.id_trans_so=trans_so.id LEFT JOIN recom_ao on recom_ao.id=view_report_ao.id_recom_ao WHERE id_trans_so = '$id'  ";
+		// $query = "SELECT view_report_ao.*, trans_so.nomor_so, recom_ao.tujuan_pinjaman as recom_tujuan_pinjaman, recom_ao.jenis_pinjaman as recom_jenis_pinjaman from `view_report_ao` LEFT JOIN trans_so on view_report_ao.id_trans_so=trans_so.id LEFT JOIN recom_ao on recom_ao.id=view_report_ao.id_recom_ao WHERE id_trans_so = '$id'  ";
+
+ $query = $this->db->query("SET @pv_id_trans ='$id' ");
+$query = $this->db->query("SELECT view_report_ao.*, trans_so.nomor_so, recom_ao.tujuan_pinjaman as recom_tujuan_pinjaman, recom_ao.jenis_pinjaman as recom_jenis_pinjaman from `view_report_ao` LEFT JOIN trans_so on view_report_ao.id_trans_so=trans_so.id LEFT JOIN recom_ao on recom_ao.id=view_report_ao.id_recom_ao WHERE id_trans_so = '$id'  ");
 
 		$result = $this->db->query($query);
 
 
+		// $count = $result->num_rows();
 
-		$count = $result->num_rows();
-
-		if ($count > 0) {
-			$x      = $result->row();
+		if ($query !== null) {
+			$x      = $query->row();
 			$id_calon_debitur = $x->id_calon_debitur;
 			$id_trans_so = $x->id_trans_so;
 			$id_ao = $x->id_ao;
@@ -62,7 +64,7 @@ class Memo_ao extends CI_Controller
 			$data['kode_pos_ktp'] = $x->kode_pos_ktp;
 			$data['alamat_domisili'] = $x->alamat_domisili;
 			$data['kecamatan_domisili'] = $x->kecamatan_domisili;
-			$data['provinsi_domisili'] = $x->kecamatan_domisili;
+			$data['provinsi_domisili'] = $x->provinsi_domisili;
 			$data['kabupaten_domisili'] = $x->kabupaten_domisili;
 			$data['kelurahan_domisili'] = $x->kelurahan_domisili;
 			$data['rt_domisili'] = $x->rt_domisili;
@@ -193,10 +195,18 @@ class Memo_ao extends CI_Controller
 				$data['row'] = $rows;
 			}
 
-			$agunan_tanah = $this->db->query("SELECT * FROM view_agunan_tanah 
-			 							WHERE id in (SELECT id_agunan_tanah 
-			 										 FROM  view_report_ao
-			 										 WHERE id_ao ='$id_ao' )");
+	$rep_ao = $this->db->query("SELECT
+            id_agunan_tanah
+          FROM
+            trans_ao
+          WHERE id = '$id_ao'
+");
+			 $agunan_tanah = $this->db->query("SELECT * FROM view_agunan_tanah 
+			 							WHERE id_trans_so = '$id_trans_so'
+			 							-- WHERE id in (SELECT id_agunan_tanah 
+			 							-- 			 FROM  trans_ao
+			 							-- 			 WHERE id ='$id_ao')
+");
 			$data['agunan_tanah'] = $agunan_tanah;
 
 			$mpdf = new \Mpdf\Mpdf();

@@ -1,9 +1,8 @@
 <style>
     .bone{
         margin-left: 260px;
-    margin-top: 6px;
+    } margin-top: 6px;
     }
-    
     .b1{
         height: 60px;
     }

@@ -18,12 +18,9 @@ class Assignment_collection extends MY_Controller
 
 
 	function import(){
-		//echo $_FILES['fileupload']['tmp_name'];
 		$validation = "";
 		if(!empty($_FILES['fileupload']['name'])) { 
-                // get file extension
                 $extension = pathinfo($_FILES['fileupload']['name'], PATHINFO_EXTENSION);
- 				// echo ($extension); die();
                 if($extension == 'csv'){
                     $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
                     $reader->setDelimiter(';');
@@ -45,8 +42,6 @@ class Assignment_collection extends MY_Controller
 							"ft_angsuran" => $ft_angsuran,
 							"NASABAH_ID" => $nasabah_id,
 							"kode_kantor" => $kode_kantor,
-							// "assignment_1" => $assignment_1,
-							// "assignment_2" => $assignment_2
 						);
 						$get_validation_kolektor = $this->Model_collection->get_collector($kode_kolektor);
 
@@ -97,32 +92,17 @@ class Assignment_collection extends MY_Controller
 							"NO_REKENING" => $no_rekening,
 							"ft_angsuran" => $ft_angsuran,
 							"NASABAH_ID" => $nasabah_id,
-							"kode_kantor" => $kode_kantor,
+							"kode_kantor" => $kode_kantor
 						);
                         $get_duplicate_assigment = $this->Model_collection->get_duplicate_assigment($no_rekening,$ft_angsuran);
 
 						$get_validation_kolektor = $this->Model_collection->get_collector($kode_kolektor);
-                        if($get_duplicate_assigment->num_rows() > 0){
-                            $validation .= "Upload gagal karena data duplikat(No Rekening : ".$no_rekening.", ft_angsuran: ".$ft_angsuran.")<br/>";
-                        }else{
     						if($get_validation_kolektor->num_rows() > 0){	
     							$get_nasabah_id = $this->Model_collection->get_id_nasabah($nasabah_id);
     							if($get_nasabah_id->num_rows() > 0){
     								$get_kode_kantor = $this->Model_collection->get_kode_kantor($kode_kantor);
     								if($get_kode_kantor->num_rows() > 0){
-    									// $this->db->insert('master_all_assignment_kolektor',$post);
-    									//$this->Model_collection->duplicate_insert("master_all_assignment_kolektor",$post);
     									$get_data_master_all_assignment_collector = $this->Model_collection->get_data_master_all_assigment_collector($no_rekening);
-    									// if($get_data_master_all_assignment_collector->num_rows() > 0){
-    									// 	$post_update = array(
-    									// 		'ft_angsuran' => $ft_angsuran,
-    									// 		// 'assignment_1' => $assignment_1,
-    									// 		// 'assignment_2' => $assignment_2
-    									// 	);
-    									// 	$this->Model_collection->update_data_master_all_assigment_kolektor($no_rekening, $post_update);
-    									// }else{
-    									// 	$this->Model_collection->insert_data_master_all_assigment_kolektor($post);
-    									// }
                                         $table = 'master_all_assigment_kolektor';
                                         $this->Model_collection->duplicate_insert($table,$post);
     								}else{
@@ -134,7 +114,7 @@ class Assignment_collection extends MY_Controller
     						}else{
     							$validation  .= "Data Kolektor ".$kode_kolektor." tidak valid (A".$i.")<br/>";
     						}
-                        }
+                        
 
 					}
 					echo " Upload Selesai<br/>".$validation;
@@ -142,31 +122,6 @@ class Assignment_collection extends MY_Controller
                     $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
                 }
         }
-
-		// $this->db->insert('master_all_assignment_kolektor',$post);
-
-		
-		
-		// $fileContent = $_FILES['fileupload']['tmp_name'];
-		// $objReader = IOFactory::createReader($fileContent)->setDelimiter(",");
-		// $objPHPExcel = $objReader->load($fileContent);
-		// $extension = explode(".",$this->input->post("nama_file"));
-  //       if(!empty($this->input->post("fileupload"))) { 
-  //               // get file extension
-  //               if($extension[1] == 'csv'){
-  //                   $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-  //               } elseif($extension[1] == 'xlsx') {
-  //                   $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-  //               } else {
-  //                   $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
-  //               }
-  //       }
-  //       $data1 = $objPHPExcel->getActiveSheet()->getCell("A1")->getValue();
-		// $post = array(
-		// 	"kode_kolektor" => $data1
-		// );
-		// $this->db->insert('master_all_assignment_kolektor',$post);
-
 	}
 
 	function ajax_list_header_master_all_assignment_kolektor(){
@@ -397,7 +352,7 @@ class Assignment_collection extends MY_Controller
                     $row->ft_hari,
                     $row->ft_bulan,
                     "Rp. ".number_format($row->os_pokok,2,".",","),
-                    "Rp. ".number_format($row->collect_fee,2,".","."),
+                    tgl_indonesia_datetime($row->updated_at),
                     "Rp. ".number_format($row->total_tagihan,2,".","."),
                 );
                 $i++;
@@ -484,7 +439,7 @@ class Assignment_collection extends MY_Controller
                     $row->not_visit,
                     $row->interaksi,
                     $row->janji_bayar,
-                    $row->tgl_janji_byr
+                    tgl_indonesia($row->tgl_janji_byr)
                 );
                 $i++;
             }
@@ -494,7 +449,7 @@ class Assignment_collection extends MY_Controller
         $arrData['data']  = $arrData['data'];
         $arrData['draw'] = $draw;
         $arrData['recordsTotal'] = $get_total_data_activity->num_rows();
-        $arrData['recordsFiltered'] = $get_total_data_activity ->num_rows();
+        $arrData['recordsFiltered'] = $get_total_data_activity->num_rows();
         header('Content-Type: application/json');
         echo json_encode($arrData);
     }

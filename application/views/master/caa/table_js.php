@@ -46,7 +46,7 @@
       submitHandler: function() {
         var awal = $('#datepicker1').val();
         var akhir = $('#datepicker2').val();
-        var cabang = $('#cabang').val();
+        var cabang = $('#nama_cabang').val();
         $('#table_caa').DataTable({
           "processing": true,
           "serverSide": true,

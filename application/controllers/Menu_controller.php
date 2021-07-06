@@ -5,7 +5,7 @@ use GuzzleHttp\Client;
 class Menu_controller extends MY_Controller
 {
     function __construct()
-    {   
+    {
         parent::__construct();
         $this->load->model('model_menu');
         $this->load->model('model_auth');
@@ -321,11 +321,12 @@ class Menu_controller extends MY_Controller
         $this->load->view('master/memorandum_ao/data_credit_checking',$data);
     }
     public function ca()
-    {   
-        $outputs   = $this->model_menu->getUser();
+    {
+		  $outputs   = $this->model_menu->getUser();
         $user_id   = $outputs['data']['user_id'];
         $data['user_id'] = $user_id;
-        $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
+        // $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
+$data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
         $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['data_collateral'] = $this->Model_view_master->data_collateral();
         $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
@@ -335,7 +336,6 @@ class Menu_controller extends MY_Controller
         $data['data_sumber_data_untuk_setoran'] =  $this->Model_view_master->sumber_data_untuk_setoran();
         $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
         $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
-        
         $this->load->view('master/memorandum_ca/data_credit_checking', $data);
     }
 
@@ -547,8 +547,7 @@ class Menu_controller extends MY_Controller
     {
         $this->load->view('master/target_lending/target_lending_template');
     }
-
-    public function activity_tele_collection()
+ public function activity_tele_collection()
     {
         $this->load->view('master/activity/activity_tele_collection');
     }
@@ -556,16 +555,6 @@ class Menu_controller extends MY_Controller
     public function activity_tele_sales()
     {
         $this->load->view('master/activity/activity_tele_sales');
-    }
-
-    public function dashboard_tele()
-    {
-        $this->load->view('master/tele_center/dashboard_tele');
-    }
-
-    public function pipeline_lending()
-    {
-        $this->load->view('master/cek_sertifikat/pipeline_lending');
     }
 
     public function activity_sales_officer()
@@ -597,21 +586,32 @@ class Menu_controller extends MY_Controller
     {
         $this->load->view('master/activity/head-bussines/index');
     }
-
-    public function verifikasi()
+       public function verifikasi()
     {
         $data['nama_user'] = $this->model_menu->getUser();
+        // $tb_parameter_access = TB_PARAMETER_ACCESS;
         $outputs   = $this->model_menu->getUser();
         $user_id   = $outputs['data']['user_id'];
+        // $divisi_id = $outputs['data']['divisi_id'];
+        // $jabatan   = $outputs['data']['jabatan'];
         $data['user_id'] = $user_id;
+        // $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
+        // $data['data_collateral'] = $this->Model_view_master->data_collateral();
+        $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
+        // $data['data_sumber_penghasilan'] =  $this->Model_view_master->sumber_penghasilan();
+        // $data['data_pemasukan_perbulan'] =  $this->Model_view_master->pemasukan_perbulan();
+        // $data['data_frek_trans_pemasukan'] =  $this->Model_view_master->frek_trans_pemasukan();
+        // $data['data_sumber_data_untuk_setoran'] =  $this->Model_view_master->sumber_data_untuk_setoran();
+        // $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
+        // $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
+        // $data['pendidikan'] = $this->Model_view_master->tampil_data_pendidikan();
+        
         $this->load->view('master/verifikasi/verifikasi', $data);
     }
-
-    public function report_verifikasi()
+ public function report_verifikasi()
     {
         $this->load->view('master/verifikasi/report_verifikasi');
     }
-    
 
     public function dashboard_collection()
     {
@@ -623,45 +623,6 @@ class Menu_controller extends MY_Controller
     	$this->load->helper("General_helper"); 
         $this->load->model('model_collection');
         $this->load->view('master/collection/report_data_collection_daily');
-    }
-
-    function json_get_hari_kerja(){
-        $this->load->model('model_collection');
-        $tgl = $this->input->post('tgl');
-        if(empty($tgl)){
-            $tgl = "CURDATE()";
-        }else {
-            $tgl = "DATE('$tgl')";
-        }
-        $hk = $this->model_collection->get_hari_kerja($tgl)->result();
-        header('Content-Type: application/json');
-        echo json_encode($hk);
-    }
-
-    function json_get_hk_bulan_lalu(){
-        $this->load->model('model_collection');
-        $tgl = $this->input->post('tgl');
-        if(empty($tgl)){
-            $tgl = "CURDATE()";
-        }else {
-            $tgl = "DATE('$tgl')";
-        }
-        $hk = $this->model_collection->get_hk_bulan_lalu($tgl)->result();
-        header('Content-Type: application/json');
-        echo json_encode($hk);
-    }
-
-    function json_get_next_hk_bulan_lalu(){
-        $this->load->model('model_collection');
-        $tgl = $this->input->post('tgl');
-        if(empty($tgl)){
-            $tgl = "CURDATE()";
-        }else {
-            $tgl = "DATE('$tgl')";
-        }
-        $hk = $this->model_collection->get_next_hk_bulan_lalu($tgl)->result();
-        header('Content-Type: application/json');
-        echo json_encode($hk);
     }
 
     function json_data_collection_daily(){
@@ -845,8 +806,75 @@ class Menu_controller extends MY_Controller
        $this->load->view('master/collection/collector/task_assignment_kolektor_view',$data); 
     }
 
-    function report_collection_activity(){
-        $this->load->view('master/collection/collector/report/report_collection_activity_view');
+   function report_collection_activity(){
+        $this->head_params(' -  List','','','<link rel="stylesheet" type="text/css" href="'.base_url().'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+            <link rel="stylesheet" href="'.base_url().'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
+        '<script src="'.base_url().'assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="'.base_url().'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="'.base_url().'assets/plugins/select2/js/select2.full.min.js"></script>
+        <script type="text/javascript">
+          $("#btn_refresh").click(function(){
+            get_dataTable(1);
+          });
+        function get_dataTable(draw){
+          
+            var kode_area = $("#kode_area option:selected").val();
+              var kode_cabang = $("#kode_cabang option:selected").val();
+              var kode_kolektor = $("#kode_kolektor option:selected").val();
+              var pic = $("#get_pic option:selected").val();
+              var from = $("#from").val();
+              var to = $("#to").val();
+            var table = $("#listData1").DataTable({
+                    "searching": true,
+                    stateSave: true,
+                    "stateSaveCallback": function (settings, data) {
+                        localStorage.setItem("Datatables_" + window.location.pathname, JSON.stringify(data));
+                    },
+                    "stateLoadCallback": function (settings) {
+                        return JSON.parse(localStorage.getItem("Datatables_" + window.location.pathname));
+                    },
+                    "dom": \'<"bottom"lpf>rt<"top"ip><"clear">\',
+                    "oLanguage": {
+                        "sProcessing": "<i class=\'fa fa-refresh fa-spin\'><\/i> Loading"
+                    },
+                    "processing": true,
+                    "serverSide": true,
+                    "bDestroy": true,
+                    "autoWidth": false,
+                    "pagingType": "full_numbers",
+                    "ajax": {
+                        "url": "'.base_url().'assignment_collection/ajax_list_collection_activity",
+                        "type": "POST",
+                        "data":{
+                            "kode_area": kode_area,
+                            "kode_cabang" : kode_cabang,
+                            "kode_kolektor" : kode_kolektor,
+                            "pic" : pic,
+                            "from" : from,
+                            "to" : to
+                        }
+                    },
+                    responsive:{details:{type:"column",target:"tr"}},
+                    columnDefs:[{className:"control",orderable:1,targets:"_all"}],
+                    order:[3,"asc"],
+                    lengthMenu:[[100,200,500,1000],[100,200,500,1000]],
+                    "pageLength":100,
+                    dom:"<\'row\' <\'col-md-12\'B>><\'row\'<\'col-md-6 col-sm-12\'l><\'col-md-6 col-sm-12\'f>r><\'table-scrollable\'t><\'row\'<\'col-md-5 col-sm-12\'i><\'col-md-7 col-sm-12\'p>>",
+                });
+
+
+
+  
+                    if (draw == 1) {
+                     table.clear().draw();
+                     // table.ajax.reload();
+                    }
+                }
+          
+        </script>
+        ');
+        $data['params'] = $this->params;
+        $this->load->view('master/collection/collector/report/report_collection_activity_view',$data);
     }
 
     function report_history_collection_activity(){
@@ -856,16 +884,50 @@ class Menu_controller extends MY_Controller
     function report_performance_collection_activity(){
         $this->load->view('master/collection/collector/report/report_performance_collection_activity_view');
     }
-
-    function tracker_data_visit_kolektor(){
-        $this->load->view('master/collection/collector/report/report_tracker_data_visit_kolektor_view');
-    }
-
-    function waypoint_data_visit_kolektor(){
+ function waypoint_data_visit_kolektor(){
         $this->load->view('master/collection/collector/report/report_waypoint_data_visit_kolektor_view');
     }
+function json_get_hari_kerja(){
+        $this->load->model('model_collection');
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $hk = $this->model_collection->get_hari_kerja($tgl)->result();
+        header('Content-Type: application/json');
+        echo json_encode($hk);
+    }
+function json_get_hk_bulan_lalu(){
+        $this->load->model('model_collection');
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $hk = $this->model_collection->get_hk_bulan_lalu($tgl)->result();
+        header('Content-Type: application/json');
+        echo json_encode($hk);
+    }
 
-    public function activity_ca()
+    function json_get_next_hk_bulan_lalu(){
+        $this->load->model('model_collection');
+        $tgl = $this->input->post('tgl');
+        if(empty($tgl)){
+            $tgl = "CURDATE()";
+        }else {
+            $tgl = "DATE('$tgl')";
+        }
+        $hk = $this->model_collection->get_next_hk_bulan_lalu($tgl)->result();
+        header('Content-Type: application/json');
+        echo json_encode($hk);
+    }
+function tracker_data_visit_kolektor(){
+        $this->load->view('master/collection/collector/report/report_tracker_data_visit_kolektor_view');
+    }
+	 public function activity_ca()
     {   
         $data['nama_user'] = $this->model_menu->getUser();
         $outputs   = $this->model_menu->getUser();
@@ -873,8 +935,8 @@ class Menu_controller extends MY_Controller
         $data['user_id'] = $user_id;
         $this->load->view('master/activity/activity_ca', $data);
     }
-
-    public function dashboard_memo_ca()
+	
+	  public function dashboard_memo_ca()
     {
         $this->load->view('master/dashboard_memo_ca/dashboard_memo_ca');
     }
@@ -887,5 +949,10 @@ class Menu_controller extends MY_Controller
     public function dashboard_tracking_order()
     {
         $this->load->view('master/tracking_order/dashboard_tracking_order');
+    }
+
+    public function penyimpangan()
+    {   
+        $this->load->view('master/penyimpangan/v_index');
     }
 }

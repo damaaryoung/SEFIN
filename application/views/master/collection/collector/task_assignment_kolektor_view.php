@@ -51,7 +51,8 @@
                     <option value="c.NO_REKENING">No Rekening</option>
                     <option value="NAMA_NASABAH">Nama Nasabah</option>
                     <option value="os_pokok">OS Pokok</option>
-                    <option valie="total_tagihan">Total Tagihan</option>
+                    <option value="total_tagihan">Total Tagihan</option>
+                    <option value="ft_hari">FT Hari</option>
                 </select>
                 <label for="inputArea" class="col-sm-2  offset-sm-1 col-form-label">Order By</label>
                 <select class="form-control col-sm-3" name="order_by" id="order_by">
@@ -88,7 +89,7 @@
             <th>FT Hari</th>
             <th>FT Bulan</th>
             <th>OS Pokok</th>
-            <th>Collect Fee</th>
+            <th>Last Update Date Assigment</th>
             <th>Total Tagihan</th>
             </tr>
           </thead>
