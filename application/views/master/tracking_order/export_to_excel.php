@@ -42,17 +42,19 @@
                     <td class="border"><?php echo $r->nama_cabang?></td>
                     <td class="border"><?php echo $r->nomor_so ?></td>
                     <td class="border"><?php echo $r->nama_debitur ?></td>
-                    <?php if($r->nama_ca == null) { ?>
-                        <td class="border">-</td>
-                    <?php } else { ?>
+                    <?php if($r->nama_ca != null) { ?>
                         <td class="border"><?php echo $r->nama_ca ?></td>
+                    <?php } else if ($r->nama_assign != null) { ?>
+                        <td class="border"><?php echo $r->nama_assign ?></td>
+                    <?php } else { ?>
+                        <td class="border">-</td>
                     <?php } ?>
                     <?php if($r->cancel_debitur == 2) { ?>
                         <td class="border" style="background-color: #dc4836; text-align: center">Cancel By Debitur</td>
                     <?php } else { ?>
                         <?php if($r->id_trans_so != null && $r->id_verif != null && $r->id_caa == null) { ?>
                             <td class="border" style="text-align: center; vertical-align: middle">Proses Pengajuan CAA</td>
-                        <?php } else if ($r->id_trans_so == null && $r->tgl_pending == null && $r->status_return == null) { ?>
+                        <?php } else if ($r->id_trans_so == null && $r->tgl_pending == null && $r->status_return == null || $r->nama_assign != null && $r->id_trans_so == null && $r->tgl_pending == null && $r->status_return == null) { ?>
                             <td class="border" style="text-align: center; vertical-align: middle">Proses Memorandum CA</td>
                         <?php } else if ($r->plafon_kredit == "0") { ?>
                             <td class="border" style="background-color: #dc4836; text-align: center; vertical-align: middle">Not Recommend CA</td>

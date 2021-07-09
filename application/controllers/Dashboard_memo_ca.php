@@ -23,7 +23,7 @@ class Dashboard_memo_ca extends CI_Controller
         $list_user_id_ca = $this->db->query("SELECT user_id as id FROM pic_ca WHERE flg_aktif = 1 AND jenis_pic = 'CREDIT ANALYST' ")->result();
 
         foreach ($list_user_id_ca as $user) {
-            $total_memo = $this->db->query("SELECT COUNT(id_trans_so) as total FROM trans_ca WHERE MONTH(created_at) = $bulan AND YEAR(created_at) = $tahun AND user_id = $user->id")->row()->total;
+            $total_memo = $this->db->query("SELECT COUNT(id) as total FROM trans_ao WHERE MONTH(date_assign) = $bulan AND YEAR(date_assign) = $tahun AND assign_to = $user->id")->row()->total;
             
             $user->total_memo = $total_memo; 
 
@@ -33,7 +33,7 @@ class Dashboard_memo_ca extends CI_Controller
             foreach ($list_hk as $hari_kerja) {
                 $day = substr($hari_kerja['tanggal'], -2);
                 $hk = $hari_kerja['hk'];
-                $memo_ca = $this->db->query("SELECT COUNT(id_trans_so) as total_memo FROM trans_ca WHERE user_id = $user->id AND YEAR(created_at) = $tahun AND MONTH(created_at) = $bulan AND DAY(created_at) = $day")->row()->total_memo;
+                $memo_ca = $this->db->query("SELECT COUNT(id) as total_memo FROM trans_ao WHERE assign_to = $user->id AND YEAR(date_assign) = $tahun AND MONTH(date_assign) = $bulan AND DAY(date_assign) = $day")->row()->total_memo;
                 $memo["$hk"] = $memo_ca;
             }
 
@@ -45,7 +45,7 @@ class Dashboard_memo_ca extends CI_Controller
 
         foreach ($list_region as $reg) {
 
-            $total_region = $this->db->query("SELECT COUNT(a.id_trans_so) as total_memo_region FROM trans_ca as a LEFT JOIN pic_ca as b ON a.user_id = b.user_id WHERE MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun AND b.region = $reg->regional")->row()->total_memo_region;
+            $total_region = $this->db->query("SELECT COUNT(a.id) as total_memo_region FROM trans_ao as a LEFT JOIN pic_ca as b ON a.assign_to = b.user_id WHERE MONTH(a.date_assign) = $bulan AND YEAR(a.date_assign) = $tahun AND b.region = $reg->regional")->row()->total_memo_region;
 
             $reg->memo_region = $total_region;
 
@@ -55,7 +55,7 @@ class Dashboard_memo_ca extends CI_Controller
             foreach ($list_hk_reg as $hari_kerja_reg) {
                 $day = substr($hari_kerja_reg['tanggal'], -2);
                 $hk_reg = $hari_kerja_reg['hk'];
-                $memo_ca_reg = $this->db->query("SELECT COUNT(a.id_trans_so) as total_memo FROM trans_ca AS a LEFT JOIN pic_ca as b ON a.user_id = b.user_id WHERE YEAR(created_at) = $tahun AND MONTH(created_at) = $bulan AND DAY(created_at) = $day AND b.region = $reg->regional")->row()->total_memo;
+                $memo_ca_reg = $this->db->query("SELECT COUNT(a.id) as total_memo FROM trans_ao AS a LEFT JOIN pic_ca as b ON a.assign_to = b.user_id WHERE YEAR(a.date_assign) = $tahun AND MONTH(a.date_assign) = $bulan AND DAY(a.date_assign) = $day AND b.region = $reg->regional")->row()->total_memo;
 
                 $memo_reg["$hk_reg"] = $memo_ca_reg;
             }
