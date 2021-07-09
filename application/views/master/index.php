@@ -118,6 +118,75 @@
       font-family: inherit;
     }
 
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 90px;
+      height: 36px;
+    }
+
+    .switch input {display:none;}
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ca2222;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 6px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 34px;
+      width: 32px;
+      top: 1px;
+      left: 1px;
+      right: 1px;
+      bottom: 1px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 6px;
+    }
+
+    input:checked + .slider {
+      background-color: #2ab934;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(55px);
+    }
+
+    .slider:after {
+      content:'OFF';
+      color: white;
+      display: block;
+      position: absolute;
+      transform: translate(-50%,-50%);
+      top: 50%;
+      left: 50%;
+      font-size: 10px;
+      font-family: Verdana, sans-serif;
+    }
+    input:checked + .slider:after {
+      content:'ON';
+    }
+
+    .bootstrap-select > .dropdown-toggle {
+      height : 40px !important;
+    }
+
     @media only screen and (max-width: 600px) {
       .brands {
         display: none;
@@ -298,6 +367,13 @@
   <script src="<?php echo base_url('assets/dist/js/bootbox.min.js') ?>"></script>
   <script src="<?php echo base_url('assets/plugins/datatables/jquery.dataTables.js') ?>"></script>
   <script src="<?php echo base_url('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js') ?>"></script>
+
+  <!-- Multiple Select -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 </body>
 
 </html>

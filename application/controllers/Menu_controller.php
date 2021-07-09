@@ -955,4 +955,9 @@ function tracker_data_visit_kolektor(){
     {   
         $this->load->view('master/penyimpangan/v_index');
     }
+
+    public function tanggal_penyimpangan()
+    {   
+        $this->load->view('master/penyimpangan/v_tanggal_penyimpangan');
+    }
 }
