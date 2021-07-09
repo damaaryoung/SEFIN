@@ -2759,24 +2759,6 @@
     }
 
     function click_edit() {
-        var user_id = '<?php echo $user_id ?>';
-        if(user_id == 1107) {
-            $('#form_npwp_debitur').show();
-            $('#form_npwp_pasangan').show();
-            $('#form_npwp_pen_1').show();
-            $('#form_npwp_pen_2').show();
-            $('#form_npwp_pen_3').show();
-            $('#form_npwp_pen_4').show();
-            $('#form_npwp_pen_5').show();
-        } else {
-            $('#form_npwp_debitur').hide();
-            $('#form_npwp_pasangan').hide();
-            $('#form_npwp_pen_1').hide();
-            $('#form_npwp_pen_2').hide();
-            $('#form_npwp_pen_3').hide();
-            $('#form_npwp_pen_4').hide();
-            $('#form_npwp_pen_5').hide();
-        }
         $('.prosesVerifikasiDebitur').hide();
         $('.prosesVerifikasiPasangan').hide();
         $('.prosesVerifikasiPenjamin_1').hide();
@@ -18137,12 +18119,23 @@
                                         verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("1");
-                                } else {
+                                } else if (data.penjamin[0].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                     $("#verifikasi_penjamin_1").on('click', function() {
                                         verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.penjamin[0].user_id) {
+                                        
+                                        document.getElementById("verifikasi_penjamin_1").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_penjamin_1").on('click', function() {
+                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                    });
+                                    $("#limit_call_penjamin_1_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_1").on('click', function() {
@@ -18342,12 +18335,23 @@
                                         verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("1");
-                                } else {
+                                } else if (data.npwp_penjamin[0].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.npwp_penjamin[0].user_id) {
+                                        
+                                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_npwp_pen_1").on('click', function() {
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_pen_1_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
