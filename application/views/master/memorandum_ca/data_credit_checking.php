@@ -227,8 +227,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default close_assign" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Assign</button>
+                    <div class="btn-group" style="margin-top: 35px; width: 100%">
+                        <button type="submit" class="btn btn-primary buttonAssign">Assign</button>
+                        <button class="btn btn-secondary buttonProses" disabled><i class="fas fa-spinner fa-pulse" ></i> Proses</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -5816,6 +5818,10 @@
         <script src="<?php echo base_url('assets/dist/js/datepicker.en.js') ?>"></script>
 
         <script type="text/javascript">
+
+            $('.buttonAssign').show();
+            $('.buttonProses').hide();
+
             tambah_penjamin = function(opts, id) {
                 var data = opts;
                 var url = '<?php echo $this->config->item('api_url'); ?>api/penjamin/tambah/' + id;
@@ -10601,7 +10607,7 @@
                 });
             }
 
-           assign_pic = function(opts) {
+            assign_pic = function(opts) {
                 var data = opts;
                 var url = 'Ao_controller/get_assign_pic';
                 return $.ajax({
@@ -10616,10 +10622,29 @@
                 });
             }
 
+            assign_date = function(opts) {
+                var data = opts;
+                var url = 'Ao_controller/check_assign_date';
+                return $.ajax({
+                    url: url,
+                    data: data,
+                    type: 'POST',
+                    dataType: "json",
+                    cache: false,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+            }
+
             $("#form_assign_ca").on('submit', function(e) {
+
+                $('.buttonAssign').hide();
+                $('.buttonProses').show();
                 
                 var id = $('input[name=id_trans_so]', this).val();
                 var pic = $('input[name=user_id_ca]', this).val();
+                var date_now = "2021-07-10";
 
                 e.preventDefault();
                 var formData = new FormData();
@@ -10631,29 +10656,71 @@
                         if (total_assign == 5) {
                             bootbox.alert("Anda Telah Mencapai Maksimal Assign Hari ini ke PIC Tersebut!!!");
                         } else {
-                            update_assign_ca(formData, id)
+                            assign_date({date_now})
                                 .done(function(res) {
-                                    var data = res.data;
-                                    bootbox.alert('Berhasil Assign !!', function() {
-                                        $('#form_assign_ca')[0].reset();
-                                        $('#modal_assign_ca').modal('hide');
-                                    });
-                                })
-                                .fail(function(jqXHR) {
-                                    var data = jqXHR.responseJSON;
-                                    var error = "";
-                
-                                    if (typeof data == 'string') {
-                                        error = '<p>' + data + '</p>';
-                                    } else {
-                                        $.each(data, function(index, item) {
-                                            error += '<p>' + item + '</p>' + "\n";
-                                        });
+                                    console.log(res);
+
+                                    var listHk = res.hk;
+                                    var hkNextMonth = res.hk_next_month;
+                                    var index = null;
+                                    var date_hk = res.date_now;
+
+                                    for (var key in listHk) {
+                                        if (listHk[key].tanggal == date_hk) {
+                                            index = key;
+                                        }   
                                     }
-                                    bootbox.alert('Gagal assign !!', function() {
-                                        $("#batal").click();
-                                    });
-                                });
+
+                                    while (index == null) {
+                                        var day = new Date(date_hk);
+                                        var nextDay = new Date(date_hk);
+                                        nextDay.setDate(day.getDate() + 1);   
+                                        date_hk = nextDay.toISOString().slice(0,10);
+
+                                        for (var key in listHk) {
+                                            if (listHk[key].tanggal == date_hk) {
+                                                index = key;
+                                            }   
+                                        }
+
+                                        if (nextDay.getMonth() != day.getMonth()) {
+                                            listHk = hkNextMonth
+                                        }
+
+                                    }
+
+                                    date_hk = listHk[index].tanggal;
+
+                                    formData.append('date_assign', date_hk);
+
+                                    update_assign_ca(formData, id)
+                                        .done(function(res) {
+                                            var data = res.data;
+                                            bootbox.alert('Berhasil Assign !!', function() {
+                                                $('#form_assign_ca')[0].reset();
+                                                $('.buttonAssign').show();
+                                                $('.buttonProses').hide();
+                                                $('#modal_assign_ca').modal('hide');
+                                            });
+                                        })
+                                        .fail(function(jqXHR) {
+                                            var data = jqXHR.responseJSON;
+                                            var error = "";
+                        
+                                            if (typeof data == 'string') {
+                                                error = '<p>' + data + '</p>';
+                                            } else {
+                                                $.each(data, function(index, item) {
+                                                    error += '<p>' + item + '</p>' + "\n";
+                                                });
+                                            }
+                                            bootbox.alert('Gagal assign !!', function() {
+                                                $("#batal").click();
+                                            });
+                                        });
+                                    
+                                }) 
+
                         }
                         
                     })

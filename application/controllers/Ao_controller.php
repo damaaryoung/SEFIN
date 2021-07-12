@@ -443,4 +443,38 @@ class Ao_controller extends CI_Controller
         
         echo json_encode($data);
     }
+
+    function check_assign_date() 
+    {   
+        $date_now    = $this->input->post('date_now');
+        $date_next_month = date('Y-m-d', strtotime('+1 month', strtotime($date_now)));
+
+        $hari_pertama = $this->db->query("SELECT dpm_online.get_som('$date_now') as som")->row();
+        $hari_terakhir = $this->db->query("SELECT dpm_online.get_eom('$date_now') as eom")->row();
+
+        $hari_pertama_next_month = $this->db->query("SELECT dpm_online.get_som('$date_next_month') as som")->row();
+        $hari_terakhir_next_month = $this->db->query("SELECT dpm_online.get_eom('$date_next_month') as eom")->row();
+        
+        $total_kerja = $this->db->query("SELECT dpm_online.get_jumlah_kerja ('$hari_pertama->som','$hari_terakhir->eom') as total")->row()->total;
+
+        $total_kerja_next_month = $this->db->query("SELECT dpm_online.get_jumlah_kerja ('$hari_pertama_next_month->som','$hari_terakhir_next_month->eom') as total")->row()->total;
+
+        $hk = $this->looping_get_hk(1, $total_kerja, $date_now);
+        $hk_next_month = $this->looping_get_hk(1, $total_kerja_next_month, $date_next_month);
+
+        $data['hk'] = $hk;
+        $data['hk_next_month'] = $hk_next_month;
+        $data['date_now'] = $date_now;
+        
+        echo json_encode($data);
+    }
+
+    private function looping_get_hk($start, $end, $date_now) {
+        $data = array();
+        for ($i=$start; $i <= intval($end); $i++) { 
+            $detail_hk['tanggal'] = $this->db->query("SELECT dpm_online.`get_tgl_hari_kerja_fid`($i, '$date_now') as tanggal")->row()->tanggal;
+            $data["$i"] = $detail_hk;
+        }
+        return $data;
+    }
 }
