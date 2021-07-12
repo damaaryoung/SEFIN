@@ -16,7 +16,7 @@ class model_tanggal_penyimpangan extends CI_Model{
     }
 
     function get_tanggal_penyimpangan() {
-        $this->datatables->select('id, start_date, end_date');
+        $this->datatables->select('id, start_date, end_date, expired');
         $this->datatables->from($this->tableTanggal);
         $this->datatables->add_column('action',
             '<a href="javascript:void(0);" title="detail" class="detail_record btn btn-default btn-md" data-id="$1" data-start_date="$2" data-end_date="$3">
@@ -56,6 +56,12 @@ class model_tanggal_penyimpangan extends CI_Model{
         $this->db->where('id', $data['id']);
         $result = $this->db->update($this->tableList);
         return $result;
+    }
+
+    function CountExpired()
+    {
+        $query ="SELECT * from $this->tableTanggal WHERE expired = 0";
+		return $this->db->query($query);
     }
 
 }

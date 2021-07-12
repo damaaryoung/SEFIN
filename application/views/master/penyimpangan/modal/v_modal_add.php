@@ -17,6 +17,8 @@
                         <input type="text" class="form-control" id="nama" placeholder="Nama" name="nama">
                         <span id="nama_error" class="text-danger"></span>
                     </div>
+                    <div class="form-group mj-pic">
+                    </div>
                     <div class="form-group">
                         <label>Status</label>
                         <select name="flg_aktif" id="status" class="form-control">

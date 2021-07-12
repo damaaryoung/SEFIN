@@ -100,4 +100,11 @@ class Tanggal_penyimpangan_controller extends CI_Controller
         $sql = $this->model_tanggal_penyimpangan->is_active($data);
         echo json_encode(array('message' => $sql));
     }
+
+    public function ExpiredDatePenyimpangan()
+    {
+        $count = $this->model_tanggal_penyimpangan->CountExpired();
+        echo json_encode(array('total' => $count->num_rows()));
+
+    }
 }

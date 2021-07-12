@@ -20,6 +20,12 @@
                 <div class="card">
                     <div class="card-body">
                     <button type="button" class="btn btn-primary mb-3" id="btn_modal_add_tanggal_penyimpangan">+ ADD</button>
+                    <div class="col-4 alert alert-info" role="alert" hidden id="message_expired">
+                        IOM masih aktif, Tidak dapat menambah Tanggal IOM!
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <table class="table table-striped" id="table_tanggal_penyimpangan" style="width: 100%;">
                         <thead style="background-color: #dc3545; color:white">
                             <tr>
@@ -46,6 +52,19 @@
     tables();
     // end
 
+    // get expired tanggal penyimpangan
+    ajax_call('', "<?php echo base_url('tanggal_penyimpangan_controller/ExpiredDatePenyimpangan')?>", 'GET')
+        .done(function(response){
+            if(response.total > 0) {
+                $('#btn_modal_add_tanggal_penyimpangan').prop('disabled', true);
+                $('#message_expired').removeAttr('hidden');
+            }
+        })
+        .fail(function(jqXHR){
+            swal("Error!", "oops! something wrong", "error");
+        });
+    // end
+    
     // get value param penyimpangan
     ajax_call('', "<?php echo base_url('tanggal_penyimpangan_controller/getParamPenyimpangan')?>", 'GET')
         .done(function(response){
@@ -131,7 +150,7 @@
                         if(date3 < 0) {
                             return '<h5><span class="badge badge-warning">Not yet started</span></h5>';
                         } else {
-                            if(days > 0) {
+                            if(row.expired == 0) {
                                 return days + " days left";
                             } else {
                                 return `<h5><span class="badge badge-danger">Expired</span></h5>`;

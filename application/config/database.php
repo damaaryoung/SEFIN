@@ -73,56 +73,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
-$db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => '10.20.30.254:3307',
-	'username' => 'u2Qi7Jfui',
-	'password' => 'qJ9ysIkg9ce!',
-	'database' => 'newwebtool',
-	'dbdriver' => 'mysqli',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
-
-$db['dpm_online'] = array(
-	'dsn'	=> '',
-	'hostname' => '10.20.30.254:3307',
-	'username' => 'u2Qi7Jfui',
-	'password' => 'qJ9ysIkg9ce!',
-	'database' => 'dpm_online',
-	'dbdriver' => 'mysqli',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
-
 // $db['default'] = array(
-// 	'dsn'   => '',
-// 	'hostname' => '103.234.254.186:3308',
-// 	'username' => 'test', //username database kedua
-// 	'password' => 'test2021!', //password database kedua
-// 	'database' => 'newwebtool', //nama database kedua
+// 	'dsn'	=> '',
+// 	'hostname' => '10.20.30.254:3307',
+// 	'username' => 'u2Qi7Jfui',
+// 	'password' => 'qJ9ysIkg9ce!',
+// 	'database' => 'newwebtool',
 // 	'dbdriver' => 'mysqli',
 // 	'dbprefix' => '',
 // 	'pconnect' => FALSE,
@@ -140,11 +96,11 @@ $db['dpm_online'] = array(
 // );
 
 // $db['dpm_online'] = array(
-// 	'dsn'   => '',
-// 	'hostname' => '103.234.254.186:3308',
-// 	'username' => 'test', //username database kedua
-// 	'password' => 'test2021!', //password database kedua
-// 	'database' => 'dpm_online', //nama database kedua
+// 	'dsn'	=> '',
+// 	'hostname' => '10.20.30.254:3307',
+// 	'username' => 'u2Qi7Jfui',
+// 	'password' => 'qJ9ysIkg9ce!',
+// 	'database' => 'dpm_online',
 // 	'dbdriver' => 'mysqli',
 // 	'dbprefix' => '',
 // 	'pconnect' => FALSE,
@@ -160,3 +116,47 @@ $db['dpm_online'] = array(
 // 	'failover' => array(),
 // 	'save_queries' => TRUE
 // );
+
+$db['default'] = array(
+	'dsn'   => '',
+	'hostname' => '103.234.254.186:3308',
+	'username' => 'test', //username database kedua
+	'password' => 'test2021!', //password database kedua
+	'database' => 'newwebtool', //nama database kedua
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+$db['dpm_online'] = array(
+	'dsn'   => '',
+	'hostname' => '103.234.254.186:3308',
+	'username' => 'test', //username database kedua
+	'password' => 'test2021!', //password database kedua
+	'database' => 'dpm_online', //nama database kedua
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
