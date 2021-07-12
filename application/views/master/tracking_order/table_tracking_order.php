@@ -243,32 +243,33 @@
 
                             if (item.nama_ca != null) {
                                 var nama_ca = '<td>'+ item.nama_ca +'</td>';
-                            } else if (item.nama_assign != null) {
-                                var nama_ca = '<td>'+ item.nama_assign +'</td>';
                             } else {
-                                var nama_ca = '<td>-</td>';
-                            }
+                                var nama_ca = '<td>'+ item.nama_assign +'</td>';
+                            } 
 
                             if (item.cancel_debitur == 2) {
                                 var status = '<td style="background-color: #dc4836; text-align: center; vertical-align: middle">Cancel By Debitur</td>';
                             } else {
-                                if (item.id_trans_so != null && item.id_verif != null && item.id_caa == null) {
-                                    var status = '<td style="text-align: center; vertical-align: middle">Proses Pengajuan CAA</td>';
-                                } else if (item.id_trans_so == null && item.tgl_pending == null && item.status_return == null || item.nama_assign != null) {
-                                    var status = '<td style="text-align: center; vertical-align: middle">Proses Memorandum CA</td>';
-                                } else if (item.plafon_kredit == "0") {
+                                if (item.plafon_kredit == "0") {
                                     var status = '<td style="background-color: #dc4836; text-align: center; vertical-align: middle">Not Recommend CA</td>';
-                                } else if (item.id_trans_so != null && item.id_verif == null) {
-                                    var status = '<td style="text-align: center; vertical-align: middle">Proses Verifikasi</td>';
-                                } else if (item.id_caa != null && item.id_trans_so != null) {
-                                    var status = '<td style="background-color: #00d807; text-align: center; vertical-align: middle">Sudah Pengajuan CAA</td>';
-                                } else if (item.tgl_pending != null && item.id_trans_so == null) {
-                                    var status = '<td style="background-color: #a8b4ae; text-align: center; vertical-align: middle">Pending</td>';
-                                } else if (item.status_return != null && item.id_trans_so == null) {
-                                    var status = '<td style="background-color: #a8b4ae; text-align: center; vertical-align: middle">Return</td>';
                                 } else {
-                                    var status = '<td style="text-align: center; vertical-align: middle">Status Lain</td>';
+                                    if (item.id_trans_so != null && item.id_verif != null && item.id_caa == null) {
+                                        var status = '<td style="text-align: center; vertical-align: middle">Proses Pengajuan CAA</td>';
+                                    } else if (item.id_trans_so == null && item.nama_assign != null && item.tgl_pending == null && item.status_return == null) {
+                                        var status = '<td style="text-align: center; vertical-align: middle">Proses Memorandum CA</td>';
+                                    } else if (item.id_trans_so != null && item.id_verif == null && item.id_caa == null) {
+                                        var status = '<td style="text-align: center; vertical-align: middle">Proses Verifikasi</td>';
+                                    } else if (item.id_caa != null && item.id_trans_so != null) {
+                                        var status = '<td style="background-color: #00d807; text-align: center; vertical-align: middle">Sudah Pengajuan CAA</td>';
+                                    } else if (item.tgl_pending != null && item.id_trans_so == null) {
+                                        var status = '<td style="background-color: #a8b4ae; text-align: center; vertical-align: middle">Pending</td>';
+                                    } else if (item.status_return != null && item.id_trans_so == null) {
+                                        var status = '<td style="background-color: #a8b4ae; text-align: center; vertical-align: middle">Return</td>';
+                                    } else {
+                                        var status = '<td style="text-align: center; vertical-align: middle">Status Lain</td>';
+                                    }
                                 }
+                                
                             }
 
                             var tr = [
@@ -314,7 +315,11 @@
 
         if (kode_area == "" && kode_cabang == "") {
             bootbox.alert("Salah satu dari Area atau Cabang tidak boleh kosong!");
-        } else {
+        } else if (kode_area == "" && kode_cabang != "") {
+            kode_area = "kosong";
+            window.open('dashboard_tracking_order/export_to_excel/'+bulan+'/'+tahun+'/'+kode_area+'/'+kode_cabang);
+        } else if (kode_area != "" && kode_cabang == "") {
+            kode_cabang = "kosong";
             window.open('dashboard_tracking_order/export_to_excel/'+bulan+'/'+tahun+'/'+kode_area+'/'+kode_cabang);
         }
 

@@ -202,7 +202,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <input type="hidden" name="id_trans_so" value="">
-                        <input type="hidden" name="user_id_ca" value="">
+                        <input type="hidden" name="user_id_ca" value="" method="POST">
                         <div class="col-md-3">
                             <label>Nomor SO :</label>
                             <input type="text" class="form-control" name="nomor_so" id="nomor_so" disabled>
@@ -10601,34 +10601,63 @@
                 });
             }
 
+           assign_pic = function(opts) {
+                var data = opts;
+                var url = 'Ao_controller/get_assign_pic';
+                return $.ajax({
+                    url: url,
+                    data: data,
+                    type: 'POST',
+                    dataType: "json",
+                    cache: false,
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+            }
+
             $("#form_assign_ca").on('submit', function(e) {
                 
                 var id = $('input[name=id_trans_so]', this).val();
+                var pic = $('input[name=user_id_ca]', this).val();
 
                 e.preventDefault();
                 var formData = new FormData();
                 formData.append('assign_to', $('input[name=user_id_ca]', this).val());
-            
-                update_assign_ca(formData, id)
+
+                assign_pic({pic})
                     .done(function(res) {
-                        var data = res.data;
-                        console.log(data);
-                        bootbox.alert('Berhasil Assign !!', function() {
-                            $('#form_assign_ca')[0].reset();
-                            $('#modal_assign_ca').modal('hide');
-                        });
+                        var total_assign = res.total_assign;
+                        if (total_assign == 5) {
+                            bootbox.alert("Anda Telah Mencapai Maksimal Assign Hari ini ke PIC Tersebut!!!");
+                        } else {
+                            update_assign_ca(formData, id)
+                                .done(function(res) {
+                                    var data = res.data;
+                                    bootbox.alert('Berhasil Assign !!', function() {
+                                        $('#form_assign_ca')[0].reset();
+                                        $('#modal_assign_ca').modal('hide');
+                                    });
+                                })
+                                .fail(function(jqXHR) {
+                                    var data = jqXHR.responseJSON;
+                                    var error = "";
+                
+                                    if (typeof data == 'string') {
+                                        error = '<p>' + data + '</p>';
+                                    } else {
+                                        $.each(data, function(index, item) {
+                                            error += '<p>' + item + '</p>' + "\n";
+                                        });
+                                    }
+                                    bootbox.alert('Gagal assign !!', function() {
+                                        $("#batal").click();
+                                    });
+                                });
+                        }
+                        
                     })
                     .fail(function(jqXHR) {
-                        var data = jqXHR.responseJSON;
-                        var error = "";
-    
-                        if (typeof data == 'string') {
-                            error = '<p>' + data + '</p>';
-                        } else {
-                            $.each(data, function(index, item) {
-                                error += '<p>' + item + '</p>' + "\n";
-                            });
-                        }
                         bootbox.alert('Gagal assign !!', function() {
                             $("#batal").click();
                         });

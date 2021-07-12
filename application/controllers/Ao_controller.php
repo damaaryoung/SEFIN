@@ -335,124 +335,43 @@ class Ao_controller extends CI_Controller
         $kode_area = $this->input->post("kode_area");
 
         if ($kode_cabang == "Konsolidasi" && $kode_area == "") {
-            $data_tracking_order = "SELECT c.id_trans_so AS id_trans_so,
-                b.nomor_so AS nomor_so,
-                DATE_FORMAT(b.created_at, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,
-                e.nama AS nama_so,
-                f.nama_lengkap AS nama_debitur,
-                g.nama AS nama_cabang,
-                d.plafon_kredit AS plafon_kredit,
-                a.tgl_pending AS tgl_pending,
-                a.status_return AS status_return,
-                h.id AS id_caa,
-                i.id_trans_so AS id_verif,
-                b.flg_cancel_debitur AS cancel_debitur,
-                j.nama AS nama_ca,
-                k.nama AS nama_assign
-            FROM trans_ao AS a
-            LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
-            LEFT JOIN trans_ca AS c ON a.id_trans_so = c.id_trans_so
-            LEFT JOIN recom_ca AS d ON d.id = c.id_recom_ca
-            LEFT JOIN dpm_online.user AS e ON a.user_id = e.user_id
-            LEFT JOIN calon_debitur AS f ON b.id_calon_debitur = f.id
-            LEFT JOIN mk_cabang AS g ON b.id_cabang = g.id
-            LEFT JOIN trans_caa AS h ON a.id_trans_so = h.id_trans_so
-            LEFT JOIN verif_cadebt AS i ON a.id_trans_so = i.id_trans_so
-            LEFT JOIN dpm_online.user AS j ON c.user_id = j.user_id
-            LEFT JOIN dpm_online.user AS k ON a.assign_to = k.user_id
-            WHERE MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun 
-            ORDER BY a.id_trans_so DESC";
-            $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
+            $filter = "";
         } else if ($kode_cabang != "Konsolidasi" && $kode_area == "") {
-            $data_tracking_order = "SELECT c.id_trans_so AS id_trans_so,
-                b.nomor_so AS nomor_so,
-                DATE_FORMAT(b.created_at, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,
-                e.nama AS nama_so,
-                f.nama_lengkap AS nama_debitur,
-                g.nama AS nama_cabang,
-                d.plafon_kredit AS plafon_kredit,
-                a.tgl_pending AS tgl_pending,
-                a.status_return AS status_return,
-                h.id AS id_caa,
-                i.id_trans_so AS id_verif,
-                b.flg_cancel_debitur AS cancel_debitur,
-                j.nama AS nama_ca,
-                k.nama AS nama_assign
-            FROM trans_ao AS a
-            LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
-            LEFT JOIN trans_ca AS c ON a.id_trans_so = c.id_trans_so
-            LEFT JOIN recom_ca AS d ON d.id = c.id_recom_ca
-            LEFT JOIN dpm_online.user AS e ON a.user_id = e.user_id
-            LEFT JOIN calon_debitur AS f ON b.id_calon_debitur = f.id
-            LEFT JOIN mk_cabang AS g ON b.id_cabang = g.id
-            LEFT JOIN trans_caa AS h ON a.id_trans_so = h.id_trans_so
-            LEFT JOIN verif_cadebt AS i ON a.id_trans_so = i.id_trans_so
-            LEFT JOIN dpm_online.user AS j ON c.user_id = j.user_id
-            LEFT JOIN dpm_online.user AS k ON a.assign_to = k.user_id
-            WHERE MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun AND b.id_cabang = $kode_cabang
-            ORDER BY a.id_trans_so DESC";
-            $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
+            $filter = "AND a.`id_cabang` = $kode_cabang";
+        } else if ($kode_area == "KONSOLIDASI" && $kode_cabang == "") {
+            $filter = "";
+        } else if ($kode_area != "KONSOLIDASI" && $kode_cabang == ""){
+            $filter = "AND a.`id_area` = $kode_area";
         }
 
-        if ($kode_area == "KONSOLIDASI" && $kode_cabang == "") {
-            $data_tracking_order = "SELECT c.id_trans_so AS id_trans_so,
-                b.nomor_so AS nomor_so,
-                DATE_FORMAT(b.created_at, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,
-                e.nama AS nama_so,
-                f.nama_lengkap AS nama_debitur,
-                g.nama AS nama_cabang,
-                d.plafon_kredit AS plafon_kredit,
-                a.tgl_pending AS tgl_pending,
-                a.status_return AS status_return,
-                h.id AS id_caa,
-                i.id_trans_so AS id_verif,
-                b.flg_cancel_debitur AS cancel_debitur,
-                j.nama AS nama_ca,
-                k.nama AS nama_assign
+        $data_tracking_order = "SELECT b.`id_trans_so` AS id_trans_so,
+                f.`nomor_so` AS nomor_so,
+                DATE_FORMAT(f.`created_at`, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,
+                g.`nama` AS nama_so,
+                k.`nama_lengkap` AS nama_debitur,
+                j.`nama` AS nama_cabang,
+                c.`plafon_kredit` AS plafon_kredit,
+                a.`tgl_pending` AS tgl_pending,
+                a.`status_return` AS status_return,
+                d.`id` AS id_caa,
+                e.`id_trans_so` AS id_verif,
+                f.`flg_cancel_debitur` AS cancel_debitur,
+                h.`nama` AS nama_assign,
+                i.`nama` AS nama_ca
             FROM trans_ao AS a
-            LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
-            LEFT JOIN trans_ca AS c ON a.id_trans_so = c.id_trans_so
-            LEFT JOIN recom_ca AS d ON d.id = c.id_recom_ca
-            LEFT JOIN dpm_online.user AS e ON a.user_id = e.user_id
-            LEFT JOIN calon_debitur AS f ON b.id_calon_debitur = f.id
-            LEFT JOIN mk_cabang AS g ON b.id_cabang = g.id
-            LEFT JOIN trans_caa AS h ON a.id_trans_so = h.id_trans_so
-            LEFT JOIN verif_cadebt AS i ON a.id_trans_so = i.id_trans_so
-            LEFT JOIN dpm_online.user AS j ON c.user_id = j.user_id
-            LEFT JOIN dpm_online.user AS k ON a.assign_to = k.user_id
-            WHERE MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun 
+            LEFT JOIN trans_ca AS b ON a.`id_trans_so` = b.`id_trans_so`
+            LEFT JOIN recom_ca AS c ON b.`id_recom_ca` = c.`id`
+            LEFT JOIN trans_caa AS d ON a.`id_trans_so` = d.`id_trans_so`
+            LEFT JOIN verif_cadebt AS e ON a.`id_trans_so` = e.`id_trans_so`
+            LEFT JOIN trans_so AS f ON a.`id_trans_so` = f.`id`
+            LEFT JOIN dpm_online.user AS g ON f.`user_id` = g.`user_id`
+            LEFT JOIN dpm_online.user AS h ON a.`assign_to` = h.`user_id`
+            LEFT JOIN dpm_online.user AS i ON b.`user_id` = i.`user_id`
+            LEFT JOIN mk_cabang AS j ON a.`id_cabang` = j.`id`
+            LEFT JOIN calon_debitur AS k ON f.`id_calon_debitur` = k.`id`
+            WHERE a.assign_to IS NOT NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun $filter
             ORDER BY a.id_trans_so DESC";
             $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
-        } else if ($kode_area != "KONSOLIDASI" && $kode_cabang == ""){
-            $data_tracking_order = "SELECT c.id_trans_so AS id_trans_so,
-                b.nomor_so AS nomor_so,
-                DATE_FORMAT(b.created_at, '%d/%m/%Y %H:%i:%s') AS tgl_transaksi,
-                e.nama AS nama_so,
-                f.nama_lengkap AS nama_debitur,
-                g.nama AS nama_cabang,
-                d.plafon_kredit AS plafon_kredit,
-                a.tgl_pending AS tgl_pending,
-                a.status_return AS status_return,
-                h.id AS id_caa,
-                i.id_trans_so AS id_verif,
-                b.flg_cancel_debitur AS cancel_debitur,
-                j.nama AS nama_ca,
-                k.nama AS nama_assign
-            FROM trans_ao AS a
-            LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
-            LEFT JOIN trans_ca AS c ON a.id_trans_so = c.id_trans_so
-            LEFT JOIN recom_ca AS d ON d.id = c.id_recom_ca
-            LEFT JOIN dpm_online.user AS e ON b.user_id = e.user_id
-            LEFT JOIN calon_debitur AS f ON b.id_calon_debitur = f.id
-            LEFT JOIN mk_cabang AS g ON b.id_cabang = g.id
-            LEFT JOIN trans_caa AS h ON a.id_trans_so = h.id_trans_so
-            LEFT JOIN verif_cadebt AS i ON a.id_trans_so = i.id_trans_so
-            LEFT JOIN dpm_online.user AS j ON c.user_id = j.user_id
-            LEFT JOIN dpm_online.user AS k ON a.assign_to = k.user_id
-            WHERE MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun AND b.id_area = $kode_area
-            ORDER BY a.id_trans_so DESC";
-            $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
-        }
 
         // $list = $this->Model_tracking_order->get_datatables();
         // $data = array();
@@ -508,6 +427,20 @@ class Ao_controller extends CI_Controller
         //     "data" => $data,
         // );
 
+        echo json_encode($data);
+    }
+
+    function get_assign_pic() 
+    {   
+        $pic    = $this->input->post("pic");
+        $day    = date('d');
+        $month  = date('m');
+        $year   = date('Y');
+        $total_assign = $this->db->query("SELECT COUNT(assign_to) as total_assign FROM trans_ao WHERE assign_to = $pic AND YEAR(date_assign) = $year AND MONTH(date_assign) = $month AND DAY(date_assign) = $day")->row()->total_assign;
+
+        $data["pic"] = $pic;
+        $data['total_assign'] = $total_assign;
+        
         echo json_encode($data);
     }
 }
