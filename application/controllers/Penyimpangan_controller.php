@@ -9,6 +9,10 @@ class Penyimpangan_controller extends CI_Controller
         $this->load->library('datatables'); //load library ignited-dataTable
         $this->load->model('model_penyimpangan'); //load model penyimpangan
         $this->load->library('form_validation');
+        $session = $this->session->userdata('SESSION_TOKEN');
+        if(!$session) {
+            redirect('/');
+        }
     }
 
     function validation()
@@ -39,12 +43,21 @@ class Penyimpangan_controller extends CI_Controller
         echo $this->model_penyimpangan->get_all_penyimpangan($parent_penyimpangan);
     }
 
+    public function get_detail_approval()
+    {
+        $id_mj_pic = $this->input->post('id_mj_pic');
+        header('Content-Type: application/json');
+        echo $this->model_penyimpangan->detail_approval($id_mj_pic);
+    }
+
     public function create()
     {
         $input     = $this->input->post();
+        // echo json_encode($input);
+        // die();
         $validate = $this->validation();
         if(!$validate['success']) {
-            $this->model_penyimpangan->insert($input);
+            $sql = $this->model_penyimpangan->insert($input);
         }
         
         echo json_encode(array('validate' => $validate, 'data' => $input));
@@ -82,4 +95,9 @@ class Penyimpangan_controller extends CI_Controller
         echo json_encode('ok');
     }
 
+    public function get_mj_pic()
+    {
+        $mj_pic = $this->model_penyimpangan->mj_pic()->result();
+        echo json_encode(array('data' => $mj_pic));
+    }
 }

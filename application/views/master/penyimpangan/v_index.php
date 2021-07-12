@@ -37,6 +37,7 @@
     </div>
 
     <?php $this->load->view('master/penyimpangan/modal/v_modal_detail'); ?>
+    <?php $this->load->view('master/penyimpangan/modal/v_modal_detail_approval'); ?>
     <?php $this->load->view('master/penyimpangan/modal/v_modal_add'); ?>
     <?php $this->load->view('master/penyimpangan/modal/v_modal_edit'); ?>
 
@@ -92,6 +93,43 @@
         });
     }
 
+    function table_detail_approval(approval)
+    {
+        var url = "<?php echo base_url('penyimpangan_controller/get_detail_approval')?>";
+
+        $('#table_detail_approval').dataTable({
+            initComplete: function() {
+            var api = this.api();
+            $('#table_penyimpangan_filter input')
+                .off('.DT')
+                .on('input.DT', function() {
+                    api.search(this.value).draw();
+                });
+            },
+            oLanguage: {
+                sProcessing: "<img style='width: 50px;' src='<?=  base_url() ?>"+'/assets/dist/img/sefin-system.png'+"'></img><br>Loading ....."
+            },
+            processing: true,
+            serverSide: true,
+            destroy: true,
+            ajax: {
+                "url": url,
+                "type": "POST",
+                "data" : {'id_mj_pic' : approval}
+            },
+            columns: [
+                {"data": "nama_jenis"}
+            ],
+            order: [[0, 'asc']],
+            rowCallback: function(row, data, iDisplayIndex) {
+                var info = this.fnPagingInfo();
+                var page = info.iPage;
+                var length = info.iLength;
+                $('td:eq(0)', row).html();
+            }
+        });
+    }
+
     $('#table_penyimpangan').on('click','.detail_record',function() {
         var id=$(this).data('id');
         var nama=$(this).data('nama');
@@ -103,6 +141,17 @@
         $('#modal_detail_penyimpangan').modal('show');
     });
 
+    // get detail approval by id
+    $('#table_detail_penyimpangan').on('click','.detail_approval',function() {
+        var id=$(this).data('id');
+        var approval=$(this).data('approval');
+
+        table_detail_approval(approval);
+        $("input[aria-controls='table_detail_approval']").css("width", "150px");
+        $('#modal_detail_approval').modal('show');
+    });
+    // end
+
     $('#btn_modal_add_kategori').on('click', function() {
         $('#title_modal_add').html('Add Kategori');
         $('#parent_penyimpan').val(0);
@@ -112,6 +161,21 @@
     //proses simpan data
     $('#penyimpangan_form_add').on('submit', function(e) {
         e.preventDefault();
+        var parent_penyimpangan = $('#parent_penyimpan').val();
+        var nama = $('#nama').val();
+        var status = $('#status').val();
+        var staging_approval = $('#staging_approval').val();
+
+        if(parent_penyimpangan != 0) {
+            var data = {
+            'parent_penyimpan' : parent_penyimpangan,
+            'nama' : nama,
+            'flg_aktif' : status,
+            'id_mj_pic' : staging_approval.toString()
+            }
+        } else {
+            var data = $(this).serialize();
+        }
         $('#btn_save_penyimpangan').prop('disabled', true);
         var token = localStorage.getItem('token');
         var url = "<?php echo base_url('penyimpangan_controller/create')?>";
@@ -127,8 +191,9 @@
             confirmButtonText: `Save`,
         }).then((result) => {
             if (result.isConfirmed) {
-                ajax_call($(this).serialize(), url, 'POST')
+                ajax_call(data, url, 'POST')
                 .done(function(response){
+                    // console.log(response)
                     $('#btn_save_penyimpangan').prop('disabled', false);
                     if(response.validate.success) {
                         $('#nama_error').html(response.validate.nama_error);
@@ -247,6 +312,8 @@
         var nama=$(this).data('nama');
         var status=$(this).data('status');
         var parent_penyimpangan=$(this).data('parent_penyimpangan');
+        var approval=$(this).data('approval');
+        get_mj_pic('.mj-pic-edit', approval);
         
         $('#nama_edit').val(nama);
         $('#status_edit').val(status);
@@ -269,11 +336,51 @@
     });
     // end form edit penyimpangan
 
+    function get_mj_pic(class_name = '.mj-pic', data = null) {
+        var array = JSON.parse("[" + data + "]");
+        var url = "<?php echo base_url('penyimpangan_controller/get_mj_pic')?>";
+        ajax_call('', url, 'GET')
+                .done(function(response){
+                    var html = `<label for="">Staging Approval</label><br>
+                        <select class="selectpicker" id="staging_approval" name="staging_approval" multiple data-live-search="true">`;
+                    for(var i = 0; i < response.data.length; i++) {
+                        html += `<option value="${response.data[i].id}">${response.data[i].nama_jenis}</option>`;
+                    }
+                    html += `</select>`;
+                    $(class_name).html(html);
+                    $('.selectpicker').selectpicker();
+                    if(data != null) {
+                        $('.selectpicker').selectpicker('val', array);
+                    }
+                })
+                .fail(function(jqXHR){
+                    console.log(jqXHR);
+                });
+    }
+
     $('#penyimpangan_form_edit').on('submit', function(e) {
         e.preventDefault();
         $('#btn_edit_penyimpangan').prop('disabled', true);
-        var parent_penyimpangan= $('#parent_penyimpangan_edit').val();
-        var data = $(this).serialize();
+        // var parent_penyimpangan= $('#parent_penyimpangan_edit').val();
+        // var data = $(this).serialize();
+        var parent_penyimpangan = $('#parent_penyimpangan_edit').val();
+        var id = $('#id_penyimpangan_edit').val();
+        var nama = $('#nama_edit').val();
+        var status = $('#status_edit').val();
+        var staging_approval = $('#staging_approval').val();
+
+        if(parent_penyimpangan != 0) {
+            var data = {
+            'parent_penyimpan' : parent_penyimpangan,
+            'id' : id,
+            'nama' : nama,
+            'flg_aktif' : status,
+            'id_mj_pic' : staging_approval.toString()
+            }
+        } else {
+            var data = $(this).serialize();
+        }
+
         var idTable = (parent_penyimpangan == 0) ? '#table_penyimpangan': '#table_detail_penyimpangan';
         update_penyimpangan(data, parent_penyimpangan, idTable);
     });
@@ -293,6 +400,7 @@
     });
 
     function btn_modal_add_sub_kategori(id) {
+        get_mj_pic();
         $('#title_modal_add').html('Add Sub Kategori');
         $('#modal_add_sub_kategori').modal('show');
     }
@@ -303,5 +411,11 @@
 
     $('#modal_add_sub_kategori').on('hidden.bs.modal', function (e) {
         $('#nama_error').html('');
+        $('.mj-pic').html('');
+    });
+
+    $('#modal_edit_sub_kategori').on('hidden.bs.modal', function (e) {
+        $('#nama_error').html('');
+        $('.mj-pic-edit').html('');
     });
 </script>
