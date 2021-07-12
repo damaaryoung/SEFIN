@@ -10644,7 +10644,7 @@
                 
                 var id = $('input[name=id_trans_so]', this).val();
                 var pic = $('input[name=user_id_ca]', this).val();
-                var date_now = "2021-07-10";
+                var date_now = "<?php echo date('Y-m-d')?>";
 
                 e.preventDefault();
                 var formData = new FormData();
