@@ -16,13 +16,13 @@ class Dashboard_tracking_order extends CI_Controller
         $kode_cabang = $this->input->post("kode_cabang");
 
         if ($pilih_ca == "*") {
-            $sudah_pengajuan_ca = "SELECT COUNT(b.id_trans_so) as total_sudah_pengajuan_ca FROM trans_ca as a LEFT JOIN trans_caa as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_ao as c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so AS d ON a.id_trans_so = d.id WHERE b.id_trans_so IS NOT NULL AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun";
+            $sudah_pengajuan_ca = "SELECT COUNT(b.id_trans_so) as total_sudah_pengajuan_ca FROM trans_ca as a LEFT JOIN trans_caa as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_ao as c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so AS d ON a.id_trans_so = d.id WHERE d.flg_cancel_debitur != 2 AND b.id_trans_so IS NOT NULL AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun";
             $data['sudah_pengajuan_ca'] = $this->db->query($sudah_pengajuan_ca)->row()->total_sudah_pengajuan_ca;
 
             $not_recommend_ca = "SELECT COUNT(a.id_trans_so) as total_not_recommend_ca FROM trans_ca AS a LEFT JOIN recom_ca AS b ON a.id_recom_ca = b.id LEFT JOIN trans_ao AS c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so as d ON a.id_trans_so = d.id WHERE b.plafon_kredit = 0 AND d.flg_cancel_debitur != 2 AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun";
             $data['not_recommend_ca'] = $this->db->query($not_recommend_ca)->row()->total_not_recommend_ca;
 
-            $cancel_ca = "SELECT COUNT(b.id_trans_so) as cancel_ca FROM trans_so as a LEFT JOIN trans_ao as b ON a.id = b.id_trans_so WHERE a.flg_cancel_debitur = 2 AND MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun";
+            $cancel_ca = "SELECT COUNT(a.id_trans_so) as cancel_ca FROM trans_ao as a LEFT JOIN trans_so as b ON a.id_trans_so = b.id LEFT JOIN trans_ca as c ON a.id_trans_so = c.id_trans_so WHERE b.flg_cancel_debitur = 2 AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun";
             $data['cancel_ca'] = $this->db->query($cancel_ca)->row()->cancel_ca;
 
             $memorandum_ca = "SELECT COUNT(a.id_trans_so) as memorandum_ca FROM trans_ao as a LEFT JOIN trans_ca as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_so as c ON a.id_trans_so = c.id WHERE c.flg_cancel_debitur != 2 AND a.status_return IS NULL AND a.tgl_pending IS NULL AND b.id_trans_so IS NULL AND a.assign_to IS NOT NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun";
@@ -51,13 +51,13 @@ class Dashboard_tracking_order extends CI_Controller
             $data['persen_pending_ca'] = number_format($data['pending_ca'] / $data['jumlah_ca'] * 100, 2, '.', '');
             $data['persen_return_ca'] = number_format($data['return_ca'] / $data['jumlah_ca'] * 100, 2, '.', '');
         } else {
-            $sudah_pengajuan_ca = "SELECT COUNT(b.id_trans_so) as total_sudah_pengajuan_ca FROM trans_ca as a LEFT JOIN trans_caa as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_ao as c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so AS d ON a.id_trans_so = d.id WHERE b.id_trans_so IS NOT NULL AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun AND a.user_id = $pilih_ca";
+            $sudah_pengajuan_ca = "SELECT COUNT(b.id_trans_so) as total_sudah_pengajuan_ca FROM trans_ca as a LEFT JOIN trans_caa as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_ao as c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so AS d ON a.id_trans_so = d.id WHERE d.flg_cancel_debitur != 2 AND b.id_trans_so IS NOT NULL AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun AND a.user_id = $pilih_ca";
             $data['sudah_pengajuan_ca'] = $this->db->query($sudah_pengajuan_ca)->row()->total_sudah_pengajuan_ca;
 
             $not_recommend_ca = "SELECT COUNT(a.id_trans_so) as total_not_recommend_ca FROM trans_ca AS a LEFT JOIN recom_ca AS b ON a.id_recom_ca = b.id LEFT JOIN trans_ao AS c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so as d ON a.id_trans_so = d.id WHERE b.plafon_kredit = 0 AND d.flg_cancel_debitur != 2 AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun AND a.user_id = $pilih_ca";
             $data['not_recommend_ca'] = $this->db->query($not_recommend_ca)->row()->total_not_recommend_ca;
 
-            $cancel_ca = "SELECT COUNT(b.id_trans_so) as cancel_ca FROM trans_so as a LEFT JOIN trans_ao as b ON a.id = b.id_trans_so WHERE a.flg_cancel_debitur = 2 AND MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun AND b.assign_to = $pilih_ca";
+            $cancel_ca = "SELECT COUNT(a.id_trans_so) as cancel_ca FROM trans_ao as a LEFT JOIN trans_so as b ON a.id_trans_so = b.id LEFT JOIN trans_ca as c ON a.id_trans_so = c.id_trans_so WHERE b.flg_cancel_debitur = 2 AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun AND a.assign_to = $pilih_ca";
             $data['cancel_ca'] = $this->db->query($cancel_ca)->row()->cancel_ca;
 
             $memorandum_ca = "SELECT COUNT(a.id_trans_so) as memorandum_ca FROM trans_ao as a LEFT JOIN trans_ca as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_so as c ON a.id_trans_so = c.id WHERE c.flg_cancel_debitur != 2 AND a.status_return IS NULL AND a.tgl_pending IS NULL AND b.id_trans_so IS NULL AND a.assign_to IS NOT NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun AND (b.user_id = $pilih_ca OR a.assign_to = $pilih_ca) ";
@@ -88,13 +88,13 @@ class Dashboard_tracking_order extends CI_Controller
         }
 
         if ($kode_cabang == "*") {
-            $sudah_pengajuan_cabang = "SELECT COUNT(b.id_trans_so) as total_sudah_pengajuan_cabang FROM trans_ca as a LEFT JOIN trans_caa as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_ao as c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so AS d ON a.id_trans_so = d.id WHERE b.id_trans_so IS NOT NULL AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun";
+            $sudah_pengajuan_cabang = "SELECT COUNT(b.id_trans_so) as total_sudah_pengajuan_cabang FROM trans_ca as a LEFT JOIN trans_caa as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_ao as c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so AS d ON a.id_trans_so = d.id WHERE d.flg_cancel_debitur != 2 AND b.id_trans_so IS NOT NULL AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun";
             $data['sudah_pengajuan_cabang'] = $this->db->query($sudah_pengajuan_cabang)->row()->total_sudah_pengajuan_cabang;
 
             $not_recommend_cabang = "SELECT COUNT(a.id_trans_so) as total_not_recommend_cabang FROM trans_ca AS a LEFT JOIN recom_ca AS b ON a.id_recom_ca = b.id LEFT JOIN trans_ao AS c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so as d ON a.id_trans_so = d.id WHERE b.plafon_kredit = 0 AND d.flg_cancel_debitur != 2 AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun";
             $data['not_recommend_cabang'] = $this->db->query($not_recommend_cabang)->row()->total_not_recommend_cabang;
 
-            $cancel_cabang = "SELECT COUNT(b.id_trans_so) as cancel_cabang FROM trans_so as a LEFT JOIN trans_ao as b ON a.id = b.id_trans_so WHERE a.flg_cancel_debitur = 2 AND MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun";
+            $cancel_cabang = "SELECT COUNT(a.id_trans_so) as cancel_cabang FROM trans_ao as a LEFT JOIN trans_so as b ON a.id_trans_so = b.id LEFT JOIN trans_ca as c ON a.id_trans_so = c.id_trans_so WHERE b.flg_cancel_debitur = 2 AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun";
             $data['cancel_cabang'] = $this->db->query($cancel_cabang)->row()->cancel_cabang;
 
             $memorandum_cabang = "SELECT COUNT(a.id_trans_so) as memorandum_cabang FROM trans_ao as a LEFT JOIN trans_ca as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_so as c ON a.id_trans_so = c.id WHERE c.flg_cancel_debitur != 2 AND a.status_return IS NULL AND a.tgl_pending IS NULL AND b.id_trans_so IS NULL AND a.assign_to IS NOT NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun";
@@ -123,13 +123,13 @@ class Dashboard_tracking_order extends CI_Controller
             $data['persen_pending_cabang'] = number_format($data['pending_cabang'] / $data['jumlah_cabang'] * 100, 2, '.', '');
             $data['persen_return_cabang'] = number_format($data['return_cabang'] / $data['jumlah_cabang'] * 100, 2, '.', '');
         } else {
-            $sudah_pengajuan_cabang = "SELECT COUNT(b.id_trans_so) as total_sudah_pengajuan_cabang FROM trans_ca as a LEFT JOIN trans_caa as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_ao as c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so AS d ON a.id_trans_so = d.id WHERE b.id_trans_so IS NOT NULL AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun AND a.id_cabang = $kode_cabang";
+            $sudah_pengajuan_cabang = "SELECT COUNT(b.id_trans_so) as total_sudah_pengajuan_cabang FROM trans_ca as a LEFT JOIN trans_caa as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_ao as c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so AS d ON a.id_trans_so = d.id WHERE d.flg_cancel_debitur != 2 AND b.id_trans_so IS NOT NULL AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun AND a.id_cabang = $kode_cabang";
             $data['sudah_pengajuan_cabang'] = $this->db->query($sudah_pengajuan_cabang)->row()->total_sudah_pengajuan_cabang;
 
             $not_recommend_cabang = "SELECT COUNT(a.id_trans_so) as total_not_recommend_cabang FROM trans_ca AS a LEFT JOIN recom_ca AS b ON a.id_recom_ca = b.id LEFT JOIN trans_ao AS c ON a.id_trans_so = c.id_trans_so LEFT JOIN trans_so as d ON a.id_trans_so = d.id WHERE b.plafon_kredit = 0 AND d.flg_cancel_debitur != 2 AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun AND a.id_cabang = $kode_cabang";
             $data['not_recommend_cabang'] = $this->db->query($not_recommend_cabang)->row()->total_not_recommend_cabang;
 
-            $cancel_cabang = "SELECT COUNT(b.id_trans_so) as cancel_cabang FROM trans_so as a LEFT JOIN trans_ao as b ON a.id = b.id_trans_so WHERE a.flg_cancel_debitur = 2 AND MONTH(b.created_at) = $bulan AND YEAR(b.created_at) = $tahun AND b.id_cabang = $kode_cabang";
+            $cancel_cabang = "SELECT COUNT(a.id_trans_so) as cancel_cabang FROM trans_ao as a LEFT JOIN trans_so as b ON a.id_trans_so = b.id LEFT JOIN trans_ca as c ON a.id_trans_so = c.id_trans_so WHERE b.flg_cancel_debitur = 2 AND MONTH(c.created_at) = $bulan AND YEAR(c.created_at) = $tahun AND c.id_cabang = $kode_cabang";
             $data['cancel_cabang'] = $this->db->query($cancel_cabang)->row()->cancel_cabang;
 
             $memorandum_cabang = "SELECT COUNT(a.id_trans_so) as memorandum_cabang FROM trans_ao as a LEFT JOIN trans_ca as b ON a.id_trans_so = b.id_trans_so LEFT JOIN trans_so as c ON a.id_trans_so = c.id WHERE c.flg_cancel_debitur != 2 AND a.status_return IS NULL AND a.tgl_pending IS NULL AND b.id_trans_so IS NULL AND a.assign_to IS NOT NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun AND b.id_cabang = $kode_cabang";
