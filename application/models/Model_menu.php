@@ -113,8 +113,14 @@ class Model_menu extends ci_model
     {
         return $this->db->get('mk_cabang')->result();
     }
+<<<<<<< HEAD
     function getArea()
     {
         return $this->db->query("SELECT id,nama FROM mk_area");
+=======
+    
+    function getArea(){
+    return $this->db->query("SELECT id,nama FROM mk_area");
+>>>>>>> 8274bf0b716ae1f8d0f9b344edbf6c0e29581903
     }
 }
