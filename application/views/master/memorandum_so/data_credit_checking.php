@@ -228,7 +228,7 @@
                                                 <div class="form-group col-md-5">
                                                     <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
                                                     <div class="input-group">
-                                                        <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control"/>
+                                                        <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-2">
@@ -249,16 +249,16 @@
                                                 <div class="form-group col-md-6">
                                                     <label>Pendidikan Terakhir<span class="required_notification">*</span></label>
                                                     <select id="pendidikan_terakhir" name="pendidikan_terakhir" class="form-control">
-                                                    <option value="">--Pilih--</option>
-                                                    <?php foreach ($pendidikan as $key) {?>
-                                                        <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
-                                                    <?php } ?>
+                                                        <option value="">--Pilih--</option>
+                                                        <?php foreach ($pendidikan as $key) { ?>
+                                                            <option value="<?= $key->nama_detail; ?>"><?= $key->nama_detail; ?></option>
+                                                        <?php } ?>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label>Jumlah Tanggungan<span class="required_notification">*</span></label>
-                                                <input type="text" class="form-control" name="jumlah_tanggungan"  id="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
+                                                <input type="text" class="form-control" name="jumlah_tanggungan" id="jumlah_tanggungan" maxlength="3" onkeypress="return hanyaAngka(event)">
                                             </div>
                                             <div class="row">
                                                 <div class="form-group col-md-6">
@@ -1502,6 +1502,14 @@
         return true;
     }
 
+    var edit_access = '<?php echo $akses['edit_access'] ?>';
+    console.log(edit_access);
+    if (edit_access == 'N') {
+        $('#click-add-memorandum-so').hide();
+    } else {
+        $('#click-add-memorandum-so').show();
+    }
+
     $('#click-add-memorandum-so').on('click', function(e) {
         e.preventDefault();
         NProgress.start();
@@ -1619,9 +1627,9 @@
                             '<td>' + item.das.status + '</td>',
                             '<td>' + item.hm.status + '</td>',
                             '<td style="width: 108px;">',
-                                '<form method="post" target="_blank" action="<?php echo base_url() . 'index.php/report/memo_so' ?>"> <button type="button" ' + disabled + ' class="btn btn-info btn-sm edit"   data-target="#update" data="' + item.id + '"><i class="fas fa-pencil-alt"></i></button>',
-                                '<button type="button" class="btn btn-warning btn-sm edit" onclick="click_detail()" data-target="#update" data="' + item.id + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
-                                '<input type="hidden" name ="id" value="' + item.id + '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
+                            '<form method="post" target="_blank" action="<?php echo base_url() . 'index.php/report/memo_so' ?>"> <button type="button" ' + disabled + ' class="btn btn-info btn-sm edit"   data-target="#update" data="' + item.id + '"><i class="fas fa-pencil-alt"></i></button>',
+                            '<button type="button" class="btn btn-warning btn-sm edit" onclick="click_detail()" data-target="#update" data="' + item.id + '"><i style="color: #fff;" class="fas fa-eye"></i></button>',
+                            '<input type="hidden" name ="id" value="' + item.id + '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>',
                             '</td>',
                             '</tr>'
                         ].join('\n');
@@ -2355,7 +2363,7 @@
                                     $('#gambar_photo').html(html1);
                                 }
 
-                                if (data_debitur.lampiran.lamp_npwp== null) {
+                                if (data_debitur.lampiran.lamp_npwp == null) {
                                     var c = [
                                         '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
                                     ].join('\n');
@@ -2484,11 +2492,11 @@
                                     }
 
                                     if (data_pasangan.lampiran.lampiran_npwp == null) {
-                                    var jj = [
-                                        '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
-                                    ].join('\n');
-                                    html17.push(jj);
-                                    $('#gambar_npwp_pasangan').html(html17);
+                                        var jj = [
+                                            '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                                        ].join('\n');
+                                        html17.push(jj);
+                                        $('#gambar_npwp_pasangan').html(html17);
                                     } else {
                                         var jj = [
                                             '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWP Pasangan"><img id="img_npwp_pas" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lampiran_npwp + '" /> </a>'
@@ -2498,11 +2506,11 @@
                                     }
 
                                     if (data_pasangan.lampiran.foto_pasangan == null) {
-                                    var j = [
-                                        '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
-                                    ].join('\n');
-                                    html9.push(j);
-                                    $('#gambar_photo_pasangan').html(html9);
+                                        var j = [
+                                            '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
+                                        ].join('\n');
+                                        html9.push(j);
+                                        $('#gambar_photo_pasangan').html(html9);
                                     } else {
                                         var j = [
                                             '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" data-lightbox="example-set" data-title="Lampiran Photo Pasangan"><img id="img_photo_pas" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.foto_pasangan + '" /> </a>'
@@ -3191,8 +3199,8 @@
         }
 
         $("#umur").val(umur);
-        
-    } 
+
+    }
 
     //update_penjamin
     $(function() {
@@ -3633,7 +3641,7 @@
                     });
                 });
         });
-        
+
         //CHANGE KTP PENJAMIN
         $('.add_lamp_ktp_penjamin').on('change', function(e) {
             e.preventDefault();
@@ -4060,7 +4068,7 @@
                         $('#gambar_npwp').html(html7);
                     } else {
                         var a3 = [
-                            '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_npwp+ '" data-lightbox="example-set" data-title="Lampiran NPWPr"><img id="img_npwp" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_npwp + '" /> </a>'
+                            '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_npwp + '" data-lightbox="example-set" data-title="Lampiran NPWPr"><img id="img_npwp" class="thumbnail img-responsive img" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_debitur.lampiran.lamp_npwp + '" /> </a>'
                         ].join('\n');
                         html7.push(a3);
                         $('#gambar_npwp').html(html7);
@@ -4207,10 +4215,9 @@
                 })
         }
     });
-    
+
     function click_detail() {
         $('#form_detail .form-control').prop('disabled', true);
         $('.submit').hide();
     }
-
 </script>

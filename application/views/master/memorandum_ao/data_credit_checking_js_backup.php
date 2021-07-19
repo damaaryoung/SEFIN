@@ -13,7 +13,7 @@
         bsCustomFileInput.init();
     });
     // =============================================================
-    
+
     $(function() {
         $("#tambah_data_anak").click(function() {
             // var id_data_anak = $('#form_tambah_data_anak input[type=hidden][name=id_debitur_anak]').val();
@@ -3112,16 +3112,16 @@
                             }
                         })
 
-                        $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
-                        $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
-                        $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
-                        $('#form_detail input[name=tgl_mulai_kerja]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
-                        $('#form_detail input[name=lama_kerja]').val(data.data_debitur.pekerjaan.lama_kerja);
-                        $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
-                        $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
-                        $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
-                        $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
-                        $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
+                    $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
+                    $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
+                    $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
+                    $('#form_detail input[name=tgl_mulai_kerja]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
+                    $('#form_detail input[name=lama_kerja]').val(data.data_debitur.pekerjaan.lama_kerja);
+                    $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
+                    $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
+                    $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
+                    $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
+                    $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
 
 
                     get_provinsi()
@@ -3462,7 +3462,7 @@
             var html20 = [];
             var html21 = [];
             var html22 = [];
-            
+
             var htmlideb = [];
             var htmlpefindo = [];
 
@@ -3474,7 +3474,7 @@
                     if (data.status_ca == "recommend") {
                         $('#form_debitur .form-control').prop('disabled', true);
                         $('.buttonPhotoDebitur').hide();
-                        if(data.data_pasangan != null) {
+                        if (data.data_pasangan != null) {
                             $('#form_pasangan .form-control').prop('disabled', true);
                             $('.buttonPhotoPasangan').hide();
                         }
@@ -3551,7 +3551,7 @@
                     $('#form_surat_keterangan_usaha_usaha input[type=hidden][name=id_debitur_surat_keterangan_usaha]').val(data.data_debitur.id);
                     $('#form_pembukuan_usaha_usaha input[type=hidden][name=id_debitur_pembukuan_usaha]').val(data.data_debitur.id);
                     $('#form_foto_usaha_usaha input[type=hidden][name=id_debitur_foto_usaha]').val(data.data_debitur.id);
-                    
+
                     $('#form_edit_photo_deb input[type=hidden][name=id_debitur_photo]').val(data.data_debitur.id);
                     $('#form_edit_photo_deb_detail input[type=hidden][name=id_debitur_photo]').val(data.data_debitur.id);
                     $('#form_edit_ktp_deb input[type=hidden][name=id_debitur_ktp]').val(data.data_debitur.id);
@@ -3834,17 +3834,17 @@
                         })
 
 
-                        $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
-                        $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
-                        $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
-                        $('#form_detail input[name=tgl_mulai_kerja]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
-                        $('#form_detail input[name=lama_kerja]').val(data.data_debitur.pekerjaan.lama_kerja);
-                        $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
-                        $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
-                        $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
-                        $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
-                        $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
-                                    
+                    $('#form_detail input[name=posisi]').val(data.data_debitur.pekerjaan.posisi_pekerjaan);
+                    $('#form_detail input[name=nama_perusahaan]').val(data.data_debitur.pekerjaan.nama_tempat_kerja);
+                    $('#form_detail input[name=jenis_usaha]').val(data.data_debitur.pekerjaan.jenis_pekerjaan);
+                    $('#form_detail input[name=tgl_mulai_kerja]').val(data.data_debitur.pekerjaan.tgl_mulai_kerja);
+                    $('#form_detail input[name=lama_kerja]').val(data.data_debitur.pekerjaan.lama_kerja);
+                    $('#form_detail input[name=no_telp_kantor_usaha]').val(data.data_debitur.pekerjaan.no_telp_tempat_kerja);
+                    $('#form_detail input[name=alamat_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.alamat_singkat);
+                    $('#form_detail input[name=rt_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rt);
+                    $('#form_detail input[name=rw_usaha_kantor]').val(data.data_debitur.pekerjaan.alamat.rw);
+                    $('#form_detail input[name=kode_pos_kantor]').val(data.data_debitur.pekerjaan.alamat.kode_pos);
+
                     get_provinsi()
                         .done(function(res) {
                             var select = [];
@@ -4078,7 +4078,7 @@
                         $('#gambar_lamp_ktp_pasangan').html(html6);
                     }
 
-                    var html22 =[];
+                    var html22 = [];
                     if (data.data_pasangan.lampiran.lampiran_npwp == null) {
                         var ff = [
                             '<img class="thumbnail img-responsive img" alt="" src="<?php echo base_url('assets/dist/img/no-image.png') ?>" />'
@@ -5408,26 +5408,26 @@
 
             var stringPlafon = document.getElementById('plafon_deb').value.split('.').join("");
 
-            if(document.getElementById('pekerjaan_deb').value == "01" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+            if (document.getElementById('pekerjaan_deb').value == "01" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
                 bootbox.alert("Pekerjaan Debitur adalah Karyawan dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
                 return (false);
             }
 
-            if(document.getElementById('pekerjaan_deb').value == "03" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+            if (document.getElementById('pekerjaan_deb').value == "03" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
                 bootbox.alert("Pekerjaan Debitur adalah PNS dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
                 return (false);
             }
 
-            if(document.getElementById('pekerjaan_deb').value == "11" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+            if (document.getElementById('pekerjaan_deb').value == "11" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
                 bootbox.alert("Pekerjaan Debitur adalah Pegawai Bank dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
                 return (false);
             }
 
-            if(document.getElementById('pekerjaan_deb').value == "02" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 200000000) {
+            if (document.getElementById('pekerjaan_deb').value == "02" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 200000000) {
                 bootbox.alert("Pekerjaan Debitur adalah Wiraswasta dengan Plafon > 200jt maka Wajib Mengisi No. NPWP!!!");
                 return (false);
             }
-            
+
             if (document.getElementById('nama_perusahaan').value == "") {
                 bootbox.alert("Nama Perusahaan Debitur Tidak Boleh Kosong !!!");
                 return (false);
@@ -5762,7 +5762,7 @@
                 });
             $(".close_deb").click();
         });
-        
+
         $('#form_edit_npwp').on('submit', function(e) {
             var id = $('input[name=id_debitur_npwp]', this).val();
             e.preventDefault();
@@ -6912,26 +6912,26 @@
 
                 var stringPlafon = document.getElementById('plafon_deb').value.split('.').join("");
 
-                if(document.getElementById('pekerjaan_deb').value == "01" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+                if (document.getElementById('pekerjaan_deb').value == "01" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
                     bootbox.alert("Pekerjaan Debitur adalah Karyawan dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
                     return (false);
                 }
 
-                if(document.getElementById('pekerjaan_deb').value == "03" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+                if (document.getElementById('pekerjaan_deb').value == "03" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
                     bootbox.alert("Pekerjaan Debitur adalah PNS dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
                     return (false);
                 }
 
-                if(document.getElementById('pekerjaan_deb').value == "11" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
+                if (document.getElementById('pekerjaan_deb').value == "11" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 150000000) {
                     bootbox.alert("Pekerjaan Debitur adalah Pegawai Bank dengan Plafon > 150jt maka Wajib Mengisi No. NPWP!!!");
                     return (false);
                 }
 
-                if(document.getElementById('pekerjaan_deb').value == "02" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 200000000) {
+                if (document.getElementById('pekerjaan_deb').value == "02" && (document.getElementById('no_npwp').value == "0" || document.getElementById('no_npwp').value == "") && Number(stringPlafon) >= 200000000) {
                     bootbox.alert("Pekerjaan Debitur adalah Wiraswasta dengan Plafon > 200jt maka Wajib Mengisi No. NPWP!!!");
                     return (false);
                 }
-                
+
                 if (document.getElementById('img_npwp').src == "<?php echo base_url('assets/dist/img/no-image.png') ?>" && (document.getElementById('no_npwp').value != "0" && document.getElementById('no_npwp').value != "")) {
                     bootbox.alert("Nomor NPWP ada, silahkan lampirkan foto NPWP terlebih dahulu!!!");
                     return (false);
@@ -6941,7 +6941,7 @@
                     bootbox.alert("Lampiran NPWP ada, silahkan isi nomor NPWP terlebih dahulu!!!");
                     return (false);
                 }
-            
+
                 if (document.getElementById('nama_perusahaan').value == "") {
                     bootbox.alert("Nama Perusahaan Debitur Tidak Boleh Kosong !!!");
                     return (false);
@@ -8448,7 +8448,7 @@
                 ].join('\n');
                 html1.push(f);
                 $('#gambar_ktp_pasangan').html(html1);
-                
+
                 var ff = [
                     '<a class="example-image-link" target="window.open()" href="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lampiran_npwp + '" data-lightbox="example-set" data-title="Lampiran KTP Pasangan"><img class="thumbnail img-responsive" alt="" src="<?php echo $this->config->item('img_url') ?>' + data_pasangan.lampiran.lampiran_npwp + '" /> </a>'
                 ].join('\n');

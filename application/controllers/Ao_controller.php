@@ -14,16 +14,26 @@ class Ao_controller extends CI_Controller
 
     function get_data_ao()
     {
+        $akses   = $this->model_menu->getUserAkses(4);
         $list = $this->Model_ao->get_datatables();
         $data = array();
         $no = $_POST['start'];
+        // var_dump($akses['data']['edit_access']);
+        // die;
         foreach ($list as $field) {
             $no++;
 
             $id =  $field->id_trans_so;
 
             $url = "report/memo_ao";
+            if ($akses['data']['edit_access'] == 'N') {
+                $btndisable = "disabled";
+            } else {
 
+                $btndisable = "";
+            }
+            // var_dump($btndisable);
+            // die;
             $row = array();
             $row[] = $no;
             $row[] = $field->tanggal;
@@ -33,7 +43,7 @@ class Ao_controller extends CI_Controller
             $row[] = $field->nama_marketing;
             $row[] = $field->nama_debitur;
             $row[] = $field->cabang;
-            $row[] = '<form method="post" target="_blank" action="' . $url . '"> <button type="button"  class="btn btn-info btn-sm edit"   data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
+            $row[] = '<form method="post" target="_blank" action="' . $url . '"> <button type="button"  class="btn btn-info btn-sm edit" ' . $btndisable . ' data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
             <button type="button" class="btn btn-warning btn-sm edit" onclick="click_detail()" data-target="#update" data="' . $id . '"><i style="color: #fff;" class="fas fa-eye"></i></button>
             <input type="hidden" name ="id" value="' . $id . '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>';
             $data[] = $row;
@@ -65,9 +75,10 @@ class Ao_controller extends CI_Controller
                 FROM verif_cadebt AS a
                 LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
                 WHERE a.id_trans_so = $id
-            ")->row();
-            
-            if($check_verif == null ) {
+            "
+            )->row();
+
+            if ($check_verif == null) {
                 $nama_deb = $nama_debitur;
             } else {
                 $nama_deb = '<p style="background-color: #00d807;">' . $nama_debitur . '</p>';
@@ -98,7 +109,6 @@ class Ao_controller extends CI_Controller
 
         //output dalam format JSON
         echo json_encode($output);
-        
     }
 
     function get_data_telepon()
@@ -117,9 +127,10 @@ class Ao_controller extends CI_Controller
                 FROM verif_telp AS a
                 LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
                 WHERE a.id_trans_so = $id
-            ")->row();
-            
-            if($check_verif == null ) {
+            "
+            )->row();
+
+            if ($check_verif == null) {
                 $nama_deb = $nama_debitur;
             } else {
                 $nama_deb = '<p style="background-color: #00d807;">' . $nama_debitur . '</p>';
@@ -149,7 +160,6 @@ class Ao_controller extends CI_Controller
 
         //output dalam format JSON
         echo json_encode($output);
-        
     }
 
     function get_data_so_approve_hm()
@@ -185,16 +195,17 @@ class Ao_controller extends CI_Controller
         echo json_encode($output);
     }
 
-    function get_data_verifikasi_filter() {
+    function get_data_verifikasi_filter()
+    {
 
-        $url = $this->config->item('api_url').'api/master/verif/filter?page='.$_POST['draw'];
+        $url = $this->config->item('api_url') . 'api/master/verif/filter?page=' . $_POST['draw'];
         $token = $this->session->userdata('SESSION_TOKEN');
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Authorization: Bearer '.$token,
+            'Authorization: Bearer ' . $token,
             'Content-Type: application/json',
             'Accept: application/json'
         ));
@@ -209,16 +220,17 @@ class Ao_controller extends CI_Controller
 
         $data = array();
         $no = $res->data->from;
-        foreach($res->data->data as $datum) {
+        foreach ($res->data->data as $datum) {
 
             $check_verif = $this->db->query(
                 "SELECT a.id AS id
                 FROM verif_cadebt AS a
                 LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
                 WHERE a.id_trans_so = $datum->id_trans_so
-            ")->row();
-            
-            if($check_verif == null ) {
+            "
+            )->row();
+
+            if ($check_verif == null) {
                 $nama_deb = $datum->nama_debitur;
             } else {
                 $nama_deb = '<p style="background-color: #00d807;">' . $datum->nama_debitur . '</p>';
@@ -257,16 +269,17 @@ class Ao_controller extends CI_Controller
         echo json_encode($output);
     }
 
-    function get_data_telepon_filter() {
+    function get_data_telepon_filter()
+    {
 
-        $url = $this->config->item('api_url').'api/master/verif/filter?page='.$_POST['draw'];
+        $url = $this->config->item('api_url') . 'api/master/verif/filter?page=' . $_POST['draw'];
         $token = $this->session->userdata('SESSION_TOKEN');
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Authorization: Bearer '.$token,
+            'Authorization: Bearer ' . $token,
             'Content-Type: application/json',
             'Accept: application/json'
         ));
@@ -281,17 +294,18 @@ class Ao_controller extends CI_Controller
 
         $data = array();
         $no = $res->data->from;
-        foreach($res->data->data as $datum) {
+        foreach ($res->data->data as $datum) {
 
             $check_verif = $this->db->query(
                 "SELECT a.id AS id
                 FROM verif_telp AS a
                 LEFT JOIN trans_so AS b ON a.id_trans_so = b.id
                 WHERE a.id_trans_so = $datum->id_trans_so
-            ")->row();
-            
-            if($check_verif == null ) {
-               $nama_deb = $datum->nama_debitur;
+            "
+            )->row();
+
+            if ($check_verif == null) {
+                $nama_deb = $datum->nama_debitur;
             } else {
                 $nama_deb = '<p style="background-color: #00d807;">' . $datum->nama_debitur . '</p>';
             }
@@ -328,7 +342,7 @@ class Ao_controller extends CI_Controller
     }
 
     function get_data_tracking_order()
-    {   
+    {
         $bulan = $this->input->post("bulan");
         $tahun = $this->input->post("tahun");
         $kode_cabang = $this->input->post("kode_cabang");
@@ -340,7 +354,7 @@ class Ao_controller extends CI_Controller
             $filter = "AND a.`id_cabang` = $kode_cabang";
         } else if ($kode_area == "KONSOLIDASI" && $kode_cabang == "") {
             $filter = "";
-        } else if ($kode_area != "KONSOLIDASI" && $kode_cabang == ""){
+        } else if ($kode_area != "KONSOLIDASI" && $kode_cabang == "") {
             $filter = "AND a.`id_area` = $kode_area";
         }
 
@@ -371,7 +385,7 @@ class Ao_controller extends CI_Controller
             LEFT JOIN calon_debitur AS k ON f.`id_calon_debitur` = k.`id`
             WHERE a.assign_to IS NOT NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun $filter
             ORDER BY a.id_trans_so DESC";
-            $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
+        $data['data_tracking_order'] = $this->db->query($data_tracking_order)->result();
 
         // $list = $this->Model_tracking_order->get_datatables();
         // $data = array();
@@ -430,8 +444,8 @@ class Ao_controller extends CI_Controller
         echo json_encode($data);
     }
 
-    function get_assign_pic() 
-    {   
+    function get_assign_pic()
+    {
         $pic    = $this->input->post("pic");
         $day    = date('d');
         $month  = date('m');
@@ -440,12 +454,12 @@ class Ao_controller extends CI_Controller
 
         $data["pic"] = $pic;
         $data['total_assign'] = $total_assign;
-        
+
         echo json_encode($data);
     }
 
-    function check_assign_date() 
-    {   
+    function check_assign_date()
+    {
         $date_now    = $this->input->post('date_now');
         $date_next_month = date('Y-m-d', strtotime('+1 month', strtotime($date_now)));
 
@@ -454,7 +468,7 @@ class Ao_controller extends CI_Controller
 
         $hari_pertama_next_month = $this->db->query("SELECT dpm_online.get_som('$date_next_month') as som")->row();
         $hari_terakhir_next_month = $this->db->query("SELECT dpm_online.get_eom('$date_next_month') as eom")->row();
-        
+
         $total_kerja = $this->db->query("SELECT dpm_online.get_jumlah_kerja ('$hari_pertama->som','$hari_terakhir->eom') as total")->row()->total;
 
         $total_kerja_next_month = $this->db->query("SELECT dpm_online.get_jumlah_kerja ('$hari_pertama_next_month->som','$hari_terakhir_next_month->eom') as total")->row()->total;
@@ -465,13 +479,14 @@ class Ao_controller extends CI_Controller
         $data['hk'] = $hk;
         $data['hk_next_month'] = $hk_next_month;
         $data['date_now'] = $date_now;
-        
+
         echo json_encode($data);
     }
 
-    private function looping_get_hk($start, $end, $date_now) {
+    private function looping_get_hk($start, $end, $date_now)
+    {
         $data = array();
-        for ($i=$start; $i <= intval($end); $i++) { 
+        for ($i = $start; $i <= intval($end); $i++) {
             $detail_hk['tanggal'] = $this->db->query("SELECT dpm_online.`get_tgl_hari_kerja_fid`($i, '$date_now') as tanggal")->row()->tanggal;
             $data["$i"] = $detail_hk;
         }

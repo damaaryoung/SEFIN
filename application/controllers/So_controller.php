@@ -12,6 +12,7 @@ class So_controller extends CI_Controller
 
     function get_data_so()
     {
+        $akses   = $this->model_menu->getUserAkses(3);
         $list = $this->Model_so->get_datatables();
         $data = array();
         $no = $_POST['start'];
@@ -31,6 +32,19 @@ class So_controller extends CI_Controller
                 $status_das = 'reject';
             };
 
+            if ($akses['data']['edit_access'] == 'N') {
+                $btndisable = "disabled";
+            } else {
+
+                $btndisable = "";
+            }
+
+            // if ($akses['data']['add_access'] == 'N') {
+            //     $btndisableadd = "disabled";
+            // } else {
+
+            //     $btndisableadd = "";
+            // }
             $url = "report/memo_so";
             if ($status_hm1 == 1) {
                 $status_hm = 'complete';
@@ -49,7 +63,7 @@ class So_controller extends CI_Controller
             $row[] = $field->cabang;
             $row[] =  $status_das;
             $row[] = $status_hm;
-            $row[] = '<form method="post" target="_blank" action="' . $url . '"> <button type="button"  class="btn btn-info btn-sm edit"   data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
+            $row[] = '<form method="post" target="_blank" action="' . $url . '"> <button type="button"  class="btn btn-info btn-sm edit" ' . $btndisable . '  data-target="#update" data="' . $id . '"><i class="fas fa-pencil-alt"></i></button>
             <button type="button" class="btn btn-warning btn-sm edit" onclick="click_detail()" data-target="#update" data="' . $id . '"><i style="color: #fff;" class="fas fa-eye"></i></button>
             <input type="hidden" name ="id" value="' . $id . '"><button type="submit" class="btn btn-success btn-sm" ><i class="far fa-file-pdf"></i></a></form>';
             $data[] = $row;
