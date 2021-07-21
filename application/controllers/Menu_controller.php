@@ -315,14 +315,11 @@ class Menu_controller extends MY_Controller
         //var_dump($data['akses']['data']['add_access']);
     }
     public function ao()
-<<<<<<< HEAD
+
     {
         $data['akses']   = $this->model_menu->getUserAkses(4);
         //  $data['nama_user'] = $this->model_menu->getUser();
 
-=======
-    {   
->>>>>>> 8274bf0b716ae1f8d0f9b344edbf6c0e29581903
         $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['data_collateral'] = $this->Model_view_master->data_collateral();
         $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();

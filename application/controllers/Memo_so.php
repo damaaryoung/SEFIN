@@ -157,7 +157,7 @@ class Memo_so extends CI_Controller {
 	public function take_snapshot_identity_debitur(){
 		$config = array(
 			'upload_path'   => './uploads/debitur',
-			'allowed_types' => 'gif|jpg|png',
+			'allowed_types' => 'jpeg|jpg|png',
 			'max_size'      => '2000',
 			'min_width'		=> 256,
 			'min_height'    => 256,
@@ -191,12 +191,14 @@ class Memo_so extends CI_Controller {
 	        $result = $client -> request($api_name, null, $ocrImage);
 	        echo $result;
 		}
+		// $result = '{"code":"SUCCESS","message":"OK","data":{"idNumber":"3173017101880017","name":"DEPI","bloodType":null,"religion":"BUDHA","gender":"PEREMPUAN","birthPlaceBirthday":"SUNGAI LIAT, 31-01-1988","province":"DKI JAKARTA","city":"JAKARTA BARAT","district":"CENGKARENG","village":"CENGKARENG BARAT","rtrw":"002/009","occupation":"KARYAWAN SWASTA","expiryDate":"31-01-2016","nationality":"WNI","maritalStatus":"BELUM KAWIN","address":"JL.RAYA MENCENG"},"extra":null,"transactionId":"9cfa82e04bc59d4a","pricingStrategy":"PAY"}';
+		// echo $result;
 	}
 
 	public function take_snapshot_identity_pasangan(){
 		$config = array(
 			'upload_path'   => './uploads/pasangan',
-			'allowed_types' => 'gif|jpg|png',
+			'allowed_types' => 'jpeg|jpg|png',
 			'max_size'      => '2000',
 			'min_width'		=> 256,
 			'min_height'    => 256,
@@ -243,7 +245,7 @@ class Memo_so extends CI_Controller {
 	public function take_snapshot_identity_penjamin(){
 		$config = array(
 			'upload_path'   => './uploads/penjamin',
-			'allowed_types' => 'gif|jpg|png',
+			'allowed_types' => 'jpeg|jpg|png',
 			'max_size'      => '2000',
 			'min_width'		=> 256,
 			'min_height'    => 256,
@@ -251,17 +253,31 @@ class Memo_so extends CI_Controller {
 			'max_height'	=> 4096,
 			'file_name'		=> date("Y-m-d").'_'.time()."_ektp"
 		);
-		$this->load->library('upload', $config);
 
-        if ( ! $this->upload->do_upload('file')){
-            $status = "error";
-            $msg = $this->upload->display_errors();
-        }
-        else{
-            $dataupload = $this->upload->data();
-            $status = "success";
-            $msg = $dataupload['file_name']." berhasil diupload";
-        }
-        $this->output->set_content_type('application/json')->set_output(json_encode(array('status'=>$status,'msg'=>$msg)));
+		$this->load->library('upload',$config);
+
+		if(!$this->upload->do_upload('file'))
+		{
+			$error = array('error' => $this->upload->display_errors());
+			echo json_encode($error);
+		}else{
+			$data = array('upload_data'=> $this->upload->data());
+
+
+			require('./application/third_party/ocr/CurlClient.php');
+	        $api_host = 'https://api.advance.ai';
+	        $api_name = '/openapi/face-recognition/v1/ocr-ktp-check';
+	        $access_key = 'c3609576a2f72065'; // your access key
+	        $secret_key = '5fe5320ef5712301'; // your secret key
+
+	        $ocrImage = array(
+	            'ocrImage' => base_url()."uploads/penjamin/".$config['file_name'].".jpg"
+	        );
+
+	        $client = new ai\advance\CurlClient($api_host, $access_key, $secret_key);
+
+	        $result = $client -> request($api_name, null, $ocrImage);
+	        echo $result;
+		}
 	}
 }

@@ -24,8 +24,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'http://' . $_SERVER['HTTP_HOST'] . '/SEFIN/';
-#$config['api_url'] = 'http://103.31.232.146/API_WEBTOOL3/';
-$config['api_url'] = 'http://192.168.1.7/API_WEBTOOL3GITHUB/';
+$config['api_url'] = 'http://103.31.232.146/API_WEBTOOL3/';
+//$config['api_url'] = 'http://192.168.1.7/API_WEBTOOL3GITHUB/';
 $config['img_url'] = 'http://103.31.232.146/API_WEBTOOL3/';
 // $config['api_url'] = 'http://103.31.232.146/API_WEBTOOL3_2/';
 // $config['img_url'] = 'http://103.31.232.146/API_WEBTOOL3_2/';

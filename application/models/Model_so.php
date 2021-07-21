@@ -88,4 +88,21 @@ class Model_so extends CI_Model
         $this->sql_so();
         return $this->db->count_all_results();
     }
+
+    function get_kelurahan($kecamatan){
+        $sql = "SELECT nama_kecamatan,nama_kelurahan,id_kelurahan,kode_pos FROM dpm_online.app_kelurahan a
+        INNER JOIN dpm_online.app_kecamatan b ON a.id_kecamatan = b.id_kecamatan
+         WHERE nama_kecamatan LIKE '%".$kecamatan."%'";
+        // die($sql);
+        $query = $this->db->query($sql);
+        return $query;
+    }
+
+    function get_kecamatan($kabupaten){
+        $sql = "SELECT nama_kabupaten,nama_kecamatan,id_kecamatan FROM dpm_online.app_kecamatan a
+        INNER JOIN dpm_online.app_kabupaten b ON a.id_kabupaten = b.id_kabupaten
+        WHERE nama_kabupaten LIKE '".$kabupaten."'";
+        $query = $this->db->query($sql);
+        return $query;
+    }
 }
