@@ -3224,6 +3224,10 @@
 
     function verifikasiSimpanPenjamin_1(isTesting, id_trans_so) {
         $('.verifikasiPenjamin_1').hide();
+        $('.verifikasiPenjamin_2').hide();
+        $('.verifikasiPenjamin_3').hide();
+        $('.verifikasiPenjamin_4').hide();
+        $('.verifikasiPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -3450,6 +3454,7 @@
                             .done( (response) => {
                                 mappingResponsePenjamin_1(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                $('.prosesVerifikasiPenjamin_1').hide();
                             })
 
                         }
@@ -3626,7 +3631,11 @@
     }
 
     function verifikasiSimpanPenjamin_2(isTesting, id_trans_so) {
+        $('.verifikasiPenjamin_1').hide();
         $('.verifikasiPenjamin_2').hide();
+        $('.verifikasiPenjamin_3').hide();
+        $('.verifikasiPenjamin_4').hide();
+        $('.verifikasiPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -3680,344 +3689,701 @@
                 } 
             })
 
-        var id_pen = $('#id_penjamin_2').val();
-        var photo_penjamin_2 = document.getElementById("photo_selfie_penjamin_2");
-        var base64_selfiePenjamin_2 = "";
-        var responseBody;
+        get_detail({}, id_trans_so)
+            .done(function(response) {
+                var data = response.data;
 
-        if (photo_penjamin_2.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_2.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "KMI" + $("#nik_penjamin_2").text() + "01",
-                    "nik" : $("#nik_penjamin_2").text(),
-                    "name" : $("#name_penjamin_2").text(),
-                    "birthdate" : $("#birthdate_penjamin_2").text(),
-                    "birthplace" : $("#birthplace_penjamin_2").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                
-                if (isTesting) {
-                    responseBody = responseCompleteID(requestBody);
+                if(data.penjamin.length == 0) {
+                    var id_pen_1 = $('#id_penjamin_1').val();
+                    var id_pen_2 = $('#id_penjamin_2').val();
+                    var photo_penjamin_2 = document.getElementById("photo_selfie_penjamin_2");
+                    var base64_selfiePenjamin_2 = "";
+                    var responseBody;
 
-                    if(responseBody.status == 401) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_2").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
-
+                    if (photo_penjamin_2.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_2').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiPenjamin_2').hide();
-                        })
-                    } else if(responseBody.status == 500) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_2").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.errors.message,
-                        }
+                            url: photo_penjamin_2.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_2").text() + "01",
+                                "nik" : $("#nik_penjamin_2").text(),
+                                "name" : $("#name_penjamin_2").text(),
+                                "birthdate" : $("#birthdate_penjamin_2").text(),
+                                "birthplace" : $("#birthplace_penjamin_2").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_2').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.errors.message);
-                            $('.prosesVerifikasiPenjamin_2').hide();
-                        })
-                    } else if(responseBody.status == 502) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_2").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_2").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_2').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiPenjamin_2').hide();
-                        })
-                    } else if (responseBody.status == 200) {
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_2").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.selfie_photo,
-                                }
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_2").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                    beforeSend: function() {
-                                        $('.prosesVerifikasiPenjamin_2').show();
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.selfie_photo);
-                                    $('.prosesVerifikasiPenjamin_2').hide();
-                                })
-                            } else if (responseBody.errors.message == "Data not found") {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_2").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                    beforeSend: function() {
-                                        $('.prosesVerifikasiPenjamin_2').show();
-                                    },
-                                })
-                                .done(function(res) {
-                                    var url = "api/master/verif/storepenjamin/";
-
-                                    httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponsePenjamin_2DataNotFound();
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
                                         bootbox.alert(responseBody.errors.message);
                                         $('.prosesVerifikasiPenjamin_2').hide();
                                     })
-                                })
-                            }
-                        } else {
-                            var url = "api/master/verif/storepenjamin/";
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_2").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_2(responseBody);
-                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
-                            })
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
 
-                        }
-                    }
-                
-                } else {
-                    $.ajax({
-                        url: 'Verifikasi_controller/verifikasi_id',
-                        type: 'POST',
-                        data: requestBody,
-                        beforeSend: function() {
-                            $('.prosesVerifikasiPenjamin_2').show();
-                        },
-                    })
-                    .done(function(res) {
-                        responseBody = JSON.parse(res);
-                        console.log(responseBody);
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_2').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
 
-                        if (responseBody.pesan != null ) {
-                            var requestBodyError = {
-                                "nik" : $("#nik").text(),
-                                "jenis_call" : "COMPLETE ID",
-                                "rc" : "",
-                                "messages" : responseBody.pesan,
-                            }
-    
-                            $.ajax({
-                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                type: 'POST',
-                                data: requestBodyError,
-                                headers: {
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                            })
-                            .done(function(res) {
-                                bootbox.alert(responseBody.pesan);
-                                $('.prosesVerifikasiDebitur').hide();
-                            })
-                        } else {
-                            if(responseBody.status == 401) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_2").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_2').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
 
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiPenjamin_2').hide();
-                                })
-                            } else if(responseBody.status == 500) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_2").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.message);
-                                    $('.prosesVerifikasiPenjamin_2').hide();
-                                })
-                            } else if(responseBody.status == 502) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_2").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiPenjamin_2').hide();
-                                })
-                            } else if (responseBody.status == 200) {
-                                if (responseBody.data == null) {
-                                    if(responseBody.errors.selfie_photo == "no face detected") {
-                                        var requestBodyError = {
-                                            "nik" : $("#nik_penjamin_2").text(),
-                                            "jenis_call" : "COMPLETE ID",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.selfie_photo,
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_2DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_2').hide();
+                                                })
+                                            })
                                         }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
 
-                                        $.ajax({
-                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                            type: 'POST',
-                                            data: requestBodyError,
-                                            headers: {
-                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                            },
-                                        })
-                                        .done(function(res) {
-                                            bootbox.alert(responseBody.errors.selfie_photo);
-                                            $('.prosesVerifikasiPenjamin_2').hide();
-                                        })
-                                    } else if (responseBody.errors.message == "Data not found") {
-                                        var requestBodyError = {
-                                            "nik" : $("#nik_penjamin_2").text(),
-                                            "jenis_call" : "COMPLETE ID",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errorsmessage,
-                                        }
-
-                                        $.ajax({
-                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                            type: 'POST',
-                                            data: requestBodyError,
-                                            headers: {
-                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                            },
-                                        })
-                                        .done(function(res) {
-                                            var url = "api/master/verif/storepenjamin/";
-
-                                            httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_2), url, id_trans_so, "POST")
                                             .done( (response) => {
-                                                mappingResponsePenjamin_2DataNotFound();
+                                                mappingResponsePenjamin_2(responseBody);
+                                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+
+                                            })
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_2').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
                                                 bootbox.alert(responseBody.errors.message);
                                                 $('.prosesVerifikasiPenjamin_2').hide();
                                             })
-                                        })
-                                    }
-                                } else {
-                                    var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
-                                    var url = "api/master/verif/storepenjamin/";
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
 
-                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponsePenjamin_2(responseBody);
-                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_2").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_2").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errorsmessage,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_2), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_2DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_2').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponsePenjamin_2(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                                    })
+                                                })
+
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                } else {
+                    var id_pen_2 = $('#id_penjamin_2').val();
+                    var photo_penjamin_2 = document.getElementById("photo_selfie_penjamin_2");
+                    var base64_selfiePenjamin_2 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_2.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_2.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_2").text() + "01",
+                                "nik" : $("#nik_penjamin_2").text(),
+                                "name" : $("#name_penjamin_2").text(),
+                                "birthdate" : $("#birthdate_penjamin_2").text(),
+                                "birthplace" : $("#birthplace_penjamin_2").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_2").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiPenjamin_2').hide();
                                     })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_2").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_2").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_2').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_2').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_2DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_2').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            mappingResponsePenjamin_2(responseBody);
+                                            bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                            $('.prosesVerifikasiPenjamin_1').hide();
+                                        })
+
+                                    }
                                 }
-                            }
-                        }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_2').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                    })
-                    
-                }
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
                 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Penjamin!!");
-            });
-        }
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_2").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_2").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_2").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errorsmessage,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_2DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_2').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_2(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                    $('.prosesVerifikasiPenjamin_1').hide();
+                                                })
+
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+
+                }
+            })
     }
 
     function verifikasiSimpanPenjamin_3(isTesting, id_trans_so) {
+        $('.verifikasiPenjamin_1').hide();
+        $('.verifikasiPenjamin_2').hide();
         $('.verifikasiPenjamin_3').hide();
+        $('.verifikasiPenjamin_4').hide();
+        $('.verifikasiPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -4060,344 +4426,1047 @@
                 } 
             })
 
-        var id_pen = $('#id_penjamin_3').val();
-        var photo_penjamin_3 = document.getElementById("photo_selfie_penjamin_3");
-        var base64_selfiePenjamin_3 = "";
-        var responseBody;
+        get_detail({}, id_trans_so)
+            .done(function(response) {
+                var data = response.data;
 
-        if (photo_penjamin_3.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_3.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "KMI" + $("#nik_penjamin_3").text() + "01",
-                    "nik" : $("#nik_penjamin_3").text(),
-                    "name" : $("#name_penjamin_3").text(),
-                    "birthdate" : $("#birthdate_penjamin_3").text(),
-                    "birthplace" : $("#birthplace_penjamin_3").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                
-                if (isTesting) {
-                    responseBody = responseCompleteID(requestBody);
+                if(data.penjamin.length == 0) {
+                    var id_pen_1 = $('#id_penjamin_1').val();
+                    var id_pen_2 = $('#id_penjamin_2').val();
+                    var id_pen_3 = $('#id_penjamin_3').val();
+                    var photo_penjamin_3 = document.getElementById("photo_selfie_penjamin_3");
+                    var base64_selfiePenjamin_3 = "";
+                    var responseBody;
 
-                    if(responseBody.status == 401) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_3").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
-
+                    if (photo_penjamin_3.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_3').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiPenjamin_3').hide();
-                        })
-                    } else if(responseBody.status == 500) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_3").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.errors.message,
-                        }
+                            url: photo_penjamin_3.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_3").text() + "01",
+                                "nik" : $("#nik_penjamin_3").text(),
+                                "name" : $("#name_penjamin_3").text(),
+                                "birthdate" : $("#birthdate_penjamin_3").text(),
+                                "birthplace" : $("#birthplace_penjamin_3").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_3').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.errors.message);
-                            $('.prosesVerifikasiPenjamin_3').hide();
-                        })
-                    } else if(responseBody.status == 502) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_3").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_3').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiPenjamin_3').hide();
-                        })
-                    } else if (responseBody.status == 200) {
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_3").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.selfie_photo,
-                                }
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                    beforeSend: function() {
-                                        $('.prosesVerifikasiPenjamin_3').show();
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.selfie_photo);
-                                    $('.prosesVerifikasiPenjamin_3').hide();
-                                })
-                            } else if (responseBody.errors.message == "Data not found") {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_3").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                    beforeSend: function() {
-                                        $('.prosesVerifikasiPenjamin_3').show();
-                                    },
-                                })
-                                .done(function(res) {
-                                    var url = "api/master/verif/storepenjamin/";
-
-                                    httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponsePenjamin_3DataNotFound();
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
                                         bootbox.alert(responseBody.errors.message);
                                         $('.prosesVerifikasiPenjamin_3').hide();
                                     })
-                                })
-                            }
-                        } else {
-                            var url = "api/master/verif/storepenjamin/";
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_3(responseBody);
-                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
-                            })
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
 
-                        }
-                    }
-                
-                } else {
-                    $.ajax({
-                        url: 'Verifikasi_controller/verifikasi_id',
-                        type: 'POST',
-                        data: requestBody,
-                        beforeSend: function() {
-                            $('.prosesVerifikasiPenjamin_3').show();
-                        },
-                    })
-                    .done(function(res) {
-                        responseBody = JSON.parse(res);
-                        console.log(responseBody);
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
 
-                        if (responseBody.pesan != null ) {
-                            var requestBodyError = {
-                                "nik" : $("#nik").text(),
-                                "jenis_call" : "COMPLETE ID",
-                                "rc" : "",
-                                "messages" : responseBody.pesan,
-                            }
-    
-                            $.ajax({
-                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                type: 'POST',
-                                data: requestBodyError,
-                                headers: {
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                            })
-                            .done(function(res) {
-                                bootbox.alert(responseBody.pesan);
-                                $('.prosesVerifikasiDebitur').hide();
-                            })
-                        } else {
-                            if(responseBody.status == 401) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_3").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
 
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiPenjamin_3').hide();
-                                })
-                            } else if(responseBody.status == 500) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_3").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.message);
-                                    $('.prosesVerifikasiPenjamin_3').hide();
-                                })
-                            } else if(responseBody.status == 502) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_3").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiPenjamin_3').hide();
-                                })
-                            } else if (responseBody.status == 200) {
-                                if (responseBody.data == null) {
-                                    if(responseBody.errors.selfie_photo == "no face detected") {
-                                        var requestBodyError = {
-                                            "nik" : $("#nik_penjamin_3").text(),
-                                            "jenis_call" : "COMPLETE ID",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.selfie_photo,
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_3DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_3').hide();
+                                                })
+                                            })
                                         }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
 
-                                        $.ajax({
-                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                            type: 'POST',
-                                            data: requestBodyError,
-                                            headers: {
-                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                            },
-                                        })
-                                        .done(function(res) {
-                                            bootbox.alert(responseBody.errors.selfie_photo);
-                                            $('.prosesVerifikasiPenjamin_3').hide();
-                                        })
-                                    } else if (responseBody.errors.message == "Data not found") {
-                                        var requestBodyError = {
-                                            "nik" : $("#nik_penjamin_3").text(),
-                                            "jenis_call" : "COMPLETE ID",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.message,
-                                        }
-
-                                        $.ajax({
-                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                            type: 'POST',
-                                            data: requestBodyError,
-                                            headers: {
-                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                            },
-                                        })
-                                        .done(function(res) {
-                                            var url = "api/master/verif/storepenjamin/";
-
-                                            httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
                                             .done( (response) => {
-                                                mappingResponsePenjamin_3DataNotFound();
+                                                httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_3(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                    $('.prosesVerifikasiPenjamin_3').hide();
+                                                })
+                                            })
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_3').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
                                                 bootbox.alert(responseBody.errors.message);
                                                 $('.prosesVerifikasiPenjamin_3').hide();
                                             })
-                                        })
-                                    }
-                                } else {
-                                    var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
-                                    var url = "api/master/verif/storepenjamin/";
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
 
-                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponsePenjamin_3(responseBody);
-                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_3").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_3").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_3DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_3').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_3(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                            $('.prosesVerifikasiPenjamin_3').hide();
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                } else if (data.penjamin.length == 1) {
+                    var id_pen_2 = $('#id_penjamin_2').val();
+                    var id_pen_3 = $('#id_penjamin_3').val();
+                    var photo_penjamin_3 = document.getElementById("photo_selfie_penjamin_3");
+                    var base64_selfiePenjamin_3 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_3.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_3.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_3").text() + "01",
+                                "nik" : $("#nik_penjamin_3").text(),
+                                "name" : $("#name_penjamin_3").text(),
+                                "birthdate" : $("#birthdate_penjamin_3").text(),
+                                "birthplace" : $("#birthplace_penjamin_3").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiPenjamin_3').hide();
                                     })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_3DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_3').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_3(responseBody);
+                                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        })
+
+                                    }
                                 }
-                            }
-                        }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_3').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                    })
-                    
-                }
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
                 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Penjamin!!");
-            });
-        }
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_3").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_3").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_3DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_3').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponsePenjamin_3(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                } else {
+                    var id_pen = $('#id_penjamin_3').val();
+                    var photo_penjamin_3 = document.getElementById("photo_selfie_penjamin_3");
+                    var base64_selfiePenjamin_3 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_3.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_3.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_3").text() + "01",
+                                "nik" : $("#nik_penjamin_3").text(),
+                                "name" : $("#name_penjamin_3").text(),
+                                "birthdate" : $("#birthdate_penjamin_3").text(),
+                                "birthplace" : $("#birthplace_penjamin_3").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_3").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_3DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_3').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            mappingResponsePenjamin_3(responseBody);
+                                            bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                            $('.prosesVerifikasiPenjamin_3').hide();
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_3').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_3").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_3").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_3").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_3DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_3').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_3(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                    $('.prosesVerifikasiPenjamin_3').hide();
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                }
+            })
+       
     }
 
     function verifikasiSimpanPenjamin_4(isTesting, id_trans_so) {
+        $('.verifikasiPenjamin_1').hide();
+        $('.verifikasiPenjamin_2').hide();
+        $('.verifikasiPenjamin_3').hide();
         $('.verifikasiPenjamin_4').hide();
+        $('.verifikasiPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -4429,273 +5498,49 @@
                 } 
             })
 
-        var id_pen = $('#id_penjamin_4').val();
-        var photo_penjamin_4 = document.getElementById("photo_selfie_penjamin_4");
-        var base64_selfiePenjamin_4 = "";
-        var responseBody;
+        get_detail({}, id_trans_so)
+            .done(function(response) {
+                var data = response.data;
 
-        if (photo_penjamin_4.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_4.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "KMI" + $("#nik_penjamin_4").text() + "01",
-                    "nik" : $("#nik_penjamin_4").text(),
-                    "name" : $("#name_penjamin_4").text(),
-                    "birthdate" : $("#birthdate_penjamin_4").text(),
-                    "birthplace" : $("#birthplace_penjamin_4").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                
-                if (isTesting) {
-                    responseBody = responseCompleteID(requestBody);
+                if(data.penjamin.length == 0) {
+                    var id_pen_1 = $('#id_penjamin_1').val();
+                    var id_pen_2 = $('#id_penjamin_2').val();
+                    var id_pen_3 = $('#id_penjamin_3').val();
+                    var id_pen_4 = $('#id_penjamin_4').val();
+                    var photo_penjamin_4 = document.getElementById("photo_selfie_penjamin_4");
+                    var base64_selfiePenjamin_4 = "";
+                    var responseBody;
 
-                    if(responseBody.status == 401) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_4").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
-
+                    if (photo_penjamin_4.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_4').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiPenjamin_4').hide();
-                        })
-                    } else if(responseBody.status == 500) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_4").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.errors.message,
-                        }
-
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_4').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.errors.message);
-                            $('.prosesVerifikasiPenjamin_4').hide();
-                        })
-                    } else if(responseBody.status == 502) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_4").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
-
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_4').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiPenjamin_4').hide();
-                        })
-                    } else if (responseBody.status == 200) {
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_4").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.selfie_photo,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                    beforeSend: function() {
-                                        $('.prosesVerifikasiPenjamin_4').show();
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.selfie_photo);
-                                    $('.prosesVerifikasiPenjamin_4').hide();
-                                })
-                            } else if (responseBody.errors.message == "Data not found") {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_4").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                    beforeSend: function() {
-                                        $('.prosesVerifikasiPenjamin_4').show();
-                                    },
-                                })
-                                .done(function(res) {
-                                    var url = "api/master/verif/storepenjamin/";
-
-                                    httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponsePenjamin_4DataNotFound();
-                                        bootbox.alert(responseBody.errors.message);
-                                        $('.prosesVerifikasiPenjamin_4').hide();
-                                    })
-                                })
+                            url: photo_penjamin_4.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
                             }
-                        } else {
-                            var url = "api/master/verif/storepenjamin/";
-
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_4(responseBody);
-                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
-                            })
-
-                        }
-                    }
-                
-                } else {
-                    $.ajax({
-                        url: 'Verifikasi_controller/verifikasi_id',
-                        type: 'POST',
-                        data: requestBody,
-                        beforeSend: function() {
-                            $('.prosesVerifikasiPenjamin_4').show();
-                        },
-                    })
-                    .done(function(res) {
-                        responseBody = JSON.parse(res);
-                        console.log(responseBody);
-
-                        if (responseBody.pesan != null ) {
-                            var requestBodyError = {
-                                "nik" : $("#nik").text(),
-                                "jenis_call" : "COMPLETE ID",
-                                "rc" : "",
-                                "messages" : responseBody.pesan,
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_4").text() + "01",
+                                "nik" : $("#nik_penjamin_4").text(),
+                                "name" : $("#name_penjamin_4").text(),
+                                "birthdate" : $("#birthdate_penjamin_4").text(),
+                                "birthplace" : $("#birthplace_penjamin_4").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
                             }
-    
-                            $.ajax({
-                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                type: 'POST',
-                                data: requestBodyError,
-                                headers: {
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                            })
-                            .done(function(res) {
-                                bootbox.alert(responseBody.pesan);
-                                $('.prosesVerifikasiDebitur').hide();
-                            })
-                        } else {
-                            if(responseBody.status == 401) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_4").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
 
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiPenjamin_4').hide();
-                                })
-                            } else if(responseBody.status == 500) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_4").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.message);
-                                    $('.prosesVerifikasiPenjamin_4').hide();
-                                })
-                            } else if(responseBody.status == 502) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_4").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiPenjamin_4').hide();
-                                })
-                            } else if (responseBody.status == 200) {
-                                if (responseBody.data == null) {
-                                    if(responseBody.errors.selfie_photo == "no face detected") {
-                                        var requestBodyError = {
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
                                         "nik" : $("#nik_penjamin_4").text(),
                                         "jenis_call" : "COMPLETE ID",
                                         "rc" : responseBody.status,
-                                        "messages" : responseBody.errors.selfie_photo,
+                                        "messages" : responseBody.message,
                                     }
 
                                     $.ajax({
@@ -4705,19 +5550,158 @@
                                         headers: {
                                             'Authorization': 'Bearer ' + localStorage.getItem('token')
                                         },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
                                     })
                                     .done(function(res) {
-                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiPenjamin_4').hide();
                                     })
-                                    } else if (responseBody.errors.message == "Data not found") {
-                                        var requestBodyError = {
-                                            "nik" : $("#nik_penjamin_4").text(),
-                                            "jenis_call" : "COMPLETE ID",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.message,
-                                        }
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_4DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponsePenjamin_4(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                                    })
+                                                })
+                                            })
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_4').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
                                         $.ajax({
                                             url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
                                             type: 'POST',
@@ -4727,45 +5711,1190 @@
                                             },
                                         })
                                         .done(function(res) {
-                                        var url = "api/master/verif/storepenjamin/";
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
 
-                                            httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
-                                            .done( (response) => {
-                                                mappingResponsePenjamin_4DataNotFound();
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
                                                 bootbox.alert(responseBody.errors.message);
                                                 $('.prosesVerifikasiPenjamin_4').hide();
                                             })
-                                        })
-                                    }
-                                } else {
-                                    var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
-                                    var url = "api/master/verif/storepenjamin/";
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
 
-                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponsePenjamin_4(responseBody);
-                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                    "nik" : $("#nik_penjamin_4").text(),
+                                                    "jenis_call" : "COMPLETE ID",
+                                                    "rc" : responseBody.status,
+                                                    "messages" : responseBody.errors.selfie_photo,
+                                                }
+
+                                                $.ajax({
+                                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                    type: 'POST',
+                                                    data: requestBodyError,
+                                                    headers: {
+                                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                    },
+                                                })
+                                                .done(function(res) {
+                                                    bootbox.alert(responseBody.errors.selfie_photo);
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_4").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                    var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_4DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                            .done( (response) => {
+                                                                mappingResponsePenjamin_4(responseBody);
+                                                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                                            })
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+
+                } else if (data.penjamin.length == 1) {
+                    var id_pen_2 = $('#id_penjamin_2').val();
+                    var id_pen_3 = $('#id_penjamin_3').val();
+                    var id_pen_4 = $('#id_penjamin_4').val();
+                    var photo_penjamin_4 = document.getElementById("photo_selfie_penjamin_4");
+                    var base64_selfiePenjamin_4 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_4.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_4.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_4").text() + "01",
+                                "nik" : $("#nik_penjamin_4").text(),
+                                "name" : $("#name_penjamin_4").text(),
+                                "birthdate" : $("#birthdate_penjamin_4").text(),
+                                "birthplace" : $("#birthplace_penjamin_4").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiPenjamin_4').hide();
                                     })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_4DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_4(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                            })
+                                        })
+
+                                    }
                                 }
-                            }
-                        }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_4').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                    })
-                    
-                }
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
                 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Penjamin!!");
-            });
-        }
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                    "nik" : $("#nik_penjamin_4").text(),
+                                                    "jenis_call" : "COMPLETE ID",
+                                                    "rc" : responseBody.status,
+                                                    "messages" : responseBody.errors.selfie_photo,
+                                                }
+
+                                                $.ajax({
+                                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                    type: 'POST',
+                                                    data: requestBodyError,
+                                                    headers: {
+                                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                    },
+                                                })
+                                                .done(function(res) {
+                                                    bootbox.alert(responseBody.errors.selfie_photo);
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_4").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                    var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_4DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_4(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                            $('.prosesVerifikasiPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                } else if (data.penjamin.length == 2) {
+                    var id_pen_3 = $('#id_penjamin_3').val();
+                    var id_pen_4 = $('#id_penjamin_4').val();
+                    var photo_penjamin_4 = document.getElementById("photo_selfie_penjamin_4");
+                    var base64_selfiePenjamin_4 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_4.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_4.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_4").text() + "01",
+                                "nik" : $("#nik_penjamin_4").text(),
+                                "name" : $("#name_penjamin_4").text(),
+                                "birthdate" : $("#birthdate_penjamin_4").text(),
+                                "birthplace" : $("#birthplace_penjamin_4").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_4DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_4(responseBody);
+                                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_4').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                    "nik" : $("#nik_penjamin_4").text(),
+                                                    "jenis_call" : "COMPLETE ID",
+                                                    "rc" : responseBody.status,
+                                                    "messages" : responseBody.errors.selfie_photo,
+                                                }
+
+                                                $.ajax({
+                                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                    type: 'POST',
+                                                    data: requestBodyError,
+                                                    headers: {
+                                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                    },
+                                                })
+                                                .done(function(res) {
+                                                    bootbox.alert(responseBody.errors.selfie_photo);
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_4").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                    var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_4DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponsePenjamin_4(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                } else {
+                    var id_pen = $('#id_penjamin_4').val();
+                    var photo_penjamin_4 = document.getElementById("photo_selfie_penjamin_4");
+                    var base64_selfiePenjamin_4 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_4.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_4.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_4").text() + "01",
+                                "nik" : $("#nik_penjamin_4").text(),
+                                "name" : $("#name_penjamin_4").text(),
+                                "birthdate" : $("#birthdate_penjamin_4").text(),
+                                "birthplace" : $("#birthplace_penjamin_4").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_4").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_4DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            mappingResponsePenjamin_4(responseBody);
+                                            bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                            $('.prosesVerifikasiPenjamin_4').hide();
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_4').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_4").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                    "nik" : $("#nik_penjamin_4").text(),
+                                                    "jenis_call" : "COMPLETE ID",
+                                                    "rc" : responseBody.status,
+                                                    "messages" : responseBody.errors.selfie_photo,
+                                                }
+
+                                                $.ajax({
+                                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                    type: 'POST',
+                                                    data: requestBodyError,
+                                                    headers: {
+                                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                    },
+                                                })
+                                                .done(function(res) {
+                                                    bootbox.alert(responseBody.errors.selfie_photo);
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_4").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                    var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_4DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_4(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                    $('.prosesVerifikasiPenjamin_4').hide();
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                }
+            })
+
     }
 
     function verifikasiSimpanPenjamin_5(isTesting, id_trans_so) {
+        $('.verifikasiPenjamin_1').hide();
+        $('.verifikasiPenjamin_2').hide();
+        $('.verifikasiPenjamin_3').hide();
+        $('.verifikasiPenjamin_4').hide();
         $('.verifikasiPenjamin_5').hide();
 
         document.getElementById("verifikasi_npwp_pen_1").disabled = true;
@@ -4779,344 +6908,1769 @@
         document.getElementById("verifikasi_npwp_pen_5").disabled = true;
         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
 
-        var id_pen = $('#id_penjamin_5').val();
-        var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_5");
-        var base64_selfiePenjamin_5 = "";
-        var responseBody;
+        get_detail({}, id_trans_so)
+            .done(function(response) {
+                var data = response.data;
 
-        if (photo_penjamin_5.src== "http://103.31.232.146/API_WEBTOOL3/null") {
-            bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
-        } else {
-            $.ajax({
-                url: photo_penjamin_5.src,
-                type: 'GET',
-                beforeSend: function( xhr ) {
-                    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-                    xhr.responseType = 'blob';
-                }
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "KMI" + $("#nik_penjamin_5").text() + "01",
-                    "nik" : $("#nik_penjamin_5").text(),
-                    "name" : $("#name_penjamin_5").text(),
-                    "birthdate" : $("#birthdate_penjamin_5").text(),
-                    "birthplace" : $("#birthplace_penjamin_5").text(),
-                    "identity_photo" : "",
-                    "selfie_photo" : base64Encode(data),
-                }
-                
-                if (isTesting) {
-                    responseBody = responseCompleteID(requestBody);
+                if(data.penjamin.length == 0) {
+                    var id_pen_1 = $('#id_penjamin_1').val();
+                    var id_pen_2 = $('#id_penjamin_2').val();
+                    var id_pen_3 = $('#id_penjamin_3').val();
+                    var id_pen_4 = $('#id_penjamin_4').val();
+                    var id_pen_5 = $('#id_penjamin_5').val();
 
-                    if(responseBody.status == 401) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_5").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
+                    var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_5");
+                    var base64_selfiePenjamin_5 = "";
+                    var responseBody;
 
+                    if (photo_penjamin_5.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_5').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiPenjamin_5').hide();
-                        })
-                    } else if(responseBody.status == 500) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_5").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.errors.message,
-                        }
+                            url: photo_penjamin_5.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_5").text() + "01",
+                                "nik" : $("#nik_penjamin_5").text(),
+                                "name" : $("#name_penjamin_5").text(),
+                                "birthdate" : $("#birthdate_penjamin_5").text(),
+                                "birthplace" : $("#birthplace_penjamin_5").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_5').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.errors.message);
-                            $('.prosesVerifikasiPenjamin_5').hide();
-                        })
-                    } else if(responseBody.status == 502) {
-                        var requestBodyError = {
-                            "nik" : $("#nik_penjamin_5").text(),
-                            "jenis_call" : "COMPLETE ID",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiPenjamin_5').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiPenjamin_5').hide();
-                        })
-                    } else if (responseBody.status == 200) {
-                        if (responseBody.data == null) {
-                            if(responseBody.errors.selfie_photo == "no face detected") {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_5").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.selfie_photo,
-                                }
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                    beforeSend: function() {
-                                        $('.prosesVerifikasiPenjamin_5').show();
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.selfie_photo);
-                                    $('.prosesVerifikasiPenjamin_5').hide();
-                                })
-                            } else if (responseBody.errors.message == "Data not found") {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_5").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                    beforeSend: function() {
-                                        $('.prosesVerifikasiPenjamin_5').show();
-                                    },
-                                })
-                                .done(function(res) {
-                                    var url = "api/master/verif/storepenjamin/";
-
-                                    httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponsePenjamin_5DataNotFound();
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
                                         bootbox.alert(responseBody.errors.message);
                                         $('.prosesVerifikasiPenjamin_5').hide();
                                     })
-                                })
-                            }
-                        } else {
-                            var url = "api/master/verif/storepenjamin/";
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                            .done( (response) => {
-                                mappingResponsePenjamin_5(responseBody);
-                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
-                            })
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
 
-                        }
-                    }
-                
-                } else {
-                    $.ajax({
-                        url: 'Verifikasi_controller/verifikasi_id',
-                        type: 'POST',
-                        data: requestBody,
-                        beforeSend: function() {
-                            $('.prosesVerifikasiPenjamin_5').show();
-                        },
-                    })
-                    .done(function(res) {
-                        responseBody = JSON.parse(res);
-                        console.log(responseBody);
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
 
-                        if (responseBody.pesan != null ) {
-                            var requestBodyError = {
-                                "nik" : $("#nik").text(),
-                                "jenis_call" : "COMPLETE ID",
-                                "rc" : "",
-                                "messages" : responseBody.pesan,
-                            }
-    
-                            $.ajax({
-                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                type: 'POST',
-                                data: requestBodyError,
-                                headers: {
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                            })
-                            .done(function(res) {
-                                bootbox.alert(responseBody.pesan);
-                                $('.prosesVerifikasiDebitur').hide();
-                            })
-                        } else {
-                            if(responseBody.status == 401) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_5").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
 
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiPenjamin_5').hide();
-                                })
-                            } else if(responseBody.status == 500) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_5").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.message);
-                                    $('.prosesVerifikasiPenjamin_5').hide();
-                                })
-                            } else if(responseBody.status == 502) {
-                                var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_5").text(),
-                                    "jenis_call" : "COMPLETE ID",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiPenjamin_5').hide();
-                                })
-                            } else if (responseBody.status == 200) {
-                                if (responseBody.data == null) {
-                                    if(responseBody.errors.selfie_photo == "no face detected") {
-                                        var requestBodyError = {
-                                            "nik" : $("#nik_penjamin_5").text(),
-                                            "jenis_call" : "COMPLETE ID",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.selfie_photo,
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_5').hide();
+                                                })
+                                            })
                                         }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
 
-                                        $.ajax({
-                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                            type: 'POST',
-                                            data: requestBodyError,
-                                            headers: {
-                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                            },
-                                        })
-                                        .done(function(res) {
-                                            bootbox.alert(responseBody.errors.selfie_photo);
-                                            $('.prosesVerifikasiPenjamin_5').hide();
-                                        })
-                                    } else if (responseBody.errors.message == "Data not found") {
-                                        var requestBodyError = {
-                                            "nik" : $("#nik_penjamin_5").text(),
-                                            "jenis_call" : "COMPLETE ID",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.message,
-                                        }
-
-                                        $.ajax({
-                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                            type: 'POST',
-                                            data: requestBodyError,
-                                            headers: {
-                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                            },
-                                        })
-                                        .done(function(res) {
-                                            var url = "api/master/verif/storepenjamin/";
-
-                                            httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
                                             .done( (response) => {
-                                                mappingResponsePenjamin_5DataNotFound();
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_5(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                            $('.prosesVerifikasiPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                })
+                                            })
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
                                                 bootbox.alert(responseBody.errors.message);
                                                 $('.prosesVerifikasiPenjamin_5').hide();
                                             })
-                                        })
-                                    }
-                                } else {
-                                    var requestBody = requestMapperForStorePenjamin(responseBody, id_pen);
-                                    var url = "api/master/verif/storepenjamin/";
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
 
-                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponsePenjamin_5(responseBody);
-                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                            .done( (response) => {
+                                                                httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                                .done( (response) => {
+                                                                    mappingResponsePenjamin_5(responseBody);
+                                                                    bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                                    $('.prosesVerifikasiPenjamin_5').hide();
+                                                                })
+                                                            })
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+
+                } else if(data.penjamin.length == 1) {
+                    var id_pen_2 = $('#id_penjamin_2').val();
+                    var id_pen_3 = $('#id_penjamin_3').val();
+                    var id_pen_4 = $('#id_penjamin_4').val();
+                    var id_pen_5 = $('#id_penjamin_5').val();
+
+                    var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_5");
+                    var base64_selfiePenjamin_5 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_5.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_5.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_5").text() + "01",
+                                "nik" : $("#nik_penjamin_5").text(),
+                                "name" : $("#name_penjamin_5").text(),
+                                "birthdate" : $("#birthdate_penjamin_5").text(),
+                                "birthplace" : $("#birthplace_penjamin_5").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiPenjamin_5').hide();
                                     })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponsePenjamin_5(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                                    })
+                                                })
+                                            })
+                                        })
+
+                                    }
                                 }
-                            }
-                        }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                    })
-                    
-                }
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
                 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data Penjamin!!");
-            });
-        }
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                            .done( (response) => {
+                                                                mappingResponsePenjamin_5(responseBody);
+                                                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                                            })
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                } else if(data.penjamin.length == 2) {
+                    var id_pen_3 = $('#id_penjamin_3').val();
+                    var id_pen_4 = $('#id_penjamin_4').val();
+                    var id_pen_5 = $('#id_penjamin_5').val();
+
+                    var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_5");
+                    var base64_selfiePenjamin_5 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_5.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_5.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_5").text() + "01",
+                                "nik" : $("#nik_penjamin_5").text(),
+                                "name" : $("#name_penjamin_5").text(),
+                                "birthdate" : $("#birthdate_penjamin_5").text(),
+                                "birthplace" : $("#birthplace_penjamin_5").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_5(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                    $('.prosesVerifikasiPenjamin_5').hide();
+                                                })
+                                            })
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_5(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                            $('.prosesVerifikasiPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                } else if(data.penjamin.length == 3) {
+                    var id_pen_4 = $('#id_penjamin_4').val();
+                    var id_pen_5 = $('#id_penjamin_5').val();
+
+                    var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_5");
+                    var base64_selfiePenjamin_5 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_5.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_5.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_5").text() + "01",
+                                "nik" : $("#nik_penjamin_5").text(),
+                                "name" : $("#name_penjamin_5").text(),
+                                "birthdate" : $("#birthdate_penjamin_5").text(),
+                                "birthplace" : $("#birthplace_penjamin_5").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_5(responseBody);
+                                                bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponsePenjamin_5(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                } else {
+                    var id_pen = $('#id_penjamin_5').val();
+                    var photo_penjamin_5 = document.getElementById("photo_selfie_penjamin_5");
+                    var base64_selfiePenjamin_5 = "";
+                    var responseBody;
+
+                    if (photo_penjamin_5.src== "http://103.31.232.146/API_WEBTOOL3/null") {
+                        bootbox.alert("Photo Penjamin Kosong!! Harap Upload Terlebih Dahulu");
+                    } else {
+                        $.ajax({
+                            url: photo_penjamin_5.src,
+                            type: 'GET',
+                            beforeSend: function( xhr ) {
+                                xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+                                xhr.responseType = 'blob';
+                            }
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#nik_penjamin_5").text() + "01",
+                                "nik" : $("#nik_penjamin_5").text(),
+                                "name" : $("#name_penjamin_5").text(),
+                                "birthdate" : $("#birthdate_penjamin_5").text(),
+                                "birthplace" : $("#birthplace_penjamin_5").text(),
+                                "identity_photo" : "",
+                                "selfie_photo" : base64Encode(data),
+                            }
+                            
+                            if (isTesting) {
+                                responseBody = responseCompleteID(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "nik" : $("#nik_penjamin_5").text(),
+                                        "jenis_call" : "COMPLETE ID",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if(responseBody.errors.selfie_photo == "no face detected") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.selfie_photo,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.selfie_photo);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storepenjamin/";
+
+                                        httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            mappingResponsePenjamin_5(responseBody);
+                                            bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                            $('.prosesVerifikasiPenjamin_5').hide();
+                                        })
+
+                                    }
+                                }
+                            
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_id',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log(responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "nik" : $("#nik_penjamin_5").text(),
+                                                "jenis_call" : "COMPLETE ID",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if(responseBody.errors.selfie_photo == "no face detected") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.selfie_photo,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        bootbox.alert(responseBody.errors.selfie_photo);
+                                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                                    })
+                                                } else if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "nik" : $("#nik_penjamin_5").text(),
+                                                        "jenis_call" : "COMPLETE ID",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storepenjamin/";
+
+                                                        httpRequestBuilder(requestMapperForStorePenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponsePenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storepenjamin/";
+
+                                                httpRequestBuilder(requestMapperForStorePenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponsePenjamin_5(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data Penjamin!!");
+                                                    $('.prosesVerifikasiPenjamin_5').hide();
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+                            
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data Penjamin!!");
+                        });
+                    }
+                }
+            })
+
     }
 
     function verifikasiUpdatePenjamin_1(isTesting, limitCallPenjamin_1, id_trans_so) {
         $('.verifikasiPenjamin_1').hide();
+        $('.verifikasiPenjamin_2').hide();
+        $('.verifikasiPenjamin_3').hide();
+        $('.verifikasiPenjamin_4').hide();
+        $('.verifikasiPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -5341,12 +8895,24 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updatePenjamin/";
+
+                                if (limitCallPenjamin_1 == "0") {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_1(responseBody);
+                                        bootbox.alert("Berhasil Verifikasi Data Penjamin!!");
+                                        $('.prosesVerifikasiPenjamin_1').hide();
+                                    })
+
+                                } else {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_1(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
+                                        $('.prosesVerifikasiPenjamin_1').hide();
+                                    })
+                                }
         
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_1(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                })
 
                             }
                         }
@@ -5497,12 +9063,22 @@
                                     } else {
                                         var url = "api/master/verif/updatePenjamin/";
             
-                                        httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                        .done( (response) => {
-                                            mappingResponsePenjamin_1(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                            $('.prosesVerifikasiPenjamin_1').hide();
-                                        })
+                                        if (limitCallPenjamin_1 == "0") {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_1(responseBody);
+                                                bootbox.alert("Berhasil Verifikasi Data Penjamin!!");
+                                                $('.prosesVerifikasiPenjamin_1').hide();
+                                            })
+
+                                        } else {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_1(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
+                                                $('.prosesVerifikasiPenjamin_1').hide();
+                                            })
+                                        }
 
                                     }
                                 }
@@ -5738,12 +9314,22 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updatePenjamin/";
-        
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_2(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
-                                })
+                                
+                                if(limitCallPenjamin_2 == "0") {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_2(responseBody);
+                                        bootbox.alert("Berhasil Verifikasi Data Penjamin!!"); 
+                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                    })
+                                } else {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_2(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                        $('.prosesVerifikasiPenjamin_2').hide();
+                                    })
+                                }
 
                             }
                         }
@@ -5894,12 +9480,21 @@
                                     } else {
                                         var url = "api/master/verif/updatePenjamin/";
             
-                                        httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                        .done( (response) => {
-                                            mappingResponsePenjamin_2(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                            $('.prosesVerifikasiPenjamin_2').hide();
-                                        })
+                                        if(limitCallPenjamin_2 == "0") {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_2(responseBody);
+                                                bootbox.alert("Berhasil Verifikasi Data Penjamin!!"); 
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        } else {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_2(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                                $('.prosesVerifikasiPenjamin_2').hide();
+                                            })
+                                        }
 
                                     }
                                 }
@@ -6124,12 +9719,22 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updatePenjamin/";
-        
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_3(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
-                                })
+                                
+                                if (limitCallPenjamin_3 == "0") {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_3(responseBody);
+                                        bootbox.alert("Berhasil Verifikasi Data Penjamin!!"); 
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                } else {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_3(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                        $('.prosesVerifikasiPenjamin_3').hide();
+                                    })
+                                }
 
                             }
                         }
@@ -6232,7 +9837,7 @@
                                     if (responseBody.data == null) {
                                         if(responseBody.errors.selfie_photo == "no face detected") {
                                             var requestBodyError = {
-                                    "nik" : $("#nik_penjamin_3").text(),
+                                                "nik" : $("#nik_penjamin_3").text(),
                                                 "jenis_call" : "COMPLETE ID",
                                                 "rc" : responseBody.status,
                                                 "messages" : responseBody.errors.selfie_photo,
@@ -6280,12 +9885,21 @@
                                     } else {
                                         var url = "api/master/verif/updatePenjamin/";
             
-                                        httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                        .done( (response) => {
-                                            mappingResponsePenjamin_3(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                            $('.prosesVerifikasiPenjamin_3').hide();
-                                        })
+                                        if (limitCallPenjamin_3 == "0") {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_3(responseBody);
+                                                bootbox.alert("Berhasil Verifikasi Data Penjamin!!"); 
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        } else {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_3(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                                $('.prosesVerifikasiPenjamin_3').hide();
+                                            })
+                                        }
 
                                     }
                                 }
@@ -6500,11 +10114,21 @@
                             } else {
                                 var url = "api/master/verif/updatePenjamin/";
         
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_4(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
-                                })
+                                if (limitCallPenjamin_4 == "0") {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_4(responseBody);
+                                        bootbox.alert("Berhasil Verifikasi Data Penjamin!!"); 
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                } else {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_4(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                        $('.prosesVerifikasiPenjamin_4').hide();
+                                    })
+                                }
 
                             }
                         }
@@ -6655,12 +10279,21 @@
                                     } else {
                                         var url = "api/master/verif/updatePenjamin/";
             
-                                        httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                        .done( (response) => {
-                                            mappingResponsePenjamin_4(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                            $('.prosesVerifikasiPenjamin_4').hide();
-                                        })
+                                        if (limitCallPenjamin_4 == "0") {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_4(responseBody);
+                                                bootbox.alert("Berhasil Verifikasi Data Penjamin!!"); 
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        } else {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_4(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                                $('.prosesVerifikasiPenjamin_4').hide();
+                                            })
+                                        }
 
                                     }
                                 }
@@ -6856,12 +10489,22 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updatePenjamin/";
-        
-                                httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                .done( (response) => {
-                                    mappingResponsePenjamin_5(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
-                                })
+                                
+                                if(limitCallPenjamin_5 == "0") {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_5(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                } else {
+                                    httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                    .done( (response) => {
+                                        mappingResponsePenjamin_5(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                        $('.prosesVerifikasiPenjamin_5').hide();
+                                    })
+                                }
 
                             }
                         }
@@ -7012,12 +10655,21 @@
                                     } else {
                                         var url = "api/master/verif/updatePenjamin/";
             
-                                        httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
-                                        .done( (response) => {
-                                            mappingResponsePenjamin_5(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!");
-                                            $('.prosesVerifikasiPenjamin_5').hide();
-                                        })
+                                        if(limitCallPenjamin_5 == "0") {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin_null(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_5(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        } else {
+                                            httpRequestBuilderPenjamin(requestMapperForUpdatePenjamin(responseBody, id_pen), url, id_trans_so, id_pen, "POST")
+                                            .done( (response) => {
+                                                mappingResponsePenjamin_5(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data Penjamin!!"); 
+                                                $('.prosesVerifikasiPenjamin_5').hide();
+                                            })
+                                        }
 
                                     }
                                 }
@@ -8050,7 +11702,7 @@
         }
     }
 
-    function verifikasiUpdateNpwpPasangan(isTesting, limitCallNpwpPasangan, id_trans_so, id_pasangan) {
+    function verifikasiUpdateNpwpPasangan(isTesting, limitCallNpwpPasangan, id_trans_so) {
         $('.verifikasiNpwpPasangan').hide();
 
         get_data({}, id_trans_so)
@@ -8121,7 +11773,7 @@
                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP!!"); 
                 } else {
                     if (isTesting) {
-                        responseBody = responseNpwp(requestBody);
+                        responseBody = responseDataNotFound(requestBody);
                         console.log(responseBody);
 
                         if(responseBody.status == 401) {
@@ -8217,7 +11869,7 @@
                                     .done(function(res) {
                                         var url = "api/master/verif/updateNpwppasangan/";
         
-                                        httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
+                                        httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpPasanganDataNotFound(), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPasanganDataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -8352,7 +12004,7 @@
                                             .done(function(res) {
                                                 var url = "api/master/verif/updateNpwppasangan/";
             
-                                                httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, "POST")
+                                                httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpPasanganDataNotFound(), url, id_trans_so, "POST")
                                                 .done( (response) => {
                                                     mappingResponseNpwpPasanganDataNotFound();
                                                     bootbox.alert(responseBody.errors.message);
@@ -8363,7 +12015,7 @@
                                     } else {
                                         var url = "api/master/verif/updateNpwppasangan/";
             
-                                        httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, "POST")
+                                        httpRequestBuilderNpwpPasangan(requestMapperForUpdateNpwpPasangan(responseBody), url, id_trans_so, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPasangan(responseBody);
                                             bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
@@ -8391,6 +12043,10 @@
 
     function verifikasiSimpanNpwpPen_1(isTesting, id_trans_so) {
         $('.verifikasiNpwpPenjamin_1').hide();
+        $('.verifikasiNpwpPenjamin_2').hide();
+        $('.verifikasiNpwpPenjamin_3').hide();
+        $('.verifikasiNpwpPenjamin_4').hide();
+        $('.verifikasiNpwpPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -8543,7 +12199,7 @@
                                 .done(function(res) {
                                     var url = "api/master/verif/storenpwppenjamin/";
         
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                    httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
                                     .done( (response) => {
                                         mappingResponseNpwpPenjamin_1DataNotFound();
                                         bootbox.alert(responseBody.errors.message);
@@ -8558,6 +12214,7 @@
                             .done( (response) => {
                                 mappingResponseNpwpPenjamin_1(responseBody);
                                 bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                $('.prosesVerifikasiNpwpPenjamin_1').hide();
                             })
 
                         }
@@ -8678,7 +12335,7 @@
                                         .done(function(res) {
                                             var url = "api/master/verif/storenpwppenjamin/";
             
-                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen), url, id_trans_so, "POST")
                                             .done( (response) => {
                                                 mappingResponseNpwpPenjamin_1DataNotFound();
                                                 bootbox.alert(responseBody.errors.message);
@@ -8714,7 +12371,11 @@
     }
 
     function verifikasiSimpanNpwpPen_2(isTesting, id_trans_so) {
+        $('.verifikasiNpwpPenjamin_1').hide();
         $('.verifikasiNpwpPenjamin_2').hide();
+        $('.verifikasiNpwpPenjamin_3').hide();
+        $('.verifikasiNpwpPenjamin_4').hide();
+        $('.verifikasiNpwpPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -8739,249 +12400,177 @@
                 } 
             })
 
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_2").text();
-        var id_pen = $('#id_npwp_penjamin_2').val();
+        get_detail({}, id_trans_so)
+            .done(function(response) {
+                var data = response.data;
 
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "KMI" + $("#no_npwp_pen_2").text() + "01",
-                    "npwp" : $("#no_npwp_pen_2").text(),
-                    "nik" : $("#nik_pen_2").text(),
-                    "income" : Number($("#income_npwp_pen_2").text()),
-                    "name" : $("#name_npwp_pen_2").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_2").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_2").text()
-                    // "income" : $("#income_npwp_pen_2").text(),
-                }
+                if(data.npwp_penjamin.length == 0) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_2").text();
 
-                console.log(requestBody);
+                    var id_pen_1 = $('#id_npwp_penjamin_1').val();
+                    var id_pen_2 = $('#id_npwp_penjamin_2').val();
 
-                if (isTesting) {
-                    responseBody = responseNpwp(requestBody);
-
-                    if(responseBody.status == 401) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_2").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
-
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_2').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiNpwpPenjamin_2').hide();
-                        })
-                    } else if(responseBody.status == 500) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_2").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.errors.message,
-                        }
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_2").text() + "01",
+                                "npwp" : $("#no_npwp_pen_2").text(),
+                                "nik" : $("#nik_pen_2").text(),
+                                "income" : Number($("#income_npwp_pen_2").text()),
+                                "name" : $("#name_npwp_pen_2").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_2").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_2").text()
+                                // "income" : $("#income_npwp_pen_2").text(),
+                            }
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_2').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.errors.message);
-                            $('.prosesVerifikasiNpwpPenjamin_2').hide();
-                        })
-                    } else if(responseBody.status == 502) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_2").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
+                            console.log(requestBody);
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_2').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiNpwpPenjamin_2').hide();
-                        })
-                    } else if (responseBody.status == 200) {
-                        if (responseBody.data == null) {
-                            if (responseBody.errors.message == "Data not found") {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_2").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_2").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_2").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_2").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_2").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_2DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_2(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                    $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                                })
+                                        })
+
+                                    }
                                 }
-
+                                
+                            } else {
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
                                     type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
+                                    data: requestBody,
                                     beforeSend: function() {
                                         $('.prosesVerifikasiNpwpPenjamin_2').show();
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwppenjamin/";
-        
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponseNpwpPenjamin_2DataNotFound();
-                                        bootbox.alert(responseBody.errors.message);
-                                        $('.prosesVerifikasiNpwpPenjamin_2').hide();
-                                    })
-                                })
-                            }
-                        } else {
-                            var url = "api/master/verif/storenpwppenjamin/";
-        
-                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_2(responseBody);
-                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
-                            })
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
 
-                        }
-                    }
-                    
-                } else {
-                    $.ajax({
-                        url: 'Verifikasi_controller/verifikasi_npwp',
-                        type: 'POST',
-                        data: requestBody,
-                        beforeSend: function() {
-                            $('.prosesVerifikasiNpwpPenjamin_2').show();
-                        },
-                    })
-                    .done(function(res) {
-                        responseBody = JSON.parse(res);
-                        console.log( responseBody);
-
-                        if (responseBody.pesan != null ) {
-                            var requestBodyError = {
-                                "nik" : $("#nik").text(),
-                                "jenis_call" : "COMPLETE ID",
-                                "rc" : "",
-                                "messages" : responseBody.pesan,
-                            }
-    
-                            $.ajax({
-                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                type: 'POST',
-                                data: requestBodyError,
-                                headers: {
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                            })
-                            .done(function(res) {
-                                bootbox.alert(responseBody.pesan);
-                                $('.prosesVerifikasiDebitur').hide();
-                            })
-                        } else {
-                            if(responseBody.status == 401) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_2").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_2').hide();
-                                })
-                            } else if(responseBody.status == 500) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_2").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_2').hide();
-                                })
-                            } else if(responseBody.status == 502) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_2").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_2').hide();
-                                })
-                            } else if (responseBody.status == 200) {
-                                if (responseBody.data == null) {
-                                    if (responseBody.errors.message == "Data not found") {
+                                    if (responseBody.pesan != null ) {
                                         var requestBodyError = {
-                                            "npwp" : $("#no_npwp_pen_2").text(),
-                                            "jenis_call" : "PENDAPATAN",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.message,
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
                                         }
-
+                
                                         $.ajax({
                                             url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
                                             type: 'POST',
@@ -8991,45 +12580,427 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/storenpwppenjamin/";
-            
-                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
-                                            .done( (response) => {
-                                                mappingResponseNpwpPenjamin_2DataNotFound();
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_2").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_2").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
                                                 bootbox.alert(responseBody.errors.message);
                                                 $('.prosesVerifikasiNpwpPenjamin_2').hide();
                                             })
-                                        })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_2").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_2").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_2), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_2DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponseNpwpPenjamin_2(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                            $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                                    })
+                                                })
+
+                                            }
+                                        }
                                     }
-                                } else {
-                                    var url = "api/master/verif/storenpwppenjamin/";
-            
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponseNpwpPenjamin_2(responseBody);
-                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+
+                } else {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_2").text();
+                    var id_pen = $('#id_npwp_penjamin_2').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_2").text() + "01",
+                                "npwp" : $("#no_npwp_pen_2").text(),
+                                "nik" : $("#nik_pen_2").text(),
+                                "income" : Number($("#income_npwp_pen_2").text()),
+                                "name" : $("#name_npwp_pen_2").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_2").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_2").text()
+                                // "income" : $("#income_npwp_pen_2").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_2").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiNpwpPenjamin_2').hide();
                                     })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_2").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
-                                }
-                            }
-                        }
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_2").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                    })
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_2").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
                     
-                }
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_2DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            mappingResponseNpwpPenjamin_2(responseBody);
+                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                        })
 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_2').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_2").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_2").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_2").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_2").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_2DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_2(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+                                                    $('.prosesVerifikasiNpwpPenjamin_2').hide();
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                }
+            })
+
     }
 
     function verifikasiSimpanNpwpPen_3(isTesting, id_trans_so) {
+        $('.verifikasiNpwpPenjamin_1').hide();
+        $('.verifikasiNpwpPenjamin_2').hide();
         $('.verifikasiNpwpPenjamin_3').hide();
+        $('.verifikasiNpwpPenjamin_4').hide();
+        $('.verifikasiNpwpPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -9047,249 +13018,181 @@
                 } 
             })
 
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_3").text();
-        var id_pen = $('#id_npwp_penjamin_3').val();
+        get_detail({}, id_trans_so)
+            .done(function(response){
+                var data = response.data;
 
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "KMI" + $("#no_npwp_pen_3").text() + "01",
-                    "npwp" : $("#no_npwp_pen_3").text(),
-                    "nik" : $("#nik_pen_3").text(),
-                    "income" : Number($("#income_npwp_pen_3").text()),
-                    "name" : $("#name_npwp_pen_3").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_3").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_3").text()
-                    // "income" : $("#income_npwp_pen_3").text(),
-                }
+                if(data.npwp_penjamin.length == 0) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_3").text();
+                    var id_pen_1 = $('#id_npwp_penjamin_1').val();
+                    var id_pen_2 = $('#id_npwp_penjamin_2').val();
+                    var id_pen_3 = $('#id_npwp_penjamin_3').val();
 
-                console.log(requestBody);
-
-                if (isTesting) {
-                    responseBody = responseNpwp(requestBody);
-
-                    if(responseBody.status == 401) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_3").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
-
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_3').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiNpwpPenjamin_3').hide();
-                        })
-                    } else if(responseBody.status == 500) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_3").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.errors.message,
-                        }
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_3").text() + "01",
+                                "npwp" : $("#no_npwp_pen_3").text(),
+                                "nik" : $("#nik_pen_3").text(),
+                                "income" : Number($("#income_npwp_pen_3").text()),
+                                "name" : $("#name_npwp_pen_3").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_3").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_3").text()
+                                // "income" : $("#income_npwp_pen_3").text(),
+                            }
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_3').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.errors.message);
-                            $('.prosesVerifikasiNpwpPenjamin_3').hide();
-                        })
-                    } else if(responseBody.status == 502) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_3").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
+                            console.log(requestBody);
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_3').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiNpwpPenjamin_3').hide();
-                        })
-                    } else if (responseBody.status == 200) {
-                        if (responseBody.data == null) {
-                            if (responseBody.errors.message == "Data not found") {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_3").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_3DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_3(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+                                                    $('.prosesVerifikasiNpwpPenjamin_3').hide(); 
+                                                })
+                                            })
+                                            
+                                        })
+
+                                    }
                                 }
-
+                                
+                            } else {
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
                                     type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
+                                    data: requestBody,
                                     beforeSend: function() {
                                         $('.prosesVerifikasiNpwpPenjamin_3').show();
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwppenjamin/";
-        
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponseNpwpPenjamin_3DataNotFound();
-                                        bootbox.alert(responseBody.errors.message);
-                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
-                                    })
-                                })
-                            }
-                        } else {
-                            var url = "api/master/verif/storenpwppenjamin/";
-        
-                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_3(responseBody);
-                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
-                            })
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
 
-                        }
-                    }
-                    
-                } else {
-                    $.ajax({
-                        url: 'Verifikasi_controller/verifikasi_npwp',
-                        type: 'POST',
-                        data: requestBody,
-                        beforeSend: function() {
-                            $('.prosesVerifikasiNpwpPenjamin_3').show();
-                        },
-                    })
-                    .done(function(res) {
-                        responseBody = JSON.parse(res);
-                        console.log( responseBody);
-
-                        if (responseBody.pesan != null ) {
-                            var requestBodyError = {
-                                "nik" : $("#nik").text(),
-                                "jenis_call" : "COMPLETE ID",
-                                "rc" : "",
-                                "messages" : responseBody.pesan,
-                            }
-    
-                            $.ajax({
-                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                type: 'POST',
-                                data: requestBodyError,
-                                headers: {
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                            })
-                            .done(function(res) {
-                                bootbox.alert(responseBody.pesan);
-                                $('.prosesVerifikasiDebitur').hide();
-                            })
-                        } else {
-                            if(responseBody.status == 401) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_3").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_3').hide();
-                                })
-                            } else if(responseBody.status == 500) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_3").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_3').hide();
-                                })
-                            } else if(responseBody.status == 502) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_3").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_3').hide();
-                                })
-                            } else if (responseBody.status == 200) {
-                                if (responseBody.data == null) {
-                                    if (responseBody.errors.message == "Data not found") {
+                                    if (responseBody.pesan != null ) {
                                         var requestBodyError = {
-                                            "npwp" : $("#no_npwp_pen_3").text(),
-                                            "jenis_call" : "PENDAPATAN",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.message,
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
                                         }
-
+                
                                         $.ajax({
                                             url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
                                             type: 'POST',
@@ -9299,45 +13202,727 @@
                                             },
                                         })
                                         .done(function(res) {
-                                        var url = "api/master/verif/storenpwppenjamin/";
-            
-                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
-                                            .done( (response) => {
-                                                mappingResponseNpwpPenjamin_3DataNotFound();
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
                                                 bootbox.alert(responseBody.errors.message);
                                                 $('.prosesVerifikasiNpwpPenjamin_3').hide();
                                             })
-                                        })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                    var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_3DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_3(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+                                                            $('.prosesVerifikasiNpwpPenjamin_3').hide(); 
+                                                        })
+                                                    })
+                                                    
+                                                })
+
+                                            }
+                                        }
                                     }
-                                } else {
-                                    var url = "api/master/verif/storenpwppenjamin/";
-            
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponseNpwpPenjamin_3(responseBody);
-                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else if (data.npwp_penjamin.length == 1) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_3").text();
+
+                    var id_pen_2 = $('#id_npwp_penjamin_2').val();
+                    var id_pen_3 = $('#id_npwp_penjamin_3').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_3").text() + "01",
+                                "npwp" : $("#no_npwp_pen_3").text(),
+                                "nik" : $("#nik_pen_3").text(),
+                                "income" : Number($("#income_npwp_pen_3").text()),
+                                "name" : $("#name_npwp_pen_3").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_3").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_3").text()
+                                // "income" : $("#income_npwp_pen_3").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiNpwpPenjamin_3').hide();
                                     })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
-                                }
-                            }
-                        }
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                    })
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
                     
-                }
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_3DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin_(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_3(responseBody);
+                                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide(); 
+                                            })
+                                        })
 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                    var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_3DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin_(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponseNpwpPenjamin_3(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+                                                        $('.prosesVerifikasiNpwpPenjamin_3').hide(); 
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_3").text();
+                    var id_pen = $('#id_npwp_penjamin_3').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_3").text() + "01",
+                                "npwp" : $("#no_npwp_pen_3").text(),
+                                "nik" : $("#nik_pen_3").text(),
+                                "income" : Number($("#income_npwp_pen_3").text()),
+                                "name" : $("#name_npwp_pen_3").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_3").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_3").text()
+                                // "income" : $("#income_npwp_pen_3").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_3DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            mappingResponseNpwpPenjamin_3(responseBody);
+                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                        })
+
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_3').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_3").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_3").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                    var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_3DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_3(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+                                                    $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                }
+            })
+
     }
 
     function verifikasiSimpanNpwpPen_4(isTesting, id_trans_so) {
+        $('.verifikasiNpwpPenjamin_1').hide();
+        $('.verifikasiNpwpPenjamin_2').hide();
+        $('.verifikasiNpwpPenjamin_3').hide();
         $('.verifikasiNpwpPenjamin_4').hide();
+        $('.verifikasiNpwpPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -9350,249 +13935,184 @@
                 } 
             })
 
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_4").text();
-        var id_pen = $('#id_npwp_penjamin_4').val();
+        get_detail({}, id_trans_so)
+            .done(function(response) {
+                var data = response.data;
 
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "KMI" + $("#no_npwp_pen_4").text() + "01",
-                    "npwp" : $("#no_npwp_pen_4").text(),
-                    "nik" : $("#nik_pen_4").text(),
-                    "income" : Number($("#income_npwp_pen_4").text()),
-                    "name" : $("#name_npwp_pen_4").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_4").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_4").text()
-                    // "income" : $("#income_npwp_pen_4").text(),
-                }
+                if (data.npwp_penjamin.length == 0) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_4").text();
+                    var id_pen_1 = $('#id_npwp_penjamin_1').val();
+                    var id_pen_2 = $('#id_npwp_penjamin_2').val();
+                    var id_pen_3 = $('#id_npwp_penjamin_3').val();
+                    var id_pen_4 = $('#id_npwp_penjamin_4').val();
 
-                console.log(requestBody);
-
-                if (isTesting) {
-                    responseBody = responseNpwp(requestBody);
-
-                    if(responseBody.status == 401) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_4").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
-
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_4').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
-                        })
-                    } else if(responseBody.status == 500) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_4").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.errors.message,
-                        }
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_4").text() + "01",
+                                "npwp" : $("#no_npwp_pen_4").text(),
+                                "nik" : $("#nik_pen_4").text(),
+                                "income" : Number($("#income_npwp_pen_4").text()),
+                                "name" : $("#name_npwp_pen_4").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_4").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_4").text()
+                                // "income" : $("#income_npwp_pen_4").text(),
+                            }
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_4').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.errors.message);
-                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
-                        })
-                    } else if(responseBody.status == 502) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_4").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
+                            console.log(requestBody);
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_4').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
-                        })
-                    } else if (responseBody.status == 200) {
-                        if (responseBody.data == null) {
-                            if (responseBody.errors.message == "Data not found") {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_4").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_4DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponseNpwpPenjamin_4(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                    })
+                                                })
+                                            })
+                                        })
+
+                                    }
                                 }
-
+                                
+                            } else {
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
                                     type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
+                                    data: requestBody,
                                     beforeSend: function() {
                                         $('.prosesVerifikasiNpwpPenjamin_4').show();
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwppenjamin/";
-        
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponseNpwpPenjamin_4DataNotFound();
-                                        bootbox.alert(responseBody.errors.message);
-                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
-                                    })
-                                })
-                            }
-                        } else {
-                            var url = "api/master/verif/storenpwppenjamin/";
-        
-                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_4(responseBody);
-                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
-                            })
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
 
-                        }
-                    }
-                    
-                } else {
-                    $.ajax({
-                        url: 'Verifikasi_controller/verifikasi_npwp',
-                        type: 'POST',
-                        data: requestBody,
-                        beforeSend: function() {
-                            $('.prosesVerifikasiNpwpPenjamin_4').show();
-                        },
-                    })
-                    .done(function(res) {
-                        responseBody = JSON.parse(res);
-                        console.log( responseBody);
-
-                        if (responseBody.pesan != null ) {
-                            var requestBodyError = {
-                                "nik" : $("#nik").text(),
-                                "jenis_call" : "COMPLETE ID",
-                                "rc" : "",
-                                "messages" : responseBody.pesan,
-                            }
-    
-                            $.ajax({
-                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                type: 'POST',
-                                data: requestBodyError,
-                                headers: {
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                            })
-                            .done(function(res) {
-                                bootbox.alert(responseBody.pesan);
-                                $('.prosesVerifikasiDebitur').hide();
-                            })
-                        } else {
-                            if(responseBody.status == 401) {
-                            var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_4").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
-                                })
-                            } else if(responseBody.status == 500) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_4").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
-                                })
-                            } else if(responseBody.status == 502) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_4").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
-                                })
-                            } else if (responseBody.status == 200) {
-                                if (responseBody.data == null) {
-                                    if (responseBody.errors.message == "Data not found") {
+                                    if (responseBody.pesan != null ) {
                                         var requestBodyError = {
-                                            "npwp" : $("#no_npwp_pen_4").text(),
-                                            "jenis_call" : "PENDAPATAN",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.message,
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
                                         }
-
+                
                                         $.ajax({
                                             url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
                                             type: 'POST',
@@ -9602,289 +14122,1216 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/storenpwppenjamin/";
-            
-                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
-                                            .done( (response) => {
-                                                mappingResponseNpwpPenjamin_4DataNotFound();
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                        var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
                                                 bootbox.alert(responseBody.errors.message);
                                                 $('.prosesVerifikasiNpwpPenjamin_4').hide();
                                             })
-                                        })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_4DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                            .done( (response) => {
+                                                                mappingResponseNpwpPenjamin_4(responseBody);
+                                                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                            })
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
                                     }
-                                } else {
-                                    var url = "api/master/verif/storenpwppenjamin/";
-            
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponseNpwpPenjamin_4(responseBody);
-                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else if (data.npwp_penjamin.length == 1) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_4").text();
+                    
+                    var id_pen_2 = $('#id_npwp_penjamin_2').val();
+                    var id_pen_3 = $('#id_npwp_penjamin_3').val();
+                    var id_pen_4 = $('#id_npwp_penjamin_4').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_4").text() + "01",
+                                "npwp" : $("#no_npwp_pen_4").text(),
+                                "nik" : $("#nik_pen_4").text(),
+                                "income" : Number($("#income_npwp_pen_4").text()),
+                                "name" : $("#name_npwp_pen_4").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_4").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_4").text()
+                                // "income" : $("#income_npwp_pen_4").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiNpwpPenjamin_4').hide();
                                     })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
-                                }
-                            }
-                        }
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                    })
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
                     
-                }
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_4DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_4(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                })
+                                            })
+                                        })
 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                        var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_4DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_4(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else if (data.npwp_penjamin.length == 2) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_4").text();
+                    
+                    var id_pen_3 = $('#id_npwp_penjamin_3').val();
+                    var id_pen_4 = $('#id_npwp_penjamin_4').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_4").text() + "01",
+                                "npwp" : $("#no_npwp_pen_4").text(),
+                                "nik" : $("#nik_pen_4").text(),
+                                "income" : Number($("#income_npwp_pen_4").text()),
+                                "name" : $("#name_npwp_pen_4").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_4").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_4").text()
+                                // "income" : $("#income_npwp_pen_4").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_4DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_4(responseBody);
+                                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        })
+
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                        var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjaminDataNotFound(id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_4DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponseNpwpPenjamin_4(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_4").text();
+                    var id_pen = $('#id_npwp_penjamin_4').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_4").text() + "01",
+                                "npwp" : $("#no_npwp_pen_4").text(),
+                                "nik" : $("#nik_pen_4").text(),
+                                "income" : Number($("#income_npwp_pen_4").text()),
+                                "name" : $("#name_npwp_pen_4").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_4").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_4").text()
+                                // "income" : $("#income_npwp_pen_4").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_4DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            mappingResponseNpwpPenjamin_4(responseBody);
+                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                        })
+
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_4').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                        var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_4").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_4").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_4DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_4(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+                                                    $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                }
+            })
+
     }
 
     function verifikasiSimpanNpwpPen_5(isTesting, id_trans_so) {
+        $('.verifikasiNpwpPenjamin_1').hide();
+        $('.verifikasiNpwpPenjamin_2').hide();
+        $('.verifikasiNpwpPenjamin_3').hide();
+        $('.verifikasiNpwpPenjamin_4').hide();
         $('.verifikasiNpwpPenjamin_5').hide();
 
-        var responseBody;
-        var no_npwp = $("#no_npwp_pen_5").text();
-        var id_pen = $('#id_npwp_penjamin_5').val();
+        get_detail({}, id_trans_so)
+            .done(function(response) {
+                var data = response.data;
 
-        if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
-            bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
-        } else {
-            $.ajax({
-            type: 'GET',
-            }).done(function( data, textStatus, jqXHR ) {
-                var requestBody = {
-                    "trx_id" : "KMI" + $("#no_npwp_pen_5").text() + "01",
-                    "npwp" : $("#no_npwp_pen_5").text(),
-                    "nik" : $("#nik_pen_5").text(),
-                    "income" : Number($("#income_npwp_pen_5").text()),
-                    "name" : $("#name_npwp_pen_5").text(),
-                    "birthdate" : $("#birthdate_npwp_pen_5").text(),
-                    "birthplace" : $("#birthplace_npwp_pen_5").text()
-                    // "income" : $("#income_npwp_pen_5").text(),
-                }
+                if (data.npwp_penjamin.length == 0) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_5").text();
+                    var id_pen_1 = $('#id_npwp_penjamin_1').val();
+                    var id_pen_2 = $('#id_npwp_penjamin_2').val();
+                    var id_pen_3 = $('#id_npwp_penjamin_3').val();
+                    var id_pen_4 = $('#id_npwp_penjamin_4').val();
+                    var id_pen_5 = $('#id_npwp_penjamin_5').val();
 
-                console.log(requestBody);
-
-                if (isTesting) {
-                    responseBody = responseNpwp(requestBody);
-
-                    if(responseBody.status == 401) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_5").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
-
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
                         $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_5').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
-                        })
-                    } else if(responseBody.status == 500) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_5").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.errors.message,
-                        }
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_5").text() + "01",
+                                "npwp" : $("#no_npwp_pen_5").text(),
+                                "nik" : $("#nik_pen_5").text(),
+                                "income" : Number($("#income_npwp_pen_5").text()),
+                                "name" : $("#name_npwp_pen_5").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_5").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_5").text()
+                                // "income" : $("#income_npwp_pen_5").text(),
+                            }
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_5').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.errors.message);
-                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
-                        })
-                    } else if(responseBody.status == 502) {
-                        var requestBodyError = {
-                            "npwp" : $("#no_npwp_pen_5").text(),
-                            "jenis_call" : "PENDAPATAN",
-                            "rc" : responseBody.status,
-                            "messages" : responseBody.message,
-                        }
+                            console.log(requestBody);
 
-                        $.ajax({
-                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                            type: 'POST',
-                            data: requestBodyError,
-                            headers: {
-                                'Authorization': 'Bearer ' + localStorage.getItem('token')
-                            },
-                            beforeSend: function() {
-                                $('.prosesVerifikasiNpwpPenjamin_5').show();
-                            },
-                        })
-                        .done(function(res) {
-                            bootbox.alert(responseBody.message);
-                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
-                        })
-                    } else if (responseBody.status == 200) {
-                        if (responseBody.data == null) {
-                            if (responseBody.errors.message == "Data not found") {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_5").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_5(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                })
+                                            })
+                                        })
+
+                                    }
                                 }
-
+                                
+                            } else {
                                 $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
                                     type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
+                                    data: requestBody,
                                     beforeSend: function() {
                                         $('.prosesVerifikasiNpwpPenjamin_5').show();
                                     },
                                 })
                                 .done(function(res) {
-                                    var url = "api/master/verif/storenpwppenjamin/";
-        
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponseNpwpPenjamin_5DataNotFound();
-                                        bootbox.alert(responseBody.errors.message);
-                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
-                                    })
-                                })
-                            }
-                        } else {
-                            var url = "api/master/verif/storenpwppenjamin/";
-        
-                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                            .done( (response) => {
-                                mappingResponseNpwpPenjamin_5(responseBody);
-                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
-                            })
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
 
-                        }
-                    }
-                    
-                } else {
-                    $.ajax({
-                        url: 'Verifikasi_controller/verifikasi_npwp',
-                        type: 'POST',
-                        data: requestBody,
-                        beforeSend: function() {
-                            $('.prosesVerifikasiNpwpPenjamin_5').show();
-                        },
-                    })
-                    .done(function(res) {
-                        responseBody = JSON.parse(res);
-                        console.log( responseBody);
-
-                        if (responseBody.pesan != null ) {
-                            var requestBodyError = {
-                                "nik" : $("#nik").text(),
-                                "jenis_call" : "COMPLETE ID",
-                                "rc" : "",
-                                "messages" : responseBody.pesan,
-                            }
-    
-                            $.ajax({
-                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                type: 'POST',
-                                data: requestBodyError,
-                                headers: {
-                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                },
-                            })
-                            .done(function(res) {
-                                bootbox.alert(responseBody.pesan);
-                                $('.prosesVerifikasiDebitur').hide();
-                            })
-                        } else {
-                            if(responseBody.status == 401) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_5").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
-                                })
-                            } else if(responseBody.status == 500) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_5").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.errors.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.errors.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
-                                })
-                            } else if(responseBody.status == 502) {
-                                var requestBodyError = {
-                                    "npwp" : $("#no_npwp_pen_5").text(),
-                                    "jenis_call" : "PENDAPATAN",
-                                    "rc" : responseBody.status,
-                                    "messages" : responseBody.message,
-                                }
-
-                                $.ajax({
-                                    url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
-                                    type: 'POST',
-                                    data: requestBodyError,
-                                    headers: {
-                                        'Authorization': 'Bearer ' + localStorage.getItem('token')
-                                    },
-                                })
-                                .done(function(res) {
-                                    bootbox.alert(responseBody.message);
-                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
-                                })
-                            } else if (responseBody.status == 200) {
-                                if (responseBody.data == null) {
-                                    if (responseBody.errors.message == "Data not found") {
+                                    if (responseBody.pesan != null ) {
                                         var requestBodyError = {
-                                            "npwp" : $("#no_npwp_pen_5").text(),
-                                            "jenis_call" : "PENDAPATAN",
-                                            "rc" : responseBody.status,
-                                            "messages" : responseBody.errors.message,
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
                                         }
-
+                
                                         $.ajax({
                                             url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
                                             type: 'POST',
@@ -9894,45 +15341,1347 @@
                                             },
                                         })
                                         .done(function(res) {
-                                            var url = "api/master/verif/storenpwppenjamin/";
-            
-                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
-                                            .done( (response) => {
-                                                mappingResponseNpwpPenjamin_5DataNotFound();
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
                                                 bootbox.alert(responseBody.errors.message);
                                                 $('.prosesVerifikasiNpwpPenjamin_5').hide();
                                             })
-                                        })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_1), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                            .done( (response) => {
+                                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                                .done( (response) => {
+                                                                    mappingResponseNpwpPenjamin_5(responseBody);
+                                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                                })
+                                                            })
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
                                     }
-                                } else {
-                                    var url = "api/master/verif/storenpwppenjamin/";
-            
-                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
-                                    .done( (response) => {
-                                        mappingResponseNpwpPenjamin_5(responseBody);
-                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else if (data.npwp_penjamin.length == 1) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_5").text();
+                    
+                    var id_pen_2 = $('#id_npwp_penjamin_2').val();
+                    var id_pen_3 = $('#id_npwp_penjamin_3').val();
+                    var id_pen_4 = $('#id_npwp_penjamin_4').val();
+                    var id_pen_5 = $('#id_npwp_penjamin_5').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_5").text() + "01",
+                                "npwp" : $("#no_npwp_pen_5").text(),
+                                "nik" : $("#nik_pen_5").text(),
+                                "income" : Number($("#income_npwp_pen_5").text()),
+                                "name" : $("#name_npwp_pen_5").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_5").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_5").text()
+                                // "income" : $("#income_npwp_pen_5").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
                                         $('.prosesVerifikasiNpwpPenjamin_5').hide();
                                     })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
 
-                                }
-                            }
-                        }
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
 
-                    })
-                    .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
-                        alert("Status: " + textStatus); alert("Error: " + errorThrown); 
-                    })
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
                     
-                }
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponseNpwpPenjamin_5(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                    })
+                                                })
+                                            })
+                                        })
 
-            }).fail(function( jqXHR, textStatus, errorThrown ) {
-                bootbox.alert("Gagal Verifikasi Data NPWP!!");
-            });
-        }
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_2), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                            .done( (response) => {
+                                                                mappingResponseNpwpPenjamin_5(responseBody);
+                                                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                            })
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else if (data.npwp_penjamin.length == 2) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_5").text();
+                    
+                    var id_pen_3 = $('#id_npwp_penjamin_3').val();
+                    var id_pen_4 = $('#id_npwp_penjamin_4').val();
+                    var id_pen_5 = $('#id_npwp_penjamin_5').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_5").text() + "01",
+                                "npwp" : $("#no_npwp_pen_5").text(),
+                                "nik" : $("#nik_pen_5").text(),
+                                "income" : Number($("#income_npwp_pen_5").text()),
+                                "name" : $("#name_npwp_pen_5").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_5").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_5").text()
+                                // "income" : $("#income_npwp_pen_5").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_5(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                })
+                                            })
+                                        })
+
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_3), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_5(responseBody);
+                                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else if (data.npwp_penjamin.length == 3) {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_5").text();
+                    
+                    var id_pen_4 = $('#id_npwp_penjamin_4').val();
+                    var id_pen_5 = $('#id_npwp_penjamin_5').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_5").text() + "01",
+                                "npwp" : $("#no_npwp_pen_5").text(),
+                                "nik" : $("#nik_pen_5").text(),
+                                "income" : Number($("#income_npwp_pen_5").text()),
+                                "name" : $("#name_npwp_pen_5").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_5").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_5").text()
+                                // "income" : $("#income_npwp_pen_5").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen_5), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_5(responseBody);
+                                                bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        })
+
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen_5), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen_4), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen_5), url, id_trans_so, "POST")
+                                                    .done( (response) => {
+                                                        mappingResponseNpwpPenjamin_5(responseBody);
+                                                        bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                    })
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                } else {
+                    var responseBody;
+                    var no_npwp = $("#no_npwp_pen_5").text();
+                    var id_pen = $('#id_npwp_penjamin_5').val();
+
+                    if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
+                        bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
+                    } else {
+                        $.ajax({
+                        type: 'GET',
+                        }).done(function( data, textStatus, jqXHR ) {
+                            var requestBody = {
+                                "trx_id" : "KMI" + $("#no_npwp_pen_5").text() + "01",
+                                "npwp" : $("#no_npwp_pen_5").text(),
+                                "nik" : $("#nik_pen_5").text(),
+                                "income" : Number($("#income_npwp_pen_5").text()),
+                                "name" : $("#name_npwp_pen_5").text(),
+                                "birthdate" : $("#birthdate_npwp_pen_5").text(),
+                                "birthplace" : $("#birthplace_npwp_pen_5").text()
+                                // "income" : $("#income_npwp_pen_5").text(),
+                            }
+
+                            console.log(requestBody);
+
+                            if (isTesting) {
+                                responseBody = responseNpwp(requestBody);
+
+                                if(responseBody.status == 401) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 500) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.errors.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.errors.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if(responseBody.status == 502) {
+                                    var requestBodyError = {
+                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                        "jenis_call" : "PENDAPATAN",
+                                        "rc" : responseBody.status,
+                                        "messages" : responseBody.message,
+                                    }
+
+                                    $.ajax({
+                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                        type: 'POST',
+                                        data: requestBodyError,
+                                        headers: {
+                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                        },
+                                        beforeSend: function() {
+                                            $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                        },
+                                    })
+                                    .done(function(res) {
+                                        bootbox.alert(responseBody.message);
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else if (responseBody.status == 200) {
+                                    if (responseBody.data == null) {
+                                        if (responseBody.errors.message == "Data not found") {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                                beforeSend: function() {
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_5DataNotFound();
+                                                    bootbox.alert(responseBody.errors.message);
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                })
+                                            })
+                                        }
+                                    } else {
+                                        var url = "api/master/verif/storenpwppenjamin/";
+                    
+                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                        .done( (response) => {
+                                            mappingResponseNpwpPenjamin_5(responseBody);
+                                            bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!"); 
+                                        })
+
+                                    }
+                                }
+                                
+                            } else {
+                                $.ajax({
+                                    url: 'Verifikasi_controller/verifikasi_npwp',
+                                    type: 'POST',
+                                    data: requestBody,
+                                    beforeSend: function() {
+                                        $('.prosesVerifikasiNpwpPenjamin_5').show();
+                                    },
+                                })
+                                .done(function(res) {
+                                    responseBody = JSON.parse(res);
+                                    console.log( responseBody);
+
+                                    if (responseBody.pesan != null ) {
+                                        var requestBodyError = {
+                                            "nik" : $("#nik").text(),
+                                            "jenis_call" : "COMPLETE ID",
+                                            "rc" : "",
+                                            "messages" : responseBody.pesan,
+                                        }
+                
+                                        $.ajax({
+                                            url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                            type: 'POST',
+                                            data: requestBodyError,
+                                            headers: {
+                                                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                            },
+                                        })
+                                        .done(function(res) {
+                                            bootbox.alert(responseBody.pesan);
+                                            $('.prosesVerifikasiDebitur').hide();
+                                        })
+                                    } else {
+                                        if(responseBody.status == 401) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 500) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.errors.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.errors.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if(responseBody.status == 502) {
+                                            var requestBodyError = {
+                                                "npwp" : $("#no_npwp_pen_5").text(),
+                                                "jenis_call" : "PENDAPATAN",
+                                                "rc" : responseBody.status,
+                                                "messages" : responseBody.message,
+                                            }
+
+                                            $.ajax({
+                                                url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                type: 'POST',
+                                                data: requestBodyError,
+                                                headers: {
+                                                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                },
+                                            })
+                                            .done(function(res) {
+                                                bootbox.alert(responseBody.message);
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else if (responseBody.status == 200) {
+                                            if (responseBody.data == null) {
+                                                if (responseBody.errors.message == "Data not found") {
+                                                    var requestBodyError = {
+                                                        "npwp" : $("#no_npwp_pen_5").text(),
+                                                        "jenis_call" : "PENDAPATAN",
+                                                        "rc" : responseBody.status,
+                                                        "messages" : responseBody.errors.message,
+                                                    }
+
+                                                    $.ajax({
+                                                        url: '<?php echo config_item('api_url') ?>api/master/verif/error_log',
+                                                        type: 'POST',
+                                                        data: requestBodyError,
+                                                        headers: {
+                                                            'Authorization': 'Bearer ' + localStorage.getItem('token')
+                                                        },
+                                                    })
+                                                    .done(function(res) {
+                                                        var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                        httpRequestBuilder(requestMapperForStoreNpwpPenjamin(id_pen), url, id_trans_so, "POST")
+                                                        .done( (response) => {
+                                                            mappingResponseNpwpPenjamin_5DataNotFound();
+                                                            bootbox.alert(responseBody.errors.message);
+                                                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                        })
+                                                    })
+                                                }
+                                            } else {
+                                                var url = "api/master/verif/storenpwppenjamin/";
+                        
+                                                httpRequestBuilder(requestMapperForStoreNpwpPenjamin(responseBody, id_pen), url, id_trans_so, "POST")
+                                                .done( (response) => {
+                                                    mappingResponseNpwpPenjamin_5(responseBody);
+                                                    bootbox.alert("Berhasil Simpan Verifikasi Data NPWP!!");
+                                                    $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                                })
+
+                                            }
+                                        }
+                                    }
+
+                                })
+                                .fail(function(XMLHttpRequest, textStatus, errorThrown) { 
+                                    alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                                })
+                                
+                            }
+
+                        }).fail(function( jqXHR, textStatus, errorThrown ) {
+                            bootbox.alert("Gagal Verifikasi Data NPWP!!");
+                        });
+                    }
+                }
+            })
+
     }
 
-    function verifikasiUpdateNpwpPen_1(isTesting, limitCallNpwpPenjamin_1, id_trans_so, id_penjamin) {
+    function verifikasiUpdateNpwpPen_1(isTesting, limitCallNpwpPenjamin_1, id_trans_so) {
         $('.verifikasiNpwpPenjamin_1').hide();
+        $('.verifikasiNpwpPenjamin_2').hide();
+        $('.verifikasiNpwpPenjamin_3').hide();
+        $('.verifikasiNpwpPenjamin_4').hide();
+        $('.verifikasiNpwpPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -9968,6 +16717,7 @@
 
         var responseBody;
         var no_npwp = $("#no_npwp_pen_1").text();
+        var id_penjamin = $('#id_npwp_penjamin_1').val();
 
         if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
             bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
@@ -10087,7 +16837,7 @@
                                     .done(function(res) {
                                         var url = "api/master/verif/updateNpwppenjamin/";
         
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPenjamin_1DataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -10097,12 +16847,23 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updateNpwppenjamin/";
-        
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_1(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
-                                })
+
+                                if (limitCallNpwpPenjamin_1 == "0") {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_1(responseBody);
+                                        bootbox.alert("Berhasil Verifikasi Data NPWP!!"); 
+                                        $('.prosesVerifikasiPenjamin_1').hide();
+                                    })
+
+                                } else {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_1(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                        $('.prosesVerifikasiPenjamin_1').hide();
+                                    })
+                                }
 
                             }
                         }
@@ -10222,7 +16983,7 @@
                                             .done(function(res) {
                                                 var url = "api/master/verif/updateNpwppenjamin/";
             
-                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                                 .done( (response) => {
                                                     mappingResponseNpwpPenjamin_1DataNotFound();
                                                     bootbox.alert(responseBody.errors.message);
@@ -10233,12 +16994,22 @@
                                     } else {
                                         var url = "api/master/verif/updateNpwppenjamin/";
             
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                        .done( (response) => {
-                                            mappingResponseNpwpPenjamin_1(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                            $('.prosesVerifikasiNpwpPenjamin_1').hide();
-                                        })
+                                        if (limitCallNpwpPenjamin_1 == "0") {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_1(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiPenjamin_1').hide();
+                                            })
+
+                                        } else {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_1(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiPenjamin_1').hide();
+                                            })
+                                        }
 
                                     }
                                 }
@@ -10259,8 +17030,12 @@
         }
     }
 
-    function verifikasiUpdateNpwpPen_2(isTesting, limitCallNpwpPenjamin_2, id_trans_so, id_penjamin) {
+    function verifikasiUpdateNpwpPen_2(isTesting, limitCallNpwpPenjamin_2, id_trans_so) {
+        $('.verifikasiNpwpPenjamin_1').hide();
         $('.verifikasiNpwpPenjamin_2').hide();
+        $('.verifikasiNpwpPenjamin_3').hide();
+        $('.verifikasiNpwpPenjamin_4').hide();
+        $('.verifikasiNpwpPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -10287,6 +17062,7 @@
 
         var responseBody;
         var no_npwp = $("#no_npwp_pen_2").text();
+        var id_penjamin = $('#id_npwp_penjamin_2').val();
 
         if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
             bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
@@ -10406,7 +17182,7 @@
                                     .done(function(res) {
                                         var url = "api/master/verif/updateNpwppenjamin/";
         
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPenjamin_2DataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -10416,12 +17192,22 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updateNpwppenjamin/";
-        
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_2(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
-                                })
+                                
+                                if(limitCallNpwpPenjamin_2 == "0") {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_2(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
+                                        $('.prosesVerifikasiNpwpPenjamin_2').hide(); 
+                                    })
+                                } else {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_2(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
+                                        $('.prosesVerifikasiNpwpPenjamin_2').hide(); 
+                                    })
+                                }
 
                             }
                         }
@@ -10541,7 +17327,7 @@
                                             .done(function(res) {
                                                 var url = "api/master/verif/updateNpwppenjamin/";
             
-                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                                 .done( (response) => {
                                                     mappingResponseNpwpPenjamin_2DataNotFound();
                                                     bootbox.alert(responseBody.errors.message);
@@ -10552,12 +17338,21 @@
                                     } else {
                                         var url = "api/master/verif/updateNpwppenjamin/";
             
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                        .done( (response) => {
-                                            mappingResponseNpwpPenjamin_2(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                            $('.prosesVerifikasiNpwpPenjamin_2').hide();
-                                        })
+                                        if(limitCallNpwpPenjamin_2 == "0") {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_2(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
+                                                $('.prosesVerifikasiNpwpPenjamin_2').hide(); 
+                                            })
+                                        } else {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_2(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
+                                                $('.prosesVerifikasiNpwpPenjamin_2').hide(); 
+                                            })
+                                        }
 
                                     }
                                 }
@@ -10578,8 +17373,12 @@
         }
     }
 
-    function verifikasiUpdateNpwpPen_3(isTesting, limitCallNpwpPenjamin_3, id_trans_so, id_penjamin) {
+    function verifikasiUpdateNpwpPen_3(isTesting, limitCallNpwpPenjamin_3, id_trans_so) {
+        $('.verifikasiNpwpPenjamin_1').hide();
+        $('.verifikasiNpwpPenjamin_2').hide();
         $('.verifikasiNpwpPenjamin_3').hide();
+        $('.verifikasiNpwpPenjamin_4').hide();
+        $('.verifikasiNpwpPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -10599,6 +17398,7 @@
 
         var responseBody;
         var no_npwp = $("#no_npwp_pen_3").text();
+        var id_penjamin = $('#id_npwp_penjamin_3').val();
 
         if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
             bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
@@ -10718,7 +17518,7 @@
                                     .done(function(res) {
                                         var url = "api/master/verif/updateNpwppenjamin/";
         
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPenjamin_3DataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -10728,12 +17528,23 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updateNpwppenjamin/";
-        
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_3(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
-                                })
+                                
+                                if (limitCallNpwpPenjamin_3 == "0") {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_3(responseBody);
+                                        bootbox.alert("Berhasil Verifikasi Data NPWP!!"); 
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+                                } else {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_3(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                        $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                    })
+
+                                }
 
                             }
                         }
@@ -10853,7 +17664,7 @@
                                             .done(function(res) {
                                                 var url = "api/master/verif/updateNpwppenjamin/";
             
-                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                                 .done( (response) => {
                                                     mappingResponseNpwpPenjamin_3DataNotFound();
                                                     bootbox.alert(responseBody.errors.message);
@@ -10864,12 +17675,22 @@
                                     } else {
                                         var url = "api/master/verif/updateNpwppenjamin/";
             
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                        .done( (response) => {
-                                            mappingResponseNpwpPenjamin_3(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                            $('.prosesVerifikasiNpwpPenjamin_3').hide();
-                                        })
+                                        if (limitCallNpwpPenjamin_3 == "0") {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_3(responseBody);
+                                                bootbox.alert("Berhasil Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+                                        } else {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_3(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiNpwpPenjamin_3').hide();
+                                            })
+
+                                        }
 
                                     }
                                 }
@@ -10890,8 +17711,12 @@
         }
     }
 
-    function verifikasiUpdateNpwpPen_4(isTesting, limitCallNpwpPenjamin_4, id_trans_so, id_penjamin) {
+    function verifikasiUpdateNpwpPen_4(isTesting, limitCallNpwpPenjamin_4, id_trans_so) {
+        $('.verifikasiNpwpPenjamin_1').hide();
+        $('.verifikasiNpwpPenjamin_2').hide();
+        $('.verifikasiNpwpPenjamin_3').hide();
         $('.verifikasiNpwpPenjamin_4').hide();
+        $('.verifikasiNpwpPenjamin_5').hide();
 
         get_data({}, id_trans_so)
             .done(function(response) {
@@ -10906,6 +17731,7 @@
 
         var responseBody;
         var no_npwp = $("#no_npwp_pen_4").text();
+        var id_penjamin = $('#id_npwp_penjamin_4').val();
 
         if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
             bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
@@ -11025,7 +17851,7 @@
                                     .done(function(res) {
                                         var url = "api/master/verif/updateNpwppenjamin/";
         
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPenjamin_4DataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -11035,12 +17861,23 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updateNpwppenjamin/";
-        
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_4(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
-                                })
+                                
+                                if (limitCallNpwpPenjamin_4 == "0") {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_4(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+                                } else {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_4(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                        $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                    })
+
+                                }
 
                             }
                         }
@@ -11160,7 +17997,7 @@
                                             .done(function(res) {
                                                 var url = "api/master/verif/updateNpwppenjamin/";
             
-                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                                 .done( (response) => {
                                                     mappingResponseNpwpPenjamin_4DataNotFound();
                                                     bootbox.alert(responseBody.errors.message);
@@ -11171,12 +18008,22 @@
                                     } else {
                                         var url = "api/master/verif/updateNpwppenjamin/";
             
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                        .done( (response) => {
-                                            mappingResponseNpwpPenjamin_4(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                            $('.prosesVerifikasiNpwpPenjamin_4').hide();
-                                        })
+                                        if (limitCallNpwpPenjamin_4 == "0") {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_4(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+                                        } else {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_4(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiNpwpPenjamin_4').hide();
+                                            })
+
+                                        }
 
                                     }
                                 }
@@ -11197,11 +18044,16 @@
         }
     }
 
-    function verifikasiUpdateNpwpPen_5(isTesting, limitCallNpwpPenjamin_5, id_trans_so, id_penjamin) {
+    function verifikasiUpdateNpwpPen_5(isTesting, limitCallNpwpPenjamin_5, id_trans_so) {
+        $('.verifikasiNpwpPenjamin_1').hide();
+        $('.verifikasiNpwpPenjamin_2').hide();
+        $('.verifikasiNpwpPenjamin_3').hide();
+        $('.verifikasiNpwpPenjamin_4').hide();
         $('.verifikasiNpwpPenjamin_5').hide();
 
         var responseBody;
         var no_npwp = $("#no_npwp_pen_5").text();
+        var id_penjamin = $('#id_npwp_penjamin_5').val();
 
         if (no_npwp == "0" || no_npwp == "" || no_npwp == null) {
             bootbox. alert("Penjamin Tidak Memiliki No. NPWP, Tidak Dapat Melakukan Verifikasi!!");
@@ -11321,7 +18173,7 @@
                                     .done(function(res) {
                                         var url = "api/master/verif/updateNpwppenjamin/";
         
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                         .done( (response) => {
                                             mappingResponseNpwpPenjamin_5DataNotFound();
                                             bootbox.alert(responseBody.errors.message);
@@ -11331,12 +18183,23 @@
                                 }
                             } else {
                                 var url = "api/master/verif/updateNpwppenjamin/";
-        
-                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                .done( (response) => {
-                                    mappingResponseNpwpPenjamin_5(responseBody);
-                                    bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
-                                })
+                                
+                                if(limitCallNpwpPenjamin_5 == "0") {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_5(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+                                } else {
+                                    httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                    .done( (response) => {
+                                        mappingResponseNpwpPenjamin_5(responseBody);
+                                        bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                        $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                    })
+
+                                }
 
                             }
                         }
@@ -11456,7 +18319,7 @@
                                             .done(function(res) {
                                                 var url = "api/master/verif/updateNpwppenjamin/";
             
-                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpDataNotFound(), url, id_trans_so, id_penjamin, "POST")
+                                                httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjaminDataNotFound(id_penjamin), url, id_trans_so, id_penjamin, "POST")
                                                 .done( (response) => {
                                                     mappingResponseNpwpPenjamin_5DataNotFound();
                                                     bootbox.alert(responseBody.errors.message);
@@ -11467,12 +18330,22 @@
                                     } else {
                                         var url = "api/master/verif/updateNpwppenjamin/";
             
-                                        httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwp(responseBody), url, id_trans_so, id_penjamin, "POST")
-                                        .done( (response) => {
-                                            mappingResponseNpwpPenjamin_5(responseBody);
-                                            bootbox.alert("Berhasil Update Verifikasi Data NPWP!!");
-                                            $('.prosesVerifikasiNpwpPenjamin_5').hide();
-                                        })
+                                        if(limitCallNpwpPenjamin_5 == "0") {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin_null(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_5(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+                                        } else {
+                                            httpRequestBuilderNpwpPenjamin(requestMapperForUpdateNpwpPenjamin(responseBody, id_penjamin), url, id_trans_so, id_penjamin, "POST")
+                                            .done( (response) => {
+                                                mappingResponseNpwpPenjamin_5(responseBody);
+                                                bootbox.alert("Berhasil Update Verifikasi Data NPWP!!"); 
+                                                $('.prosesVerifikasiNpwpPenjamin_5').hide();
+                                            })
+
+                                        }
 
                                     }
                                 }
@@ -13677,6 +20550,20 @@
         }
     }
 
+    function requestMapperForStorePenjamin_null(responseBody, id_pen) {
+        return {
+            id_penjamin: id_pen,
+            nama: null,
+            tempat_lahir: null,
+            tgl_lahir: null,
+            alamat: null,
+            selfie_foto: null,
+            trx_id: null,
+            ref_id: null,
+            limit_call: 0,
+        }
+    }
+
     function requestMapperForStorePenjaminDataNotFound(id_pen) {
         return {
             id_penjamin: id_pen,
@@ -13764,6 +20651,22 @@
             trx_id: responseBody.trx_id,
             ref_id: responseBody.ref_id,
             limit_call: 1,
+        }
+    }
+
+    function requestMapperForStoreNpwpPenjamin_null(responseBody, id_pen) {
+        return {
+            id_penjamin: id_pen,
+            npwp: null,
+            nik: null,
+            match_result: null,
+            income: null,
+            nama: null,
+            tmp_lahir: null,
+            tgl_lahir: null,
+            trx_id: null,
+            ref_id: null,
+            limit_call: 0,
         }
     }
 
@@ -13885,6 +20788,20 @@
         }
     }
 
+    function requestMapperForUpdatePenjamin_null(responseBody, id_pen) {
+        return {
+            id_penjamin: id_pen,
+            nama_penjamin: responseBody.data.name ? 1 : 2,
+            tempat_lahir_penjamin: responseBody.data.birthplace ? 1 : 2,
+            tgl_lahir_penjamin: responseBody.data.birthdate ? 1 : 2,
+            alamat_penjamin: responseBody.data.address,
+            selfie_foto_penjamin: responseBody.data.selfie_photo,
+            trx_id_penjamin: responseBody.trx_id,
+            ref_id_penjamin: responseBody.ref_id,
+            limit_call_penjamin: 1,
+        }
+    }
+
     function requestMapperForUpdatePenjaminDataNotFound(id_pen) {
         return {
             id_penjamin: id_pen,
@@ -13916,6 +20833,84 @@
 
     function requestMapperForUpdateNpwpDataNotFound() {
         return {
+            npwp: 2,
+            nik: 2,
+            match_result: 2,
+            income: null,
+            nama: 2,
+            tmp_lahir: 2,
+            tgl_lahir: 2,
+            trx_id: "",
+            ref_id: "",
+            limit_call: 2,
+        }
+    }
+
+    function requestMapperForUpdateNpwpPasangan(responseBody) {
+        return {
+            npwp: responseBody.data.npwp ? 1 : 2,
+            nik: responseBody.data.nik ? 1 : 2,
+            match_result: responseBody.data.match_result ? 1 : 2,
+            income: responseBody.data.income,
+            nama: responseBody.data.name ? 1 : 2,
+            tmp_lahir: responseBody.data.birthplace ? 1 : 2,
+            tgl_lahir: responseBody.data.birthdate ? 1 : 2,
+            trx_id: responseBody.trx_id,
+            ref_id: responseBody.ref_id,
+            limit_call: 2,
+        }
+    }
+
+    function requestMapperForUpdateNpwpPasanganDataNotFound() {
+        return {
+            npwp: 2,
+            nik: 2,
+            match_result: 2,
+            income: null,
+            nama: 2,
+            tmp_lahir: 2,
+            tgl_lahir: 2,
+            trx_id: "",
+            ref_id: "",
+            limit_call: 2,
+        }
+    }
+
+    function requestMapperForUpdateNpwpPenjamin(responseBody, id_pen) {
+        return {
+            id_penjamin: id_pen,
+            npwp: responseBody.data.npwp ? 1 : 2,
+            nik: responseBody.data.nik ? 1 : 2,
+            match_result: responseBody.data.match_result ? 1 : 2,
+            income: responseBody.data.income,
+            nama: responseBody.data.name ? 1 : 2,
+            tmp_lahir: responseBody.data.birthplace ? 1 : 2,
+            tgl_lahir: responseBody.data.birthdate ? 1 : 2,
+            trx_id: responseBody.trx_id,
+            ref_id: responseBody.ref_id,
+            limit_call: 2,
+        }
+    }
+
+    function requestMapperForUpdateNpwpPenjamin_null(responseBody, id_pen) {
+        return {
+            id_penjamin: id_pen,
+            npwp: responseBody.data.npwp ? 1 : 2,
+            nik: responseBody.data.nik ? 1 : 2,
+            match_result: responseBody.data.match_result ? 1 : 2,
+            income: responseBody.data.income,
+            nama: responseBody.data.name ? 1 : 2,
+            tmp_lahir: responseBody.data.birthplace ? 1 : 2,
+            tgl_lahir: responseBody.data.birthdate ? 1 : 2,
+            trx_id: responseBody.trx_id,
+            ref_id: responseBody.ref_id,
+            limit_call: 1,
+        }
+    }
+
+    function requestMapperForUpdateNpwpPenjaminDataNotFound(id_pen) {
+        return {
+            id_penjamin: id_pen,
             npwp: 2,
             nik: 2,
             match_result: 2,
@@ -16438,6 +23433,7 @@
                         $("#data_properti_1").html(html_properti_1);
                         $('.verifikasiProperti_1').hide();
                     }
+
                 } else if (data.data_agunan.agunan_tanah.length == 4) {
                     if (data.pemeriksaan.agunan_tanah.length != 0) {
                         $('#form_properti_5').hide();
@@ -16677,6 +23673,7 @@
                         $("#data_properti_1").html(html_properti_1);
                         $('.verifikasiProperti_1').hide();
                     }
+
                 } else if (data.data_agunan.agunan_tanah.length == 5) {
                     if (data.pemeriksaan.agunan_tanah.length != 0) {
                         $('#form_properti_1 input[type=hidden][name=id_properti_1]').val(data.data_agunan.agunan_tanah[0].id);
@@ -16995,27 +23992,27 @@
                         if (data.property.length == 0) {
 
                             $("#verifikasi_properti_1").on('click', function() {
-                                verifikasiSimpanProperti_1(false, id);
+                                verifikasiSimpanProperti_1(true, id);
                             });
                             $("#limit_call_properti_1_result").html("1");
 
                             $("#verifikasi_properti_2").on('click', function() {
-                                verifikasiSimpanProperti_2(false, id);
+                                verifikasiSimpanProperti_2(true, id);
                             });
                             $("#limit_call_properti_2_result").html("1");
 
                             $("#verifikasi_properti_3").on('click', function() {
-                                verifikasiSimpanProperti_3(false, id);
+                                verifikasiSimpanProperti_3(true, id);
                             });
                             $("#limit_call_properti_3_result").html("1");
 
                             $("#verifikasi_properti_4").on('click', function() {
-                                verifikasiSimpanProperti_4(false, id);
+                                verifikasiSimpanProperti_4(true, id);
                             });
                             $("#limit_call_properti_4_result").html("1");
 
                             $("#verifikasi_properti_5").on('click', function() {
-                                verifikasiSimpanProperti_5(false, id);
+                                verifikasiSimpanProperti_5(true, id);
                             });
                             $("#limit_call_properti_5_result").html("1");
 
@@ -17035,7 +24032,7 @@
                                 }
                             } else {
                                 $("#verifikasi_properti_1").on('click', function() {
-                                    verifikasiSimpanProperti_1(false, id);
+                                    verifikasiSimpanProperti_1(true, id);
                                 });
                                 $("#limit_call_properti_1_result").html("1");
                             }
@@ -17055,7 +24052,7 @@
                                 }
                             } else {
                                 $("#verifikasi_properti_2").on('click', function() {
-                                    verifikasiSimpanProperti_2(false, id);
+                                    verifikasiSimpanProperti_2(true, id);
                                 });
                                 $("#limit_call_properti_2_result").html("1");
                             }
@@ -17075,7 +24072,7 @@
                                 }
                             } else {
                                 $("#verifikasi_properti_3").on('click', function() {
-                                    verifikasiSimpanProperti_3(false, id);
+                                    verifikasiSimpanProperti_3(true, id);
                                 });
                                 $("#limit_call_properti_3_result").html("1");
                             }
@@ -17095,7 +24092,7 @@
                                 }
                             } else {
                                 $("#verifikasi_properti_4").on('click', function() {
-                                    verifikasiSimpanProperti_4(false, id);
+                                    verifikasiSimpanProperti_4(true, id);
                                 });
                                 $("#limit_call_properti_4_result").html("1");
                             }
@@ -17117,7 +24114,7 @@
                                 }
                             } else {
                                 $("#verifikasi_properti_5").on('click', function() {
-                                    verifikasiSimpanProperti_5(false, id);
+                                    verifikasiSimpanProperti_5(true, id);
                                 });
                                 $("#limit_call_properti_5_result").html("1");
                             }
@@ -17128,27 +24125,27 @@
                             if (data.property.length == 0) {
 
                                 $("#verifikasi_properti_1").on('click', function() {
-                                    verifikasiSimpanProperti_1(false, id);
+                                    verifikasiSimpanProperti_1(true, id);
                                 });
                                 $("#limit_call_properti_1_result").html("1");
 
                                 $("#verifikasi_properti_2").on('click', function() {
-                                    verifikasiSimpanProperti_2(false, id);
+                                    verifikasiSimpanProperti_2(true, id);
                                 });
                                 $("#limit_call_properti_2_result").html("1");
 
                                 $("#verifikasi_properti_3").on('click', function() {
-                                    verifikasiSimpanProperti_3(false, id);
+                                    verifikasiSimpanProperti_3(true, id);
                                 });
                                 $("#limit_call_properti_3_result").html("1");
 
                                 $("#verifikasi_properti_4").on('click', function() {
-                                    verifikasiSimpanProperti_4(false, id);
+                                    verifikasiSimpanProperti_4(true, id);
                                 });
                                 $("#limit_call_properti_4_result").html("1");
 
                                 $("#verifikasi_properti_5").on('click', function() {
-                                    verifikasiSimpanProperti_5(false, id);
+                                    verifikasiSimpanProperti_5(true, id);
                                 });
                                 $("#limit_call_properti_5_result").html("1");
 
@@ -17168,7 +24165,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_1").on('click', function() {
-                                        verifikasiSimpanProperti_1(false, id);
+                                        verifikasiSimpanProperti_1(true, id);
                                     });
                                     $("#limit_call_properti_1_result").html("1");
                                 }
@@ -17188,7 +24185,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_2").on('click', function() {
-                                        verifikasiSimpanProperti_2(false, id);
+                                        verifikasiSimpanProperti_2(true, id);
                                     });
                                     $("#limit_call_properti_2_result").html("1");
                                 }
@@ -17208,7 +24205,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_3").on('click', function() {
-                                        verifikasiSimpanProperti_3(false, id);
+                                        verifikasiSimpanProperti_3(true, id);
                                     });
                                     $("#limit_call_properti_3_result").html("1");
                                 }
@@ -17228,7 +24225,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_4").on('click', function() {
-                                        verifikasiSimpanProperti_4(false, id);
+                                        verifikasiSimpanProperti_4(true, id);
                                     });
                                     $("#limit_call_properti_4_result").html("1");
                                 }
@@ -17248,7 +24245,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_5").on('click', function() {
-                                        verifikasiSimpanProperti_5(false, id);
+                                        verifikasiSimpanProperti_5(true, id);
                                     });
                                     $("#limit_call_properti_5_result").html("1");
                                 }
@@ -17257,7 +24254,7 @@
 
                         if (data.cadebt == null) {
                             $("#verifikasi_debitur").on('click', function() {
-                                verifikasiSimpanDebitur(false, id);
+                                verifikasiSimpanDebitur(true, id);
                             });
                             $("#limit_call_debitur_result").html("2");
                         } else {
@@ -17268,13 +24265,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_debitur").disabled = false;},300000);
                                 }
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                    verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
                                 });
                                 $("#limit_call_debitur_result").html("1");
                             } else { 
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                    verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
                                 });
                                 $("#limit_call_debitur_result").html("0");
                             }
@@ -17282,7 +24279,7 @@
                         
                         if (data.pasangan == null) {
                             $("#verifikasi_pasangan").on('click', function() {
-                                verifikasiSimpanPasangan(false, id);
+                                verifikasiSimpanPasangan(true, id);
                             });
                             $("#limit_call_pasangan_result").html("2");
                         } else {
@@ -17293,13 +24290,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
                                 }
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                    verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
                                 });
                                 $("#limit_call_pasangan_result").html("1");
                             } else{
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                    verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
                                 });
                                 $("#limit_call_pasangan_result").html("0");
                             }
@@ -17308,27 +24305,27 @@
                         if (data.penjamin.length == 0) {
 
                             $("#verifikasi_penjamin_1").on('click', function() {
-                                verifikasiSimpanPenjamin_1(false, id);
+                                verifikasiSimpanPenjamin_1(true, id);
                             });
                             $("#limit_call_penjamin_1_result").html("2");
 
                             $("#verifikasi_penjamin_2").on('click', function() {
-                                verifikasiSimpanPenjamin_2(false, id);
+                                verifikasiSimpanPenjamin_2(true, id);
                             });
                             $("#limit_call_penjamin_2_result").html("2");
 
                             $("#verifikasi_penjamin_3").on('click', function() {
-                                verifikasiSimpanPenjamin_3(false, id);
+                                verifikasiSimpanPenjamin_3(true, id);
                             });
                             $("#limit_call_penjamin_3_result").html("2");
 
                             $("#verifikasi_penjamin_4").on('click', function() {
-                                verifikasiSimpanPenjamin_4(false, id);
+                                verifikasiSimpanPenjamin_4(true, id);
                             });
                             $("#limit_call_penjamin_4_result").html("2");
 
                             $("#verifikasi_penjamin_5").on('click', function() {
-                                verifikasiSimpanPenjamin_5(false, id);
+                                verifikasiSimpanPenjamin_5(true, id);
                             });
                             $("#limit_call_penjamin_5_result").html("2");
 
@@ -17342,13 +24339,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("1");
                                 } else if (data.penjamin[0].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("0");
                                 } else {
@@ -17359,13 +24356,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_1").on('click', function() {
-                                    verifikasiSimpanPenjamin_1(false, id);
+                                    verifikasiSimpanPenjamin_1(true, data.penjamin[0].limit_call, id);
                                 });
                                 $("#limit_call_penjamin_1_result").html("2");
                             }
@@ -17378,19 +24375,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_2").on('click', function() {
-                                        verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
+                                        verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_2_result").html("1");
-                                } else {
+                                } else if (data.penjamin[1].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
                                     $("#verifikasi_penjamin_2").on('click', function() {
-                                        verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
+                                        verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_2_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.penjamin[1].user_id) {
+                                        document.getElementById("verifikasi_penjamin_2").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_penjamin_2").on('click', function() {
+                                        verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                    });
+                                    $("#limit_call_penjamin_2_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_2").on('click', function() {
-                                    verifikasiSimpanPenjamin_2(false, id);
+                                    verifikasiSimpanPenjamin_2(true, id);
                                 });
                                 $("#limit_call_penjamin_2_result").html("2");
                             }
@@ -17403,19 +24410,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_3").on('click', function() {
-                                        verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
+                                        verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_3_result").html("1");
-                                } else {
+                                } else if(data.penjamin[2].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
                                     $("#verifikasi_penjamin_3").on('click', function() {
-                                        verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
+                                        verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_3_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.penjamin[2].user_id) {
+                                        document.getElementById("verifikasi_penjamin_3").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_penjamin_3").on('click', function() {
+                                        verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                    });
+                                    $("#limit_call_penjamin_3_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_3").on('click', function() {
-                                    verifikasiSimpanPenjamin_3(false, id);
+                                    verifikasiSimpanPenjamin_3(true, id);
                                 });
                                 $("#limit_call_penjamin_3_result").html("2");
                             }
@@ -17428,19 +24445,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_4").on('click', function() {
-                                        verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
+                                        verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_4_result").html("1");
-                                } else {
+                                } else if(data.penjamin[3].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
                                     $("#verifikasi_penjamin_4").on('click', function() {
-                                        verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
+                                        verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_4_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.penjamin[3].user_id) {
+                                        document.getElementById("verifikasi_penjamin_4").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_penjamin_4").on('click', function() {
+                                        verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                    });
+                                    $("#limit_call_penjamin_4_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_4").on('click', function() {
-                                    verifikasiSimpanPenjamin_4(false, id);
+                                    verifikasiSimpanPenjamin_4(true, id);
                                 });
                                 $("#limit_call_penjamin_4_result").html("2");
                             }
@@ -17453,19 +24480,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_5").on('click', function() {
-                                        verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
+                                        verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_5_result").html("1");
-                                } else {
+                                } else if(data.penjamin[4].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
                                     $("#verifikasi_penjamin_5").on('click', function() {
-                                        verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
+                                        verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_5_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.penjamin[4].user_id) {
+                                        document.getElementById("verifikasi_penjamin_5").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_penjamin_5").on('click', function() {
+                                        verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                    });
+                                    $("#limit_call_penjamin_5_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_5").on('click', function() {
-                                    verifikasiSimpanPenjamin_5(false, id);
+                                    verifikasiSimpanPenjamin_5(true, id);
                                 });
                                 $("#limit_call_penjamin_5_result").html("2");
                             }
@@ -17474,7 +24511,7 @@
     
                         if (data.npwp == null) {
                             $("#verifikasi_npwp").on('click', function() {
-                                verifikasiSimpanNpwp(false, id);
+                                verifikasiSimpanNpwp(true, id);
                             });
                             $("#limit_call_npwp_result").html("2");
 
@@ -17486,13 +24523,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
                                 }
                                 $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
+                                    verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
                                 });
                                 $("#limit_call_npwp_result").html("1");
                             } else {
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
                                 $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
+                                    verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
                                 });
                                 $("#limit_call_npwp_result").html("0");
                             }
@@ -17500,7 +24537,7 @@
 
                         if (data.npwp_pasangan == null) {
                             $("#verifikasi_npwp_pasangan").on('click', function() {
-                                verifikasiSimpanNpwpPasangan(false, id);
+                                verifikasiSimpanNpwpPasangan(true, id);
                             });
                             $("#limit_call_npwp_pas_result").html("2");
 
@@ -17512,13 +24549,13 @@
                                     setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
                                 }
                                 $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
+                                    verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
                                 });
                                 $("#limit_call_npwp_pas_result").html("1");
                             } else {
                                 bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
                                 $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
+                                    verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
                                 });
                                 $("#limit_call_npwp_pas_result").html("0");
                             }
@@ -17526,27 +24563,27 @@
 
                         if (data.npwp_penjamin.length == 0) {
                             $("#verifikasi_npwp_pen_1").on('click', function() {
-                                verifikasiSimpanNpwpPen_1(false, id);
+                                verifikasiSimpanNpwpPen_1(true, id);
                             });
                             $("#limit_call_npwp_pen_1_result").html("2");
                             
                             $("#verifikasi_npwp_pen_2").on('click', function() {
-                                verifikasiSimpanNpwpPen_2(false, id);
+                                verifikasiSimpanNpwpPen_2(true, id);
                             });
                             $("#limit_call_npwp_pen_2_result").html("2");
 
                             $("#verifikasi_npwp_pen_3").on('click', function() {
-                                verifikasiSimpanNpwpPen_3(false, id);
+                                verifikasiSimpanNpwpPen_3(true, id);
                             });
                             $("#limit_call_npwp_pen_3_result").html("2");
 
                             $("#verifikasi_npwp_pen_4").on('click', function() {
-                                verifikasiSimpanNpwpPen_4(false, id);
+                                verifikasiSimpanNpwpPen_4(true, id);
                             });
                             $("#limit_call_npwp_pen_4_result").html("2");
 
                             $("#verifikasi_npwp_pen_5").on('click', function() {
-                                verifikasiSimpanNpwpPen_5(false, id);
+                                verifikasiSimpanNpwpPen_5(true, id);
                             });
                             $("#limit_call_npwp_pen_5_result").html("2");
                         } else {
@@ -17558,19 +24595,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("1");
-                                } else {
+                                } else if (npwp_penjamin[0].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.npwp_penjamin[0].user_id) {
+                                        document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_npwp_pen_1").on('click', function() {
+                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_pen_1_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
-                                    verifikasiSimpanNpwpPen_1(false, id);
+                                    verifikasiSimpanNpwpPen_1(true, id);
                                 });
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
@@ -17583,19 +24630,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                     } 
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
+                                        verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("1");
-                                } else {
+                                } else if(data.npwp_penjamin[1].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
+                                        verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.npwp_penjamin[1].user_id) {
+                                        document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                                    } 
+                                    $("#verifikasi_npwp_pen_2").on('click', function() {
+                                        verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_pen_2_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_2").on('click', function() {
-                                    verifikasiSimpanNpwpPen_2(false, id);
+                                    verifikasiSimpanNpwpPen_2(true, id);
                                 });
                                 $("#limit_call_npwp_pen_2_result").html("2");
                             }
@@ -17608,19 +24665,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
+                                        verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("1");
-                                } else {
+                                } else if(data.npwp_penjamin[2].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
+                                        verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.npwp_penjamin[2].user_id) {
+                                        document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_npwp_pen_3").on('click', function() {
+                                        verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_pen_3_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_3").on('click', function() {
-                                    verifikasiSimpanNpwpPen_3(false, id);
+                                    verifikasiSimpanNpwpPen_3(true, id);
                                 });
                                 $("#limit_call_npwp_pen_3_result").html("2");
                             }
@@ -17633,19 +24700,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
+                                        verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("1");
-                                } else {
+                                } else if(data.npwp_penjamin[3].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
+                                        verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.npwp_penjamin[3].user_id) {
+                                        document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_npwp_pen_4").on('click', function() {
+                                        verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_pen_4_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_4").on('click', function() {
-                                    verifikasiSimpanNpwpPen_4(false, id);
+                                    verifikasiSimpanNpwpPen_4(true, id);
                                 });
                                 $("#limit_call_npwp_pen_4_result").html("2");
                             }
@@ -17658,19 +24735,29 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
+                                        verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("1");
-                                } else {
+                                } else if(data.npwp_penjamin[4].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
+                                        verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("0");
+                                } else {
+                                    var user_id = '<?php echo $user_id ?>';
+                                    if (user_id == data.npwp_penjamin[4].user_id) {
+                                        document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                                        setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                                    }
+                                    $("#verifikasi_npwp_pen_5").on('click', function() {
+                                        verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
+                                    });
+                                    $("#limit_call_npwp_pen_5_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_5").on('click', function() {
-                                    verifikasiSimpanNpwpPen_5(false, id);
+                                    verifikasiSimpanNpwpPen_5(true, id);
                                 });
                                 $("#limit_call_npwp_pen_5_result").html("2");
                             }
@@ -23674,27 +30761,27 @@
                             if (data.property.length == 0) {
 
                                 $("#verifikasi_properti_1").on('click', function() {
-                                    verifikasiSimpanProperti_1(false, id);
+                                    verifikasiSimpanProperti_1(true, id);
                                 });
                                 $("#limit_call_properti_1_result").html("1");
 
                                 $("#verifikasi_properti_2").on('click', function() {
-                                    verifikasiSimpanProperti_2(false, id);
+                                    verifikasiSimpanProperti_2(true, id);
                                 });
                                 $("#limit_call_properti_2_result").html("1");
 
                                 $("#verifikasi_properti_3").on('click', function() {
-                                    verifikasiSimpanProperti_3(false, id);
+                                    verifikasiSimpanProperti_3(true, id);
                                 });
                                 $("#limit_call_properti_3_result").html("1");
 
                                 $("#verifikasi_properti_4").on('click', function() {
-                                    verifikasiSimpanProperti_4(false, id);
+                                    verifikasiSimpanProperti_4(true, id);
                                 });
                                 $("#limit_call_properti_4_result").html("1");
 
                                 $("#verifikasi_properti_5").on('click', function() {
-                                    verifikasiSimpanProperti_5(false, id);
+                                    verifikasiSimpanProperti_5(true, id);
                                 });
                                 $("#limit_call_properti_5_result").html("1");
 
@@ -23714,7 +30801,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_1").on('click', function() {
-                                        verifikasiSimpanProperti_1(false, id);
+                                        verifikasiSimpanProperti_1(true, id);
                                     });
                                     $("#limit_call_properti_1_result").html("1");
                                 }
@@ -23734,7 +30821,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_2").on('click', function() {
-                                        verifikasiSimpanProperti_2(false, id);
+                                        verifikasiSimpanProperti_2(true, id);
                                     });
                                     $("#limit_call_properti_2_result").html("1");
                                 }
@@ -23754,7 +30841,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_3").on('click', function() {
-                                        verifikasiSimpanProperti_3(false, id);
+                                        verifikasiSimpanProperti_3(true, id);
                                     });
                                     $("#limit_call_properti_3_result").html("1");
                                 }
@@ -23774,7 +30861,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_4").on('click', function() {
-                                        verifikasiSimpanProperti_4(false, id);
+                                        verifikasiSimpanProperti_4(true, id);
                                     });
                                     $("#limit_call_properti_4_result").html("1");
                                 }
@@ -23796,7 +30883,7 @@
                                     }
                                 } else {
                                     $("#verifikasi_properti_5").on('click', function() {
-                                        verifikasiSimpanProperti_5(false, id);
+                                        verifikasiSimpanProperti_5(true, id);
                                     });
                                     $("#limit_call_properti_5_result").html("1");
                                 }
@@ -23807,27 +30894,27 @@
                                 if (data.property.length == 0) {
 
                                     $("#verifikasi_properti_1").on('click', function() {
-                                        verifikasiSimpanProperti_1(false, id);
+                                        verifikasiSimpanProperti_1(true, id);
                                     });
                                     $("#limit_call_properti_1_result").html("1");
 
                                     $("#verifikasi_properti_2").on('click', function() {
-                                        verifikasiSimpanProperti_2(false, id);
+                                        verifikasiSimpanProperti_2(true, id);
                                     });
                                     $("#limit_call_properti_2_result").html("1");
 
                                     $("#verifikasi_properti_3").on('click', function() {
-                                        verifikasiSimpanProperti_3(false, id);
+                                        verifikasiSimpanProperti_3(true, id);
                                     });
                                     $("#limit_call_properti_3_result").html("1");
 
                                     $("#verifikasi_properti_4").on('click', function() {
-                                        verifikasiSimpanProperti_4(false, id);
+                                        verifikasiSimpanProperti_4(true, id);
                                     });
                                     $("#limit_call_properti_4_result").html("1");
 
                                     $("#verifikasi_properti_5").on('click', function() {
-                                        verifikasiSimpanProperti_5(false, id);
+                                        verifikasiSimpanProperti_5(true, id);
                                     });
                                     $("#limit_call_properti_5_result").html("1");
 
@@ -23847,7 +30934,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_1").on('click', function() {
-                                            verifikasiSimpanProperti_1(false, id);
+                                            verifikasiSimpanProperti_1(true, id);
                                         });
                                         $("#limit_call_properti_1_result").html("1");
                                     }
@@ -23867,7 +30954,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_2").on('click', function() {
-                                            verifikasiSimpanProperti_2(false, id);
+                                            verifikasiSimpanProperti_2(true, id);
                                         });
                                         $("#limit_call_properti_2_result").html("1");
                                     }
@@ -23887,7 +30974,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_3").on('click', function() {
-                                            verifikasiSimpanProperti_3(false, id);
+                                            verifikasiSimpanProperti_3(true, id);
                                         });
                                         $("#limit_call_properti_3_result").html("1");
                                     }
@@ -23907,7 +30994,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_4").on('click', function() {
-                                            verifikasiSimpanProperti_4(false, id);
+                                            verifikasiSimpanProperti_4(true, id);
                                         });
                                         $("#limit_call_properti_4_result").html("1");
                                     }
@@ -23927,7 +31014,7 @@
                                         }
                                     } else {
                                         $("#verifikasi_properti_5").on('click', function() {
-                                            verifikasiSimpanProperti_5(false, id);
+                                            verifikasiSimpanProperti_5(true, id);
                                         });
                                         $("#limit_call_properti_5_result").html("1");
                                     }
@@ -23936,7 +31023,7 @@
 
                             if (data.cadebt == null) {
                                 $("#verifikasi_debitur").on('click', function() {
-                                    verifikasiSimpanDebitur(false, id);
+                                    verifikasiSimpanDebitur(true, id);
                                 });
                                 $("#limit_call_debitur_result").html("2");
                             } else {
@@ -23947,13 +31034,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_debitur").disabled = false;},300000);
                                     }
                                     $("#verifikasi_debitur").on('click', function() {
-                                        verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                        verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
                                     });
                                     $("#limit_call_debitur_result").html("1");
                                 } else { 
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
                                     $("#verifikasi_debitur").on('click', function() {
-                                        verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
+                                        verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
                                     });
                                     $("#limit_call_debitur_result").html("0");
                                 }
@@ -23961,7 +31048,7 @@
                             
                             if (data.pasangan == null) {
                                 $("#verifikasi_pasangan").on('click', function() {
-                                    verifikasiSimpanPasangan(false, id);
+                                    verifikasiSimpanPasangan(true, id);
                                 });
                                 $("#limit_call_pasangan_result").html("2");
                             } else {
@@ -23972,13 +31059,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
                                     }
                                     $("#verifikasi_pasangan").on('click', function() {
-                                        verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                        verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
                                     });
                                     $("#limit_call_pasangan_result").html("1");
                                 } else{
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
                                     $("#verifikasi_pasangan").on('click', function() {
-                                        verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
+                                        verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
                                     });
                                     $("#limit_call_pasangan_result").html("0");
                                 }
@@ -23987,27 +31074,27 @@
                             if (data.penjamin.length == 0) {
 
                                 $("#verifikasi_penjamin_1").on('click', function() {
-                                    verifikasiSimpanPenjamin_1(false, id);
+                                    verifikasiSimpanPenjamin_1(true, id);
                                 });
                                 $("#limit_call_penjamin_1_result").html("2");
 
                                 $("#verifikasi_penjamin_2").on('click', function() {
-                                    verifikasiSimpanPenjamin_2(false, id);
+                                    verifikasiSimpanPenjamin_2(true, id);
                                 });
                                 $("#limit_call_penjamin_2_result").html("2");
 
                                 $("#verifikasi_penjamin_3").on('click', function() {
-                                    verifikasiSimpanPenjamin_3(false, id);
+                                    verifikasiSimpanPenjamin_3(true, id);
                                 });
                                 $("#limit_call_penjamin_3_result").html("2");
 
                                 $("#verifikasi_penjamin_4").on('click', function() {
-                                    verifikasiSimpanPenjamin_4(false, id);
+                                    verifikasiSimpanPenjamin_4(true, id);
                                 });
                                 $("#limit_call_penjamin_4_result").html("2");
 
                                 $("#verifikasi_penjamin_5").on('click', function() {
-                                    verifikasiSimpanPenjamin_5(false, id);
+                                    verifikasiSimpanPenjamin_5(true, id);
                                 });
                                 $("#limit_call_penjamin_5_result").html("2");
 
@@ -24021,19 +31108,30 @@
                                             setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                         }
                                         $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                            verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_1_result").html("1");
-                                    } else {
+                                    } else if (data.penjamin[0].limit_call == 2) {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                         $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
+                                            verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_1_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.penjamin[0].user_id) {
+                                            
+                                            document.getElementById("verifikasi_penjamin_1").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_penjamin_1").on('click', function() {
+                                            verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_1_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiSimpanPenjamin_1(false, id);
+                                        verifikasiSimpanPenjamin_1(true, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("2");
                                 }
@@ -24046,19 +31144,29 @@
                                             setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                                         }
                                         $("#verifikasi_penjamin_2").on('click', function() {
-                                            verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
+                                            verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_2_result").html("1");
-                                    } else {
+                                    } else if (data.penjamin[1].limit_call == 2){
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
                                         $("#verifikasi_penjamin_2").on('click', function() {
-                                            verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
+                                            verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_2_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.penjamin[1].user_id) {
+                                            document.getElementById("verifikasi_penjamin_2").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_penjamin_2").on('click', function() {
+                                            verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_2_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_2").on('click', function() {
-                                        verifikasiSimpanPenjamin_2(false, id);
+                                        verifikasiSimpanPenjamin_2(true, id);
                                     });
                                     $("#limit_call_penjamin_2_result").html("2");
                                 }
@@ -24071,19 +31179,29 @@
                                             setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                                         }
                                         $("#verifikasi_penjamin_3").on('click', function() {
-                                            verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
+                                            verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_3_result").html("1");
-                                    } else {
+                                    } else if(data.penjamin[2].limit_call == 2) {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
                                         $("#verifikasi_penjamin_3").on('click', function() {
-                                            verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
+                                            verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_3_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.penjamin[2].user_id) {
+                                            document.getElementById("verifikasi_penjamin_3").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_penjamin_3").on('click', function() {
+                                            verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_3_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_3").on('click', function() {
-                                        verifikasiSimpanPenjamin_3(false, id);
+                                        verifikasiSimpanPenjamin_3(true, id);
                                     });
                                     $("#limit_call_penjamin_3_result").html("2");
                                 }
@@ -24096,19 +31214,29 @@
                                             setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                                         }
                                         $("#verifikasi_penjamin_4").on('click', function() {
-                                            verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
+                                            verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_4_result").html("1");
-                                    } else {
+                                    } else if(data.penjamin[3].limit_call == 2){
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
                                         $("#verifikasi_penjamin_4").on('click', function() {
-                                            verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
+                                            verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_4_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.penjamin[3].user_id) {
+                                            document.getElementById("verifikasi_penjamin_4").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_penjamin_4").on('click', function() {
+                                            verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_4_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_4").on('click', function() {
-                                        verifikasiSimpanPenjamin_4(false, id);
+                                        verifikasiSimpanPenjamin_4(true, id);
                                     });
                                     $("#limit_call_penjamin_4_result").html("2");
                                 }
@@ -24121,28 +31249,38 @@
                                             setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
                                         }
                                         $("#verifikasi_penjamin_5").on('click', function() {
-                                            verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
+                                            verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_5_result").html("1");
-                                    } else {
+                                    } else if(data.penjamin[4].limit_call == 2){
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
                                         $("#verifikasi_penjamin_5").on('click', function() {
-                                            verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
+                                            verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_5_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.penjamin[4].user_id) {
+                                            document.getElementById("verifikasi_penjamin_5").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_penjamin_5").on('click', function() {
+                                            verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                        });
+                                        $("#limit_call_penjamin_5_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_penjamin_5").on('click', function() {
-                                        verifikasiSimpanPenjamin_5(false, id);
+                                        verifikasiSimpanPenjamin_5(true, id);
                                     });
                                     $("#limit_call_penjamin_5_result").html("2");
                                 }
 
                             }
-        
+    
                             if (data.npwp == null) {
                                 $("#verifikasi_npwp").on('click', function() {
-                                    verifikasiSimpanNpwp(false, id);
+                                    verifikasiSimpanNpwp(true, id);
                                 });
                                 $("#limit_call_npwp_result").html("2");
 
@@ -24154,13 +31292,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
+                                        verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
                                     });
                                     $("#limit_call_npwp_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
                                     $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
+                                        verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
                                     });
                                     $("#limit_call_npwp_result").html("0");
                                 }
@@ -24168,7 +31306,7 @@
 
                             if (data.npwp_pasangan == null) {
                                 $("#verifikasi_npwp_pasangan").on('click', function() {
-                                    verifikasiSimpanNpwpPasangan(false, id);
+                                    verifikasiSimpanNpwpPasangan(true, id);
                                 });
                                 $("#limit_call_npwp_pas_result").html("2");
 
@@ -24180,13 +31318,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
+                                        verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
                                     });
                                     $("#limit_call_npwp_pas_result").html("1");
                                 } else {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
                                     $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
+                                        verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
                                     });
                                     $("#limit_call_npwp_pas_result").html("0");
                                 }
@@ -24194,27 +31332,27 @@
 
                             if (data.npwp_penjamin.length == 0) {
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
-                                    verifikasiSimpanNpwpPen_1(false, id);
+                                    verifikasiSimpanNpwpPen_1(true, id);
                                 });
                                 $("#limit_call_npwp_pen_1_result").html("2");
                                 
                                 $("#verifikasi_npwp_pen_2").on('click', function() {
-                                    verifikasiSimpanNpwpPen_2(false, id);
+                                    verifikasiSimpanNpwpPen_2(true, id);
                                 });
                                 $("#limit_call_npwp_pen_2_result").html("2");
 
                                 $("#verifikasi_npwp_pen_3").on('click', function() {
-                                    verifikasiSimpanNpwpPen_3(false, id);
+                                    verifikasiSimpanNpwpPen_3(true, id);
                                 });
                                 $("#limit_call_npwp_pen_3_result").html("2");
 
                                 $("#verifikasi_npwp_pen_4").on('click', function() {
-                                    verifikasiSimpanNpwpPen_4(false, id);
+                                    verifikasiSimpanNpwpPen_4(true, id);
                                 });
                                 $("#limit_call_npwp_pen_4_result").html("2");
 
                                 $("#verifikasi_npwp_pen_5").on('click', function() {
-                                    verifikasiSimpanNpwpPen_5(false, id);
+                                    verifikasiSimpanNpwpPen_5(true, id);
                                 });
                                 $("#limit_call_npwp_pen_5_result").html("2");
                             } else {
@@ -24226,19 +31364,29 @@
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                            verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_1_result").html("1");
-                                    } else {
+                                    } else if (npwp_penjamin[0].limit_call == 2) {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id, data.npwp_penjamin[0].id_penjamin);
+                                            verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_1_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.npwp_penjamin[0].user_id) {
+                                            document.getElementById("verifikasi_npwp_pen_1").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_npwp_pen_1").on('click', function() {
+                                            verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
+                                        });
+                                        $("#limit_call_npwp_pen_1_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiSimpanNpwpPen_1(false, id);
+                                        verifikasiSimpanNpwpPen_1(true, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("2");
                                 }
@@ -24251,19 +31399,29 @@
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                         } 
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
+                                            verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_2_result").html("1");
-                                    } else {
+                                    } else if(data.npwp_penjamin[1].limit_call == 2) {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id, data.npwp_penjamin[1].id_penjamin);
+                                            verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_2_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.npwp_penjamin[1].user_id) {
+                                            document.getElementById("verifikasi_npwp_pen_2").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
+                                        } 
+                                        $("#verifikasi_npwp_pen_2").on('click', function() {
+                                            verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
+                                        });
+                                        $("#limit_call_npwp_pen_2_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiSimpanNpwpPen_2(false, id);
+                                        verifikasiSimpanNpwpPen_2(true, id);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("2");
                                 }
@@ -24276,19 +31434,29 @@
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
+                                            verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_3_result").html("1");
-                                    } else {
+                                    } else if(data.npwp_penjamin[2].limit_call == 2) {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id, data.npwp_penjamin[2].id_penjamin);
+                                            verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_3_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.npwp_penjamin[2].user_id) {
+                                            document.getElementById("verifikasi_npwp_pen_3").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_npwp_pen_3").on('click', function() {
+                                            verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
+                                        });
+                                        $("#limit_call_npwp_pen_3_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiSimpanNpwpPen_3(false, id);
+                                        verifikasiSimpanNpwpPen_3(true, id);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("2");
                                 }
@@ -24301,19 +31469,29 @@
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
+                                            verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_4_result").html("1");
-                                    } else {
+                                    } else if(data.npwp_penjamin[3].limit_call == 2){
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id, data.npwp_penjamin[3].id_penjamin);
+                                            verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_4_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.npwp_penjamin[3].user_id) {
+                                            document.getElementById("verifikasi_npwp_pen_4").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_npwp_pen_4").on('click', function() {
+                                            verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
+                                        });
+                                        $("#limit_call_npwp_pen_4_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiSimpanNpwpPen_4(false, id);
+                                        verifikasiSimpanNpwpPen_4(true, id);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("2");
                                 }
@@ -24326,25 +31504,35 @@
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
+                                            verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_5_result").html("1");
-                                    } else {
+                                    } else if(data.npwp_penjamin[4].limit_call == 2){
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id, data.npwp_penjamin[4].id_penjamin);
+                                            verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
                                         });
                                         $("#limit_call_npwp_pen_5_result").html("0");
+                                    } else {
+                                        var user_id = '<?php echo $user_id ?>';
+                                        if (user_id == data.npwp_penjamin[4].user_id) {
+                                            document.getElementById("verifikasi_npwp_pen_5").disabled = true;
+                                            setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
+                                        }
+                                        $("#verifikasi_npwp_pen_5").on('click', function() {
+                                            verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
+                                        });
+                                        $("#limit_call_npwp_pen_5_result").html("2");
                                     }
                                 } else {
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiSimpanNpwpPen_5(false, id);
+                                        verifikasiSimpanNpwpPen_5(true, id);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("2");
                                 }
-                            }
-                            
-                        }      
+                                
+                            }     
+                        } 
                     })
 
                 })
