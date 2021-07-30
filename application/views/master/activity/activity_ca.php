@@ -25530,27 +25530,27 @@
                         if (data.penjamin.length == 0) {
 
                             $("#verifikasi_penjamin_1").on('click', function() {
-                                verifikasiSimpanPenjamin_1(true, id);
+                                verifikasiSimpanPenjamin_1(false, id);
                             });
                             $("#limit_call_penjamin_1_result").html("2");
 
                             $("#verifikasi_penjamin_2").on('click', function() {
-                                verifikasiSimpanPenjamin_2(true, id);
+                                verifikasiSimpanPenjamin_2(false, id);
                             });
                             $("#limit_call_penjamin_2_result").html("2");
 
                             $("#verifikasi_penjamin_3").on('click', function() {
-                                verifikasiSimpanPenjamin_3(true, id);
+                                verifikasiSimpanPenjamin_3(false, id);
                             });
                             $("#limit_call_penjamin_3_result").html("2");
 
                             $("#verifikasi_penjamin_4").on('click', function() {
-                                verifikasiSimpanPenjamin_4(true, id);
+                                verifikasiSimpanPenjamin_4(false, id);
                             });
                             $("#limit_call_penjamin_4_result").html("2");
 
                             $("#verifikasi_penjamin_5").on('click', function() {
-                                verifikasiSimpanPenjamin_5(true, id);
+                                verifikasiSimpanPenjamin_5(false, id);
                             });
                             $("#limit_call_penjamin_5_result").html("2");
 
@@ -25564,13 +25564,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("1");
                                 } else if (data.penjamin[0].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("0");
                                 } else {
@@ -25581,13 +25581,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                        verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_1").on('click', function() {
-                                    verifikasiSimpanPenjamin_1(true, data.penjamin[0].limit_call, id);
+                                    verifikasiSimpanPenjamin_1(false, data.penjamin[0].limit_call, id);
                                 });
                                 $("#limit_call_penjamin_1_result").html("2");
                             }
@@ -25600,13 +25600,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_2").on('click', function() {
-                                        verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                        verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_2_result").html("1");
                                 } else if (data.penjamin[1].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
                                     $("#verifikasi_penjamin_2").on('click', function() {
-                                        verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                        verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_2_result").html("0");
                                 } else {
@@ -25616,13 +25616,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_2").on('click', function() {
-                                        verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                        verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_2_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_2").on('click', function() {
-                                    verifikasiSimpanPenjamin_2(true, id);
+                                    verifikasiSimpanPenjamin_2(false, id);
                                 });
                                 $("#limit_call_penjamin_2_result").html("2");
                             }
@@ -25635,13 +25635,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_3").on('click', function() {
-                                        verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                        verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_3_result").html("1");
                                 } else if(data.penjamin[2].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
                                     $("#verifikasi_penjamin_3").on('click', function() {
-                                        verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                        verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_3_result").html("0");
                                 } else {
@@ -25651,13 +25651,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_3").on('click', function() {
-                                        verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                        verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_3_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_3").on('click', function() {
-                                    verifikasiSimpanPenjamin_3(true, id);
+                                    verifikasiSimpanPenjamin_3(false, id);
                                 });
                                 $("#limit_call_penjamin_3_result").html("2");
                             }
@@ -25670,13 +25670,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_4").on('click', function() {
-                                        verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                        verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_4_result").html("1");
                                 } else if(data.penjamin[3].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
                                     $("#verifikasi_penjamin_4").on('click', function() {
-                                        verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                        verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_4_result").html("0");
                                 } else {
@@ -25686,13 +25686,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_4").on('click', function() {
-                                        verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                        verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_4_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_4").on('click', function() {
-                                    verifikasiSimpanPenjamin_4(true, id);
+                                    verifikasiSimpanPenjamin_4(false, id);
                                 });
                                 $("#limit_call_penjamin_4_result").html("2");
                             }
@@ -25705,13 +25705,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_5").on('click', function() {
-                                        verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                        verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_5_result").html("1");
                                 } else if(data.penjamin[4].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
                                     $("#verifikasi_penjamin_5").on('click', function() {
-                                        verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                        verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_5_result").html("0");
                                 } else {
@@ -25721,13 +25721,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
                                     }
                                     $("#verifikasi_penjamin_5").on('click', function() {
-                                        verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                        verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_penjamin_5_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_penjamin_5").on('click', function() {
-                                    verifikasiSimpanPenjamin_5(true, id);
+                                    verifikasiSimpanPenjamin_5(false, id);
                                 });
                                 $("#limit_call_penjamin_5_result").html("2");
                             }
@@ -25788,27 +25788,27 @@
 
                         if (data.npwp_penjamin.length == 0) {
                             $("#verifikasi_npwp_pen_1").on('click', function() {
-                                verifikasiSimpanNpwpPen_1(true, id);
+                                verifikasiSimpanNpwpPen_1(false, id);
                             });
                             $("#limit_call_npwp_pen_1_result").html("2");
                             
                             $("#verifikasi_npwp_pen_2").on('click', function() {
-                                verifikasiSimpanNpwpPen_2(true, id);
+                                verifikasiSimpanNpwpPen_2(false, id);
                             });
                             $("#limit_call_npwp_pen_2_result").html("2");
 
                             $("#verifikasi_npwp_pen_3").on('click', function() {
-                                verifikasiSimpanNpwpPen_3(true, id);
+                                verifikasiSimpanNpwpPen_3(false, id);
                             });
                             $("#limit_call_npwp_pen_3_result").html("2");
 
                             $("#verifikasi_npwp_pen_4").on('click', function() {
-                                verifikasiSimpanNpwpPen_4(true, id);
+                                verifikasiSimpanNpwpPen_4(false, id);
                             });
                             $("#limit_call_npwp_pen_4_result").html("2");
 
                             $("#verifikasi_npwp_pen_5").on('click', function() {
-                                verifikasiSimpanNpwpPen_5(true, id);
+                                verifikasiSimpanNpwpPen_5(false, id);
                             });
                             $("#limit_call_npwp_pen_5_result").html("2");
                         } else {
@@ -25820,13 +25820,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("1");
                                 } else if (npwp_penjamin[0].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("0");
                                 } else {
@@ -25836,13 +25836,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
+                                        verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_1").on('click', function() {
-                                    verifikasiSimpanNpwpPen_1(true, id);
+                                    verifikasiSimpanNpwpPen_1(false, id);
                                 });
                                 $("#limit_call_npwp_pen_1_result").html("2");
                             }
@@ -25855,13 +25855,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                     } 
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
+                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("1");
                                 } else if(data.npwp_penjamin[1].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
+                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("0");
                                 } else {
@@ -25871,13 +25871,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                     } 
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
+                                        verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_2").on('click', function() {
-                                    verifikasiSimpanNpwpPen_2(true, id);
+                                    verifikasiSimpanNpwpPen_2(false, id);
                                 });
                                 $("#limit_call_npwp_pen_2_result").html("2");
                             }
@@ -25890,13 +25890,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
+                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("1");
                                 } else if(data.npwp_penjamin[2].limit_call == 2) {
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
+                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("0");
                                 } else {
@@ -25906,13 +25906,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
+                                        verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_3").on('click', function() {
-                                    verifikasiSimpanNpwpPen_3(true, id);
+                                    verifikasiSimpanNpwpPen_3(false, id);
                                 });
                                 $("#limit_call_npwp_pen_3_result").html("2");
                             }
@@ -25925,13 +25925,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
+                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("1");
                                 } else if(data.npwp_penjamin[3].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
+                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("0");
                                 } else {
@@ -25941,13 +25941,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
+                                        verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_4").on('click', function() {
-                                    verifikasiSimpanNpwpPen_4(true, id);
+                                    verifikasiSimpanNpwpPen_4(false, id);
                                 });
                                 $("#limit_call_npwp_pen_4_result").html("2");
                             }
@@ -25960,13 +25960,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
+                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("1");
                                 } else if(data.npwp_penjamin[4].limit_call == 2){
                                     bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
+                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("0");
                                 } else {
@@ -25976,13 +25976,13 @@
                                         setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                     }
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
+                                        verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("2");
                                 }
                             } else {
                                 $("#verifikasi_npwp_pen_5").on('click', function() {
-                                    verifikasiSimpanNpwpPen_5(true, id);
+                                    verifikasiSimpanNpwpPen_5(false, id);
                                 });
                                 $("#limit_call_npwp_pen_5_result").html("2");
                             }
@@ -32248,7 +32248,7 @@
 
                                 if (data.cadebt == null) {
                                     $("#verifikasi_debitur").on('click', function() {
-                                        verifikasiSimpanDebitur(true, id);
+                                        verifikasiSimpanDebitur(false, id);
                                     });
                                     $("#limit_call_debitur_result").html("2");
                                 } else {
@@ -32259,13 +32259,13 @@
                                             setTimeout(function(){document.getElementById("verifikasi_debitur").disabled = false;},300000);
                                         }
                                         $("#verifikasi_debitur").on('click', function() {
-                                            verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
+                                            verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
                                         });
                                         $("#limit_call_debitur_result").html("1");
                                     } else { 
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Debitur!!");
                                         $("#verifikasi_debitur").on('click', function() {
-                                            verifikasiUpdateDebitur(true, data.cadebt.limit_call, id);
+                                            verifikasiUpdateDebitur(false, data.cadebt.limit_call, id);
                                         });
                                         $("#limit_call_debitur_result").html("0");
                                     }
@@ -32273,7 +32273,7 @@
                                 
                                 if (data.pasangan == null) {
                                     $("#verifikasi_pasangan").on('click', function() {
-                                        verifikasiSimpanPasangan(true, id);
+                                        verifikasiSimpanPasangan(false, id);
                                     });
                                     $("#limit_call_pasangan_result").html("2");
                                 } else {
@@ -32284,13 +32284,13 @@
                                             setTimeout(function(){document.getElementById("verifikasi_pasangan").disabled = false;},300000);
                                         }
                                         $("#verifikasi_pasangan").on('click', function() {
-                                            verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
+                                            verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
                                         });
                                         $("#limit_call_pasangan_result").html("1");
                                     } else{
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Pasangan!!");
                                         $("#verifikasi_pasangan").on('click', function() {
-                                            verifikasiUpdatePasangan(true, data.pasangan.limit_call, id);
+                                            verifikasiUpdatePasangan(false, data.pasangan.limit_call, id);
                                         });
                                         $("#limit_call_pasangan_result").html("0");
                                     }
@@ -32299,27 +32299,27 @@
                                 if (data.penjamin.length == 0) {
 
                                     $("#verifikasi_penjamin_1").on('click', function() {
-                                        verifikasiSimpanPenjamin_1(true, id);
+                                        verifikasiSimpanPenjamin_1(false, id);
                                     });
                                     $("#limit_call_penjamin_1_result").html("2");
 
                                     $("#verifikasi_penjamin_2").on('click', function() {
-                                        verifikasiSimpanPenjamin_2(true, id);
+                                        verifikasiSimpanPenjamin_2(false, id);
                                     });
                                     $("#limit_call_penjamin_2_result").html("2");
 
                                     $("#verifikasi_penjamin_3").on('click', function() {
-                                        verifikasiSimpanPenjamin_3(true, id);
+                                        verifikasiSimpanPenjamin_3(false, id);
                                     });
                                     $("#limit_call_penjamin_3_result").html("2");
 
                                     $("#verifikasi_penjamin_4").on('click', function() {
-                                        verifikasiSimpanPenjamin_4(true, id);
+                                        verifikasiSimpanPenjamin_4(false, id);
                                     });
                                     $("#limit_call_penjamin_4_result").html("2");
 
                                     $("#verifikasi_penjamin_5").on('click', function() {
-                                        verifikasiSimpanPenjamin_5(true, id);
+                                        verifikasiSimpanPenjamin_5(false, id);
                                     });
                                     $("#limit_call_penjamin_5_result").html("2");
 
@@ -32333,13 +32333,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_1").on('click', function() {
-                                                verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                                verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_1_result").html("1");
                                         } else if (data.penjamin[0].limit_call == 2) {
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 1!!");
                                             $("#verifikasi_penjamin_1").on('click', function() {
-                                                verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                                verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_1_result").html("0");
                                         } else {
@@ -32350,13 +32350,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_1").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_1").on('click', function() {
-                                                verifikasiUpdatePenjamin_1(true, data.penjamin[0].limit_call, id);
+                                                verifikasiUpdatePenjamin_1(false, data.penjamin[0].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_1_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_penjamin_1").on('click', function() {
-                                            verifikasiSimpanPenjamin_1(true, data.penjamin[0].limit_call, id);
+                                            verifikasiSimpanPenjamin_1(false, data.penjamin[0].limit_call, id);
                                         });
                                         $("#limit_call_penjamin_1_result").html("2");
                                     }
@@ -32369,13 +32369,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_2").on('click', function() {
-                                                verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                                verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_2_result").html("1");
                                         } else if (data.penjamin[1].limit_call == 2){
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 2!!");
                                             $("#verifikasi_penjamin_2").on('click', function() {
-                                                verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                                verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_2_result").html("0");
                                         } else {
@@ -32385,13 +32385,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_2").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_2").on('click', function() {
-                                                verifikasiUpdatePenjamin_2(true, data.penjamin[1].limit_call, id);
+                                                verifikasiUpdatePenjamin_2(false, data.penjamin[1].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_2_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_penjamin_2").on('click', function() {
-                                            verifikasiSimpanPenjamin_2(true, id);
+                                            verifikasiSimpanPenjamin_2(false, id);
                                         });
                                         $("#limit_call_penjamin_2_result").html("2");
                                     }
@@ -32404,13 +32404,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_3").on('click', function() {
-                                                verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                                verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_3_result").html("1");
                                         } else if(data.penjamin[2].limit_call == 2) {
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 3!!");
                                             $("#verifikasi_penjamin_3").on('click', function() {
-                                                verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                                verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_3_result").html("0");
                                         } else {
@@ -32420,13 +32420,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_3").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_3").on('click', function() {
-                                                verifikasiUpdatePenjamin_3(true, data.penjamin[2].limit_call, id);
+                                                verifikasiUpdatePenjamin_3(false, data.penjamin[2].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_3_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_penjamin_3").on('click', function() {
-                                            verifikasiSimpanPenjamin_3(true, id);
+                                            verifikasiSimpanPenjamin_3(false, id);
                                         });
                                         $("#limit_call_penjamin_3_result").html("2");
                                     }
@@ -32439,13 +32439,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_4").on('click', function() {
-                                                verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                                verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_4_result").html("1");
                                         } else if(data.penjamin[3].limit_call == 2){
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 4!!");
                                             $("#verifikasi_penjamin_4").on('click', function() {
-                                                verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                                verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_4_result").html("0");
                                         } else {
@@ -32455,13 +32455,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_4").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_4").on('click', function() {
-                                                verifikasiUpdatePenjamin_4(true, data.penjamin[3].limit_call, id);
+                                                verifikasiUpdatePenjamin_4(false, data.penjamin[3].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_4_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_penjamin_4").on('click', function() {
-                                            verifikasiSimpanPenjamin_4(true, id);
+                                            verifikasiSimpanPenjamin_4(false, id);
                                         });
                                         $("#limit_call_penjamin_4_result").html("2");
                                     }
@@ -32474,13 +32474,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_5").on('click', function() {
-                                                verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                                verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_5_result").html("1");
                                         } else if(data.penjamin[4].limit_call == 2){
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi Data Penjamin 5!!");
                                             $("#verifikasi_penjamin_5").on('click', function() {
-                                                verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                                verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_5_result").html("0");
                                         } else {
@@ -32490,13 +32490,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_penjamin_5").disabled = false;},300000);
                                             }
                                             $("#verifikasi_penjamin_5").on('click', function() {
-                                                verifikasiUpdatePenjamin_5(true, data.penjamin[4].limit_call, id);
+                                                verifikasiUpdatePenjamin_5(false, data.penjamin[4].limit_call, id);
                                             });
                                             $("#limit_call_penjamin_5_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_penjamin_5").on('click', function() {
-                                            verifikasiSimpanPenjamin_5(true, id);
+                                            verifikasiSimpanPenjamin_5(false, id);
                                         });
                                         $("#limit_call_penjamin_5_result").html("2");
                                     }
@@ -32505,7 +32505,7 @@
         
                                 if (data.npwp == null) {
                                     $("#verifikasi_npwp").on('click', function() {
-                                        verifikasiSimpanNpwp(true, id);
+                                        verifikasiSimpanNpwp(false, id);
                                     });
                                     $("#limit_call_npwp_result").html("2");
 
@@ -32517,13 +32517,13 @@
                                             setTimeout(function(){document.getElementById("verifikasi_npwp").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
+                                            verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
                                         });
                                         $("#limit_call_npwp_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Debitur!!");
                                         $("#verifikasi_npwp").on('click', function() {
-                                            verifikasiUpdateNpwp(true, data.npwp.limit_call, id);
+                                            verifikasiUpdateNpwp(false, data.npwp.limit_call, id);
                                         });
                                         $("#limit_call_npwp_result").html("0");
                                     }
@@ -32531,7 +32531,7 @@
 
                                 if (data.npwp_pasangan == null) {
                                     $("#verifikasi_npwp_pasangan").on('click', function() {
-                                        verifikasiSimpanNpwpPasangan(true, id);
+                                        verifikasiSimpanNpwpPasangan(false, id);
                                     });
                                     $("#limit_call_npwp_pas_result").html("2");
 
@@ -32543,13 +32543,13 @@
                                             setTimeout(function(){document.getElementById("verifikasi_npwp_pasangan").disabled = false;},300000);
                                         }
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
+                                            verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
                                         });
                                         $("#limit_call_npwp_pas_result").html("1");
                                     } else {
                                         bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Pasangan!!");
                                         $("#verifikasi_npwp_pasangan").on('click', function() {
-                                            verifikasiUpdateNpwpPasangan(true, data.npwp_pasangan.limit_call, id);
+                                            verifikasiUpdateNpwpPasangan(false, data.npwp_pasangan.limit_call, id);
                                         });
                                         $("#limit_call_npwp_pas_result").html("0");
                                     }
@@ -32557,27 +32557,27 @@
 
                                 if (data.npwp_penjamin.length == 0) {
                                     $("#verifikasi_npwp_pen_1").on('click', function() {
-                                        verifikasiSimpanNpwpPen_1(true, id);
+                                        verifikasiSimpanNpwpPen_1(false, id);
                                     });
                                     $("#limit_call_npwp_pen_1_result").html("2");
                                     
                                     $("#verifikasi_npwp_pen_2").on('click', function() {
-                                        verifikasiSimpanNpwpPen_2(true, id);
+                                        verifikasiSimpanNpwpPen_2(false, id);
                                     });
                                     $("#limit_call_npwp_pen_2_result").html("2");
 
                                     $("#verifikasi_npwp_pen_3").on('click', function() {
-                                        verifikasiSimpanNpwpPen_3(true, id);
+                                        verifikasiSimpanNpwpPen_3(false, id);
                                     });
                                     $("#limit_call_npwp_pen_3_result").html("2");
 
                                     $("#verifikasi_npwp_pen_4").on('click', function() {
-                                        verifikasiSimpanNpwpPen_4(true, id);
+                                        verifikasiSimpanNpwpPen_4(false, id);
                                     });
                                     $("#limit_call_npwp_pen_4_result").html("2");
 
                                     $("#verifikasi_npwp_pen_5").on('click', function() {
-                                        verifikasiSimpanNpwpPen_5(true, id);
+                                        verifikasiSimpanNpwpPen_5(false, id);
                                     });
                                     $("#limit_call_npwp_pen_5_result").html("2");
                                 } else {
@@ -32589,13 +32589,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                             }
                                             $("#verifikasi_npwp_pen_1").on('click', function() {
-                                                verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
+                                                verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_1_result").html("1");
                                         } else if (npwp_penjamin[0].limit_call == 2) {
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 1!!");
                                             $("#verifikasi_npwp_pen_1").on('click', function() {
-                                                verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
+                                                verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_1_result").html("0");
                                         } else {
@@ -32605,13 +32605,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_1").disabled = false;},300000);
                                             }
                                             $("#verifikasi_npwp_pen_1").on('click', function() {
-                                                verifikasiUpdateNpwpPen_1(true, data.npwp_penjamin[0].limit_call, id);
+                                                verifikasiUpdateNpwpPen_1(false, data.npwp_penjamin[0].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_1_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_npwp_pen_1").on('click', function() {
-                                            verifikasiSimpanNpwpPen_1(true, id);
+                                            verifikasiSimpanNpwpPen_1(false, id);
                                         });
                                         $("#limit_call_npwp_pen_1_result").html("2");
                                     }
@@ -32624,13 +32624,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                             } 
                                             $("#verifikasi_npwp_pen_2").on('click', function() {
-                                                verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
+                                                verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_2_result").html("1");
                                         } else if(data.npwp_penjamin[1].limit_call == 2) {
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 2!!");
                                             $("#verifikasi_npwp_pen_2").on('click', function() {
-                                                verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
+                                                verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_2_result").html("0");
                                         } else {
@@ -32640,13 +32640,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_2").disabled = false;},300000);
                                             } 
                                             $("#verifikasi_npwp_pen_2").on('click', function() {
-                                                verifikasiUpdateNpwpPen_2(true, data.npwp_penjamin[1].limit_call, id);
+                                                verifikasiUpdateNpwpPen_2(false, data.npwp_penjamin[1].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_2_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_npwp_pen_2").on('click', function() {
-                                            verifikasiSimpanNpwpPen_2(true, id);
+                                            verifikasiSimpanNpwpPen_2(false, id);
                                         });
                                         $("#limit_call_npwp_pen_2_result").html("2");
                                     }
@@ -32659,13 +32659,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                             }
                                             $("#verifikasi_npwp_pen_3").on('click', function() {
-                                                verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
+                                                verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_3_result").html("1");
                                         } else if(data.npwp_penjamin[2].limit_call == 2) {
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 3!!");
                                             $("#verifikasi_npwp_pen_3").on('click', function() {
-                                                verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
+                                                verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_3_result").html("0");
                                         } else {
@@ -32675,13 +32675,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_3").disabled = false;},300000);
                                             }
                                             $("#verifikasi_npwp_pen_3").on('click', function() {
-                                                verifikasiUpdateNpwpPen_3(true, data.npwp_penjamin[2].limit_call, id);
+                                                verifikasiUpdateNpwpPen_3(false, data.npwp_penjamin[2].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_3_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_npwp_pen_3").on('click', function() {
-                                            verifikasiSimpanNpwpPen_3(true, id);
+                                            verifikasiSimpanNpwpPen_3(false, id);
                                         });
                                         $("#limit_call_npwp_pen_3_result").html("2");
                                     }
@@ -32694,13 +32694,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                             }
                                             $("#verifikasi_npwp_pen_4").on('click', function() {
-                                                verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
+                                                verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_4_result").html("1");
                                         } else if(data.npwp_penjamin[3].limit_call == 2){
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 4!!");
                                             $("#verifikasi_npwp_pen_4").on('click', function() {
-                                                verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
+                                                verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_4_result").html("0");
                                         } else {
@@ -32710,13 +32710,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_4").disabled = false;},300000);
                                             }
                                             $("#verifikasi_npwp_pen_4").on('click', function() {
-                                                verifikasiUpdateNpwpPen_4(true, data.npwp_penjamin[3].limit_call, id);
+                                                verifikasiUpdateNpwpPen_4(false, data.npwp_penjamin[3].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_4_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_npwp_pen_4").on('click', function() {
-                                            verifikasiSimpanNpwpPen_4(true, id);
+                                            verifikasiSimpanNpwpPen_4(false, id);
                                         });
                                         $("#limit_call_npwp_pen_4_result").html("2");
                                     }
@@ -32729,13 +32729,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                             }
                                             $("#verifikasi_npwp_pen_5").on('click', function() {
-                                                verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
+                                                verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_5_result").html("1");
                                         } else if(data.npwp_penjamin[4].limit_call == 2){
                                             bootbox.alert("Anda Sudah Mencapai Limit Verifikasi NPWP Penjamin 5!!");
                                             $("#verifikasi_npwp_pen_5").on('click', function() {
-                                                verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
+                                                verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_5_result").html("0");
                                         } else {
@@ -32745,13 +32745,13 @@
                                                 setTimeout(function(){document.getElementById("verifikasi_npwp_pen_5").disabled = false;},300000);
                                             }
                                             $("#verifikasi_npwp_pen_5").on('click', function() {
-                                                verifikasiUpdateNpwpPen_5(true, data.npwp_penjamin[4].limit_call, id);
+                                                verifikasiUpdateNpwpPen_5(false, data.npwp_penjamin[4].limit_call, id);
                                             });
                                             $("#limit_call_npwp_pen_5_result").html("2");
                                         }
                                     } else {
                                         $("#verifikasi_npwp_pen_5").on('click', function() {
-                                            verifikasiSimpanNpwpPen_5(true, id);
+                                            verifikasiSimpanNpwpPen_5(false, id);
                                         });
                                         $("#limit_call_npwp_pen_5_result").html("2");
                                     }
