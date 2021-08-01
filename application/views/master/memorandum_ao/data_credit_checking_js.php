@@ -9857,6 +9857,8 @@ $('#submit_kk_debitur').submit(function(e) {
                         $("#pekerjaan_deb").val("04").change();
                     }else if(personList[i_deb].occupation == ''){
 
+                    }else{
+                        $("#pekerjaan_deb").val("05").change();
                     }
 
                     if (personList[i_deb].religion == "ISLAM") {
