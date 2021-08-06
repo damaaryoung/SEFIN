@@ -354,6 +354,27 @@ class Assignment_collection extends MY_Controller
                     "Rp. ".number_format($row->os_pokok,2,".",","),
                     tgl_indonesia_datetime($row->updated_at),
                     "Rp. ".number_format($row->total_tagihan,2,".","."),
+                    '<button type="button" class="btn btn-secondary" onclick="edit_assignment('.$row->task_code.')">Edit</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delTaskCode_'.$row->task_code.'">Delete</button>
+                    <div class="modal fade" id="delTaskCode_'.$row->task_code.'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">DELETE TASK CODE</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Apakah anda benar-benar ingin menghapus task code dengan nomor '.$row->task_code.'
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="delete_assignment('.$row->task_code.')">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>'
                 );
                 $i++;
             }
@@ -680,6 +701,151 @@ class Assignment_collection extends MY_Controller
         $get_track_visit = $this->Model_collection->get_route_data_visit($kode_area,$kode_cabang,$kode_kolektor,$from,$to);
 
         echo json_encode($get_track_visit->result());
+    }
+
+    public function add_task_assigment()
+    {
+        $this->load->view('master/collection/collector/add_task_assigment_view');
+    }
+
+    public function getAccount(){
+        $no_rekening = $this->input->post('no_rekening');
+        $getAccount = $this->Model_collection->getAccount($no_rekening);
+        echo json_encode($getAccount->result());
+    }
+
+    public function getAllCabang(){
+        $getCabang = $this->Model_collection->get_all_cabang();
+        echo json_encode($getCabang->result());
+    }
+
+    public function getCollectorByKodeKantor(){
+        $kode_kantor = $this->input->post("kode_kantor");
+        $getCollector = $this->Model_collection->get_collector_by_kode_kantor($kode_kantor);
+        echo json_encode($getCollector->result());
+    }
+
+    function addTaskAssigment(){
+        $generate_task_code = $this->Model_collection->generate_task_code();
+        $post1 = array(
+            "task_code" => $generate_task_code->task_code,
+            "no_rekening" => $this->input->post('nomor_rekening'),
+            "kode_group3" => $this->input->post('kode_kolektor'),
+            "kode_kantor" => $this->input->post('kode_kantor'),
+            "os_pokok" => $this->input->post('os_pokok'),
+            "assignment_date" => $this->input->post('assignment_date'),
+            "collect_fee" => $this->input->post('collect_fee'),
+            "total_tagihan" => $this->input->post('total_tagihan')
+        );
+
+        
+        //echo json_encode($post);
+        $checkNoRekening = $this->Model_collection->checkNoRekeningperAssigment_date($this->input->post('nomor_rekening'),$this->input->post('kode_kolektor'),$this->input->post('assignment_date'));
+        if($checkNoRekening->num_rows() > 0){
+            $data = array(
+                'check_validation'=>'Ada duplikasi no rekening pada tanggal yang sama',
+                'insert'=>'error',
+            );
+            echo json_encode($data);
+        }else{
+            $this->Model_collection->add_task_assigment($post1);
+            for($i = 0; $i < COUNT($_POST['tgl_jt_tempo']); $i++){
+                $post2 = array(
+                    "task_code" => $generate_task_code->task_code,
+                    "tgl_jt_tempo" => $_POST['tgl_jt_tempo'][$i],
+                    "ang_ke" => $_POST['ang_ke'][$i],
+                    "ft_hari" => $_POST['ft_hari'][$i],
+                    "angsuran" => $_POST['jumlah_angsuran'][$i],
+                    "denda" => $_POST['denda'][$i],
+                );
+                $this->Model_collection->add_task_assigment_detail($post2);
+            }
+            $data = array(
+                'post1'=>$post1,
+                'post2'=>$post2,
+                'check_validation'=>'Tidak ada duplikasi no rekening pada tanggal yang sama',
+                'insert'=>'success',
+            );
+            echo json_encode($data);
+        }
+    }
+
+    function update_task_assigment(){
+        $task_code = $this->input->post('task_code');
+        $data['detail_task_assigment'] = $this->Model_collection->get_task_assigment_detail($task_code); 
+        $this->load->view('master/collection/collector/update_task_assigment_view',$data);
+    }
+
+    function getDataDetailTaskAssigment(){
+        $task_code = $this->input->post('task_code');
+        $detail_task_assigment = $this->Model_collection->get_task_assigment_detail($task_code);
+        echo json_encode($detail_task_assigment->result());
+    }
+
+    function editTaskAssigment(){
+        $generate_task_code = $this->Model_collection->generate_task_code();
+        $task_code = $this->input->post('task_code'); 
+        $post1 = array(
+            "no_rekening" => $this->input->post('nomor_rekening'),
+            "kode_group3" => $this->input->post('kode_kolektor'),
+            "kode_kantor" => $this->input->post('kode_kantor'),
+            "os_pokok" => $this->input->post('os_pokok'),
+            "assignment_date" => $this->input->post('assignment_date'),
+            "collect_fee" => $this->input->post('collect_fee'),
+            "total_tagihan" => $this->input->post('total_tagihan')
+        );
+
+        
+        //echo json_encode($post);
+        $checkNoRekening = $this->Model_collection->checkNoRekeningperAssigment_date($this->input->post('nomor_rekening'),$this->input->post('kode_kolektor'),$this->input->post('assignment_date'));
+        if($checkNoRekening->num_rows() > 0){
+            $data = array(
+                'check_validation'=>'Ada duplikasi no rekening pada tanggal yang sama',
+                'insert'=>'error',
+            );
+            echo json_encode($data);
+        }else{
+            $this->Model_collection->delete_task_assigment($task_code);
+            $this->Model_collection->delete_task_assigment_detail($task_code);
+            $this->Model_collection->update_task_assigment($task_code,$post1);
+            for($i = 0; $i < COUNT($_POST['tgl_jt_tempo']); $i++){
+                $post2 = array(
+                    "task_code" => $generate_task_code->task_code,
+                    "tgl_jt_tempo" => $_POST['tgl_jt_tempo'][$i],
+                    "ang_ke" => $_POST['ang_ke'][$i],
+                    "ft_hari" => $_POST['ft_hari'][$i],
+                    "angsuran" => $_POST['jumlah_angsuran'][$i],
+                    "denda" => $_POST['denda'][$i],
+                );
+                $this->Model_collection->update_task_assigment_detail($post2);
+            }
+            $data = array(
+                'post1'=>$post1,
+                'post2'=>$post2,
+                'check_validation'=>'Tidak ada duplikasi no rekening pada tanggal yang sama',
+                'insert'=>'success',
+            );
+            echo json_encode($data);
+        }
+    }
+
+    function deleteTaskAssigment($task_code){
+        $delete_task_assigment = $this->Model_collection->delete_task_assigment($task_code);
+        $delete_task_assigment_detail = $this->Model_collection->delete_task_assigment_detail($task_code);
+        if($delete_task_assigment && $delete_task_assigment_detail){
+            $notif = "Data dengan task code ".$task_code." sudah berhasil dihapus";
+            $notif = array(
+                "message" => "Data dengan task code ".$task_code." sudah berhasil dihapus",
+                "icon" => "success"
+            );
+        }else{
+            $notif = array(
+                "message" => "Data dengan task code ".$task_code." tidak ada",
+                "icon" => "error"
+            );
+        }
+
+        echo json_encode($message);
     }
 
 }
