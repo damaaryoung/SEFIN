@@ -10700,8 +10700,10 @@
                                     }
 
                                     date_hk = listHk[index].tanggal;
+                                    var time_now = "<?php echo date('H:i:s')?>";
+                                    var date_assign =  date_hk +' '+ time_now;
 
-                                    formData.append('date_assign', date_hk);
+                                    formData.append('date_assign', date_assign);
 
                                     update_assign_ca(formData, id)
                                         .done(function(res) {
