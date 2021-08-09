@@ -25,6 +25,91 @@
         <!-- <h5 class="text-center">
           <strong>Assigment</strong>
         </h5> -->
+         <button type="button" class="btn btn-primary" id="AddAssigment"><i class="fa fa-plus-square" aria-hidden="true"></i> TAMBAH</button>
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddAssigment"><i class="fa fa-plus-square" aria-hidden="true"></i> TAMBAH</button> -->
+
+        <!-- <div class="modal fade" id="AddAssigment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group row ml-1 mr-1">
+                                <label for="norek" class="col-form-label col-3">No Rekening:</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="no_rekening" name="no_rekening" />
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddRekening"><i class="fa fa-plus-square"></i> PILIH</button>
+                                </div>
+                            </div>
+                            <div class="form-group row ml-1 mr-1">
+                                 <label for="collector" class="col-form-label col-3">Nama Kolektor:</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="nama_kolektor" name="nama_kolektor" />
+                                    <input type="hidden" name="kode_group3" id="kode_group3"/>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddColektor"><i class="fa fa-plus-square"></i> PILIH</button>
+                                </div>
+                            </div>
+                            <div class="form-group row ml-1 mr-1">
+                                <label for="cabang" class="col-form-label col-3">Cabang:</label>
+                                <div class="col-sm-5">
+                                    <select class="form-control select2" name="cabang" id="cabang"></select>
+                                </div>
+                            </div>
+                            <div class="form-group row ml-1 mr-1">
+                                <label for="ospokok" class="col-form-label col-3">OS Pokok:</label>
+                                <div class="col-sm-5">
+                                   <input type="number" class="form-control" id="os_pokok" name="os_pokok" />
+                                </div>
+                            </div>
+                            <div class="form-group row ml-1 mr-1">
+                                <label for="tgl_jth_tempo" class="col-form-label col-3">Tanggal Jatuh Tempo:</label>
+                                <div class="col-sm-5">
+                                   <input type="date" class="form-control" id="tgl_jt_tempo" name="tgl_jt_tempo"  data-date-format="d-m-Y"/>
+                                </div>
+                            </div>
+                            <div class="form-group row ml-1 mr-1">
+                                <label for="ftangsuran" class="col-form-label col-3">FT Angsuran:</label>
+                                <div class="col-sm-5">
+                                   <input type="number" class="form-control" id="ft_angsuran" name="ft_angsuran"/>
+                                </div>
+                            </div>
+                            <div class="form-group row ml-1 mr-1">
+                                <label for="fthari" class="col-form-label col-3">FT Hari:</label>
+                                <div class="col-sm-5">
+                                   <input type="number" class="form-control" id="ft_hari" name="ft_hari"/>
+                                </div>
+                            </div>
+                            <div class="form-group row ml-1 mr-1">
+                                <label for="jml_angsuran" class="col-form-label col-3">Jumlah Angsuran:</label>
+                                <div class="col-sm-5">
+                                   <input type="number" class="form-control" id="jumlah_angsuran" name="jumlah_angsuran" />
+                                </div>
+                            </div>
+                             <div class="form-group row ml-1 mr-1">
+                                <label for="denda" class="col-form-label col-3">Denda:</label>
+                                <div class="col-sm-5">
+                                   <input type="number" class="form-control" id="denda" name="denda" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Send message</button>
+                    </div>
+            </div>
+          </div>
+        </div> -->
+
         <form id="import_assignment_collection" method="post" enctype="multipart/form-data" class="form-horizontal">
           <div class="form-group row">
               <label for="inputArea" class="col-sm-2 col-form-label">Area</label>
@@ -91,6 +176,7 @@
             <th>OS Pokok</th>
             <th>Last Update Date Assigment</th>
             <th>Total Tagihan</th>
+            <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -289,5 +375,148 @@ $(document).ready(function(){
       theme: 'bootstrap4'
     })
 
+    $('#AddAssigment').on('click', function(e) {
+        e.preventDefault();
+        NProgress.start();
+        $.ajax({
+                url: '<?php echo base_url('index.php/assignment_collection/add_task_assigment') ?>',
+                dataType: 'html'
+            })
+            .done(function(response) {
+                $('#main-content').html(response);
+                NProgress.done();
+            })
+            .fail(function(jqXHR) {
+                $('#main-content').load('<?php echo base_url('Rusak') ?>');
+                NProgress.done();
+            });
+    });
+
+
+    function delete_assignment(task_code){
+        $.ajax({
+            url:'<?php echo base_url();?>assignment_collection/deleteTaskAssigment',
+            dataType:"JSON",
+            type:"POST",
+            data:{
+                "task_code" : task_code
+            },
+            success: function(data){
+                Swal.fire({
+                title: 'Perhatian',
+                html: data.message,
+                icon: data.icon,
+                });
+            },
+            error: function (request, status, error) {
+                alert(request.responseText);
+            }
+    }
+    function edit_assignment(task_code){
+        NProgress.start();
+        $.ajax({
+                url: '<?php echo base_url('index.php/assignment_collection/update_task_assigment') ?>',
+                dataType: 'html',
+                type:"POST",
+            })
+            .done(function(response) {
+                $('#main-content').html(response);
+                NProgress.done();
+
+                $.ajax({
+                    url:'<?php echo base_url();?>assignment_collection/getDataDetailTaskAssigment',
+                    dataType:"JSON",
+                    type:"POST",
+                    data:{
+                        "task_code" : task_code
+                    },
+                    success: function(data){
+                        $.ajax({
+                            url:"<?php echo base_url();?>assignment_collection/getCollectorByKodeKantor",
+                            type:"POST",
+                             dataType:"JSON",
+                             data: {"kode_kantor":data[0].kode_kantor},
+                             success: function(data2){
+                              for(var i = 0; i < data2.length; i++){
+                              $('#kode_kolektor').append($('<option>',{
+                                value: data2[i].kode_group3,
+                                text: data2[i].deskripsi_group3
+                              }));  
+                            }
+                            }
+                        });
+
+                        $.ajax({
+                            url:"<?php echo base_url();?>assignment_collection/getAllCabang",
+                            type:"POST",
+                            cache: false,
+                            dataType:"JSON",
+                            success: function(data){
+                              for(var i = 0; i < data.length; i++){
+                                $('#kode_kantor').append($('<option>',{
+                                  value: data[i].kode_kantor,
+                                  text: data[i].nama_kantor
+                                }));
+                              }
+                            },
+                             error: function (request, status, error) {
+                                alert(request.responseText);
+                            }
+                        });
+                        $('#task_code').val(data[0].task_code);
+                        $('#no_rekening').val(data[0].no_rekening);
+                        $('#kode_kolektor option[value='+data[0].kode_group3+']').attr('selected','selected');
+                        $('#kode_kantor option[value='+data[0].kode_kantor+']').attr('selected','selected');
+                        $('#os_pokok').val(data[0].os_pokok);
+                        $('#assignment_date').val(data[0].assignment_date);
+                        $('#collect_fee').val(data[0].collect_fee);
+                        $('#total_tagihan').val(data[0].total_tagihan);
+                        $('#total_tunggakan').val(data[0].total_tunggakan);
+
+                        var markup ="";
+                        //alert(data.length);
+                        for(var a = 0; a < data.length; a++){
+                            var markup = markup + '<tr>'+
+                              '<td><input type="checkbox" name="record" width="5" onkeyup="javascript:this.value=this.value.toUpperCase()"></td>'+
+                              '<td>'+
+                                '<div class="form-group col-md-12 row">'+
+                                  '<label>Tanggal Jatuh Tempo<span class="required_notification">*</span></label>'+
+                                  '<input type="date" class="form-control" id="tgl_jt_tempo' + a + '" name="tgl_jt_tempo[]" data-date-format="d-m-Y" value="'+ data[a].tgl_jt_tempo +'" required/>'+
+                                '</div>'+
+                              
+                                '<div class="form-group col-md-12 row">'+
+                                  '<label>Angsuran ke-<span class="required_notification">*</span></label>'+
+                                  '<input type="number" class="form-control" id="ang_ke' + a + '" name="ang_ke[]" value="'+ data[a].ang_ke +'" required/>'+
+                                '</div>'+
+                              
+                                '<div class="form-group col-md-12 row">'+
+                                  '<label>FT Hari<span class="required_notification">*</span></label>'+
+                                  '<input type="number" class="form-control" id="ft_hari' + a + '" name="ft_hari[]" value="'+ data[a].ft_hari +'" required/>'+
+                                '</div>'+
+                              '</td>'+
+                              '<td>'+
+                                '<div class="form-group col-md-12 row">'+
+                                  '<label>jumlah Angsuran<span class="required_notification">*</span></label>'+
+                                  '<input type="number" class="form-control" id="jumlah_angsuran' + a + '" name="jumlah_angsuran[]" value="'+ data[a].angsuran +'" required/>'+
+                                '</div>'+
+                                '<div class="form-group col-md-12 row">'+
+                                  '<label>Denda<span class="required_notification">*</span></label>'+
+                                  '<input type="number" class="form-control" id="denda' + a + '" name="denda[]" value="'+ data[a].denda +'" required/>'+
+                                '</div>'+
+                              '</td>'+
+                            '</tr>';
+                        }
+                        $("#table_detail tbody").append(markup);
+                    },
+                    error: function (request, status, error) {
+                        alert(request.responseText);
+                    }
+                });
+            })
+            .fail(function(jqXHR) {
+                $('#main-content').load('<?php echo base_url('Rusak') ?>');
+                NProgress.done();
+            });
+    }
 </script>
 <?php echo $params['custom_js'];?>

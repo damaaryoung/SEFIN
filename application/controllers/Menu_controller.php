@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') or exmaster('No direct script access allowed');
+
 use GuzzleHttp\Client;
 
 class Menu_controller extends MY_Controller
@@ -11,7 +12,6 @@ class Menu_controller extends MY_Controller
         $this->load->model('model_auth');
         $this->load->model('Model_view_master');
         $this->load->model('Model_target_lending');
-
     }
 
     public function index()
@@ -310,23 +310,30 @@ class Menu_controller extends MY_Controller
 
     public function so()
     {
+        $data['akses']['data']   = $this->model_menu->getUserAkses(3);
         $this->load->view('master/memorandum_so/data_credit_checking');
+        //var_dump($data['akses']['data']['add_access']);
     }
     public function ao()
+
     {
+        $data['akses']   = $this->model_menu->getUserAkses(4);
+        //  $data['nama_user'] = $this->model_menu->getUser();
+
         $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['data_collateral'] = $this->Model_view_master->data_collateral();
         $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
         $data['pemilik_jaminan'] = $this->Model_view_master->pemilik_jaminan();
-        $this->load->view('master/memorandum_ao/data_credit_checking',$data);
+        $this->load->view('master/memorandum_ao/data_credit_checking', $data);
     }
     public function ca()
     {
-		  $outputs   = $this->model_menu->getUser();
+        $data['akses']   = $this->model_menu->getUserAkses(5);
+        $outputs   = $this->model_menu->getUser();
         $user_id   = $outputs['data']['user_id'];
         $data['user_id'] = $user_id;
         // $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
-$data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
+        $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
         $data['lokasi_jaminan'] = $this->Model_view_master->tampil_lokasi_jaminan();
         $data['data_collateral'] = $this->Model_view_master->data_collateral();
         $data['jenis_sertifikat'] = $this->Model_view_master->jenis_sertifikat();
@@ -547,7 +554,7 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
     {
         $this->load->view('master/target_lending/target_lending_template');
     }
- public function activity_tele_collection()
+    public function activity_tele_collection()
     {
         $this->load->view('master/activity/activity_tele_collection');
     }
@@ -576,7 +583,7 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
     public function dashboard_activity_so_dan_ao()
     {
         $data['get_area'] = $this->model_menu->getArea()->result();
-        $this->load->view('master/dashboard-activity-so-dan-ao/index',$data);
+        $this->load->view('master/dashboard-activity-so-dan-ao/index', $data);
     }
     public function activity_head_marketing()
     {
@@ -586,7 +593,7 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
     {
         $this->load->view('master/activity/head-bussines/index');
     }
-       public function verifikasi()
+    public function verifikasi()
     {
         $data['nama_user'] = $this->model_menu->getUser();
         // $tb_parameter_access = TB_PARAMETER_ACCESS;
@@ -605,32 +612,34 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
         // $data['data_pengeluaran_per_bulan'] =  $this->Model_view_master->pengeluaran_per_bulan();
         // $data['data_frek_pengeluaran'] =  $this->Model_view_master->frek_pengeluaran();
         // $data['pendidikan'] = $this->Model_view_master->tampil_data_pendidikan();
-        
+
         $this->load->view('master/verifikasi/verifikasi', $data);
     }
- public function report_verifikasi()
+    public function report_verifikasi()
     {
         $this->load->view('master/verifikasi/report_verifikasi');
     }
 
     public function dashboard_collection()
     {
-       
+
         $this->load->view('master/collection/dashboard_collection');
     }
 
-    public function report_data_collection_daily(){
-    	$this->load->helper("General_helper"); 
+    public function report_data_collection_daily()
+    {
+        $this->load->helper("General_helper");
         $this->load->model('model_collection');
         $this->load->view('master/collection/report_data_collection_daily');
     }
 
-    function json_data_collection_daily(){
+    function json_data_collection_daily()
+    {
         $this->load->model('model_collection');
         $tgl = $this->input->post('tgl');
-        if(empty($tgl)){
+        if (empty($tgl)) {
             $tgl = "CURDATE()";
-        }else {
+        } else {
             $tgl = "DATE('$tgl')";
         }
         $hk = $this->model_collection->data_collection_daily($tgl)->result();
@@ -638,14 +647,18 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
         echo json_encode($hk);
     }
 
-    function master_all_assignment_kolektor(){
-        $this->head_params(' -  List','','',
-        '<link rel="stylesheet" type="text/css" href="'.base_url().'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-        <link rel="stylesheet" href="'.base_url().'assets/plugins/select2/css/select2.min.css">
-        <link rel="stylesheet" href="'.base_url().'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
-        '<script src="'.base_url().'assets/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="'.base_url().'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="'.base_url().'assets/plugins/select2/js/select2.full.min.js"></script>
+    function master_all_assignment_kolektor()
+    {
+        $this->head_params(
+            ' -  List',
+            '',
+            '',
+            '<link rel="stylesheet" type="text/css" href="' . base_url() . 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="' . base_url() . 'assets/plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="' . base_url() . 'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
+            '<script src="' . base_url() . 'assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="' . base_url() . 'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="' . base_url() . 'assets/plugins/select2/js/select2.full.min.js"></script>
         <script type="text/javascript">
             $(function () {
               bsCustomFileInput.init();
@@ -683,7 +696,7 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
                     // fixedHeader: true,
                     "pagingType": "full_numbers",
                     "ajax": {
-                        "url": "'.base_url().'assignment_collection/ajax_list_header_master_all_assignment_kolektor",
+                        "url": "' . base_url() . 'assignment_collection/ajax_list_header_master_all_assignment_kolektor",
                         "type": "POST",
                         "data":{
                             "kode_kolektor": kode_kolektor,
@@ -709,17 +722,23 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
   
 }
         </script>
-        ');
-         $data['params'] = $this->params;
-        $this->load->view('master/collection/collector/master_all_assignment_kolektor_view',$data);
+        '
+        );
+        $data['params'] = $this->params;
+        $this->load->view('master/collection/collector/master_all_assignment_kolektor_view', $data);
     }
 
-    function task_assignment_kolektor(){
-        $this->head_params(' -  List','','','<link rel="stylesheet" type="text/css" href="'.base_url().'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-            <link rel="stylesheet" href="'.base_url().'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
-        '<script src="'.base_url().'assets/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="'.base_url().'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="'.base_url().'assets/plugins/select2/js/select2.full.min.js"></script>
+    function task_assignment_kolektor()
+    {
+        $this->head_params(
+            ' -  List',
+            '',
+            '',
+            '<link rel="stylesheet" type="text/css" href="' . base_url() . 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+            <link rel="stylesheet" href="' . base_url() . 'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
+            '<script src="' . base_url() . 'assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="' . base_url() . 'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="' . base_url() . 'assets/plugins/select2/js/select2.full.min.js"></script>
         <script type="text/javascript">
             get_dataTable(0);
           $("#btn_refresh").click(function(){
@@ -753,7 +772,7 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
                     "autoWidth": false,
                     "pagingType": "full_numbers",
                     "ajax": {
-                        "url": "'.base_url().'assignment_collection/ajax_list_task_assignment_kolektor",
+                        "url": "' . base_url() . 'assignment_collection/ajax_list_task_assignment_kolektor",
                         "type": "POST",
                         "data":{
                             "kode_kolektor": kode_kolektor,
@@ -782,7 +801,7 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
                     }
                 }
                     function flag_checked(task_code){
-                  var url = "'.base_url().'assignment_collection/change_status_task_assignment";
+                  var url = "' . base_url() . 'assignment_collection/change_status_task_assignment";
                   $.ajax({
                     url:url,
                     type:"POST",
@@ -801,17 +820,23 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
                   });
                 }          
         </script>
-        ');
-         $data['params'] = $this->params;
-       $this->load->view('master/collection/collector/task_assignment_kolektor_view',$data); 
+        '
+        );
+        $data['params'] = $this->params;
+        $this->load->view('master/collection/collector/task_assignment_kolektor_view', $data);
     }
 
-   function report_collection_activity(){
-        $this->head_params(' -  List','','','<link rel="stylesheet" type="text/css" href="'.base_url().'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-            <link rel="stylesheet" href="'.base_url().'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
-        '<script src="'.base_url().'assets/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="'.base_url().'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="'.base_url().'assets/plugins/select2/js/select2.full.min.js"></script>
+    function report_collection_activity()
+    {
+        $this->head_params(
+            ' -  List',
+            '',
+            '',
+            '<link rel="stylesheet" type="text/css" href="' . base_url() . 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+            <link rel="stylesheet" href="' . base_url() . 'assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">',
+            '<script src="' . base_url() . 'assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="' . base_url() . 'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="' . base_url() . 'assets/plugins/select2/js/select2.full.min.js"></script>
         <script type="text/javascript">
           $("#btn_refresh").click(function(){
             get_dataTable(1);
@@ -843,7 +868,7 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
                     "autoWidth": false,
                     "pagingType": "full_numbers",
                     "ajax": {
-                        "url": "'.base_url().'assignment_collection/ajax_list_collection_activity",
+                        "url": "' . base_url() . 'assignment_collection/ajax_list_collection_activity",
                         "type": "POST",
                         "data":{
                             "kode_area": kode_area,
@@ -872,39 +897,45 @@ $data['jenis_kredit'] = $this->Model_view_master->jenis_kredit();
                 }
           
         </script>
-        ');
+        '
+        );
         $data['params'] = $this->params;
-        $this->load->view('master/collection/collector/report/report_collection_activity_view',$data);
+        $this->load->view('master/collection/collector/report/report_collection_activity_view', $data);
     }
 
-    function report_history_collection_activity(){
-         $this->load->view('master/collection/collector/report/report_history_collection_activity_view');
+    function report_history_collection_activity()
+    {
+        $this->load->view('master/collection/collector/report/report_history_collection_activity_view');
     }
 
-    function report_performance_collection_activity(){
+    function report_performance_collection_activity()
+    {
         $this->load->view('master/collection/collector/report/report_performance_collection_activity_view');
     }
- function waypoint_data_visit_kolektor(){
+    function waypoint_data_visit_kolektor()
+    {
         $this->load->view('master/collection/collector/report/report_waypoint_data_visit_kolektor_view');
     }
-function json_get_hari_kerja(){
+    function json_get_hari_kerja()
+    {
         $this->load->model('model_collection');
         $tgl = $this->input->post('tgl');
-        if(empty($tgl)){
+        if (empty($tgl)) {
             $tgl = "CURDATE()";
-        }else {
+        } else {
             $tgl = "DATE('$tgl')";
         }
         $hk = $this->model_collection->get_hari_kerja($tgl)->result();
         header('Content-Type: application/json');
         echo json_encode($hk);
     }
-function json_get_hk_bulan_lalu(){
+    function json_get_hk_bulan_lalu()
+    {
         $this->load->model('model_collection');
         $tgl = $this->input->post('tgl');
-        if(empty($tgl)){
+        if (empty($tgl)) {
             $tgl = "CURDATE()";
-        }else {
+        } else {
             $tgl = "DATE('$tgl')";
         }
         $hk = $this->model_collection->get_hk_bulan_lalu($tgl)->result();
@@ -912,31 +943,33 @@ function json_get_hk_bulan_lalu(){
         echo json_encode($hk);
     }
 
-    function json_get_next_hk_bulan_lalu(){
+    function json_get_next_hk_bulan_lalu()
+    {
         $this->load->model('model_collection');
         $tgl = $this->input->post('tgl');
-        if(empty($tgl)){
+        if (empty($tgl)) {
             $tgl = "CURDATE()";
-        }else {
+        } else {
             $tgl = "DATE('$tgl')";
         }
         $hk = $this->model_collection->get_next_hk_bulan_lalu($tgl)->result();
         header('Content-Type: application/json');
         echo json_encode($hk);
     }
-function tracker_data_visit_kolektor(){
+    function tracker_data_visit_kolektor()
+    {
         $this->load->view('master/collection/collector/report/report_tracker_data_visit_kolektor_view');
     }
-	 public function activity_ca()
-    {   
+    public function activity_ca()
+    {
         $data['nama_user'] = $this->model_menu->getUser();
         $outputs   = $this->model_menu->getUser();
         $user_id   = $outputs['data']['user_id'];
         $data['user_id'] = $user_id;
         $this->load->view('master/activity/activity_ca', $data);
     }
-	
-	  public function dashboard_memo_ca()
+
+    public function dashboard_memo_ca()
     {
         $this->load->view('master/dashboard_memo_ca/dashboard_memo_ca');
     }
@@ -952,12 +985,12 @@ function tracker_data_visit_kolektor(){
     }
 
     public function penyimpangan()
-    {   
+    {
         $this->load->view('master/penyimpangan/v_index');
     }
 
     public function tanggal_penyimpangan()
-    {   
+    {
         $this->load->view('master/penyimpangan/v_tanggal_penyimpangan');
     }
 

@@ -6041,6 +6041,7 @@
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem('token')
                     }
+                 
                 });
             }
 
@@ -6154,6 +6155,7 @@
                     },
                     success: function(response) {
                         data = response.data;
+                       
                         var html = '';
                         var no = 0;
                         var i;
@@ -6269,7 +6271,14 @@
                     },
                 });
             }
-
+            var edit_access = '<?php echo $akses['data']['edit_access'] ?>';
+    var add_access = '<?php echo $akses['data']['add_access'] ?>';
+    console.log(edit_access);
+    if (add_access == 'N') {
+        $('#modal_pengajuan').hide();
+    } else {
+        $('#modal_pengajuan').show();
+    }
             $("#modal_pengajuan").click(function() {
                 load_data_pengajuan = function() {
 
@@ -8622,6 +8631,7 @@
 
                                     $.each(data_das.lampiran.pefindo, function(item) {
                                         var b = [
+                                           
                                             '<a class="example-image-link" target="window.open()" download href="<?php echo $this->config->item('img_url') ?>' + data_das.lampiran.pefindo[item] + '"><p style="font-size: 13px; font-weight: 400;">' + data_das.lampiran.pefindo[item] + '</p></a>',
                                         ].join('\n');
                                         htmlpefindo.push(b);
@@ -9899,7 +9909,7 @@
                     .fail(function(jqXHR) {
                         $('#modal_data_credit').modal('toggle');
                         // $('#modal_data_credit').modal('close');
-                        bootbox.alert('Data tidak ditemukan, coba refresh kembali!!', function() {
+                        bootbox.alert('Maaf anda tidak memiliki akses untuk Mengedit Transaksi ini periksa kembali PIC Memorandum atau Silahkan Hubungi IT!', function() {
                             $('.close').on('click');
                         });
 
@@ -10550,7 +10560,7 @@
                 get_credit_checking({}, id)
                     .done(function(response) {
                         var data = response.data;
-                        console.log(data);
+                      
 
                         $('#form_assign_ca input[type=hidden][name=id_trans_so]').val(data.id_trans_so);
                         $('#form_assign_ca input[name=nomor_so]').val(data.nomor_so);
@@ -10690,8 +10700,10 @@
                                     }
 
                                     date_hk = listHk[index].tanggal;
+                                    var time_now = "<?php echo date('H:i:s')?>";
+                                    var date_assign =  date_hk +' '+ time_now;
 
-                                    formData.append('date_assign', date_hk);
+                                    formData.append('date_assign', date_assign);
 
                                     update_assign_ca(formData, id)
                                         .done(function(res) {
@@ -16408,6 +16420,7 @@
                 get_detail_ca({}, id)
                     .done(function(response) {
                         var data = response.data;
+                        
                         var htmlinformasi_analisa_credit = [];
                         var htmlinformasi_analisa_credit_tot = [];
                         $.each(data.informasi_analisa_cc.table, function(index, item) {

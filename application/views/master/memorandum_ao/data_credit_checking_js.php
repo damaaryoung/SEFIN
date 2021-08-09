@@ -1284,7 +1284,7 @@
                 "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                 "</div>";
             $('#load_data').html(html);
-            console.log(e);
+            // console.log(e);
         })
     });
 
@@ -1334,7 +1334,7 @@
                 "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                 "</div>";
             $('#load_data').html(html);
-            console.log(e);
+            //console.log(e);
         })
     });
 
@@ -1384,7 +1384,7 @@
                 "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                 "</div>";
             $('#load_data').html(html);
-            console.log(e);
+            //console.log(e);
         })
     });
 
@@ -1434,7 +1434,7 @@
                 "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                 "</div>";
             $('#load_data').html(html);
-            console.log(e);
+            //console.log(e);
         })
     });
 
@@ -1485,7 +1485,7 @@
                 "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                 "</div>";
             $('#load_data').html(html);
-            console.log(e);
+            //console.log(e);
         })
     });
 
@@ -1539,7 +1539,7 @@
                 "<a id='batal' href='javascript:void(0)' class='text-primary' data-dismiss='modal'>Tutup</a><br><br>" +
                 "</div>";
             $('#load_data').html(html);
-            console.log(e);
+            //console.log(e);
         })
     });
 
@@ -1986,6 +1986,7 @@
 
         $('#provinsi_ktp_dup').change(function() {
             var id = $(this).val();
+
             $.ajax({
                 url: "<?php echo $this->config->item('api_url'); ?>wilayah/provinsi/" + id + "/kabupaten",
                 method: "GET",
@@ -1998,8 +1999,15 @@
                     var select = [];
                     var select1 = '<option value="">--Pilih--</option>';
                     $.each(res.data, function(i, e) {
+                        var nama = e.nama;
+                        var split_nama_kabupaten = nama.split(' ');
+                        if(split_nama_kabupaten[0] == 'KABUPATEN'){
+                            var nama_kabupaten = nama.replace("KABUPATEN","");
+                        }else if(split_nama_kabupaten[0] == 'KOTA'){
+                            var nama_kabupaten = nama.replace("KOTA","");
+                        }
                         var option = [
-                            '<option value="' + e.id + '">' + e.nama + '</option>'
+                            '<option value="' + e.id + '">' + nama_kabupaten.trim() + '</option>'
                         ].join('\n');
                         select.push(option);
                     });
@@ -2912,8 +2920,9 @@
                             var select_prov_ktp = [];
                             var select_prov_ktp1 = '<option value="">--Pilih--</option>';
                             $.each(res.data, function(i, e) {
+                                var nama_provinsi = e.nama;
                                 var option_prov_ktp = [
-                                    '<option value="' + e.id + '">' + e.nama + '</option>'
+                                    '<option id="'+nama_provinsi.split(' ').join('')+'" value="' + e.id + '">' + e.nama + '</option>'
                                 ].join('\n');
                                 select_prov_ktp.push(option_prov_ktp);
                             });
@@ -3128,14 +3137,28 @@
 
                     var select_provinsi_ktp = [];
                     var option_provinsi_ktp = [
-                        '<option value="' + data.data_debitur.alamat_ktp.provinsi.id + '">' + data.data_debitur.alamat_ktp.provinsi.nama + '</option>'
+                        '<option id="'+ data.data_debitur.alamat_ktp.provinsi.nama +'" value="' + data.data_debitur.alamat_ktp.provinsi.id + '">' + data.data_debitur.alamat_ktp.provinsi.nama + '</option>'
                     ].join('\n');
                     select_provinsi_ktp.push(option_provinsi_ktp);
                     $('#form_detail select[id=provinsi_ktp]').html(select_provinsi_ktp);
                     var select_kabupaten_ktp = [];
-                    var option_kabupaten_ktp = [
-                        '<option value="' + data.data_debitur.alamat_ktp.kabupaten.id + '">' + data.data_debitur.alamat_ktp.kabupaten.nama + '</option>'
-                    ].join('\n');
+                    var kabupaten = data.data_debitur.alamat_ktp.kabupaten.nama;
+                    // alert(kabupaten);
+                    var split_kabupaten = kabupaten.split(" ")[0];
+                    if(split_kabupaten == "KOTA"){
+                        var kabupaten = kabupaten.replace("KOTA","");
+                        var option_kabupaten_ktp = [
+                        '<option id="'+ kabupaten.split(' ').join('') +'" value="' + data.data_debitur.alamat_ktp.kabupaten.id + '">' + data.data_debitur.alamat_ktp.kabupaten.nama + '</option>'].join('\n');
+                    }else if(split_kabupaten == "KABUPATEN"){
+                        var kabupaten = kabupaten.replace("KABUPATEN","");
+                        var option_kabupaten_ktp = [
+                        '<option id="'+kabupaten.split(' ').join('') +'" value="' + data.data_debitur.alamat_ktp.kabupaten.id + '">' + data.data_debitur.alamat_ktp.kabupaten.nama + '</option>'].join('\n');
+                    }else{
+                        var option_kabupaten_ktp = [
+                        '<option id="'+ kabupaten.split(' ').join('') +'" value="' + data.data_debitur.alamat_ktp.kabupaten.id + '">' + data.data_debitur.alamat_ktp.kabupaten.nama + '</option>'].join('\n');
+                    }
+
+
                     select_kabupaten_ktp.push(option_kabupaten_ktp);
                     $('#form_detail select[id=kabupaten_ktp]').html(select_kabupaten_ktp);
 
@@ -3884,7 +3907,7 @@
 
                     var select_provinsi_ktp = [];
                     var option_provinsi_ktp = [
-                        '<option value="' + data.data_debitur.alamat_ktp.provinsi.id + '">' + data.data_debitur.alamat_ktp.provinsi.nama + '</option>'
+                        '<option id="'+data.data_debitur.alamat_ktp.provinsi.nama+'" value="' + data.data_debitur.alamat_ktp.provinsi.id + '">' + data.data_debitur.alamat_ktp.provinsi.nama + '</option>'
                     ].join('\n');
                     select_provinsi_ktp.push(option_provinsi_ktp);
                     $('#form_detail select[id=provinsi_ktp]').html(select_provinsi_ktp);
@@ -9785,4 +9808,123 @@
     //             $('#data_agunan_detail').html('<tr><td colspan="4">Tidak ada data</td></tr>');
     //         });
     // }
+
+$('#submit_kk_debitur').submit(function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: '<?php echo base_url();?>memo_ao/take_snapshot_kk_debitur',
+        dataType: "JSON",
+        type: "post",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        cache: false,
+        async: false,
+        success: function(res) {
+            var data = res.data;
+            console.log(data);
+            var personList = res.data.personList;
+            var count_person = personList.length;
+            var i_deb = 0;
+            var txt_no_ktp_kk_debitur = $('input[name="no_ktp"]').val();
+            $('#select_provinsi_ktp').remove();
+            $('#select_provinsi_ktp_dup').show();
+            $('#select_kabupaten_ktp').remove();
+            $('#select_kabupaten_ktp_dup').show();
+            $('#select_kecamatan_ktp').remove();
+            $('#select_kecamatan_ktp_dup').show();
+            $('#select_kelurahan_ktp').remove();
+            $('#select_kelurahan_ktp_dup').show();
+            $('#kode_pos_ktp').val('');
+            for(var i = 0; i < count_person; i++){
+                if(txt_no_ktp_kk_debitur == personList[i].idNumber){
+                    i_deb += 0;
+                    $('input[name="no_ktp_kk"]').val(personList[i_deb].idNumber);
+                    $('input[name="no_kk"]').val(data.kk);
+                    $('input[name="tempat_lahir"]').val(personList[i_deb].birthPlace);
+                    $('input[name="tgl_lahir_deb"]').val(new Date(personList[i_deb].birthDate));
+                    $('input[name="tgl_lahir_deb"]').val(new Date(personList[i_deb].birthDate));
+                    alert(personList[i_deb].mother);
+                    $('input[name="ibu_kandung"]').val(personList[i_deb].mother);
+
+                    if(personList[i_deb].occupation == "KARYAWAN SWASTA" || personList[i_deb].occupation == "PEGAWAI SWASTA"){
+                        $("#pekerjaan_deb").val("01").change();
+                    }else if(personList[i_deb].occupation == 'WIRASWASTA'){
+                        $("#pekerjaan_deb").val("02").change();
+                    }else if(personList[i_deb].occupation == 'PNS' || personList[i_deb].occupation == 'PEGAWAI NEGERI SIPIL'){
+                        $("#pekerjaan_deb").val("03").change();
+                    }else if(personList[i_deb].occupation == 'PEDAGANG'){
+                        $("#pekerjaan_deb").val("04").change();
+                    }else if(personList[i_deb].occupation == ''){
+
+                    }else{
+                        $("#pekerjaan_deb").val("05").change();
+                    }
+
+                    if (personList[i_deb].religion == "ISLAM") {
+                        document.getElementById("agama_deb1").selected = "true";
+                    } else if (personList[i_deb].religion == "KATHOLIK") {
+                        document.getElementById("agama_deb2").selected = "true";
+                    } else if (personList[i_deb].religion == "KRISTEN") {
+                        document.getElementById("agama_deb3").selected = "true";
+                    } else if (personList[i_deb].religion == "HINDU") {
+                        document.getElementById("agama_deb4").selected = "true";
+                    } else if (personList[i_deb].religion == "BUDHA") {
+                        document.getElementById("agama_deb5").selected = "true";
+                    } else {
+                        document.getElementById("lain2_kepercayaan").selected = "true";
+                    }
+                }else{
+                    i_deb += 1;
+                }
+            }
+
+
+            $('input[name="alamat_ktp"]').val(data.address);
+            $('input[name="rt_ktp"]').val(data['rtrw'].substr(0,3));
+            $('input[name="rw_ktp"]').val(data['rtrw'].substr(4));
+            var nama_provinsi = data.province;
+            var val_dd_provinsi_ktp_dup = $('#provinsi_ktp_dup option').filter(function () { return $(this).html() == data.province; }).val();
+            // alert(val_dd_provinsi_ktp_dup);
+            // $('#provinsi_ktp_dup option[value="'+val_dd_provinsi_ktp_dup+'"]').attr('selected','true');
+            $('#provinsi_ktp_dup').val(val_dd_provinsi_ktp_dup).trigger('change')
+            var district = data.district;
+            var district_split = district.split(' ');
+                
+            if(district_split[0] == "KABUPATEN"){
+                var district_replace = district.replace("KABUPATEN","");
+            }else if(district_split[0] == "KOTA"){
+                var district_replace = district.replace("KOTA","");
+            }else{
+                var district_replace = district;
+            }
+            var val_dd_kabupaten_ktp_dup = $('#kabupaten_ktp_dup option').filter(function (){ return $(this).html() == district_replace;}).val();
+            //alert(district_replace);
+               $('#kabupaten_ktp_dup').val(val_dd_kabupaten_ktp_dup).trigger('change')
+                swal({
+                    title: "Data Berhasil Diambil",
+                    type: "success"
+                });
+
+            var val_dd_kecamatan_ktp_dup = $('#kecamatan_ktp_dup option').filter(function (){
+                return $(this).html() == data.subDistrict;
+            }).val();
+            $('#kecamatan_ktp_dup').val(val_dd_kecamatan_ktp_dup).trigger('change')
+
+            var val_dd_kelurahan_ktp_dup = $('#kelurahan_ktp_dup option').filter(function (){
+                return $(this).html() == data.village;
+            }).val();
+            $('#kelurahan_ktp_dup').val(val_dd_kelurahan_ktp_dup).trigger('change')
+
+            $('#kode_pos_ktp').val(data.postcode);
+
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status);
+            alert(thrownError);
+            alert('<?php echo base_url();?>memo_ao/take_snapshot_kk_debitur');
+        }
+    });
+
+});
 </script>

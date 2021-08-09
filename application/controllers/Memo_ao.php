@@ -205,4 +205,49 @@ class Memo_ao extends CI_Controller
 			$mpdf->Output();
 		}
 	}
+
+	public function take_snapshot_kk_debitur()
+	{
+		$config = array(
+			'upload_path'   => './uploads/kk/debitur',
+			'allowed_types' => 'png|jpg|jpeg',
+			'max_size'      => 2000,
+			'min_width'		=> 256,
+			'min_height'    => 256,
+			'max_width'		=> 4096,
+			'max_height'	=> 4096,
+			'file_name'		=> date("Y-m-d").'_'.time()."_ektp"
+		);
+
+		$this->load->library('upload',$config);
+
+		if(!$this->upload->do_upload('inp_debitur'))
+		{
+			$error = array('error' => $this->upload->display_errors());
+			echo json_encode($error);
+		}else{
+			$data = array('upload_data'=> $this->upload->data());
+			$dataupload = $this->upload->data();
+			$ext = pathinfo($dataupload['file_name'],PATHINFO_EXTENSION);
+
+			require('./application/third_party/ocr/CurlClient.php');
+	        $api_host = 'https://api.advance.ai';
+	        $api_name = '/openapi/face-identity/v1/ocr-kk-check';
+	        $access_key = 'c3609576a2f72065'; // your access key
+	        $secret_key = '5fe5320ef5712301'; // your secret key
+
+	        $ocrImage = array(
+	            'ocrImage' => base_url()."uploads/kk/debitur/".$config['file_name'].".".$ext
+	        );
+
+	        $client = new ai\advance\CurlClient($api_host, $access_key, $secret_key);
+
+	        $result = $client -> request($api_name, null, $ocrImage);
+	        echo $result;
+		}
+
+		// //echo "test";
+		// $myJSON = '{"code":"SUCCESS","message":"OK","data":{"address":"RAYA CIBINONG NO 7 KP PADURENAN","familyHead":"EDWIN BUDIYANTO SUNARDI","subDistrict":"CIBINONG","postcode":"169","village":"PABUARAN","rtrw":"003 006","province":"JAWA BARAT","district":"BOGOR","personList":[{"person":"person1","idNumber":"3201012911860009","name":"EDWIN BUDIYANTO SUNARDI","birthPlace":"BOGOR","occupation":"Astronout","birthDate":"29-11-1986","religion":"KRISTEN","marriageDate":null,"bloodType":null,"statusInFamily":"29-06-2019","gender":"LAKI-LAKI","education":"DIPLOMA IV/STRATA I","nationality":"LAINNYA","maritalStatus":"KAWIN TERCATAT","passport":null,"father":"WNI","mother":"Helena","kitap":null},{"person":"person2","idNumber":"3173017101880017","name":"DEPI","birthPlace":"SUNGAI LIAT","occupation":"Astronout","birthDate":"31-01-1988","religion":"KRISTEN","marriageDate":null,"bloodType":null,"statusInFamily":"29-06-2019","gender":"PEREMPUAN","education":"AKADEMI/DIPLOMA III/S. MUDA","nationality":"WNI","maritalStatus":"KAWIN TERCATAT","passport":null,"father":"WNI","mother":"MARJONO HIWAKARI","kitap":null}],"kk":"3201012511190036"},"extra":null,"transactionId":"1b04adcecbbbde4f","pricingStrategy":"PAY"}';
+		// echo $myJSON;
+	}
 }

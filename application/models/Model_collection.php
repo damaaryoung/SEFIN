@@ -329,6 +329,7 @@ class Model_collection extends CI_Model{
 	}
 
 	function get_data_task_assignment_kolektor($start,$limit,$search,$kode_kolektor,$no_rekening,$kode_area,$nama_area_kerja,$field_order,$order_by){
+		//die($sql);
 		$this->load->model('model_menu');
 		$outputs   = $this->model_menu->getUser();
 		$user_id   = $outputs['data']['user_id'];
@@ -405,7 +406,6 @@ class Model_collection extends CI_Model{
 		}
 
 			$sql.=" GROUP BY a.task_code ".$urutan." LIMIT ?,?";
-		// die($sql);
 		$query = $this->db->query($sql, array($start, $limit));
 		return $query;
 	}
@@ -1277,4 +1277,82 @@ function get_data_perfomance_collection_activity($start,$limit,$kode_area,$kode_
 		$query = $this->db->query($sql);
 		return $query;
 	}
+
+	function getAccount($no_rekening){
+		$sql ="SELECT a.`no_rekening`, a.`nama_nasabah`, a.`alamat`, b.STATUS_MARITAL, a.kode_kantor FROM dpm_online.kre_nominatif a INNER JOIN dpm_online.nasabah b ON a.nasabah_id = b.NASABAH_ID WHERE no_rekening = '$no_rekening' GROUP BY a.no_rekening";
+		$query = $this->db->query($sql);
+		return $query;
+	}
+
+	function get_all_cabang(){
+		$sql = "SELECT kode_kantor,kode_cabang, nama_kantor FROM dpm_online.app_kode_kantor";
+		$query = $this->db->query($sql);
+		return $query;
+	}
+
+	function get_collector_by_kode_kantor($kode_kantor){
+		$sql = "SELECT d.kode_group3, d.deskripsi_group3 FROM m_pic a
+		INNER JOIN mk_cabang b ON a.id_cabang = b.id
+		INNER JOIN dpm_online.app_kode_kantor c ON b.kode_kantor = c.kode_kantor 
+		RIGHT JOIN dpm_online.kre_kode_group3 d ON a.`user_id` = d.`user_id`
+		WHERE c.kode_kantor = '$kode_kantor' GROUP BY a.user_id";
+		$query = $this->db->query($sql);
+		return $query;
+	}
+
+	function generate_task_code(){
+		$sql = "SELECT UNIX_TIMESTAMP(CONCAT(CURDATE() ,' ', CURTIME())) AS task_code";
+		$query = $this->db->query($sql);
+		return $query->row();
+	}
+
+	function checkNoRekeningperAssigment_date($no_rekening,$kode_group3,$assignment_date){
+		$sql = "SELECT * FROM task_assigment WHERE no_rekening = '$no_rekening' AND assignment_date = '$assignment_date' AND  kode_group3 = '$kode_group3' AND assignment_date = '$assignment_date'";
+
+		// die($sql);
+		$query = $this->db->query($sql);
+		return $query;
+	}
+
+	function add_task_assigment($post1){
+		$this->db->insert('task_assigment',$post1);
+		return $this->db->affected_rows();
+	}
+
+	function add_task_assigment_detail($post2){
+		$this->db->insert('task_assigment_detail',$post2);
+		return $this->db->affected_rows();
+	}
+
+	function delete_task_assigment($task_code){
+		$this->db->delete('task_assigment',array('task_code'=>$task_code));
+		return $this->db->affected_rows();
+	}
+
+	function delete_task_assigment_detail($task_code){
+		$this->db->delete('task_assigment_detail',array('task_code'=>$task_code));
+		return $this->db->affected_rows();
+	}
+
+	function update_task_assigment($task_code,$post1){
+		$this->db->update('task_assigment',$post1,array('task_code'=>$task_code));
+		return $this->db->affected_rows();
+	}
+
+	function update_task_assigment_detail($task_code,$post2){
+		$this->db->update('task_assigment_detail',$post2,array('task_code'=>$task_code));
+		return $this->db->affected_rows();
+	}
+
+	function get_task_assigment_detail($task_code){
+		$sql = "SELECT * FROM task_assigment a
+		INNER JOIN task_assigment_detail b ON a.`task_code` = b.`task_code`
+		INNER JOIN dpm_online.kre_kode_group3 c ON a.`kode_group3` = c.`kode_group3`
+		INNER JOIN dpm_online.`app_kode_kantor` d ON a.`kode_kantor` = d.`kode_kantor`
+		WHERE a.task_code = '$task_code'";
+		// die($sql);
+		$query = $this->db->query($sql);
+		return $query;
+	} 
+
 }
