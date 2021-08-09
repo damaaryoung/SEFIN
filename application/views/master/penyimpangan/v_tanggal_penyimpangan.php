@@ -21,7 +21,7 @@
                     <div class="card-body">
                     <button type="button" class="btn btn-primary mb-3" id="btn_modal_add_tanggal_penyimpangan">+ ADD</button>
                     <div class="col-4 alert alert-info" role="alert" hidden id="message_expired">
-                        IOM masih aktif, Tidak dapat menambah Tanggal IOM!
+                        IOM masih aktif, Tidak dapat menambah IOM!
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -46,33 +46,21 @@
 <?php $this->load->view('master/penyimpangan/modal/Tanggal_penyimpangan/v_modal_detail'); ?>
 <?php $this->load->view('master/penyimpangan/modal/Tanggal_penyimpangan/v_modal_add'); ?>
 <?php $this->load->view('master/penyimpangan/modal/Tanggal_penyimpangan/v_modal_addlist'); ?>
+<?php $this->load->view('master/penyimpangan/modal/Tanggal_penyimpangan/v_modal_edit'); ?>
 
 <script>
     // load table
     tables();
     // end
-
-    // get expired tanggal penyimpangan
-    ajax_call('', "<?php echo base_url('tanggal_penyimpangan_controller/ExpiredDatePenyimpangan')?>", 'GET')
-        .done(function(response){
-            if(response.total > 0) {
-                $('#btn_modal_add_tanggal_penyimpangan').prop('disabled', true);
-                $('#message_expired').removeAttr('hidden');
-            }
-        })
-        .fail(function(jqXHR){
-            swal("Error!", "oops! something wrong", "error");
-        });
-    // end
-    
+    getExpiredDate();
     // get value param penyimpangan
     ajax_call('', "<?php echo base_url('tanggal_penyimpangan_controller/getParamPenyimpangan')?>", 'GET')
         .done(function(response){
             var html = `<select class="selectpicker" id="params_penyimpangan" name="params_penyimpangan" multiple data-live-search="true">`;
             var html2 = `<select class="selectpicker" id="params_penyimpangan2" name="params_penyimpangan2" multiple data-live-search="true">`;
             for(var i = 0; i < response.length; i++) {
-                html +=`<option value="${response[i].id}">${response[i].nama}</option>`;
-                html2 +=`<option value="${response[i].id}">${response[i].nama}</option>`;
+                html +=`<option value="${response[i].id}" parent="${response[i].parent_penyimpan}">${response[i].nama}</option>`;
+                html2 +=`<option value="${response[i].id}" parent="${response[i].parent_penyimpan}">${response[i].nama}</option>`;
             }
             html += `</select>`;
             html2 += `</select>`;
@@ -83,6 +71,21 @@
         .fail(function(jqXHR){
             swal("Error!", "oops! something wrong", "error");
         });
+    // end
+
+    // get expired tanggal penyimpangan
+    function getExpiredDate() {
+        ajax_call('', "<?php echo base_url('tanggal_penyimpangan_controller/ExpiredDatePenyimpangan')?>", 'GET')
+        .done(function(response){
+            if(response.total > 0) {
+                $('#btn_modal_add_tanggal_penyimpangan').prop('disabled', true);
+                $('#message_expired').removeAttr('hidden');
+            }
+        })
+        .fail(function(jqXHR){
+            swal("Error!", "oops! something wrong", "error");
+        });
+    }
     // end
 
     function params_load_table(id_tanggal_penyimpangan) {
@@ -147,13 +150,17 @@
                         difference_ms = difference_ms/60; 
                         var hours = Math.floor(difference_ms % 24);  
                         var days = Math.floor(difference_ms/24);
-                        if(date3 < 0) {
-                            return '<h5><span class="badge badge-warning">Not yet started</span></h5>';
+                        if(row.end_date == null) {
+                            return '<h5><span class="badge badge-warning">Tanggal selesai IOM belum ditentukan</span></h5>';
                         } else {
-                            if(row.expired == 0) {
-                                return days + " days left";
+                            if(date3 < 0) {
+                                return '<h5><span class="badge badge-warning">Not yet started</span></h5>';
                             } else {
-                                return `<h5><span class="badge badge-danger">Expired</span></h5>`;
+                                if(row.expired == 0) {
+                                    return days + " days left";
+                                } else {
+                                    return `<h5><span class="badge badge-danger">Expired</span></h5>`;
+                                }
                             }
                         }
                         
@@ -244,6 +251,7 @@
                     return false;
                 }
             }
+            getExpiredDate();
             
             Swal.fire('Success!', 'Data berhasil disimpan', 'success');
             if(data.id_tanggal_penyimpangan) {
@@ -276,12 +284,40 @@
     $('#btn_save_list_penyimpangan').on('click', function() {
         var params_penyimpangan = $('#params_penyimpangan2').val();
         var id_tanggal_penyimpangan = $('#id_tanggal_penyimpangan').val();
+        var id_parent_penyimpangan = $("select :selected").map((i, el) => $(el).attr("parent")).toArray();
         var data = {
             'id_tanggal_penyimpangan' : id_tanggal_penyimpangan,
             'params_penyimpangan' : params_penyimpangan.length > 0 ? params_penyimpangan: null
         }
         simpan_data(data);
     });
+
+    $('#table_tanggal_penyimpangan').on('click','.edit_record',function() {
+        var id_tanggal_penyimpangan = $(this).data('id');
+        var start_date = $(this).data('start_date');
+        var end_date = $(this).data('end_date');
+        $('#id_tanggal_penyimpangan_edit').val(id_tanggal_penyimpangan);
+        $('#start_date_edit').val(start_date);
+        $('#end_date_edit').val(end_date);
+        $('#modal_edit_tanggal_penyimpangan').modal('show');
+    });
+
+    $('#tanggal_penyimpangan_form_edit').on('submit', function(e) {
+        e.preventDefault();
+        var data = $(this).serialize();
+        ajax_call(data , "<?php echo base_url('tanggal_penyimpangan_controller/update')?>", 'POST')
+            .done(function(response){
+                if(response.message == true) {
+                    Swal.fire('Success!', 'Data berhasil diubah', 'success');
+                    tables();
+                } else {
+                    Swal.fire('Error!', 'Data gagal diubah, silakan hubungi ITMAN', 'error');
+                }
+            })
+            .fail(function(jqXHR){
+                swal("Error!", "oops! something wrong", "error");
+            });
+    })
 
     $('#table_detail_tanggal_penyimpangan').on('change','#togBtn',function(e) {
         e.preventDefault();

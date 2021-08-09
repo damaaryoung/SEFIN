@@ -95,8 +95,12 @@
 
     function table_detail_approval(approval)
     {
-        var url = "<?php echo base_url('penyimpangan_controller/get_detail_approval')?>";
+        if(approval == '') {
+            var approval = 0;
+        }
 
+        var url = "<?php echo base_url('penyimpangan_controller/get_detail_approval')?>";
+        
         $('#table_detail_approval').dataTable({
             initComplete: function() {
             var api = this.api();

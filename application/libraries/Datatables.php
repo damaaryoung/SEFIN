@@ -489,8 +489,10 @@
       $this->ci->db->select($this->columns);
       }
       // These two lines are the key difference
-      $this->ci->db->from($this->table);
-      return $this->ci->db->count_all_results();
+      // $this->ci->db->from($this->table);
+      // return $this->ci->db->count_all_results();
+      $query = $this->ci->db->get($this->table,null,null,false);  // added the "false" here
+      return $query->num_rows(); 
     }
 
     /**

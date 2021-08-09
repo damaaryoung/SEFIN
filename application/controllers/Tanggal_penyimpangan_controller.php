@@ -9,6 +9,10 @@ class Tanggal_penyimpangan_controller extends CI_Controller
         $this->load->library('datatables'); //load library ignited-dataTable
         $this->load->model('model_tanggal_penyimpangan'); //load model penyimpangan
         $this->load->library('form_validation');
+        $session = $this->session->userdata('SESSION_TOKEN');
+        if(!$session) {
+            redirect('/');
+        }
     }
 
     function validation()
@@ -17,9 +21,9 @@ class Tanggal_penyimpangan_controller extends CI_Controller
         $this->form_validation->set_rules('start_date', 'Start date', 'required',
             array('required' => 'Tanggal Mulai tidak boleh kosong')
         );
-        $this->form_validation->set_rules('end_date', 'End date', 'required',
-            array('required' => 'Tanggal Selesai tidak boleh kosong')
-        );
+        // $this->form_validation->set_rules('end_date', 'End date', 'required',
+        //     array('required' => 'Tanggal Selesai tidak boleh kosong')
+        // );
         // $this->form_validation->set_rules('params_penyimpangan', 'Penyimpangan', 'required',
         //     array('required' => 'Parameter Penyimpangan tidak boleh kosong')
         // );
@@ -34,7 +38,7 @@ class Tanggal_penyimpangan_controller extends CI_Controller
             $array = array(
                 'success'   => true,
                 'start_date' => form_error('start_date'),
-                'end_date' => form_error('end_date'),
+                // 'end_date' => form_error('end_date'),
                 // 'params_penyimpangan' => form_error('params_penyimpangan'),
             );
         }
@@ -71,8 +75,8 @@ class Tanggal_penyimpangan_controller extends CI_Controller
                 echo json_encode(array('validate' => $validate, 'data' => $input));
                 die();
             }
-            $start_date = $this->input->post('start_date');
-            $end_date = $this->input->post('end_date');
+            $start_date = $this->input->post('start_date') == '' ? null: $this->input->post('start_date');
+            $end_date = $this->input->post('end_date') == '' ? null: $this->input->post('end_date');
             $dataTanggalPenyimpangan = array('start_date' => $start_date, 'end_date' =>$end_date, 'expired' => 0);
 
             $id_tanggal = $this->model_tanggal_penyimpangan->AddTanggalPenyimpangan($dataTanggalPenyimpangan);
@@ -94,6 +98,13 @@ class Tanggal_penyimpangan_controller extends CI_Controller
         echo json_encode(array('message' => $sql));
     }
 
+    public function update()
+    {
+        $data = $this->input->post();
+        $sql = $this->model_tanggal_penyimpangan->update($data);
+        echo json_encode(array('message' => $sql));
+    }
+
     public function is_active()
     {
         $data = $this->input->post();
@@ -106,5 +117,16 @@ class Tanggal_penyimpangan_controller extends CI_Controller
         $count = $this->model_tanggal_penyimpangan->CountExpired();
         echo json_encode(array('total' => $count->num_rows()));
 
+    }
+
+    public function setExpiredDate()
+    {
+        $query = $this->model_tanggal_penyimpangan->set_expired_date_iom();
+        if($query == true) {
+            $message = 'query done';
+        } else {
+            $message = 'query failed';
+        }
+        echo json_encode(array('message' => $message));
     }
 }

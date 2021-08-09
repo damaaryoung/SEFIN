@@ -960,4 +960,9 @@ function tracker_data_visit_kolektor(){
     {   
         $this->load->view('master/penyimpangan/v_tanggal_penyimpangan');
     }
+
+    public function status_cuti()
+    {   
+        $this->load->view('master/penyimpangan/v_status_cuti');
+    }
 }

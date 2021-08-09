@@ -562,12 +562,12 @@
             var nama_pic = ' <?php echo $nama_user['data']['nama'] ?>';
             var id_mj_pic = ' <?php echo $id_mj_pic ?>';
             var status_crm = '<?php echo $status_crm ?>';
- var tgl_sk = '<?php echo $tgl_sk ?>';
+            var tgl_sk = '<?php echo $tgl_sk ?>';
             // console.log(id_mj_pic);
-            console.log(status_crm);
-console.log(tgl_sk);
-            console.log(status);
-console.log(id_mj_pic);
+            // console.log(status_crm);
+            // console.log(tgl_sk);
+            // console.log(status);
+            // console.log(id_mj_pic);
             // if (plafon <= plafon_max) {
             // if (input_plafon > plafon_max) {
             //     var radio_done = "" +
@@ -793,7 +793,11 @@ console.log(id_mj_pic);
                     formData.append('cc', $('input[id=cc]', this).val());
                     formData.append('pesan', $('textarea[id=pesan]', this).val());
                     console.log($('input[id=tujuan]', this).val());
-
+                    for (var pair of formData.entries()) {
+                    console.log(pair[0]+ ', ' + pair[1]); 
+                }
+                
+                return false;
                     $.ajax({
                             url: url,
                             data: formData,
@@ -810,6 +814,7 @@ console.log(id_mj_pic);
                         })
                         .done(function(res) {
                             var data = res.data;
+                            console.log(res);
                             bootbox.alert('Data berhasil Approved', function() {
                                 $.ajax({
                                         url: '<?php echo base_url('index.php/menu_controller/caa') ?>',
@@ -1003,11 +1008,11 @@ console.log(id_mj_pic);
 
 
         var rupiah = document.getElementById('rupiah');
-        rupiah.addEventListener('keyup', function(e) {
-            // tambahkan 'Rp.' pada saat form di ketik
-            // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-            rupiah.value = formatRupiah(this.value, '');
-        });
+        if(rupiah){
+            rupiah.addEventListener('keyup', function(e) {
+                rupiah.value = formatRupiah(this.value, '');
+            });
+        }
 
         /* Fungsi formatRupiah */
         function formatRupiah(angka, prefix) {

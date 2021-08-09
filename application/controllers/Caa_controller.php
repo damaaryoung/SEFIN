@@ -238,7 +238,523 @@ class Caa_controller extends CI_Controller
 
     public function get_teamCAA()
     {
-        $nst_struktur = $this->input->post('nst_struktur');
+        $cabang = $this->input->post('cabang');
+        $plafon_rekomen_ca = $this->input->post('plafon_rekomendasi_ca');
+        $plafon_pengajuan = $this->input->post('plafon');
+        $nst = $this->input->post('nst');
+        $get_teamCAA = $this->model_auth->get_data('/api/master/team_caa');
+        $teamCAA = $get_teamCAA['data'];
+        $res = [];
+        $arr_dsh = [];
+        $arr_am = [];
+        if($nst == 'TIDAK') {
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'DSH' && $teamCAA[$i]['flg_aktif'] == true) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($arr_dsh, $teamCAA[$i]['plafon_max']);
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+
+                // get status cuti DSH dan DSH approval naik 1 tingkat ke AM
+                if ($teamCAA[$i]['jabatan'] == 'DSH') {
+                    if($teamCAA[$i]['cabang'] == $cabang) {
+                        if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                            $dsh_cuti = true;
+                        }
+                    }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'AM' && $dsh_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+                // end get cuti dsh
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'AM') {
+                    if ($plafon_pengajuan <= $teamCAA[$i]['plafon_max'] || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                        if($plafon_pengajuan >= $arr_dsh[0]) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($arr_am, $teamCAA[$i]['plafon_max']);
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        } else if($plafon_rekomen_ca == 0) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                    } else if ($plafon_rekomen_ca == 0) {
+                        // if($plafon_pengajuan <= $teamCAA[$i]['plafon_max']) {
+                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+                    }
+                }
+
+                // get status cuti AM dan AM approval naik 1 tingkat ke dir bis
+                if ($teamCAA[$i]['jabatan'] == 'AM') {
+                        if($teamCAA[$i]['cabang'] == $cabang) {
+                            if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                                $am_cuti = true;
+                            }
+                        }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'CRM' && $am_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'DIR BIS' && $am_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+                // end get status cuti AM
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'CRM') {
+                    if($arr_am[0] != null) {
+                        if ($plafon_pengajuan >= $arr_am[0]  || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                    }
+                }
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'KEPATUHAN') {
+                    if ($plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
+                        if ($teamCAA[$i]['cabang'] == $cabang && $teamCAA[$i]['user_id'] != 207) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+                    }
+                }
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'DIR BIS') {
+                    if($arr_am[0] != null) {
+                        if ($plafon_pengajuan > $arr_am[0]  || $plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                    }
+                }
+
+                // get status cuti DIR BIS dan AM approval naik 1 tingkat ke dir risk
+                if ($teamCAA[$i]['jabatan'] == 'DIR BIS') {
+                    if($teamCAA[$i]['cabang'] == $cabang) {
+                        if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                            $dirbis_cuti = true;
+                        }
+                    }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'DIR RISK' && $dirbis_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+                // end get status cuti dir bis
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'DIR RISK') {
+                    if ($plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
+                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+                    }
+                }
+
+                // get status cuti dir risk dan AM approval naik 1 tingkat ke dir ut
+                if ($teamCAA[$i]['jabatan'] == 'DIR RISK') {
+                    if($teamCAA[$i]['cabang'] == $cabang) {
+                        if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                            $dirrisk_cuti = true;
+                        }
+                    }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'DIR UT' && $dirrisk_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+                // end get status cuti dir risk
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'DIR UT') {
+                    if ($plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+                    }
+                }
+            }
+
+        } else {
+            $nst_struktur = $this->input->post('child');
+            $data = implode(',', $nst_struktur);
+            $query = $this->Model_caa->get_mj_pic($data);
+            for($i = 0; $i < count($teamCAA); $i++) {
+                foreach($query->result() as $row) {
+                    if ($teamCAA[$i]['jabatan'] == $row->nama_jenis && $teamCAA[$i]['flg_aktif'] == true) {
+                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                            // array_push($arr_dsh, $teamCAA[$i]['plafon_max']);
+                            // $res[] = $teamCAA[$i]['id'];
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+
+                        // get status cuti AM dan AM approval naik 1 tingkat ke dir bis
+                        if ($row->nama_jenis == 'AM') {
+                            if($teamCAA[$i]['cabang'] == $cabang) {
+                                if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                                    $am_cuti = true;
+                                }
+                            }
+                        }
+
+                        if($teamCAA[$i]['jabatan'] == 'CRM' && $am_cuti) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+
+                        if($teamCAA[$i]['jabatan'] == 'DIR BIS' && $am_cuti) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                        // get status cuti AM
+
+                        // get status cuti dir bis dan naik 1 tingkat ke dir risk
+                        if ($row->nama_jenis == 'DIR BIS') {
+                            if($teamCAA[$i]['cabang'] == $cabang) {
+                                if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                                    $dirbis_cuti = true;
+                                }
+                            }
+                        }
+        
+                        if($teamCAA[$i]['jabatan'] == 'DIR RISK' && $dirbis_cuti) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                        // end get status cuti dir bis
+                    }
+                }
+            }
+        }
+        
+        echo json_encode($res);
+    }
+
+    public function get_teamCAA_bkp2()
+    {
+        $cabang = $this->input->post('cabang');
+        $plafon_rekomen_ca = $this->input->post('plafon_rekomendasi_ca');
+        $plafon_pengajuan = $this->input->post('plafon');
+        $nst = $this->input->post('nst');
+        $get_teamCAA = $this->model_auth->get_data('/api/master/team_caa');
+        $teamCAA = $get_teamCAA['data'];
+        $res = [];
+        $arr_dsh = [];
+        $arr_am = [];
+        if($nst == 'TIDAK') {
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'DSH' && $teamCAA[$i]['flg_aktif'] == true) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($arr_dsh, $teamCAA[$i]['plafon_max']);
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+
+                // get status cuti DSH dan DSH approval naik 1 tingkat ke AM
+                if ($teamCAA[$i]['jabatan'] == 'DSH') {
+                    if($teamCAA[$i]['cabang'] == $cabang) {
+                        if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                            $dsh_cuti = true;
+                        }
+                    }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'AM' && $dsh_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+                // end get cuti dsh
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'AM') {
+                    if ($plafon_pengajuan <= $teamCAA[$i]['plafon_max'] || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                        if($plafon_pengajuan >= $arr_dsh[0]) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($arr_am, $teamCAA[$i]['plafon_max']);
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        } else if($plafon_rekomen_ca == 0) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                    } else if ($plafon_rekomen_ca == 0) {
+                        // if($plafon_pengajuan <= $teamCAA[$i]['plafon_max']) {
+                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+                    }
+                }
+
+                // get status cuti AM dan AM approval naik 1 tingkat ke dir bis
+                if ($teamCAA[$i]['jabatan'] == 'AM') {
+                        if($teamCAA[$i]['cabang'] == $cabang) {
+                            if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                                $am_cuti = true;
+                            }
+                        }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'CRM' && $am_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'DIR BIS' && $am_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+                // end get status cuti AM
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'CRM') {
+                    if($arr_am[0] != null) {
+                        if ($plafon_pengajuan >= $arr_am[0]  || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                    }
+                }
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'KEPATUHAN') {
+                    if ($plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
+                        if ($teamCAA[$i]['cabang'] == $cabang && $teamCAA[$i]['user_id'] != 207) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+                    }
+                }
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'DIR BIS') {
+                    if($arr_am[0] != null) {
+                        if ($plafon_pengajuan > $arr_am[0]  || $plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                    }
+                }
+
+                // get status cuti DIR BIS dan AM approval naik 1 tingkat ke dir risk
+                if ($teamCAA[$i]['jabatan'] == 'DIR BIS') {
+                    if($teamCAA[$i]['cabang'] == $cabang) {
+                        if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                            $dirbis_cuti = true;
+                        }
+                    }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'DIR RISK' && $dirbis_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+                // end get status cuti dir bis
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'DIR RISK') {
+                    if ($plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
+                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+                    }
+                }
+
+                // get status cuti dir risk dan AM approval naik 1 tingkat ke dir ut
+                if ($teamCAA[$i]['jabatan'] == 'DIR RISK') {
+                    if($teamCAA[$i]['cabang'] == $cabang) {
+                        if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                            $dirrisk_cuti = true;
+                        }
+                    }
+                }
+
+                if($teamCAA[$i]['jabatan'] == 'DIR UT' && $dirrisk_cuti) {
+                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                    }
+                }
+                // end get status cuti dir risk
+            }
+
+            for ($i = 0; $i < count($teamCAA); $i++) {
+                if ($teamCAA[$i]['jabatan'] == 'DIR UT') {
+                    if ($plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        }
+                    }
+                }
+            }
+
+        } else {
+            $nst_struktur = $this->input->post('child');
+            $data = implode(',', $nst_struktur);
+            $query = $this->Model_caa->get_mj_pic($data);
+            for($i = 0; $i < count($teamCAA); $i++) {
+                foreach($query->result() as $row) {
+                    if ($teamCAA[$i]['jabatan'] == $row->nama_jenis && $teamCAA[$i]['flg_aktif'] == true) {
+                        if($teamCAA[$i]['jabatan'] == 'DSH') {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($arr_dsh, $teamCAA[$i]['plafon_max']);
+                                // $res[] = $teamCAA[$i]['id'];
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+
+                        } else if ($teamCAA[$i]['jabatan'] == 'AM') {
+                            if ($plafon_pengajuan <= $teamCAA[$i]['plafon_max'] || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                                if($plafon_pengajuan >= $arr_dsh[0]) {
+                                    array_push($arr_am, $teamCAA[$i]['plafon_max']);
+                                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                    }
+                                } else if($plafon_rekomen_ca == 0) {
+                                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                    }
+                                }
+                            } else if ($plafon_rekomen_ca == 0) {
+                                if ($teamCAA[$i]['cabang'] == $cabang) {
+                                    array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                }
+                            }
+                        } else {
+                            if ($teamCAA[$i]['jabatan'] == 'CRM') {
+                                if($arr_am[0] != null) {
+                                    if ($plafon_pengajuan >= $arr_am[0]  || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($teamCAA[$i]['jabatan'] == 'DIR BIS') {
+                                if($arr_am[0] != null) {
+                                    if ($plafon_pengajuan >= $arr_am[0]  || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($teamCAA[$i]['jabatan'] == 'DIR RISK') {
+                                if($arr_am[0] != null) {
+                                    if ($plafon_pengajuan >= $arr_am[0] && $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                                        if ($teamCAA[$i]['cabang'] == $cabang) {
+                                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                        }
+                                    }
+                                }
+                            }
+
+                            if ($teamCAA[$i]['jabatan'] == 'DIR UT') {
+                                if ($plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                    }
+                                }
+                            }
+
+                            if ($teamCAA[$i]['jabatan'] == 'KEPATUHAN') {
+                                if ($plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
+                                    if ($teamCAA[$i]['cabang'] == $cabang) {
+                                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                    }
+                                }
+                            }
+                        }
+
+                        // get status cuti AM dan AM approval naik 1 tingkat ke dir bis
+                        if ($row->nama_jenis == 'AM') {
+                            if($teamCAA[$i]['cabang'] == $cabang) {
+                                if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                                    $am_cuti = true;
+                                }
+                            }
+                        }
+
+                        if($teamCAA[$i]['jabatan'] == 'CRM' && $am_cuti) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+
+                        if($teamCAA[$i]['jabatan'] == 'DIR BIS' && $am_cuti) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                        // get status cuti AM
+
+                        // get status cuti dir bis dan naik 1 tingkat ke dir risk
+                        if ($row->nama_jenis == 'DIR BIS') {
+                            if($teamCAA[$i]['cabang'] == $cabang) {
+                                if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                                    $dirbis_cuti = true;
+                                }
+                            }
+                        }
+        
+                        if($teamCAA[$i]['jabatan'] == 'DIR RISK' && $dirbis_cuti) {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            }
+                        }
+                        // end get status cuti dir bis
+                    }
+                }
+            }
+        }
+        
+        echo json_encode($res);
+    }
+
+    public function get_teamCAA_bkp()
+    {
+        $nst_struktur = $this->input->post('child');
         $plafon_rekomen_ca = $this->input->post('plafon_rekomendasi_ca');
         $plafon_pengajuan = $this->input->post('plafon');
         $nst = $this->input->post('nst');
@@ -468,11 +984,20 @@ class Caa_controller extends CI_Controller
                 }
             }
 
+            $getParent = $this->db->query("SELECT * FROM params_master_penyimpangan
+            WHERE flg_aktif = 1 AND parent_penyimpan != 0")->result();
+            $arr_nst_bis = array();
+            $arr_nst_risk = array();
+            foreach($getParent as $getParents) {
+                array_push($arr_nst_bis,$getParents->nama);
+                array_push($arr_nst_risk,$getParents->nama);
+            }
+
             $nst_struktur = $this->input->post('nst_struktur');
             $arr_nst_am = array('');
             $arr_nst_crm = array();
-            $arr_nst_bis = array('STRUKTUR KREDIT', 'LTV', 'TENOR', 'BD150', 'KTA', 'PASTDUE RO', 'BIAYA PROVISI', 'BIAYA KREDIT', 'BIAYA ADMIN', 'BD50', 'PROFESI BERESIKO', 'JAMINAN DI PERKAMPUNGAN');
-            $arr_nst_risk = array('LTV', 'TENOR', 'BD150', 'KTA', 'PASTDUE RO', 'BIAYA PROVISI', 'BIAYA KREDIT', 'BIAYA ADMIN', 'BD50', 'PROFESI BERESIKO', 'JAMINAN DI PERKAMPUNGAN', 'STRUKTUR KREDIT');
+            // $arr_nst_bis = array('STRUKTUR KREDIT', 'LTV', 'TENOR', 'BD150', 'KTA', 'PASTDUE RO', 'BIAYA PROVISI', 'BIAYA KREDIT', 'BIAYA ADMIN', 'BD50', 'PROFESI BERESIKO', 'JAMINAN DI PERKAMPUNGAN');
+            // $arr_nst_risk = array('LTV', 'TENOR', 'BD150', 'KTA', 'PASTDUE RO', 'BIAYA PROVISI', 'BIAYA KREDIT', 'BIAYA ADMIN', 'BD50', 'PROFESI BERESIKO', 'JAMINAN DI PERKAMPUNGAN', 'STRUKTUR KREDIT');
 
             if ($nst_struktur) {
                 foreach ($nst_struktur as $nst) {
@@ -656,7 +1181,10 @@ class Caa_controller extends CI_Controller
         if ($user_id === 2186589) {
             $status_crm = $this->db->query("SELECT status_crm FROM tb_approval WHERE id_trans_so = $id AND user_id = 1034207")->result();
         }
-        $data['status_crm'] = $status_crm[0]->status_crm;
+
+        if(count($status_crm) > 0) {
+            $data['status_crm'] = $status_crm[0]->status_crm;
+        }        
         $pic_id = "SELECT * FROM m_pic where user_id = '$user_id' ";
         $data_pic = $this->db->query($pic_id)->result();
         foreach ($data_pic as $data1) {
@@ -685,80 +1213,85 @@ $data['tgl_sk'] = $data1->tgl_sk;
                 $data['penyimpangan'] = 'TIDAK';
             } else {
                 $data['penyimpangan'] = 'ADA';
-
-                if ($penyimpangan['biaya_provisi'] === '1') {
-                    $biaya_provisi = 'BIAYA PROVISI | ';
+                if($penyimpangan['param_penyimpangan'] === null) {
+                    if ($penyimpangan['biaya_provisi'] === '1') {
+                        $biaya_provisi = 'BIAYA PROVISI | ';
+                    } else {
+                        $biaya_provisi = '';
+                    }
+    
+                    if ($penyimpangan['biaya_admin'] === '1') {
+                        $biaya_admin = 'BIAYA ADMIN | ';
+                    } else {
+                        $biaya_admin = '';
+                    }
+    
+                    if ($penyimpangan['biaya_kredit'] === '1') {
+                        $biaya_kredit = 'BIAYA KREDIT | ';
+                    } else {
+                        $biaya_kredit = '';
+                    }
+    
+                    if ($penyimpangan['ltv'] === '1') {
+                        $ltv = 'LTV | ';
+                    } else {
+                        $ltv = '';
+                    }
+    
+                    if ($penyimpangan['tenor'] === '1') {
+                        $tenor = 'TENOR | ';
+                    } else {
+                        $tenor = '';
+                    }
+    
+                    if ($penyimpangan['kartu_pinjaman'] === '1') {
+                        $kartu_pinjaman = 'KTA / Kartu Kredit / (Sertifikat/BPKB, Coll >=2, BD <50 Jt) | ';
+                    } else {
+                        $kartu_pinjaman = '';
+                    }
+    
+                    if ($penyimpangan['sertifikat_diatas_50'] === 1) {
+                        $sertifikat_diatas_50 = 'Sertifikat/BPKB, Coll >=2, BD 50 s/d 150 Jt | ';
+                    } else {
+                        $sertifikat_diatas_50 = '';
+                    }
+    
+                    if ($penyimpangan['sertifikat_diatas_150'] === '1') {
+                        $sertifikat_diatas_150 = 'Sertifikat/BPKB, Coll >=2, BD >150 Jt | ';
+                    } else {
+                        $sertifikat_diatas_150 = '';
+                    }
+    
+                    if ($penyimpangan['profesi_beresiko'] === '1') {
+                        $profesi_beresiko = 'Profesi Beresiko | ';
+                    } else {
+                        $profesi_beresiko = '';
+                    }
+    
+                    if ($penyimpangan['jaminan_kp_tenor_48'] === '1') {
+                        $jaminan_kp_tenor_48 = 'Jaminan Di Perkampungan Tenor 48 Bulan | ';
+                    } else {
+                        $jaminan_kp_tenor_48 = '';
+                    }
+    
+                    if ($penyimpangan['struktur_kredit'] === '1') {
+                        $struktur_kredit = 'STRUKTUR KREDIT | ';
+                    } else {
+                        $struktur_kredit = '';
+                    }
+    
+                    if ($penyimpangan['past_due_ro'] === '1') {
+                        $pastdue_ro = 'PASTDUE RO | ';
+                    } else {
+                        $pastdue_ro = '';
+                    }
                 } else {
-                    $biaya_provisi = '';
+                    $param_penyimpangan = $penyimpangan['param_penyimpangan'];
+                    $params_penyimpangan_caa = str_replace(',',' | ', $param_penyimpangan);
                 }
-
-                if ($penyimpangan['biaya_admin'] === '1') {
-                    $biaya_admin = 'BIAYA ADMIN | ';
-                } else {
-                    $biaya_admin = '';
-                }
-
-                if ($penyimpangan['biaya_kredit'] === '1') {
-                    $biaya_kredit = 'BIAYA KREDIT | ';
-                } else {
-                    $biaya_kredit = '';
-                }
-
-                if ($penyimpangan['ltv'] === '1') {
-                    $ltv = 'LTV | ';
-                } else {
-                    $ltv = '';
-                }
-
-                if ($penyimpangan['tenor'] === '1') {
-                    $tenor = 'TENOR | ';
-                } else {
-                    $tenor = '';
-                }
-
-                if ($penyimpangan['kartu_pinjaman'] === '1') {
-                    $kartu_pinjaman = 'KTA / Kartu Kredit / (Sertifikat/BPKB, Coll >=2, BD <50 Jt) | ';
-                } else {
-                    $kartu_pinjaman = '';
-                }
-
-                if ($penyimpangan['sertifikat_diatas_50'] === 1) {
-                    $sertifikat_diatas_50 = 'Sertifikat/BPKB, Coll >=2, BD 50 s/d 150 Jt | ';
-                } else {
-                    $sertifikat_diatas_50 = '';
-                }
-
-                if ($penyimpangan['sertifikat_diatas_150'] === '1') {
-                    $sertifikat_diatas_150 = 'Sertifikat/BPKB, Coll >=2, BD >150 Jt | ';
-                } else {
-                    $sertifikat_diatas_150 = '';
-                }
-
-                if ($penyimpangan['profesi_beresiko'] === '1') {
-                    $profesi_beresiko = 'Profesi Beresiko | ';
-                } else {
-                    $profesi_beresiko = '';
-                }
-
-                if ($penyimpangan['jaminan_kp_tenor_48'] === '1') {
-                    $jaminan_kp_tenor_48 = 'Jaminan Di Perkampungan Tenor 48 Bulan | ';
-                } else {
-                    $jaminan_kp_tenor_48 = '';
-                }
-
-                if ($penyimpangan['struktur_kredit'] === '1') {
-                    $struktur_kredit = 'STRUKTUR KREDIT | ';
-                } else {
-                    $struktur_kredit = '';
-                }
-
-                if ($penyimpangan['past_due_ro'] === '1') {
-                    $pastdue_ro = 'PASTDUE RO | ';
-                } else {
-                    $pastdue_ro = '';
-                }
+                
             }
-            $data['hasil_nst'] = $biaya_provisi . $biaya_admin . $biaya_kredit . $ltv . $tenor . $kartu_pinjaman . $sertifikat_diatas_50 . $sertifikat_diatas_150 . $profesi_beresiko . $jaminan_kp_tenor_48 . $struktur_kredit . $pastdue_ro;
+            $data['hasil_nst'] = $biaya_provisi . $biaya_admin . $biaya_kredit . $ltv . $tenor . $kartu_pinjaman . $sertifikat_diatas_50 . $sertifikat_diatas_150 . $profesi_beresiko . $jaminan_kp_tenor_48 . $struktur_kredit . $pastdue_ro .$params_penyimpangan_caa;
 
 
             for ($i = 0; $i < count($result['data']['team_caa']); $i++) {
@@ -929,5 +1462,26 @@ $data['tgl_sk'] = $data1->tgl_sk;
             </div>
             ";
         endif;
+    }
+
+    public function getPenyimpangan()
+    {
+        // $id_parent = $this->input->post('parent');
+        $query = $this->Model_caa->CatPenyimpangan();
+        $res = [];
+        foreach($query->result() as $value) {
+            $query_cat = $this->Model_caa->get_category($value->parent_penyimpan);
+            foreach($query_cat->result() as $val) {
+                array_push($res, array('nama' => $val->nama, 'id' => $val->id));
+            }
+        }
+        echo json_encode($res);
+    }
+
+    public function getChildPenyimpangan()
+    {
+        $id_parent = $this->input->post('parent');
+        $query = $this->Model_caa->ChildPenyimpangan($id_parent);
+        echo json_encode($query->result());
     }
 }

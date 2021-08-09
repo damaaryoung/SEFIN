@@ -127,7 +127,7 @@
   $('#data_table_caa').on('click', '.edit', function(e) {
     e.preventDefault();
     var id = $(this).attr('data');
-    console.log(id);
+    // console.log(id);
     $('#modal_trans_caa').modal('show');
     $.ajax({
       type: 'post',
