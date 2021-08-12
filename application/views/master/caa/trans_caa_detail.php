@@ -502,12 +502,16 @@
 
                                             <div class="col-md-3 radio_done"></div>
                                             <div class="col-md-3 radio_accept"></div>
+                                            <?php 
+                                                if($tgl_sk != null || $tgl_sk != ''):
+                                            ?>
                                             <div class="col-md-3">
                                                 <input type="radio" name="status" value="return"> <small>Return To CA</small>
                                             </div>
                                             <div class="col-md-3" id="not_recommend">
                                                 <input type="radio" name="status" value="reject"> <small>Not Recommended</small>
                                             </div>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
 
@@ -527,9 +531,10 @@
                 <?php if (!empty($result_team_caa)) : ?>
                     <?php foreach ($result_team_caa['data'] as $result_team_caa_list) : ?>
                         <?php if (!empty($result_team_caa_list['user_id'])) : ?>
+                        <?php  $tgl_sk = $result_team_caa_list['tgl_sk']==null ? '<span class="badge badge-success">Mengetahui</span>':''; ?>
                             <div class="card" style="font-size:10pt">
                                 <div class="card-header text-primary">
-                                    <?php echo $result_team_caa_list['nama_pic'] ?><br>
+                                    <?php echo $result_team_caa_list['nama_pic'].' '.$tgl_sk ?><br>
                                     <small><?php echo date('h:i d-m-Y', strtotime($result_team_caa_list['tanggal'])) ?></small>
                                 </div>
                                 <div class="card-body">

@@ -54,12 +54,7 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
-<<<<<<< HEAD
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
-// define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
-=======
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
->>>>>>> 01ba0de90b7733b57a6f3d05d0061b62023dde19
 
 /*
  *---------------------------------------------------------------
@@ -86,7 +81,17 @@ switch (ENVIRONMENT) {
 		break;
 
 	default:
-		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		header('HTTP/1.1 503 Service Unavailable
+
+		$arr = [];
+		foreach($tb_app as $val)
+		{
+			array_push($arr, $val->status);
+		}
+
+		echo json_encode($arr);
+
+		exit();.', TRUE, 503);
 		echo 'The application environment is not set correctly.';
 		exit(1); // EXIT_ERROR
 }
