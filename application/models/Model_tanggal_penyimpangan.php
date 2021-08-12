@@ -21,6 +21,9 @@ class model_tanggal_penyimpangan extends CI_Model{
         $this->datatables->add_column('action',
             '<a href="javascript:void(0);" title="detail" class="detail_record btn btn-default btn-md" data-id="$1" data-start_date="$2" data-end_date="$3">
             <i class="fa fa-bars" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" title="detail" class="edit_record btn btn-info btn-md" data-id="$1" data-start_date="$2" data-end_date="$3">
+            <i class="fa fa-edit" aria-hidden="true"></i>
             </a>',
             'id, start_date, end_date');
         $this->datatables->add_column('keterangan','$1', '');
@@ -50,6 +53,17 @@ class model_tanggal_penyimpangan extends CI_Model{
         return $save;
     }
 
+    public function update($data)
+    {
+        $start_date = $data['start_date'] == '' ? null: $data['start_date'];
+        $end_date = $data['end_date'] == '' ? null: $data['end_date'];
+        $this->db->set('start_date', $start_date);
+        $this->db->set('end_date', $end_date);
+        $this->db->where('id', $data['id_tanggal_penyimpangan']);
+        $result = $this->db->update($this->tableTanggal);
+        return $result;
+    }
+
     public function is_active($data)
     {
         $this->db->set('active', $data['active']);
@@ -62,6 +76,14 @@ class model_tanggal_penyimpangan extends CI_Model{
     {
         $query ="SELECT * from $this->tableTanggal WHERE expired = 0";
 		return $this->db->query($query);
+    }
+
+    function set_expired_date_iom()
+    {
+        $this->db->set('expired', 1);
+        $this->db->where('end_date < current_date()');
+        $result = $this->db->update($this->tableTanggal);
+        return $result;
     }
 
 }

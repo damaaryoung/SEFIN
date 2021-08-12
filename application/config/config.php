@@ -23,7 +23,8 @@ date_default_timezone_set("Asia/Jakarta");
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://' . $_SERVER['HTTP_HOST'] . '/SEFIN/';
+$config['base_url'] = 'http://' . $_SERVER['HTTP_HOST'] . '/SEFIN_MASTER/';
+// $config['api_url'] = 'http://localhost:8000/';
 $config['api_url'] = 'http://103.31.232.146/API_WEBTOOL3/';
 //$config['api_url'] = 'http://192.168.1.7/API_WEBTOOL3GITHUB/';
 $config['img_url'] = 'http://103.31.232.146/API_WEBTOOL3/';

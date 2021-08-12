@@ -136,4 +136,58 @@ class Model_caa extends CI_Model
         $this->sql_caa();
         return $this->db->count_all_results();
     }
+
+    public function CatPenyimpangan()
+    {
+        $this->db->select("b.nama, a.id_penyimpangan, b.parent_penyimpan, b.id");
+        $this->db->from("master_list_penyimpangan a");
+        $this->db->join("params_master_penyimpangan b", "a.id_penyimpangan = b.id");
+        $this->db->join("master_tanggal_penyimpangan c", "c.id = a.id_tanggal_penyimpangan");
+        $this->db->where("c.expired", 0);
+        $this->db->where("a.active", 1);
+        $this->db->group_by("b.parent_penyimpan");
+        return $this->db->get();
+    }
+
+    public function get_category($data)
+    {
+        $this->db->select("nama,id ");
+        $this->db->from("params_master_penyimpangan");
+        $this->db->where("id", $data);
+        return $this->db->get();
+    }
+
+    public function ChildPenyimpangan($id_parent)
+    {
+        $this->db->select("b.nama, b.id_mj_pic");
+        $this->db->from("master_list_penyimpangan a");
+        $this->db->join("params_master_penyimpangan b", "a.id_penyimpangan = b.id");
+        $this->db->join("master_tanggal_penyimpangan c", "c.id = a.id_tanggal_penyimpangan");
+        $this->db->where("c.expired", 0);
+        $this->db->where("a.active", 1);
+        $this->db->where("b.parent_penyimpan", $id_parent);
+        // $this->db->group_by("a.id_parent_penyimpangan");
+        return $this->db->get();
+    }
+
+    public function get_mj_pic($data)
+    {
+        $this->db->select('nama_jenis');
+        $this->db->from('mj_pic');
+        $this->db->where('id IN('.$data.')');
+        return $this->db->get();
+    }
+
+    public function get_team_caa($data)
+    {
+        $this->db->select('a.id as id, a.user_id as user_id, a.plafon_caa as plafon_caa, a.nama as nama, a.flg_aktif as flg_aktif, c.nama as cabang, b.nama_jenis as nama_jenis');
+        $this->db->from('m_pic a');
+        $this->db->join('mj_pic b', 'a.id_mj_pic = b.id');
+        $this->db->join('mk_cabang c', 'a.id_cabang = c.id');
+        $this->db->where('c.nama', $data);
+        $this->db->where('a.plafon_caa is not null');
+        $this->db->where('a.flg_aktif', 1);
+        $this->db->order_by('b.id asc');
+        return $this->db->get();
+    }
 }

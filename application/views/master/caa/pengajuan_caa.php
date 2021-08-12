@@ -9,18 +9,18 @@
         <div class="row">
             <div class="col-md-12">
                 <small>Nama Nasabah :</small>
-                <input type="text" placeholder="Nama Nasabah" value="<?php echo strtoupper($pengajuan_nama) ?>" class="form-control form-control-sm" disabled>
+                <input type="text" placeholder="Nama Nasabah" id="nama_debitur" value="<?php echo strtoupper($pengajuan_nama) ?>" class="form-control form-control-sm" disabled>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-10">
                 <small>Plafon Pengajuan</small>
-                <input type="text" placeholder="Tenor Pengajuan" class="form-control form-control-sm" value="<?php echo number_format($pengajuan_plafon, 0, '', '.') ?>" readonly>
+                <input type="text" placeholder="Tenor Pengajuan" id="plafon_pengajuan" class="form-control form-control-sm" value="<?php echo number_format($pengajuan_plafon, 0, '', '.') ?>" readonly>
             </div>
             <div class="col-md-2">
                 <small>Tenor</small>
-                <input type="text" placeholder="Tenor Pengajuan" class="form-control form-control-sm" value="<?php echo $pengajuan_tenor ?>" readonly>
+                <input type="text" placeholder="Tenor Pengajuan" id="tenor" class="form-control form-control-sm" value="<?php echo $pengajuan_tenor ?>" readonly>
             </div>
         </div>
 
@@ -449,22 +449,45 @@
         var plafonPengajuan = '<?php echo $pengajuan_plafon ?>';
         var plafonRekomenCa = '<?php echo $rekomendasi_ca_plafon ?>';
         if (data == 'ADA') {
-            html = "" +
-                "<div class='form-group small pt-2'>" +
-                "<input type='checkbox' name='penyimpangan_struktur_pembiayaan' value='1' onchange='struktur_pembiayaan()'> Struktur Pembiayaan" +
-                "<div id='penyimpangan_struktur_pembiayaan'></div>" +
-                "</div>" +
-                "<div class='form-group small'>" +
-                "<input type='checkbox' name='penyimpangan_kolektabilitas' value='1' onchange='kolektabilitas()'> Kolektabilitas / RISIKO LAINNYA" +
-                "<div id='penyimpangan_kolektabilitas'></div>" +
-                "</div>";
-            $('#penyimpangan_optional').html(html);
+            // html = "" +
+            //     "<div class='form-group small pt-2'>" +
+            //     "<input type='checkbox' name='penyimpangan_struktur_pembiayaan' value='1' onchange='struktur_pembiayaan()'> Struktur Pembiayaan" +
+            //     "<div id='penyimpangan_struktur_pembiayaan'></div>" +
+            //     "</div>" +
+            //     "<div class='form-group small'>" +
+            //     "<input type='checkbox' name='penyimpangan_kolektabilitas' value='1' onchange='kolektabilitas()'> Kolektabilitas / RISIKO LAINNYA" +
+            //     "<div id='penyimpangan_kolektabilitas'></div>" +
+            //     "</div>";
+            $.ajax({
+                type: "get",
+                url: "caa_controller/getPenyimpangan",
+                // data: "parent=0",
+                dataType: 'JSON',
+                beforeSend: function() {
+                    $('#penyimpangan_optional').html('<i class="fa fa-spinner fa-spin text-sm"></i>');  
+                },
+                success: function(res) {
+                    
+                    var html = ``;
+                    for(var i = 0; i < res.length; i++) {
+                        // console.log(res[i].parent_penyimpan);
+                        // if(res[i].parent_penyimpan == 0) {
+                        html += `<div class="form-group small pt-2" id="parent-`+res[i].id+`">
+                        <input type="checkbox" name="parent-`+res[i].id+`" value="`+res[i].id+`" onchange="getChildPenyimpangan(`+res[i].id+`)"> `+ res[i].nama +`<div id="child-penyimpangan-`+res[i].id+`"></div>
+                        </div>`;
+                        // }
+                    }
+                    $('#penyimpangan_optional').html(html);
+                }
+            });
             $('#team_caa').html('');
             $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-secondary btn-sm" style="float: right;" disabled>Approve</button>');
         } else {
             $('#penyimpangan_optional').html('');
+            $('#team_caa').html('');
             $.ajax({
                 type: "post",
+                dataType: "JSON",
                 url: "caa_controller/get_teamCAA",
                 data: "plafon=" + plafonPengajuan + "&nst=" + data + "&cabang=" + cabang + "&plafon_rekomendasi_ca=" + plafonRekomenCa,
                 beforeSend: function() {
@@ -472,12 +495,74 @@
                     $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-secondary btn-sm" style="float: right;" disabled>Approve</button>');
                 },
                 success: function(response) {
-                    $('#team_caa').html(response);
+                    // console.log(response)
+                    var result = response.reduce((unique, o) => {
+                        if(!unique.some(obj => obj.id === o.id && obj.jabatan === o.jabatan)) {
+                        unique.push(o);
+                        }
+                        return unique;
+                    },[]);
+                    // console.log(result);
+                    // var data = $.grep(response, function(e){ 
+                    //     if(plafonPengajuan <= 150000000) {
+                    //         return e.jabatan != 'KEPATUHAN'; 
+                    //     }
+                    // });
+                    // console.log(cabang)
+                    var html = `<div class='row'>`;
+                    if(result.length > 0) {
+                        for(var i = 0; i < result.length; i++) {
+                            if(result[i].flg_cuti == 1) {
+                               var status_cuti = '<span class="badge badge-info">Cuti</span>';
+                            } else {
+                                var status_cuti = '';
+                            }
+                            html += `<div class='col-md-4'>
+                                <input type="checkbox" value=`+result[i].id+` name="team_caa[]" checked disabled data-jabatan=`+result[i].jabatan+` data-cuti=`+result[i].flg_cuti+`>
+                                <small>`+result[i].jabatan+` `+status_cuti+`</small>
+                                </div>
+                                `;
+                        }
+                        $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-success btn-sm" style="float: right;">Approve</button>');
+                    } else {
+                        html += '';
+                    }
+                    html += `</div>`;
+                    $('#team_caa').html(html);
                     $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-success btn-sm" style="float: right;">Approve</button>');
                 }
             });
         }
     });
+
+    function getChildPenyimpangan(id) {
+        var ParentChecked = $('input[name="parent-'+id+'"]').is(':checked');
+        if (ParentChecked) {
+            $.ajax({
+                type: "post",
+                url: "caa_controller/getChildPenyimpangan",
+                data: "parent="+id,
+                dataType: 'JSON',
+                beforeSend: function() {
+                    $('#child-'+id).html('<i class="fa fa-spinner fa-spin text-sm"></i>');
+                    $('#child-penyimpangan-'+id).html('<i class="fa fa-spinner fa-spin text-sm"></i>');  
+                },
+                success: function(res) {
+                    $('#child-penyimpangan-'+id).html(''); 
+                    html = `<ul class='list-group' id="child-`+id+`">`;
+                    for(var i = 0; i < res.length; i++) {
+                        html += `<li class='list-group-item'><input type='checkbox' onchange='nst_struktur()' name='child[]' data-nama='`+res[i].nama+`' value='`+res[i].id_mj_pic+`'> `+res[i].nama+`</li>`;
+                    }
+                    html += `</ul>`;
+                    $('#parent-'+id).append(html);
+                }
+            });
+        } else {
+            $('#child-'+id).remove();
+            $('#child-penyimpangan-'+id).html(''); 
+        }
+        nst_struktur();
+    }
 
     function struktur_pembiayaan() {
         var data = $('input[name="penyimpangan_struktur_pembiayaan"]:checked').val();
@@ -503,28 +588,69 @@
         var formData = new FormData();
         var plafonPengajuan = '<?php echo $pengajuan_plafon ?>';
         var cabang = $('#cabang').val();
+        var data = $('input[type=radio][name=penyimpangan]:checked').val();
+        var plafonRekomenCa = '<?php echo $rekomendasi_ca_plafon ?>';
+
+        formData.append('plafon_rekomendasi_ca', plafonRekomenCa);
+        formData.append('nst', data);
 
         formData.append('plafon', plafonPengajuan);
         formData.append('cabang', cabang);
-        $.each($('input[name="nst_struktur[]"]:checked'), function(i, e) {
-            formData.append('nst_struktur[]', e.value);
+        $.each($('input[name="child[]"]:checked'), function(i, e) {
+            formData.append('child[]', e.value);
         });
-        $.each($('input[name="nst_kolektabilitas[]"]:checked'), function(i, e) {
-            formData.append('nst_struktur[]', e.value);
-        });
+        // $.each($('input[name="nst_struktur[]"]:checked'), function(i, e) {
+        //     formData.append('nst_struktur[]', e.value);
+        // });
+        // $.each($('input[name="nst_kolektabilitas[]"]:checked'), function(i, e) {
+        //     formData.append('nst_struktur[]', e.value);
+        // });
         $.ajax({
             type: "post",
             url: "caa_controller/get_teamCAA",
             data: formData,
             processData: false,
+            dataType: 'json',
             contentType: false,
             beforeSend: function() {
                 $('#team_caa').html('<i class="fa fa-spinner fa-spin text-sm"></i> Generate Team CAA');
                 $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-secondary btn-sm" style="float: right;" disabled>Approve</button>');
             },
             success: function(response) {
-                $('#team_caa').html(response);
-                $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-success btn-sm" style="float: right;">Approve</button>');
+                var result = response.reduce((unique, o) => {
+                    if(!unique.some(obj => obj.id === o.id && obj.jabatan === o.jabatan)) {
+                    unique.push(o);
+                    }
+                    return unique;
+                },[]);
+                // var data = JSON.parse(localStorage.getItem('data_approval')) || [];
+                // data.push(response);
+                // console.log(result);
+                localStorage.setItem('data_approval', JSON.stringify(data));
+                var html = `<div class='row'>`;
+                if(result.length > 0) {
+                    for(var i = 0; i < result.length; i++) {
+                        if(result[i].flg_cuti == 1) {
+                            var status_cuti = '<span class="badge badge-info">Cuti</span>';
+                        } else {
+                            var status_cuti = '';
+                        }
+                        html += `<div class='col-md-4'>
+                            <input type="checkbox" value=`+result[i].id+` name="team_caa[]" checked disabled data-jabatan=`+result[i].jabatan+` data-cuti=`+result[i].flg_cuti+`>
+                            <small>`+result[i].jabatan+` `+status_cuti+`</small>
+                            </div>
+                            `;
+                    }
+                    $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-success btn-sm" style="float: right;">Approve</button>');
+                } else {
+                    html += '';
+                }
+                html += `</div>`;
+                $('#team_caa').html(html);
+            },
+            error: function()
+            {
+                $('#team_caa').html('');
             }
         });
     }
@@ -553,59 +679,81 @@
         e.preventDefault();
         var formData = new FormData();
         formData.append('penyimpangan', $('input[name=penyimpangan]:checked', this).val());
+        formData.append('nama_debitur', $('#nama_debitur').val());
+        formData.append('plafon_pengajuan', $('#plafon_pengajuan').val());
+        formData.append('cabang', $('#cabang').val());
+        formData.append('tenor', $('#tenor').val());
         $.each($('input[name="team_caa[]"]:checked'), function(i, e) {
+            if($(e).data('jabatan') == 'DSH') {
+                if($(e).data('cuti')) {
+                    formData.append('dsh_cuti', 1);
+                } else {
+                    formData.append('dsh_cuti', 0);
+                }
+            }
             formData.append('team_caa[]', e.value);
         });
-        $.each($('input[name="nst_struktur[]"]:checked'), function(i, e) {
-            if (e.value == 'BIAYA PROVISI') {
-                formData.append('biaya_provisi', '1');
-            }
-
-            if (e.value == 'BIAYA ADMIN') {
-                formData.append('biaya_admin', '1');
-            }
-
-            if (e.value == 'BIAYA KREDIT') {
-                formData.append('biaya_kredit', '1');
-            }
-
-            if (e.value == 'STRUKTUR KREDIT') {
-                formData.append('struktur_kredit', '1');
-            }
-
-            if (e.value == 'PASTDUE RO') {
-                formData.append('past_due_ro', '1');
-            }
-
-            if (e.value == 'LTV') {
-                formData.append('ltv', '1');
-            }
-
-            if (e.value == 'TENOR') {
-                formData.append('tenor', '1');
-            }
+        var arr = [];
+        $.each($('input[name="child[]"]:checked'), function(i, e) {
+            formData.append('params_penyimpangan[]', $(e).data('nama').replaceAll(",", " "));
         });
-        $.each($('input[name="nst_kolektabilitas[]"]:checked'), function(i, e) {
-            if (e.value == 'KTA') {
-                formData.append('kartu_pinjaman', '1');
-            }
+        // $.each($('input[name="nst_struktur[]"]:checked'), function(i, e) {
+        //     if (e.value == 'BIAYA PROVISI') {
+        //         formData.append('biaya_provisi', '1');
+        //     }
 
-            if (e.value == 'BD50') {
-                formData.append('sertifikat_diatas_50', '1');
-            }
+        //     if (e.value == 'BIAYA ADMIN') {
+        //         formData.append('biaya_admin', '1');
+        //     }
 
-            if (e.value == 'BD150') {
-                formData.append('sertifikat_diatas_150', '1');
-            }
+        //     if (e.value == 'BIAYA KREDIT') {
+        //         formData.append('biaya_kredit', '1');
+        //     }
 
-            if (e.value == 'PROFESI BERESIKO') {
-                formData.append('profesi_beresiko', '1');
-            }
+        //     if (e.value == 'STRUKTUR KREDIT') {
+        //         formData.append('struktur_kredit', '1');
+        //     }
 
-            if (e.value == 'JAMINAN DI PERKAMPUNGAN') {
-                formData.append('jaminan_kp_tenor_48', '1');
-            }
-        });
+        //     if (e.value == 'PASTDUE RO') {
+        //         formData.append('past_due_ro', '1');
+        //     }
+
+        //     if (e.value == 'LTV') {
+        //         formData.append('ltv', '1');
+        //     }
+
+        //     if (e.value == 'TENOR') {
+        //         formData.append('tenor', '1');
+        //     }
+        // });
+        // $.each($('input[name="nst_kolektabilitas[]"]:checked'), function(i, e) {
+        //     if (e.value == 'KTA') {
+        //         formData.append('kartu_pinjaman', '1');
+        //     }
+
+        //     if (e.value == 'BD50') {
+        //         formData.append('sertifikat_diatas_50', '1');
+        //     }
+
+        //     if (e.value == 'BD150') {
+        //         formData.append('sertifikat_diatas_150', '1');
+        //     }
+
+        //     if (e.value == 'PROFESI BERESIKO') {
+        //         formData.append('profesi_beresiko', '1');
+        //     }
+
+        //     if (e.value == 'JAMINAN DI PERKAMPUNGAN') {
+        //         formData.append('jaminan_kp_tenor_48', '1');
+        //     }
+        // });
+
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]); 
+        // }
+
+        // console.log(formData);
+        // return false;
 
         $.ajax({
                 url: url,
@@ -653,4 +801,8 @@
                 $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-success btn-sm" style="float: right;">Approve</button>');
             });
     });
+
+    $('#modal_caa').on('hidden', function(){
+        localStorage.removeItem('data_approval'); 
+    })
 </script>
