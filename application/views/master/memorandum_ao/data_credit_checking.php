@@ -1,64 +1,3 @@
-<style type="text/css">
-        body {
-            font-family: Helvetica, sans-serif;
-        }
-
-        h2,
-        h3 {
-            margin-top: 0;
-        }
-
-        form {
-            margin-top: 15px;
-        }
-
-        form>input {
-            margin-right: 15px;
-        }
-
-        #results {
-            float: right;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid;
-            background: #ccc;
-        }
-
-        /*fileinput*/
-        .upload-btn-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-
-        .btn_file {
-            border: 2px solid gray;
-            color: gray;
-            background-color: white;
-            padding: 8px 20px;
-            border-radius: 8px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .upload-btn-wrapper input[type=file] {
-            font-size: 100px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-        }
-
-        @media only screen and (max-width: 769px) {
-            .upload-btn-wrapper input[type=file] {
-                font-size: 100px;
-                position: absolute;
-                left: 0;
-                top: 0;
-                opacity: 0;
-            }
-        }
-    </style>
 <link href="<?php echo base_url('assets/dist/css/datepicker.min.css') ?>" rel="stylesheet" type="text/css">
 <script src="<?php echo base_url('assets/dist/js/datepicker.js') ?>"></script>
 <div id="lihat_data_credit" class="content-wrapper" style="padding-left: 15px; padding-right: 15px;">
@@ -277,7 +216,6 @@
                         <div class="card-body collapse" id="collapse_2">
                             <form id="form_debitur">
                                 <input type="hidden" id="id_debitur" name="id_debitur" value="">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#debt">Upload Foto Debitur</button>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -353,7 +291,7 @@
                                             <div class="form-group col-md-5">
                                                 <label for="exampleInputEmail1">Tanggal Lahir<span class="required_notification">*</span></label>
                                                 <div class="input-group">
-                                                    <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control" data-date-format="d-m-Y"/>
+                                                    <input type="date" id="tgl_lahir_deb" onchange="changeBirthDate()" name="tgl_lahir_deb" class="form-control"/>
                                                 </div>
                                             </div>
                                             <div class="form-group col-md-2">
@@ -1841,7 +1779,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Analisa AO<span class="required_notification">*</span></label>
-                                            <input type="text" class="form-control" id="analisa_ao" name="analisa_ao" onkeyup="this.value = this.value.toUpperCase()">
+                                            <textarea type="text" class="form-control" id="analisa_ao" name="analisa_ao" onkeyup="this.value = this.value.toUpperCase()"> </textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Biaya Provisi<span class="required_notification">*</span></label>
@@ -2630,8 +2568,10 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Analisa AO<span class="required_notification">*</span></label>
-                                        <input type="text" class="form-control" id="analisa_ao_detail" name="analisa_ao_detail" onkeyup="this.value = this.value.toUpperCase()">
+                                        <textarea type="text" style="height: 185px" class="form-control" id="analisa_ao_detail" name="analisa_ao_detail" onkeyup="this.value = this.value.toUpperCase()">
+									</textarea>
                                     </div>
+								
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Biaya Provisi<span class="required_notification">*</span></label>
                                         <input type="text" class="form-control uang" id="biaya_provisi_detail" name="biaya_provisi_detail" aria-describedby="" placeholder="">
@@ -3012,15 +2952,18 @@
                     <label style="font-style: italic; color: #383a3a;">Notes Return</label>
                     <textarea name="note_return" style="width: 100%" rows="5" readonly></textarea>
                 </div>
-                <div class="form-group">
-                    <button class="btn btn-success approve" style="float: left; margin-bottom: 30px; margin-right:10px">APPROVE HM</button>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-danger reject" style="float: left; margin-bottom: 30px; margin-right:10px">REJECT HM</button>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-warning cancel" style="float: left; margin-bottom: 30px; margin-right:10px; color: #ffffff">CANCEL BY DEBITUR</button>
-                </div>
+                <form id="status_hm">
+                    <input type="hidden" name="id_trans_so" value="">
+                    <div class="form-group">
+                        <button class="btn btn-success approve" style="float: left; margin-bottom: 30px; margin-right:10px">APPROVE HM</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-danger reject" style="float: left; margin-bottom: 30px; margin-right:10px">REJECT HM</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-warning cancel" style="float: left; margin-bottom: 30px; margin-right:10px; color: #ffffff">CANCEL BY DEBITUR</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -5232,45 +5175,13 @@
         </div>
     </div>
 </form>
+
 <div class="modal fade in" id="modal_load_data" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" id="load_data"></div>
     </div>
 </div>
-<div class="modal fade" id="debt" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <form id = "submit_kk_debitur">
-                    <div class="modal-body">
-                        <section class="modal-title">
-                            <div class="text-center">
-                                <img src="<?= base_url(); ?>/assets/dist/img/warning.svg" class="rounded" alt="..." width="50%">
-                            </div>
-                        </section>
-                        <section>
-                            <h5 class="text-center"><strong>Oops...</strong></h5>
-                            <p class="text-center" style="font-size: 0.9rem !important;font-family: 'montserrat';"><i>NIK belum terdaftar, silahkan Foto KK Debitur & Input Credit Checking !</i></p>
-                            <div class="form-group row">
-                                <!-- <p class="col-md-8 text-right control-label col-form-label">Foto KTP Debitur :</p> -->
-                                <div class="col-md-4 input-group">
-                                    <div class="upload-btn-wrapper">
-                                        <button class="btn_file"><i class="fa fa-camera"></i></button>
-                                        <input type="file" name="inp_debitur" id="inp1modals" accept="image/*" capture /> 
-                                    </div>
-                                    <textarea id="b64modals" hidden></textarea>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" id="take" class="btn btn-success" style="width: 256px;margin-left: 12px;">Cek</button>
-                        <img hidden id="img" height="150">
-                        <a href="#" data-dismiss="modal" class="btn btn-primary close_deb">Ok</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+
 <script src="<?php echo base_url('assets/dist/js/datepicker.js') ?>"></script>
 <script src="<?php echo base_url('assets/dist/js/datepicker.en.js') ?>"></script>
 <script src="https://cdn.rawgit.com/igorescobar/jQuery-Mask-Plugin/1ef022ab/dist/jquery.mask.min.js"></script>
@@ -5306,5 +5217,6 @@
 
         $("#lama_kerja").val(lama_kerja < 0 ? 0 : lama_kerja);
         
-    }    
+    }
+    
 </script>
