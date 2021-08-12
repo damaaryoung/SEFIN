@@ -290,11 +290,11 @@ class Caa_controller extends CI_Controller
                         if($plafon_pengajuan >= $arr_dsh[0]) {
                             if ($teamCAA[$i]['cabang'] == $cabang) {
                                 array_push($arr_am, $teamCAA[$i]['plafon_max']);
-                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                             }
                         } else if($plafon_rekomen_ca == 0) {
                             if ($teamCAA[$i]['cabang'] == $cabang) {
-                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                             }
                         }
                     } else if ($plafon_rekomen_ca == 0) {
@@ -318,13 +318,13 @@ class Caa_controller extends CI_Controller
 
                 if($teamCAA[$i]['jabatan'] == 'CRM' && $am_cuti) {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
-                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                     }
                 }
 
                 if($teamCAA[$i]['jabatan'] == 'DIR BIS' && $am_cuti) {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
-                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                     }
                 }
                 // end get status cuti AM
@@ -335,7 +335,7 @@ class Caa_controller extends CI_Controller
                     if($arr_am) {
                         if ($plafon_pengajuan >= $arr_am[0]  || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
                             if ($teamCAA[$i]['cabang'] == $cabang) {
-                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                             }
                         }
                     }
@@ -346,7 +346,7 @@ class Caa_controller extends CI_Controller
                 if ($teamCAA[$i]['jabatan'] == 'KEPATUHAN') {
                     if ($plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
                         if ($teamCAA[$i]['cabang'] == $cabang && $teamCAA[$i]['user_id'] != 207) {
-                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                         }
                     }
                 }
@@ -357,7 +357,7 @@ class Caa_controller extends CI_Controller
                     if($arr_am) {
                         if ($plafon_pengajuan > $arr_am[0]  || $plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
                             if ($teamCAA[$i]['cabang'] == $cabang) {
-                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                             }
                         }
                     }
@@ -376,7 +376,7 @@ class Caa_controller extends CI_Controller
 
                 if($teamCAA[$i]['jabatan'] == 'DIR RISK' && $dirbis_cuti) {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
-                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                     }
                 }
                 // end get status cuti dir bis
@@ -386,7 +386,7 @@ class Caa_controller extends CI_Controller
                 if ($teamCAA[$i]['jabatan'] == 'DIR RISK') {
                     if ($plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
                         if ($teamCAA[$i]['cabang'] == $cabang) {
-                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                         }
                     }
                 }
@@ -395,8 +395,6 @@ class Caa_controller extends CI_Controller
                 if ($teamCAA[$i]['jabatan'] == 'DIR RISK') {
                     if($teamCAA[$i]['cabang'] == $cabang) {
                         if($teamCAA[$i]['flg_cuti'] == 1 ) {
-                            $dirrisk_cuti = true;
-                        } else if($teamCAA[$i]['tgl_sk'] == null) {
                             $dirrisk_cuti = true;
                         }
                     }
