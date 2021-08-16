@@ -40,7 +40,7 @@ class Dashboard_tracking_order extends CI_Controller
             $return_ca = "SELECT COUNT(a.id_trans_so) as return_ca FROM trans_ao as a LEFT JOIN trans_ca as b ON a.id_trans_so = b.id_trans_so WHERE a.status_return IS NOT NULL AND b.id_trans_so IS NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun";
             $data['return_ca'] = $this->db->query($return_ca)->row()->return_ca;
 
-            $data['jumlah_ca'] = ($data['sudah_pengajuan_ca'] - $data['not_recommend_ca']) + $data['not_recommend_ca'] + $data['cancel_ca'] + $data['memorandum_ca'] + $data['verifikasi_ca'] + $data['pengajuan_ca'] + $data['pending_ca'] +  $data['return_ca'];
+            $data['jumlah_ca'] = $data['sudah_pengajuan_ca'] + $data['not_recommend_ca'] + $data['cancel_ca'] + $data['memorandum_ca'] + $data['verifikasi_ca'] + $data['pengajuan_ca'] + $data['pending_ca'] +  $data['return_ca'];
 
             $data['persen_sudah_pengajuan_ca'] = number_format($data['sudah_pengajuan_ca'] / $data['jumlah_ca'] * 100, 2, '.', '');
             $data['persen_not_recommend_ca'] = number_format($data['not_recommend_ca'] / $data['jumlah_ca'] * 100, 2, '.', '');
@@ -75,7 +75,7 @@ class Dashboard_tracking_order extends CI_Controller
             $return_ca = "SELECT COUNT(a.id_trans_so) as return_ca FROM trans_ao as a LEFT JOIN trans_ca as b ON a.id_trans_so = b.id_trans_so WHERE a.status_return IS NOT NULL AND b.id_trans_so IS NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun AND (a.assign_to = $pilih_ca OR b.user_id = $pilih_ca)";
             $data['return_ca'] = $this->db->query($return_ca)->row()->return_ca;
 
-            $data['jumlah_ca'] = ($data['sudah_pengajuan_ca'] - $data['not_recommend_ca']) + $data['not_recommend_ca'] + $data['cancel_ca'] + $data['memorandum_ca'] + $data['verifikasi_ca'] + $data['pengajuan_ca'] + $data['pending_ca'] +  $data['return_ca'];
+            $data['jumlah_ca'] = $data['sudah_pengajuan_ca'] + $data['not_recommend_ca'] + $data['cancel_ca'] + $data['memorandum_ca'] + $data['verifikasi_ca'] + $data['pengajuan_ca'] + $data['pending_ca'] +  $data['return_ca'];
 
             $data['persen_sudah_pengajuan_ca'] = number_format($data['sudah_pengajuan_ca'] / $data['jumlah_ca'] * 100, 2, '.', '');
             $data['persen_not_recommend_ca'] = number_format($data['not_recommend_ca'] / $data['jumlah_ca'] * 100, 2, '.', '');
@@ -112,7 +112,7 @@ class Dashboard_tracking_order extends CI_Controller
             $return_cabang = "SELECT COUNT(a.id_trans_so) as return_cabang FROM trans_ao as a LEFT JOIN trans_ca as b ON a.id_trans_so = b.id_trans_so WHERE a.status_return IS NOT NULL AND b.id_trans_so IS NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun";
             $data['return_cabang'] = $this->db->query($return_cabang)->row()->return_cabang;
 
-            $data['jumlah_cabang'] = ($data['sudah_pengajuan_cabang'] - $data['not_recommend_cabang']) + $data['not_recommend_cabang'] + $data['cancel_cabang'] + $data['memorandum_cabang'] + $data['verifikasi_cabang'] + $data['pengajuan_cabang'] + $data['pending_cabang'] +  $data['return_cabang'];
+            $data['jumlah_cabang'] = $data['sudah_pengajuan_cabang'] + $data['not_recommend_cabang'] + $data['cancel_cabang'] + $data['memorandum_cabang'] + $data['verifikasi_cabang'] + $data['pengajuan_cabang'] + $data['pending_cabang'] +  $data['return_cabang'];
 
             $data['persen_sudah_pengajuan_cabang'] = number_format($data['sudah_pengajuan_cabang'] / $data['jumlah_cabang'] * 100, 2, '.', '');
             $data['persen_not_recommend_cabang'] = number_format($data['not_recommend_cabang'] / $data['jumlah_cabang'] * 100, 2, '.', '');
@@ -147,7 +147,7 @@ class Dashboard_tracking_order extends CI_Controller
             $return_cabang = "SELECT COUNT(a.id_trans_so) as return_cabang FROM trans_ao as a LEFT JOIN trans_ca as b ON a.id_trans_so = b.id_trans_so WHERE a.status_return IS NOT NULL AND b.id_trans_so IS NULL AND MONTH(a.created_at) = $bulan AND YEAR(a.created_at) = $tahun AND b.id_cabang = $kode_cabang";
             $data['return_cabang'] = $this->db->query($return_cabang)->row()->return_cabang;
 
-            $data['jumlah_cabang'] = ($data['sudah_pengajuan_cabang'] - $data['not_recommend_cabang']) + $data['not_recommend_cabang'] + $data['cancel_cabang'] + $data['memorandum_cabang'] + $data['verifikasi_cabang'] + $data['pengajuan_cabang'] + $data['pending_cabang'] +  $data['return_cabang'];
+            $data['jumlah_cabang'] = $data['sudah_pengajuan_cabang'] + $data['not_recommend_cabang'] + $data['cancel_cabang'] + $data['memorandum_cabang'] + $data['verifikasi_cabang'] + $data['pengajuan_cabang'] + $data['pending_cabang'] +  $data['return_cabang'];
 
             $data['persen_sudah_pengajuan_cabang'] = number_format($data['sudah_pengajuan_cabang'] / $data['jumlah_cabang'] * 100, 2, '.', '');
             $data['persen_not_recommend_cabang'] = number_format($data['not_recommend_cabang'] / $data['jumlah_cabang'] * 100, 2, '.', '');
