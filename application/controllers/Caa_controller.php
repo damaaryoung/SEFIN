@@ -30,7 +30,7 @@ class Caa_controller extends CI_Controller
 
             $id =  $field->id_trans_so;
             $no_so =  $field->nomor_so;
-
+            
             $tb_app = $this->db->query("SELECT tba.user_id, mp.`nama`, mj.`nama_jenis`, tba.`id_trans_so`, tba.status, CASE WHEN tba.`plafon` IS NULL THEN 0 ELSE FORMAT (tba.plafon,0) END AS plafon 
             FROM tb_approval tba
             LEFT JOIN m_pic mp ON mp.`id`=tba.`id_pic`
@@ -247,12 +247,18 @@ class Caa_controller extends CI_Controller
         $res = [];
         $arr_dsh = [];
         $arr_am = [];
+        $dirbis_cuti = false;
+        $dirrisk_cuti = false;
+        $am_cuti = false;
+        $dsh_cuti = false;
+        $dsh_tgl_sk = false;
+        $am_tgl_sk = false;
         if($nst == 'TIDAK') {
             for ($i = 0; $i < count($teamCAA); $i++) {
                 if ($teamCAA[$i]['jabatan'] == 'DSH' && $teamCAA[$i]['flg_aktif'] == true) {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
                         array_push($arr_dsh, $teamCAA[$i]['plafon_max']);
-                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                     }
                 }
 
@@ -261,13 +267,19 @@ class Caa_controller extends CI_Controller
                     if($teamCAA[$i]['cabang'] == $cabang) {
                         if($teamCAA[$i]['flg_cuti'] == 1 ) {
                             $dsh_cuti = true;
+                        } else if($teamCAA[$i]['tgl_sk'] == null) {
+                            $dsh_tgl_sk = true;
                         }
                     }
                 }
 
-                if($teamCAA[$i]['jabatan'] == 'AM' && $dsh_cuti) {
+                if($teamCAA[$i]['jabatan'] == 'AM') {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
-                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        if($dsh_cuti) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
+                        } else if($dsh_tgl_sk) {
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
+                        }
                     }
                 }
                 // end get cuti dsh
@@ -279,11 +291,11 @@ class Caa_controller extends CI_Controller
                         if($plafon_pengajuan >= $arr_dsh[0]) {
                             if ($teamCAA[$i]['cabang'] == $cabang) {
                                 array_push($arr_am, $teamCAA[$i]['plafon_max']);
-                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                             }
                         } else if($plafon_rekomen_ca == 0) {
                             if ($teamCAA[$i]['cabang'] == $cabang) {
-                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                             }
                         }
                     } else if ($plafon_rekomen_ca == 0) {
@@ -299,19 +311,21 @@ class Caa_controller extends CI_Controller
                         if($teamCAA[$i]['cabang'] == $cabang) {
                             if($teamCAA[$i]['flg_cuti'] == 1 ) {
                                 $am_cuti = true;
+                            } else if($teamCAA[$i]['tgl_sk'] == null) {
+                                $am_cuti = true;
                             }
                         }
                 }
 
                 if($teamCAA[$i]['jabatan'] == 'CRM' && $am_cuti) {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
-                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                     }
                 }
 
                 if($teamCAA[$i]['jabatan'] == 'DIR BIS' && $am_cuti) {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
-                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                     }
                 }
                 // end get status cuti AM
@@ -319,10 +333,10 @@ class Caa_controller extends CI_Controller
 
             for ($i = 0; $i < count($teamCAA); $i++) {
                 if ($teamCAA[$i]['jabatan'] == 'CRM') {
-                    if($arr_am[0] != null) {
+                    if($arr_am) {
                         if ($plafon_pengajuan >= $arr_am[0]  || $plafon_pengajuan >= $teamCAA[$i]['plafon_max']) {
                             if ($teamCAA[$i]['cabang'] == $cabang) {
-                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                             }
                         }
                     }
@@ -333,7 +347,7 @@ class Caa_controller extends CI_Controller
                 if ($teamCAA[$i]['jabatan'] == 'KEPATUHAN') {
                     if ($plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
                         if ($teamCAA[$i]['cabang'] == $cabang && $teamCAA[$i]['user_id'] != 207) {
-                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                         }
                     }
                 }
@@ -341,10 +355,10 @@ class Caa_controller extends CI_Controller
 
             for ($i = 0; $i < count($teamCAA); $i++) {
                 if ($teamCAA[$i]['jabatan'] == 'DIR BIS') {
-                    if($arr_am[0] != null) {
+                    if($arr_am) {
                         if ($plafon_pengajuan > $arr_am[0]  || $plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
                             if ($teamCAA[$i]['cabang'] == $cabang) {
-                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                                array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                             }
                         }
                     }
@@ -355,13 +369,15 @@ class Caa_controller extends CI_Controller
                     if($teamCAA[$i]['cabang'] == $cabang) {
                         if($teamCAA[$i]['flg_cuti'] == 1 ) {
                             $dirbis_cuti = true;
+                        } else if($teamCAA[$i]['tgl_sk'] == null) {
+                            $dirbis_cuti = true;
                         }
                     }
                 }
 
                 if($teamCAA[$i]['jabatan'] == 'DIR RISK' && $dirbis_cuti) {
                     if ($teamCAA[$i]['cabang'] == $cabang) {
-                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                        array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                     }
                 }
                 // end get status cuti dir bis
@@ -371,7 +387,7 @@ class Caa_controller extends CI_Controller
                 if ($teamCAA[$i]['jabatan'] == 'DIR RISK') {
                     if ($plafon_pengajuan > $teamCAA[$i]['plafon_max']) {
                         if ($teamCAA[$i]['cabang'] == $cabang) {
-                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'],'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                         }
                     }
                 }
@@ -413,8 +429,30 @@ class Caa_controller extends CI_Controller
                         if ($teamCAA[$i]['cabang'] == $cabang) {
                             // array_push($arr_dsh, $teamCAA[$i]['plafon_max']);
                             // $res[] = $teamCAA[$i]['id'];
-                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                         }
+
+                        // get status cuti DSH dan DSH approval naik 1 tingkat ke AM
+                        if ($row->nama_jenis == 'DSH') {
+                            if($teamCAA[$i]['cabang'] == $cabang) {
+                                if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                                    $dsh_cuti = true;
+                                } else if($teamCAA[$i]['tgl_sk'] == null) {
+                                    $dsh_tgl_sk = true;
+                                }
+                            }
+                        }
+
+                        if($teamCAA[$i]['jabatan'] == 'AM') {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                if($dsh_cuti) {
+                                    array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
+                                } else if($dsh_tgl_sk) {
+                                    array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
+                                }
+                            }
+                        }
+                        // end get cuti dsh
 
                         // get status cuti AM dan AM approval naik 1 tingkat ke dir bis
                         if ($row->nama_jenis == 'AM') {
@@ -1189,7 +1227,7 @@ class Caa_controller extends CI_Controller
         $data_pic = $this->db->query($pic_id)->result();
         foreach ($data_pic as $data1) {
             $data['id_mj_pic'] = $data1->id_mj_pic;
-$data['tgl_sk'] = $data1->tgl_sk;
+            $data['tgl_sk'] = $data1->tgl_sk;
             if (empty($data['tgl_sk'] = $data1->tgl_sk)) {
                 $data['tgl_sk'] = null;
             }

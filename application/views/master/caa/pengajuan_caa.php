@@ -495,7 +495,7 @@
                     $('.btn_approve_pengajuan_caa').html('<button type="submit" class="btn btn-secondary btn-sm" style="float: right;" disabled>Approve</button>');
                 },
                 success: function(response) {
-                    // console.log(response)
+                    console.log(response)
                     var result = response.reduce((unique, o) => {
                         if(!unique.some(obj => obj.id === o.id && obj.jabatan === o.jabatan)) {
                         unique.push(o);
@@ -517,9 +517,16 @@
                             } else {
                                 var status_cuti = '';
                             }
+
+                            if(result[i].tgl_sk == null) {
+                                var tgl_sk = '<span class="badge badge-info">Mengetahui</span>';
+                            } else {
+                                var tgl_sk = '';
+                            }
+
                             html += `<div class='col-md-4'>
                                 <input type="checkbox" value=`+result[i].id+` name="team_caa[]" checked disabled data-jabatan=`+result[i].jabatan+` data-cuti=`+result[i].flg_cuti+`>
-                                <small>`+result[i].jabatan+` `+status_cuti+`</small>
+                                <small>`+result[i].jabatan+` `+status_cuti+` `+tgl_sk+`</small>
                                 </div>
                                 `;
                         }
@@ -635,9 +642,16 @@
                         } else {
                             var status_cuti = '';
                         }
+
+                        if(result[i].tgl_sk == null) {
+                            var tgl_sk = '<span class="badge badge-info">Mengetahui</span>';
+                        } else {
+                            var tgl_sk = '';
+                        }
+
                         html += `<div class='col-md-4'>
                             <input type="checkbox" value=`+result[i].id+` name="team_caa[]" checked disabled data-jabatan=`+result[i].jabatan+` data-cuti=`+result[i].flg_cuti+`>
-                            <small>`+result[i].jabatan+` `+status_cuti+`</small>
+                            <small>`+result[i].jabatan+` `+status_cuti+` `+tgl_sk+`</small>
                             </div>
                             `;
                     }

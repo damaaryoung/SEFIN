@@ -16,7 +16,7 @@ class model_tanggal_penyimpangan extends CI_Model{
     }
 
     function get_tanggal_penyimpangan() {
-        $this->datatables->select('id, start_date, end_date, expired');
+        $this->datatables->select('id, start_date, end_date, expired, filename_iom');
         $this->datatables->from($this->tableTanggal);
         $this->datatables->add_column('action',
             '<a href="javascript:void(0);" title="detail" class="detail_record btn btn-default btn-md" data-id="$1" data-start_date="$2" data-end_date="$3">
@@ -27,6 +27,7 @@ class model_tanggal_penyimpangan extends CI_Model{
             </a>',
             'id, start_date, end_date');
         $this->datatables->add_column('keterangan','$1', '');
+        $this->db->order_by('id', 'DESC');
         return $this->datatables->generate();
     }
 
@@ -83,6 +84,23 @@ class model_tanggal_penyimpangan extends CI_Model{
         $this->db->set('expired', 1);
         $this->db->where('end_date < current_date()');
         $result = $this->db->update($this->tableTanggal);
+        return $result;
+    }
+
+    function upload_iom($id,$filename)
+    {
+        $this->db->set('filename_iom', $filename);
+        $this->db->where('id', $id);
+        $result = $this->db->update($this->tableTanggal);
+        return $result;
+    }
+
+    function delete_iom($filename)
+    {
+        $this->db->set('filename_iom', null);
+        $this->db->where('filename_iom', $filename);
+        $result = $this->db->update($this->tableTanggal);
+        unlink('./assets/iom_uploaded/'.$filename);
         return $result;
     }
 

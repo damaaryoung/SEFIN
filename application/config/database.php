@@ -100,7 +100,7 @@ $db['db2'] = array(
 	'hostname' => '10.20.30.254:3307',
 	'username' => 'u2Qi7Jfui',
 	'password' => 'qJ9ysIkg9ce!',
-	'database' => 'newwebtool',
+	'database' => 'dpm_online',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -118,11 +118,11 @@ $db['db2'] = array(
 );
 
 $db['dpm_online'] = array(
-	'dsn'	=> '',
+	'dsn'   => '',
 	'hostname' => '10.20.30.254:3307',
 	'username' => 'u2Qi7Jfui',
 	'password' => 'qJ9ysIkg9ce!',
-	'database' => 'dpm_online',
+	'database' => 'dpm_online', //nama database kedua
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
