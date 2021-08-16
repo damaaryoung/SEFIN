@@ -28,6 +28,11 @@
                         </div>
                         <!-- <span id="penyimpangan_error" class="text-danger"></span> -->
                     </div>
+                    <div class="form-group">
+                        <label for="">File IOM</label><br>
+                        <input type="file" class="form-control" id="file_iom" name="file_iom" accept="application/pdf">
+                        <span class="text-danger" style="font-size: 11px;"><i>*file yang diizinkan hanya PDF</i></span>
+                    </div>
             </div>
         </div>
       </div>

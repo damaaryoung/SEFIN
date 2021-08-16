@@ -642,9 +642,16 @@
                         } else {
                             var status_cuti = '';
                         }
+
+                        if(result[i].tgl_sk == null) {
+                            var tgl_sk = '<span class="badge badge-info">Mengetahui</span>';
+                        } else {
+                            var tgl_sk = '';
+                        }
+
                         html += `<div class='col-md-4'>
                             <input type="checkbox" value=`+result[i].id+` name="team_caa[]" checked disabled data-jabatan=`+result[i].jabatan+` data-cuti=`+result[i].flg_cuti+`>
-                            <small>`+result[i].jabatan+` `+status_cuti+`</small>
+                            <small>`+result[i].jabatan+` `+status_cuti+` `+tgl_sk+`</small>
                             </div>
                             `;
                     }

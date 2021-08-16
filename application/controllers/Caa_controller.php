@@ -252,6 +252,7 @@ class Caa_controller extends CI_Controller
         $am_cuti = false;
         $dsh_cuti = false;
         $dsh_tgl_sk = false;
+        $am_tgl_sk = false;
         if($nst == 'TIDAK') {
             for ($i = 0; $i < count($teamCAA); $i++) {
                 if ($teamCAA[$i]['jabatan'] == 'DSH' && $teamCAA[$i]['flg_aktif'] == true) {
@@ -428,8 +429,30 @@ class Caa_controller extends CI_Controller
                         if ($teamCAA[$i]['cabang'] == $cabang) {
                             // array_push($arr_dsh, $teamCAA[$i]['plafon_max']);
                             // $res[] = $teamCAA[$i]['id'];
-                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti']));
+                            array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' =>$teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
                         }
+
+                        // get status cuti DSH dan DSH approval naik 1 tingkat ke AM
+                        if ($row->nama_jenis == 'DSH') {
+                            if($teamCAA[$i]['cabang'] == $cabang) {
+                                if($teamCAA[$i]['flg_cuti'] == 1 ) {
+                                    $dsh_cuti = true;
+                                } else if($teamCAA[$i]['tgl_sk'] == null) {
+                                    $dsh_tgl_sk = true;
+                                }
+                            }
+                        }
+
+                        if($teamCAA[$i]['jabatan'] == 'AM') {
+                            if ($teamCAA[$i]['cabang'] == $cabang) {
+                                if($dsh_cuti) {
+                                    array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
+                                } else if($dsh_tgl_sk) {
+                                    array_push($res,array('id' => $teamCAA[$i]['id'], 'jabatan' => $teamCAA[$i]['jabatan'], 'flg_cuti' => $teamCAA[$i]['flg_cuti'], 'tgl_sk' => $teamCAA[$i]['tgl_sk']));
+                                }
+                            }
+                        }
+                        // end get cuti dsh
 
                         // get status cuti AM dan AM approval naik 1 tingkat ke dir bis
                         if ($row->nama_jenis == 'AM') {

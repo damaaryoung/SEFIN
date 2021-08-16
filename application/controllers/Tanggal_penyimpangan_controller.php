@@ -67,8 +67,8 @@ class Tanggal_penyimpangan_controller extends CI_Controller
 
     public function create()
     {
-        $params_penyimpangan = $this->input->post('params_penyimpangan');
         if(!$this->input->post('id_tanggal_penyimpangan')) {
+            $params_penyimpangan = explode(",",$this->input->post('params_penyimpangan'));
             $input     = $this->input->post();
             $validate = $this->validation();
             if($validate['success']) {
@@ -77,10 +77,34 @@ class Tanggal_penyimpangan_controller extends CI_Controller
             }
             $start_date = $this->input->post('start_date') == '' ? null: $this->input->post('start_date');
             $end_date = $this->input->post('end_date') == '' ? null: $this->input->post('end_date');
-            $dataTanggalPenyimpangan = array('start_date' => $start_date, 'end_date' =>$end_date, 'expired' => 0);
+
+            $filenameIom = null;
+            if(!$this->input->post('file') == 'undefined') {
+                $config['upload_path'] = './assets/iom_uploaded';
+                $config['allowed_types'] = 'pdf';
+                $config['max_size']  = 1000;
+                $config['file_name'] = 'iom-'.date("Y-m-d").'-'.time();
+                $filenameIom = $config['file_name'].'.pdf';
+    
+                $this->load->library('upload', $config);
+                
+                if (!$this->upload->do_upload('file')){
+                    $status = "error";
+                    $msg = $this->upload->display_errors();
+                    echo json_encode(array('status'=>$status,'msg'=>$msg));
+                    exit();
+                } else {
+                    $dataupload = $this->upload->data();
+                    // $status = "success";
+                    // $msg = $dataupload['file_name']." berhasil diupload";
+                }
+            }
+
+            $dataTanggalPenyimpangan = array('start_date' => $start_date, 'end_date' =>$end_date, 'expired' => 0, 'filename_iom' => $filenameIom);
 
             $id_tanggal = $this->model_tanggal_penyimpangan->AddTanggalPenyimpangan($dataTanggalPenyimpangan);
         } else {
+            $params_penyimpangan = $this->input->post('params_penyimpangan');
             $id_tanggal = $this->input->post('id_tanggal_penyimpangan');
         }
 
@@ -128,5 +152,44 @@ class Tanggal_penyimpangan_controller extends CI_Controller
             $message = 'query failed';
         }
         echo json_encode(array('message' => $message));
+    }
+
+    public function upload_iom()
+    {
+        $input = $this->input->post();
+        $config['upload_path'] = './assets/iom_uploaded';
+        $config['allowed_types'] = 'pdf';
+        $config['max_size']  = 1000;
+        $config['file_name'] = 'iom-'.date("Y-m-d").'-'.time();
+        $filenameIom = $config['file_name'].'.pdf';
+        $sql = false;
+        $this->load->library('upload', $config);
+        
+        if (!$this->upload->do_upload('file')){
+            $status = "error";
+            $msg = $this->upload->display_errors();
+        } else {
+            $dataupload = $this->upload->data();
+            $status = "success";
+            $msg = $dataupload['file_name']." berhasil diupload";
+        }
+
+        if($status == "success") {
+            $sql = $this->model_tanggal_penyimpangan->upload_iom($input['id'],$filenameIom);
+        }
+        echo json_encode(array('status'=>$status,'msg'=>$msg,'sql'=>$sql));
+    }
+
+    public function delete_iom()
+    {
+        $filename     = $this->input->get('filename');
+        if (file_exists('./assets/iom_uploaded/'.$filename)) {
+            $this->model_tanggal_penyimpangan->delete_iom($filename);   
+            $statusCode = 200;
+        } else {
+            $statusCode = 404;
+        }
+        http_response_code($statusCode);
+        echo json_encode('ok');
     }
 }

@@ -31,6 +31,7 @@
                             <tr>
                             <th>Tanggal Mulai</th>
                             <th>Tanggal Selesai</th>
+                            <th>IOM</th>
                             <th>Keterangan</th>
                             <th>Action</th>
                             </tr>
@@ -120,11 +121,22 @@
     function tables (id_tanggal_penyimpangan=null,id_name_table ="#table_tanggal_penyimpangan", url="<?php echo base_url('tanggal_penyimpangan_controller/get_tanggal_penyimpangan')?>", columns = [
                 {"data": "start_date"},
                 {"data": "end_date"},
+                {"data": "filename_iom",
+                    "render": function ( data, type, row ) {
+                        var btn_upload = `<input type="file" id="iom_`+row.id+`" accept="application/pdf"/><button type="button" class="btn btn-primary btn-sm" id="btn_upload_`+row.id+`"  onclick="upload_iom(`+row.id+`)">Upload</button>`;
+                        if(row.filename_iom == null || row.filename_iom == '') {
+                            var fileIom = btn_upload;
+                        } else {
+                            var fileIom = "<a href=<?=  base_url() ?>assets/iom_uploaded/"+row.filename_iom+" target='_blank'>"+row.filename_iom+"</a> <i class='fa fa-trash' aria-hidden='true' style='cursor:pointer;' onclick='delete_iom(\""+row.filename_iom+"\")'></i>";
+                        }
+                        return fileIom;
+                    }
+                },
                 {"data": "keterangan"},
                 {"data": "action"},
             ], columnsDefs = [{
                     // puts a button in the last column
-                    targets: [2],
+                    targets: [3],
                     render: function (data, type, row, meta) {
                         var today = new Date();
                         var dd = String(today.getDate()).padStart(2, '0');
@@ -262,6 +274,7 @@
             }
         })
         .fail(function(jqXHR){
+            console.log(jqXHR)
             Swal.fire('Error!', 'oops! something wrong', 'error')
         });
     }
@@ -269,16 +282,74 @@
     // end proses
     $('#btn_save_tanggal_penyimpangan').on('click', function(e) {
         e.preventDefault();
+        // Create a test FormData object
+        var file_data = $('#file_iom').prop('files')[0];
         var start_date = $('#start_date').val();
         var end_date = $('#end_date').val();
         var params_penyimpangan = $('#params_penyimpangan').val();
+        var formData = new FormData();
+        formData.append('file', file_data);
+        formData.append('start_date', start_date);
+        formData.append('end_date', end_date);
+        formData.append('params_penyimpangan', params_penyimpangan);
+        var url = "<?php echo base_url('tanggal_penyimpangan_controller/create')?>";
+
+        $.ajax({
+            url: url, // point to server-side PHP script
+            dataType: 'json',  // what to expect back from the PHP script, if anything
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            type: 'post',
+            success: function(response){
+                console.log(response);
+                $('.invalid-feedback').remove();
+                $('.form-control').removeClass('is-invalid');
+                if(response.validate){
+                    if(response.validate.success) {
+                        $.each(response.validate, (key, val) => {
+                                el = $('[id="' + key + '"]');
+                                el.html(val);
+                                let errinfo =
+                                    `<span class="text-danger invalid-feedback d-block">${val}</span>`;
+                                el.addClass(val.length > 0 ? 'is-invalid' : '');
+                                el.after(errinfo);
+                            });
+                        return false;
+                    }
+                }
+                if(response.status) {
+                    if (response.status == 'error') {
+                        $('#file_iom').val('');
+                        Swal.fire('Error!', response.msg, 'error');
+                        return false;
+                    }
+                }
+                
+                getExpiredDate();
+                
+                Swal.fire('Success', 'Data berhasil disimpan', 'success');
+                $('#tanggal_penyimpangan_form_add')[0].reset();
+                tables();
+            }
+        });
+
+        // Display the key/value pairs
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0]+ ', ' + pair[1]); 
+        // }
+        // return false;
+        // var start_date = $('#start_date').val();
+        // var end_date = $('#end_date').val();
+        // var params_penyimpangan = $('#params_penyimpangan').val();
         
-        var data = {
-            'start_date' : start_date,
-            'end_date' : end_date,
-            'params_penyimpangan' : params_penyimpangan.length > 0 ? params_penyimpangan: null
-        }
-        simpan_data(data);
+        // var data = {
+        //     'start_date' : start_date,
+        //     'end_date' : end_date,
+        //     'params_penyimpangan' : params_penyimpangan.length > 0 ? params_penyimpangan: null
+        // }
+        // simpan_data(data);
     });
 
     $('#btn_save_list_penyimpangan').on('click', function() {
@@ -353,6 +424,89 @@
         var id_tanggal_penyimpangan = $('#id_tanggal_penyimpangan').val(id);
         $('#modal_add_list_penyimpangan').modal('show');
     }
+
+    // upload iom
+    function upload_iom(id) {
+        if(id) {
+            var form_iom = $('#iom_'+id).prop('files')[0];
+            var formData = new FormData();
+            var url = "<?php echo base_url('tanggal_penyimpangan_controller/upload_iom')?>";
+
+            formData.append('file', form_iom);
+            formData.append('id', id);
+
+            $.ajax({
+                url: url, // point to server-side PHP script
+                dataType: 'json',  // what to expect back from the PHP script, if anything
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                type: 'post',
+                beforeSend: function() {
+                    $('#btn_upload_'+id).text('uploading...');
+                },
+                success: function(response){
+                    if(response.status) {
+                        if(response.status == 'success') {
+                            Swal.fire('Success!', response.msg, 'success');
+                        } else {
+                            Swal.fire('Error!', response.msg, 'error');
+                        }
+                    }
+                    tables();
+                    $('#btn_upload_'+id).text('upload');
+                }
+            });
+        }
+    }
+    // end upload iom
+
+    // delete_iom
+    function delete_iom(filename) {
+        var url = "<?php echo base_url('tanggal_penyimpangan_controller/delete_iom')?>";
+        if(filename) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return fetch(url+'?filename='+filename)
+                    .then(response => {
+                        if (!response.ok) {
+                            if(response.status == 404) {
+                                throw new Error('Data tidak ditemukan')
+                            } else {
+                                throw new Error(response.statusText)
+                            }
+                        }
+                        return response.json()
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                        `Request failed: ${error}`
+                        )
+                    })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    tables();
+                    Swal.fire(
+                        'Deleted!',
+                        'Iom berhasil dihapus',
+                        'success'
+                    )
+                }
+            });
+        }
+    }
+    // end delete iom
     
     $('#btn_modal_add_tanggal_penyimpangan').on('click', function(e) {
         e.preventDefault();
