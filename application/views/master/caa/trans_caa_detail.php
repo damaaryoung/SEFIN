@@ -568,6 +568,15 @@
             var id_mj_pic = ' <?php echo $id_mj_pic ?>';
             var status_crm = '<?php echo $status_crm ?>';
             var tgl_sk = '<?php echo $tgl_sk ?>';
+            var rupiah_plafon_ca = $('#rupiah').val().replace(/\./g, '');
+            if(parseInt(rupiah_plafon_ca) > plafon) {
+                var radio_done = "" +
+                    "<input type='hidden' name='approval_up' id='approval_up' value='1'>" +
+                    "<input type='radio' name='status' value='forward' checked> " +
+                    "<small>Forward</small>";
+                $('.radio_done').html(radio_done);
+                return false;
+            }
             // console.log(id_mj_pic);
             // console.log(status_crm);
             // console.log(tgl_sk);
@@ -797,12 +806,13 @@
                     formData.append('tujuan', $('input[id=tujuan]', this).val());
                     formData.append('cc', $('input[id=cc]', this).val());
                     formData.append('pesan', $('textarea[id=pesan]', this).val());
-                    console.log($('input[id=tujuan]', this).val());
-                    for (var pair of formData.entries()) {
-                    console.log(pair[0]+ ', ' + pair[1]); 
-                }
+                    formData.append('approval_up', $('input[id=approval_up]', this).val());
+                //     console.log($('input[id=tujuan]', this).val());
+                //     for (var pair of formData.entries()) {
+                //     console.log(pair[0]+ ', ' + pair[1]); 
+                // }
                 
-                return false;
+                // return false;
                     $.ajax({
                             url: url,
                             data: formData,
